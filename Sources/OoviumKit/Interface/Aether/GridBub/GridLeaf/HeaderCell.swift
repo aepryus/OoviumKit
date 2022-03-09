@@ -53,8 +53,8 @@ class HeaderCell: UICollectionViewCell, Editable, Citable, DoubleTappable, Ancho
 		textField!.becomeFirstResponder()
 	}
 	func closeLabel() {
-		column._width = nil
-		column._headerWidth = nil
+//		column._width = nil
+//		column._headerWidth = nil
 		gridBub.aetherView.locked = false
 		column.name = textField!.text!
 		textField?.removeFromSuperview()

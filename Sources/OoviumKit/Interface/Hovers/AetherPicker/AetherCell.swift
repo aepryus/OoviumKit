@@ -61,7 +61,7 @@ class AetherCell: UITableViewCell, UIContextMenuInteractionDelegate {
 		deleteBox.addAction { [unowned self] in
 			self.aetherPicker.retract()
 
-			if self.aetherName == Oovium.aetherView.aether.name {
+			if self.aetherName == self.aetherPicker.aetherView.aether.name {
 				Space.local.loadNames { (names: [String]) in
 					if names.count == 0 {
 						Space.local.newAether { (aether: Aether?) in

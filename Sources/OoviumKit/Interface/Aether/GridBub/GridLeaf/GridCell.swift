@@ -131,9 +131,9 @@ class GridCell: UICollectionViewCell, Editable, Citable, ChainViewDelegate, Towe
 	}
 	
 	func onChange() {
-		cell._width = nil
+//		cell._width = nil
 		chainView.render()
-		cell.column.renderWidth()
+//		cell.column.renderWidth()
 		gridLeaf.render()
 		gridLeaf.gridBub.render()
 		setNeedsDisplay()
@@ -160,7 +160,7 @@ class GridCell: UICollectionViewCell, Editable, Citable, ChainViewDelegate, Towe
 	func onCalculate() {
 		render()
 		cell.renderWidth()
-		cell.column.renderWidth()
+//		cell.column.renderWidth()
 		gridLeaf.render()
 		gridLeaf.gridBub.render()
 	}

@@ -7,6 +7,7 @@
 //
 
 import Acheron
+import GameController
 import OoviumEngine
 import UIKit
 
@@ -82,12 +83,6 @@ class ChainView: UIView, UITextInput, UITextInputTraits, AnchorTappable {
 		return chain.tokens.count == 0 && !chain.editing
 	}
 
-	private static func usesWafer(token: Token) -> Bool {
-		return token.type == .variable
-			|| (token.type == .constant && ![Token.pi, Token.e, Token.i].contains(token))
-			|| token.status == .deleted
-	}
-	
 	static func calcWidth(chain: Chain) -> CGFloat {
 		let pen = Pen(font: UIFont(name: "HelveticaNeue", size: 16)!)
 		var x: CGFloat = 0
@@ -153,7 +148,7 @@ class ChainView: UIView, UITextInput, UITextInputTraits, AnchorTappable {
 			case .center:	frame = CGRect(x: at.x-width/2, y: at.y-height/2, width: width, height: height)
 			default: fatalError()
 		}
-		if !(Screen.mac || Oovium.hasExternalKeyboard) && chain.editing {
+		if !(Screen.mac || ChainView.hasExternalKeyboard) && chain.editing {
 			if chain.inString {
 				becomeFirstResponder()
 			} else {
@@ -219,7 +214,7 @@ class ChainView: UIView, UITextInput, UITextInputTraits, AnchorTappable {
 		render()
 		delegate?.onEdit()
 		isUserInteractionEnabled = true
-		if Screen.mac || Oovium.hasExternalKeyboard { becomeFirstResponder() }
+		if Screen.mac || ChainView.hasExternalKeyboard { becomeFirstResponder() }
 	}
 	func ok() {
 		resignFirstResponder()
@@ -253,7 +248,7 @@ class ChainView: UIView, UITextInput, UITextInputTraits, AnchorTappable {
 			if ChainView.usesWafer(token: token) {
 				let uiColor: UIColor = {
 					if token.status != .ok { return UIColor.red }
-					if let token = token as? Defable, let def: Def = token.def { return Oovium.color(for: def) }
+					if let token = token as? Defable, let def: Def = token.def { return def.uiColor }
 					return UIColor.green
 				}()
 				x += Skin.wafer(text: token.display, x: x, y: Screen.mac ? 1 : 0, uiColor: uiColor)
@@ -441,7 +436,7 @@ class ChainView: UIView, UITextInput, UITextInputTraits, AnchorTappable {
 		}
 	}
 	func deleteBackward() {
-		if Oovium.hasExternalKeyboard {
+		if ChainView.hasExternalKeyboard {
 			// actual backspace handled by key commands below; this now only triggers on (forward) delete
 			delete()
 		} else {
@@ -467,5 +462,19 @@ class ChainView: UIView, UITextInput, UITextInputTraits, AnchorTappable {
 	func onAnchorTap(point: CGPoint) {
 		guard chain.editing else {return}
 		moveCursor(to: point.x)
+	}
+
+// Static ==========================================================================================
+	private static var hasExternalKeyboard: Bool {
+		if #available(iOS 14.0, *) {
+			return GCKeyboard.coalesced != nil
+		} else {
+			return false
+		}
+	}
+	private static func usesWafer(token: Token) -> Bool {
+		return token.type == .variable
+			|| (token.type == .constant && ![Token.pi, Token.e, Token.i].contains(token))
+			|| token.status == .deleted
 	}
 }

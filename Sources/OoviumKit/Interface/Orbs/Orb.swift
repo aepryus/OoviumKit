@@ -61,7 +61,7 @@ class ScreenOrb: Orb {
 		var x: CGFloat
 		var y: CGFloat
 
-		let hoverScale = Oovium.aetherView.hoverScale
+		let hoverScale = Oo.s
 		let offsetX: CGFloat = (orbit.offset.horizontal - 14) * hoverScale
 		let offsetY: CGFloat = (orbit.offset.vertical - 14) * hoverScale
 

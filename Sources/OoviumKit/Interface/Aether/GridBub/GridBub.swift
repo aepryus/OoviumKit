@@ -115,7 +115,7 @@ class GridBub: Bubble, ChainLeafDelegate {
 			self.rotateEndMode()
 		}
 		
-		grid.columns.forEach {$0.renderWidth()}
+		grid.columns.forEach { $0.renderWidth() }
 		
 		gridLeaf.render()
 		

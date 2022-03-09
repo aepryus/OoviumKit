@@ -44,7 +44,7 @@ class ObjectLeaf: Leaf, Editable, ChainViewDelegate, TowerListener, DoubleTappab
 		} else if focused {
 			return UIColor.black.tint(0.8)
 		} else {
-			return Oovium.color(for: chainView.chain.tower.obje.def)
+			return chainView.chain.tower.obje.uiColor
 		}
 	}
 	

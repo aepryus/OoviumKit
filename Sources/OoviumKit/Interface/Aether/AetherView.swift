@@ -515,7 +515,7 @@ public class AetherView: UIView, UIScrollViewDelegate, UIGestureRecognizerDelega
 			bubble.aexel.x = Double(bubble.left)
 			bubble.aexel.y = Double(bubble.top)
 		}
-		aether.version = Oovium.version
+		aether.version = Aether.engineVersion
 	}
 	
 // Links ===========================================================================================
