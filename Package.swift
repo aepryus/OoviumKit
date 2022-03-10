@@ -11,7 +11,7 @@ let package = Package(
         .library(name: "OoviumKit", targets: ["OoviumKit"]),
     ],
     dependencies: [
-		.package(url: "https://github.com/aepryus/OoviumEngine.git", branch: "makePublic"),
+		.package(url: "https://github.com/aepryus/OoviumEngine.git", branch: "master"),
     ],
     targets: [
         .target(name: "OoviumKit", dependencies: ["OoviumEngine"]),

@@ -14,8 +14,8 @@
         "package": "OoviumEngine",
         "repositoryURL": "https://github.com/aepryus/OoviumEngine.git",
         "state": {
-          "branch": "makePublic",
-          "revision": "bb7d5b0ed454d6b754b07f0d7b814ddd556d7c11",
+          "branch": "master",
+          "revision": "0468c3e08e25a968b630080661f0727bb9f717cc",
           "version": null
         }
       }
