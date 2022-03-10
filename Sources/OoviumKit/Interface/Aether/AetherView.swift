@@ -24,24 +24,6 @@ extension AetherViewDelegate {
 	func onSave(aetherView: AetherView, aether: Aether) {}
 }
 
-class OoviumAetherViewDelegate: AetherViewDelegate {
-	func onNew(aetherView: AetherView, aether: Aether) {
-		aetherView.markPositions()
-		aetherView.space?.storeAether(aether, complete: { (success: Bool) in })
-	}
-	func onClose(aetherView: AetherView, aether: Aether) {
-		aetherView.markPositions()
-		aetherView.space?.storeAether(aether)
-	}
-	func onOpen(aetherView: AetherView, aether: Aether) {
-		if let space: Space = aetherView.space {
-			Local.set(key: "aetherPath", value: space.aetherPath(aether: aether))
-		}
-		aetherView.orb.chainEditor.customSchematic?.render(aether: aether)
-	}
-	func onSave(aetherView: AetherView, aether: Aether) {}
-}
-
 public class AetherView: UIView, UIScrollViewDelegate, UIGestureRecognizerDelegate {
 	public var aether: Aether
 	var space: Space? = nil
@@ -70,7 +52,6 @@ public class AetherView: UIView, UIScrollViewDelegate, UIGestureRecognizerDelega
 	
 	var hovers: [Hover] = []
 	public var aetherPicker: AetherPicker? = nil
-	var redDot: RedDot? = nil
 	var bubbleToolBar: BubbleToolBar? = nil
 	var shapeToolBar: ShapeToolBar? = nil
 	var colorToolBar: ColorToolBar? = nil
@@ -79,7 +60,7 @@ public class AetherView: UIView, UIScrollViewDelegate, UIGestureRecognizerDelega
 	public var toolBarOffset: UIOffset?
 	
 	var orb: Orb = ScreenOrb()
-	let backView: BackView = BackView()
+//	let backView: BackView = BackView()
 
 	let hookView: HookView = HookView()
 	
@@ -97,16 +78,12 @@ public class AetherView: UIView, UIScrollViewDelegate, UIGestureRecognizerDelega
 	lazy var anchorTap: AnchorTap = { AnchorTap(aetherView: self) }()
 	lazy var anchorPan: AnchorPan = { AnchorPan(aetherView: self) }()
 	
-//	public var onSwap: ((Aether)->())? = nil
-//	public var onNew: ((Aether)->())? = nil
-//	public var onClose: ((Aether)->())? = nil
-	
 	var needsStretch: Bool = false
 	var lockVerticalScrolling: Bool = false
 
 	var slid: Bool = false
 	
-	public init(aether: Aether, toolBox: ToolBox, toolsOn: Bool = true, redDotOn: Bool = true, burn: Bool = true, oldPicker: Bool = false) {
+	public init(aether: Aether, toolBox: ToolBox, toolsOn: Bool = true, burn: Bool = true, oldPicker: Bool = false) {
 		self.aether = aether
 		self.oldPicker = oldPicker
 
@@ -115,9 +92,9 @@ public class AetherView: UIView, UIScrollViewDelegate, UIGestureRecognizerDelega
 		backgroundColor = UIColor.clear
 		scrollView.backgroundColor = UIColor.clear
 
-		if burn { addSubview(backView) }
-		addSubview(scrollView)
-
+//		if burn { addSubview(backView) }
+//		addSubview(scrollView)
+//
 		if !oldPicker {
 			addSubview(hookView)
 			hookView.frame = CGRect(x: 3*s, y: Screen.mac ? 3*s : Screen.safeTop, width: Screen.mac ? 210*s : 168*s, height: Screen.mac ? 40*s : 32*s)
@@ -137,11 +114,6 @@ public class AetherView: UIView, UIScrollViewDelegate, UIGestureRecognizerDelega
 		
 		initToolBars(toolBox: toolBox)
 		if toolsOn { bubbleToolBar?.invoke() }
-
-		if redDotOn {
-			redDot = RedDot(aetherView: self)
-			redDot?.invoke()
-		}
 
 		openAether(aether)
 		
@@ -919,20 +891,9 @@ public class AetherView: UIView, UIScrollViewDelegate, UIGestureRecognizerDelega
 		confirmHover.invoke()
 	}
 
-	func invokeRedDot() {
-		guard let redDot = redDot else { return }
-		addSubview(redDot)
-		redDot.fade()
-	}
-
-	func invokeAntechamper() {
-		let antechamber: Antechamber = Antechamber()
-		antechamber.invoke()
-	}
-
 // UIView ==========================================================================================
 	public override func layoutSubviews() {
-		backView.frame = bounds
+//		backView.frame = bounds
 		scrollView.frame = bounds
 		hovers.forEach { $0.render() }
 		if orb is AetherViewOrb { orb.orbits.forEach { render(orbit: $0) } }

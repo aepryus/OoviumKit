@@ -10,16 +10,11 @@ import OoviumEngine
 import UIKit
 
 extension Cell {
-//	var _width: CGFloat? = nil
-//	var width: CGFloat {
-//		get {
-//			if _width == nil { renderWidth() }
-//			return _width!
-//		}
-//	}
-//
-	func renderWidth() {
-//		_width = ChainView.calcWidth(chain: chain)+6
+	var width: CGFloat {
+		get {
+			if _width == nil { renderWidth() }
+			return _width!
+		}
 	}
-	var width: CGFloat { ChainView.calcWidth(chain: chain)+6 }
+	func renderWidth() { _width = ChainView.calcWidth(chain: chain)+6 }
 }
