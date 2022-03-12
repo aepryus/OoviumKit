@@ -8,14 +8,14 @@
 
 import UIKit
 
-class KeySlot {
+public class KeySlot {
 	let row: CGFloat
 	let col: CGFloat
 	let w: CGFloat
 	let h: CGFloat
 	let key: UIControl
 	
-	init(row: CGFloat, col: CGFloat, w: CGFloat, h: CGFloat, key: UIControl) {
+	public init(row: CGFloat, col: CGFloat, w: CGFloat, h: CGFloat, key: UIControl) {
 		self.row = row
 		self.col = col
 		self.w = w
@@ -25,28 +25,28 @@ class KeySlot {
 }
 
 public class Schematic {
-	let rows: Int
-	let cols: Int
-	let scrollable: Bool
-	var keySlots = [KeySlot]()
+	public let rows: Int
+	public let cols: Int
+	public let scrollable: Bool
+	public var keySlots = [KeySlot]()
 
-	init(rows: Int, cols: Int, scrollable: Bool = false) {
+	public init(rows: Int, cols: Int, scrollable: Bool = false) {
 		self.rows = rows
 		self.cols = cols
 		self.scrollable = scrollable
 	}
 	
-	func add (row: CGFloat, col: CGFloat, w: CGFloat, h: CGFloat, key: UIControl) {
+	public func add (row: CGFloat, col: CGFloat, w: CGFloat, h: CGFloat, key: UIControl) {
 		keySlots.append(KeySlot(row: row, col: col, w: w, h: h, key: key))
 	}
-	func add (row: CGFloat, col: CGFloat, key: UIControl) {
+	public func add (row: CGFloat, col: CGFloat, key: UIControl) {
 		add(row: row, col: col, w: 1, h: 1, key: key)
 	}
-	func wipe() {
+	public func wipe() {
 		keySlots.removeAll()
 	}
 	
-	func render(rect: CGRect) {
+	public func render(rect: CGRect) {
 		let margin: CGFloat = floor(7*Oo.s)
 		let bw: CGFloat = floor((rect.size.width - 2*margin) / CGFloat(cols))
 		let bh: CGFloat = floor((rect.size.height - 2*margin) / CGFloat(rows))

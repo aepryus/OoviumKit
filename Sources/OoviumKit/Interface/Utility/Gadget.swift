@@ -11,11 +11,11 @@ import UIKit
 open class Gadget: UIView {
 	var size: CGSize = CGSize.zero
 	
-	func invoke(animated: Bool = true) {}
-	func dismiss(animated: Bool = true) {}
-	func toggle(animated: Bool = true) {}
+	public func invoke(animated: Bool = true) {}
+	public func dismiss(animated: Bool = true) {}
+	public func toggle(animated: Bool = true) {}
 	
-	init(size: CGSize) {
+	public init(size: CGSize) {
 		self.size = size
 		super.init(frame: CGRect(x: 0, y: 0, width: size.width*Oo.s, height: size.height*Oo.s))
 		backgroundColor = UIColor.clear

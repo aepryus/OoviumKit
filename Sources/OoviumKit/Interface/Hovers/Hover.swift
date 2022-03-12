@@ -58,7 +58,7 @@ open class Hover: Gadget {
 	override var size: CGSize {
 		didSet { render() }
 	}
-	override func invoke(animated: Bool = true) {
+	public override func invoke(animated: Bool = true) {
 		guard !aetherView.invoked(hover: self) else { return }
 		render()
 		self.alpha = 0
@@ -75,7 +75,7 @@ open class Hover: Gadget {
 			onFadeIn()
 		}
 	}
-	override func dismiss(animated: Bool = true) {
+	public override func dismiss(animated: Bool = true) {
 		guard aetherView.invoked(hover: self) else { return }
 		self.onDismiss()
 		if animated {
@@ -92,7 +92,7 @@ open class Hover: Gadget {
 			onFadeOut()
 		}
 	}
-	override func toggle(animated: Bool = true) {
+	public override func toggle(animated: Bool = true) {
 		if aetherView.invoked(hover: self) { dismiss() }
 		else { invoke() }
 	}
