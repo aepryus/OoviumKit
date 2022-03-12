@@ -8,20 +8,20 @@
 
 import UIKit
 
-public class Hover: Gadget {
+open class Hover: Gadget {
 	unowned let aetherView: AetherView
 	let anchor: Position
 	let offset: UIOffset
 	var fixed: UIOffset
 	
-	init(aetherView: AetherView, anchor: Position, size: CGSize, offset: UIOffset, fixed: UIOffset = .zero) {
+	public init(aetherView: AetherView, anchor: Position, size: CGSize, offset: UIOffset, fixed: UIOffset = .zero) {
 		self.aetherView = aetherView
 		self.anchor = anchor
 		self.offset = offset
 		self.fixed = fixed
 		super.init(size: size)
 	}
-	required init?(coder: NSCoder) { fatalError() }
+	public required init?(coder: NSCoder) { fatalError() }
 	
 	var hs: CGFloat {
 		return aetherView.hoverScale

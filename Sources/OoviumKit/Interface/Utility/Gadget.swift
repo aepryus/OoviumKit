@@ -8,7 +8,7 @@
 
 import UIKit
 
-public class Gadget: UIView {
+open class Gadget: UIView {
 	var size: CGSize = CGSize.zero
 	
 	func invoke(animated: Bool = true) {}

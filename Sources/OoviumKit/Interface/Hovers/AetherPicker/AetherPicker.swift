@@ -195,7 +195,7 @@ public class AetherPicker: Hover, UITableViewDelegate, UITableViewDataSource {
 		transformButtons()
 	}
 	
-	func rerender() {
+	public func rerender() {
 		aetherButton.setNeedsDisplay()
 		aetherList.reloadData()
 	}
