@@ -460,7 +460,7 @@ public class AetherView: UIView, UIScrollViewDelegate, UIGestureRecognizerDelega
 			}
 		}
 	}
-	func clearAether() {
+	public func clearAether() {
 		self.aether.removeAllAexels()
 		UIView.animate(withDuration: 0.2, animations: {
 			self.bubbles.forEach {$0.alpha = 0}
