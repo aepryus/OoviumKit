@@ -9,7 +9,7 @@
 import Acheron
 import UIKit
 
-class PathButton: UIButton {
+public class PathButton: UIButton {
 	var path: CGPath {
 		didSet {
 			let box = path.boundingBox.insetBy(dx: -2, dy: -2)
@@ -24,7 +24,7 @@ class PathButton: UIButton {
 	
 	var pen: Pen
 	
-	init(uiColor: UIColor = UIColor.white, key: String) {
+	public init(uiColor: UIColor = UIColor.white, key: String) {
 		path = CGMutablePath()
 		self.uiColor = uiColor
 		self.key = key
@@ -43,10 +43,10 @@ class PathButton: UIButton {
 	}
 	
 // UIView ==========================================================================================
-	override func hitTest(_ point: CGPoint, with event: UIEvent?) -> UIView? {
+	override public func hitTest(_ point: CGPoint, with event: UIEvent?) -> UIView? {
 		return path.contains(point) ? super.hitTest(point, with: event) : nil
 	}
-	override func draw(_ rect: CGRect) {
+	override public func draw(_ rect: CGRect) {
 		draw(path: path)
 	}
 }
