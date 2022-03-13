@@ -9,7 +9,7 @@
 import Acheron
 import UIKit
 
-class Orb {
+public class Orb {
 	var orbits: [Orbit] = []
 	
 	func orb(it orbit: Orbit) {

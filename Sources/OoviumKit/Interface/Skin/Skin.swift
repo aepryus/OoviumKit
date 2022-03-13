@@ -103,7 +103,7 @@ public class Skin {
 	static func gridFill(path: CGPath, uiColor: UIColor) {
 		skin.gridFill(path: path, uiColor: uiColor)
 	}
-	static func gridCalc(path: CGPath, uiColor: UIColor) {
+	public static func gridCalc(path: CGPath, uiColor: UIColor) {
 		skin.gridCalc(path: path, uiColor: uiColor)
 	}
 	static func pulse(context: CGContext, rect: CGRect, uiColor: UIColor) {

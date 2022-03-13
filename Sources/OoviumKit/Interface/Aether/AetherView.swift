@@ -26,7 +26,7 @@ extension AetherViewDelegate {
 
 public class AetherView: UIView, UIScrollViewDelegate, UIGestureRecognizerDelegate {
 	public var aether: Aether
-	var space: Space? = nil
+	public var space: Space? = nil
 	
 	var scrollView: UIScrollView = UIScrollView()
 	
@@ -59,7 +59,7 @@ public class AetherView: UIView, UIScrollViewDelegate, UIGestureRecognizerDelega
 	public var aetherPickerOffset: UIOffset = UIOffset.zero
 	public var toolBarOffset: UIOffset?
 	
-	var orb: Orb = ScreenOrb()
+	public var orb: Orb = ScreenOrb()
 //	let backView: BackView = BackView()
 
 	let hookView: HookView = HookView()
@@ -78,7 +78,7 @@ public class AetherView: UIView, UIScrollViewDelegate, UIGestureRecognizerDelega
 	lazy var anchorTap: AnchorTap = { AnchorTap(aetherView: self) }()
 	lazy var anchorPan: AnchorPan = { AnchorPan(aetherView: self) }()
 	
-	var needsStretch: Bool = false
+	public var needsStretch: Bool = false
 	var lockVerticalScrolling: Bool = false
 
 	var slid: Bool = false
