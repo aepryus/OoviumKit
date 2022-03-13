@@ -73,13 +73,13 @@ public class Skin {
 	// Static ==========================================================================================
 	public static var skin: Skin = TronSkin()
 	
-	static var backColor: UIColor {
+	public static var backColor: UIColor {
 		return skin.backColor
 	}
-	static var statusBarStyle: UIStatusBarStyle {
+	public static var statusBarStyle: UIStatusBarStyle {
 		return skin.statusBarStyle
 	}
-	static var fadePercent: CGFloat {
+	public static var fadePercent: CGFloat {
 		return skin.fadePercent
 	}
 	
@@ -103,7 +103,7 @@ public class Skin {
 	static func gridFill(path: CGPath, uiColor: UIColor) {
 		skin.gridFill(path: path, uiColor: uiColor)
 	}
-	static func gridCalc(path: CGPath, uiColor: UIColor) {
+	public static func gridCalc(path: CGPath, uiColor: UIColor) {
 		skin.gridCalc(path: path, uiColor: uiColor)
 	}
 	static func pulse(context: CGContext, rect: CGRect, uiColor: UIColor) {
@@ -116,13 +116,13 @@ public class Skin {
 		skin.doodle(c: c, path: path, color: color, asleep: asleep)
 	}
 	
-	static func panel(path: CGPath, uiColor: UIColor) {
+	public static func panel(path: CGPath, uiColor: UIColor) {
 		skin.panel(path: path, uiColor: uiColor)
 	}
-	static func panel(text: String, rect: CGRect, pen: Pen) {
+	public static func panel(text: String, rect: CGRect, pen: Pen) {
 		skin.panel(text: text, rect: rect, pen: pen)
 	}
-	static func panelOverride(text: String, rect: CGRect, pen: Pen) {
+	public static func panelOverride(text: String, rect: CGRect, pen: Pen) {
 		skin.panelOverride(text: text, rect: rect, pen: pen)
 	}
 	static func key(path: CGPath, uiColor: UIColor) {
@@ -140,10 +140,10 @@ public class Skin {
 	public static func bubble(path: CGPath, uiColor: UIColor, width: CGFloat) {
 		skin.bubble(path: path, uiColor: uiColor, width: width)
 	}
-	static func bubble(text: String, x: CGFloat, y: CGFloat, uiColor: UIColor? = nil, pen: Pen? = nil) {
+	public static func bubble(text: String, x: CGFloat, y: CGFloat, uiColor: UIColor? = nil, pen: Pen? = nil) {
 		skin.bubble(text: text, x: x, y: y, uiColor: uiColor, pen: pen)
 	}
-	static func bubble(text: String, rect: CGRect, uiColor: UIColor? = nil, pen: Pen? = nil) {
+	public static func bubble(text: String, rect: CGRect, uiColor: UIColor? = nil, pen: Pen? = nil) {
 		skin.bubble(text: text, rect: rect, uiColor: uiColor, pen: pen)
 	}
 	static func shape(text: String, rect: CGRect, uiColor: UIColor, maxWidth: CGFloat? = nil) {
@@ -176,10 +176,10 @@ public class Skin {
 	static func plasma(path: CGPath, uiColor: UIColor) {
 		skin.plasma(path: path, uiColor: uiColor)
 	}
-	static func about(text: String, x: CGFloat, y: CGFloat, uiColor: UIColor, font: UIFont) {
+	public static func about(text: String, x: CGFloat, y: CGFloat, uiColor: UIColor, font: UIFont) {
 		skin.about(text: text, x: x, y: y, uiColor: uiColor, font: font)
 	}
-	static func about(path: CGPath, uiColor: UIColor) {
+	public static func about(path: CGPath, uiColor: UIColor) {
 		skin.about(path: path, uiColor: uiColor)
 	}
 	static func end(path: CGPath, uiColor: UIColor) {

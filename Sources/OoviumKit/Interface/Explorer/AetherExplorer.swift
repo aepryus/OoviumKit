@@ -9,8 +9,8 @@
 import Acheron
 import UIKit
 
-class AetherExplorer: UIView, UITableViewDataSource, SpaceDelegate {
-	var space: Space = Space.local {
+public class AetherExplorer: UIView, UITableViewDataSource, SpaceDelegate {
+	public var space: Space = Space.local {
 		didSet {
 			tableView.setContentOffset(.zero, animated: false)
 			navigator.transform = .identity
@@ -73,7 +73,7 @@ class AetherExplorer: UIView, UITableViewDataSource, SpaceDelegate {
 	}
 
 // UIView ==========================================================================================
-	override func layoutSubviews() {
+	override public func layoutSubviews() {
 		tableView.topLeft(dx: 35*s, size: CGSize(width: 295*s, height: height))
 	}
 
@@ -99,10 +99,10 @@ class AetherExplorer: UIView, UITableViewDataSource, SpaceDelegate {
 		semaphore.wait()
 	}
 
-	func tableView(_ tableView: UITableView, numberOfRowsInSection section: Int) -> Int {
+	public func tableView(_ tableView: UITableView, numberOfRowsInSection section: Int) -> Int {
 		spaces.count + aetherNames.count
 	}
-	func tableView(_ tableView: UITableView, cellForRowAt indexPath: IndexPath) -> UITableViewCell {
+	public func tableView(_ tableView: UITableView, cellForRowAt indexPath: IndexPath) -> UITableViewCell {
 		let cell: AetherExplorerCell = tableView.dequeueReusableCell(withIdentifier: "cell") as! AetherExplorerCell
 		if indexPath.row < spaces.count {
 			cell.bind(explorer: self, space: spaces[indexPath.row])

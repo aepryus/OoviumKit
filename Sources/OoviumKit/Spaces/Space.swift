@@ -15,7 +15,7 @@ protocol SpaceDelegate: AnyObject {
 }
 
 public class Space {
-	enum SpaceType: String { case anchor, local, cloud, pequod }
+	public enum SpaceType: String { case anchor, local, cloud, pequod }
 	
 	let type: SpaceType
 	let path: String
@@ -23,24 +23,24 @@ public class Space {
 	unowned let parent: Space?
 	weak var delegate: SpaceDelegate? = nil
 
-	init(type: SpaceType, path: String, name: String, parent: Space? = nil) {
+	public init(type: SpaceType, path: String, name: String, parent: Space? = nil) {
 		self.type = type
 		self.path = path
 		self.name = name
 		self.parent = parent
 	}
 
-	var key: String {
+	public var key: String {
 		return "\(type.rawValue)::\(path)"
 	}
 
-	func loadSpaces(complete: @escaping ([Space])->()) { complete([]) }
-	func loadNames(complete: @escaping ([String])->()) { complete([]) }
-	func loadAether(name: String, complete: @escaping (String?)->()) { complete(nil) }
-	func storeAether(_ aether: Aether, complete: @escaping (Bool)->() = {(Bool) in}) { complete(true) }
-	func removeAether(name: String, complete: @escaping (Bool)->() = {(Bool) in}) { complete(true) }
+	public func loadSpaces(complete: @escaping ([Space])->()) { complete([]) }
+	public func loadNames(complete: @escaping ([String])->()) { complete([]) }
+	public func loadAether(name: String, complete: @escaping (String?)->()) { complete(nil) }
+	public func storeAether(_ aether: Aether, complete: @escaping (Bool)->() = {(Bool) in}) { complete(true) }
+	public func removeAether(name: String, complete: @escaping (Bool)->() = {(Bool) in}) { complete(true) }
 
-	func newAether(complete: @escaping (Aether?)->()) {
+	public func newAether(complete: @escaping (Aether?)->()) {
 		loadNames { (names: [String]) in
 			let aether = Aether()
 			var aetherNo: Int = 0
@@ -56,7 +56,7 @@ public class Space {
 		}
 	}
 
-	func loadDeepSpaces(complete: ([Space])->()) {
+	public func loadDeepSpaces(complete: ([Space])->()) {
 		var deepSpaces: [Space] = [self]
 		let group = DispatchGroup()
 		group.enter()
@@ -78,26 +78,26 @@ public class Space {
 		complete(deepSpaces)
 	}
 
-	func aetherPath(aether: Aether) -> String {
+	public func aetherPath(aether: Aether) -> String {
 		if path == "" { return "\(key)\(aether.name)" }
 		else { return "\(key)/\(aether.name)" }
 	}
 
 // Static ==========================================================================================
-	static let anchor: AnchorSpace = AnchorSpace()
+	public static let anchor: AnchorSpace = AnchorSpace()
 	public static let local: LocalSpace = LocalSpace(path: "", parent: Space.anchor)
-	static var cloud: CloudSpace? = nil
-	static let pequod: PequodSpace = PequodSpace(path: "", parent: Space.anchor)
+	public static var cloud: CloudSpace? = nil
+	public static let pequod: PequodSpace = PequodSpace(path: "", parent: Space.anchor)
 
-	static var spaces: [String:Space] = [:]
-	static func loadSpaces(complete: ()->()) {
+	public static var spaces: [String:Space] = [:]
+	public static func loadSpaces(complete: ()->()) {
 		Space.anchor.loadDeepSpaces { (spaces: [Space]) in
 			spaces.forEach { self.spaces[$0.key] = $0 }
 			print("Available Spaces ================================")
 			self.spaces.forEach { print("\t \($0.key)") }
 		}
 	}
-	static func split(aetherPath: String) -> (String, String) {
+	public static func split(aetherPath: String) -> (String, String) {
 		if let p: Int = aetherPath.lastLoc(of: "/") {
 			return (aetherPath[...(p-1)], aetherPath[(p+1)...])
 		} else if let p: Int = aetherPath.loc(of: "::") {
@@ -106,13 +106,13 @@ public class Space {
 			fatalError()
 		}
 	}
-	static func digest(space: Space, name: String, complete: @escaping (Aether?)->()) {
+	public static func digest(space: Space, name: String, complete: @escaping (Aether?)->()) {
 		space.loadAether(name: name) { (json: String?) in
 			guard let json = json else { complete(nil); return }
 			complete(Aether(json: Migrate.migrateAether(json: json)))
 		}
 	}
-	static func digest(aetherPath: String, complete: @escaping ((Space, Aether)?)->()) {
+	public static func digest(aetherPath: String, complete: @escaping ((Space, Aether)?)->()) {
 		let (key, name) = split(aetherPath: aetherPath)
 
 		guard let space: Space = spaces[key] else { return }

@@ -8,26 +8,26 @@
 
 import UIKit
 
-public class Hover: Gadget {
-	unowned let aetherView: AetherView
+open class Hover: Gadget {
+	public unowned let aetherView: AetherView
 	let anchor: Position
 	let offset: UIOffset
 	var fixed: UIOffset
 	
-	init(aetherView: AetherView, anchor: Position, size: CGSize, offset: UIOffset, fixed: UIOffset = .zero) {
+	public init(aetherView: AetherView, anchor: Position, size: CGSize, offset: UIOffset, fixed: UIOffset = .zero) {
 		self.aetherView = aetherView
 		self.anchor = anchor
 		self.offset = offset
 		self.fixed = fixed
 		super.init(size: size)
 	}
-	required init?(coder: NSCoder) { fatalError() }
+	public required init?(coder: NSCoder) { fatalError() }
 	
 	var hs: CGFloat {
 		return aetherView.hoverScale
 	}
 
-	func render() {
+	public func render() {
 		var x: CGFloat
 		var y: CGFloat
 
@@ -44,21 +44,21 @@ public class Hover: Gadget {
 
 		frame = CGRect(x: x, y: y, width: hs*size.width, height: hs*size.height)
 	}
-	func reRender() {}
-	func rescale() {}
-	func retract() {}
+	public func reRender() {}
+	open func rescale() {}
+	open func retract() {}
 	
 // Events ==========================================================================================
-	func onFadeIn() {}
-	func onFadeOut() {}
-	func onInvoke() {}
-	func onDismiss() {}
+	open func onFadeIn() {}
+	open func onFadeOut() {}
+	open func onInvoke() {}
+	open func onDismiss() {}
 
 // Gadget ==========================================================================================
-	override var size: CGSize {
+	override public var size: CGSize {
 		didSet { render() }
 	}
-	override func invoke(animated: Bool = true) {
+	public override func invoke(animated: Bool = true) {
 		guard !aetherView.invoked(hover: self) else { return }
 		render()
 		self.alpha = 0
@@ -75,7 +75,7 @@ public class Hover: Gadget {
 			onFadeIn()
 		}
 	}
-	override func dismiss(animated: Bool = true) {
+	public override func dismiss(animated: Bool = true) {
 		guard aetherView.invoked(hover: self) else { return }
 		self.onDismiss()
 		if animated {
@@ -92,7 +92,7 @@ public class Hover: Gadget {
 			onFadeOut()
 		}
 	}
-	override func toggle(animated: Bool = true) {
+	public override func toggle(animated: Bool = true) {
 		if aetherView.invoked(hover: self) { dismiss() }
 		else { invoke() }
 	}

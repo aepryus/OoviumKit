@@ -26,7 +26,7 @@ extension AetherViewDelegate {
 
 public class AetherView: UIView, UIScrollViewDelegate, UIGestureRecognizerDelegate {
 	public var aether: Aether
-	var space: Space? = nil
+	public var space: Space? = nil
 	
 	var scrollView: UIScrollView = UIScrollView()
 	
@@ -50,7 +50,7 @@ public class AetherView: UIView, UIScrollViewDelegate, UIGestureRecognizerDelega
 	var currentTextLeaf: TextLeaf? = nil
 	let oldPicker: Bool
 	
-	var hovers: [Hover] = []
+	public var hovers: [Hover] = []
 	public var aetherPicker: AetherPicker? = nil
 	var bubbleToolBar: BubbleToolBar? = nil
 	var shapeToolBar: ShapeToolBar? = nil
@@ -59,8 +59,8 @@ public class AetherView: UIView, UIScrollViewDelegate, UIGestureRecognizerDelega
 	public var aetherPickerOffset: UIOffset = UIOffset.zero
 	public var toolBarOffset: UIOffset?
 	
-	var orb: Orb = ScreenOrb()
-//	let backView: BackView = BackView()
+	public var orb: Orb = ScreenOrb()
+	public var backView: UIView? = nil
 
 	let hookView: HookView = HookView()
 	
@@ -78,8 +78,8 @@ public class AetherView: UIView, UIScrollViewDelegate, UIGestureRecognizerDelega
 	lazy var anchorTap: AnchorTap = { AnchorTap(aetherView: self) }()
 	lazy var anchorPan: AnchorPan = { AnchorPan(aetherView: self) }()
 	
-	var needsStretch: Bool = false
-	var lockVerticalScrolling: Bool = false
+	public var needsStretch: Bool = false
+	public var lockVerticalScrolling: Bool = false
 
 	var slid: Bool = false
 	
@@ -92,9 +92,9 @@ public class AetherView: UIView, UIScrollViewDelegate, UIGestureRecognizerDelega
 		backgroundColor = UIColor.clear
 		scrollView.backgroundColor = UIColor.clear
 
-//		if burn { addSubview(backView) }
-//		addSubview(scrollView)
-//
+		if let backView = backView, burn { addSubview(backView) }
+		addSubview(scrollView)
+
 		if !oldPicker {
 			addSubview(hookView)
 			hookView.frame = CGRect(x: 3*s, y: Screen.mac ? 3*s : Screen.safeTop, width: Screen.mac ? 210*s : 168*s, height: Screen.mac ? 40*s : 32*s)
@@ -179,16 +179,16 @@ public class AetherView: UIView, UIScrollViewDelegate, UIGestureRecognizerDelega
 		
 		self.init(aether: aether, toolBox: ToolBox(tools), toolsOn: toolsOn, burn: burn)
 	}
-	convenience init() {
+	public convenience init() {
 		self.init(aether: Aether())
 	}
 	public required init?(coder aDecoder: NSCoder) {fatalError()}
 	
-	func reload() {
+	public func reload() {
 		closeCurrentAether()
 		openAether(aether)
 	}
-	func makePannable() {
+	public func makePannable() {
 		guard Screen.mac else { return }
 		let gesture = UIPanGestureRecognizer(target: self, action: #selector(onPan(_:)))
 		scrollView.addGestureRecognizer(gesture)
@@ -460,7 +460,7 @@ public class AetherView: UIView, UIScrollViewDelegate, UIGestureRecognizerDelega
 			}
 		}
 	}
-	func clearAether() {
+	public func clearAether() {
 		self.aether.removeAllAexels()
 		UIView.animate(withDuration: 0.2, animations: {
 			self.bubbles.forEach {$0.alpha = 0}
@@ -879,12 +879,12 @@ public class AetherView: UIView, UIScrollViewDelegate, UIGestureRecognizerDelega
 	func contractColorToolBar() {
 		colorToolBar?.contract()
 	}
-	func invokeMessageHover(_ message: String) {
+	public func invokeMessageHover(_ message: String) {
 		let messageHover: MessageHover = MessageHover(aetherView: self)
 		messageHover.message = message
 		messageHover.invoke()
 	}
-	func invokeConfirmHover(_ message: String, _ closure: @escaping()->()) {
+	public func invokeConfirmHover(_ message: String, _ closure: @escaping()->()) {
 		let confirmHover: ConfirmHover = ConfirmHover(aetherView: self)
 		confirmHover.message = message
 		confirmHover.closure = closure
@@ -893,7 +893,7 @@ public class AetherView: UIView, UIScrollViewDelegate, UIGestureRecognizerDelega
 
 // UIView ==========================================================================================
 	public override func layoutSubviews() {
-//		backView.frame = bounds
+		backView?.frame = bounds
 		scrollView.frame = bounds
 		hovers.forEach { $0.render() }
 		if orb is AetherViewOrb { orb.orbits.forEach { render(orbit: $0) } }

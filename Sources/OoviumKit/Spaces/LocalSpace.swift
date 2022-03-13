@@ -41,7 +41,7 @@ public class LocalSpace: Space {
 //	}
 
 // Space ===========================================================================================
-	override func loadSpaces(complete: @escaping ([Space]) -> ()) {
+	override public func loadSpaces(complete: @escaping ([Space]) -> ()) {
 		var spaces: [Space] = []
 		do {
 			let contents: [URL] = try FileManager.default.contentsOfDirectory(at: url, includingPropertiesForKeys: nil, options: [.skipsHiddenFiles]).filter( { $0.hasDirectoryPath } )
@@ -49,7 +49,7 @@ public class LocalSpace: Space {
 		} catch { print("\(error)") }
 		complete(spaces)
 	}
-	override func loadNames(complete: @escaping ([String]) -> ()) {
+	override public func loadNames(complete: @escaping ([String]) -> ()) {
 		var aetherNames: [String] = []
 		do {
 			let contents: [URL] = try FileManager.default.contentsOfDirectory(at: url, includingPropertiesForKeys: nil, options: []).filter({
@@ -61,7 +61,7 @@ public class LocalSpace: Space {
 		} catch { print("\(error)") }
 		complete(aetherNames.sorted { $0.uppercased() < $1.uppercased() })
 	}
-	public override func loadAether(name: String, complete: @escaping (String?) -> ()) {
+	override public func loadAether(name: String, complete: @escaping (String?) -> ()) {
 		if	let data = FileManager.default.contents(atPath: path(name: name)),
 			let json: String = String(data: data, encoding: .utf8) {
 			complete(json)
@@ -70,11 +70,11 @@ public class LocalSpace: Space {
 			complete(nil)
 		}
 	}
-	override func storeAether(_ aether: Aether, complete: @escaping (Bool) -> ()) {
+	override public func storeAether(_ aether: Aether, complete: @escaping (Bool) -> ()) {
 		FileManager.default.createFile(atPath: path(name: aether.name), contents: aether.unload().toJSON().data(using: .utf8), attributes: nil)
 		complete(true)
 	}
-	override func removeAether(name: String, complete: @escaping (Bool) -> ()) {
+	override public func removeAether(name: String, complete: @escaping (Bool) -> ()) {
 		do {
 			try FileManager.default.removeItem(atPath: path(name: name))
 		} catch {

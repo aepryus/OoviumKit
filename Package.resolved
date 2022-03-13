@@ -5,17 +5,17 @@
         "package": "Acheron",
         "repositoryURL": "https://github.com/aepryus/Acheron.git",
         "state": {
-          "branch": null,
-          "revision": "c4c5564ad76e552607e67b937b25e46a361c48cd",
-          "version": "1.0.0"
+          "branch": "master",
+          "revision": "26c02d4b80dac70bac383b298f97b00a02ae017b",
+          "version": null
         }
       },
       {
         "package": "OoviumEngine",
         "repositoryURL": "https://github.com/aepryus/OoviumEngine.git",
         "state": {
-          "branch": "makePublic",
-          "revision": "bb7d5b0ed454d6b754b07f0d7b814ddd556d7c11",
+          "branch": "master",
+          "revision": "14a324ae3f0483063d2c375a18238b295d23d604",
           "version": null
         }
       }

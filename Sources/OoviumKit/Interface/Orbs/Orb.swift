@@ -9,7 +9,7 @@
 import Acheron
 import UIKit
 
-class Orb {
+public class Orb {
 	var orbits: [Orbit] = []
 	
 	func orb(it orbit: Orbit) {
@@ -35,7 +35,7 @@ class Orb {
 
 	// Orbits
 	let alsoEditor: AlsoEditor = AlsoEditor()
-	let chainEditor: ChainEditor = ChainEditor()
+	public let chainEditor: ChainEditor = ChainEditor()
 	let colorEditor: ColorEditor = ColorEditor()
 	let headerEditor: HeaderEditor = HeaderEditor()
 	let lefterEditor: LefterEditor = LefterEditor()
