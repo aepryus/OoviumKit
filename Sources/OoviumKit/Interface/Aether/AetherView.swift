@@ -60,7 +60,7 @@ public class AetherView: UIView, UIScrollViewDelegate, UIGestureRecognizerDelega
 	public var toolBarOffset: UIOffset?
 	
 	public var orb: Orb = ScreenOrb()
-//	let backView: BackView = BackView()
+	let backView: UIView? = nil
 
 	let hookView: HookView = HookView()
 	
@@ -92,9 +92,9 @@ public class AetherView: UIView, UIScrollViewDelegate, UIGestureRecognizerDelega
 		backgroundColor = UIColor.clear
 		scrollView.backgroundColor = UIColor.clear
 
-//		if burn { addSubview(backView) }
-//		addSubview(scrollView)
-//
+		if let backView = backView, burn { addSubview(backView) }
+		addSubview(scrollView)
+
 		if !oldPicker {
 			addSubview(hookView)
 			hookView.frame = CGRect(x: 3*s, y: Screen.mac ? 3*s : Screen.safeTop, width: Screen.mac ? 210*s : 168*s, height: Screen.mac ? 40*s : 32*s)
@@ -893,7 +893,7 @@ public class AetherView: UIView, UIScrollViewDelegate, UIGestureRecognizerDelega
 
 // UIView ==========================================================================================
 	public override func layoutSubviews() {
-//		backView.frame = bounds
+		backView?.frame = bounds
 		scrollView.frame = bounds
 		hovers.forEach { $0.render() }
 		if orb is AetherViewOrb { orb.orbits.forEach { render(orbit: $0) } }

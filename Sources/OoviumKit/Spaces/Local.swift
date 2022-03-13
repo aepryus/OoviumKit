@@ -11,16 +11,6 @@ import Foundation
 import OoviumEngine
 
 public class Local {
-//	public static func set(key: String, value: String) {
-//		Pequod.basket.set(key: key, value: value)
-//	}
-//	public static func get(key: String) -> String? {
-//		return Pequod.basket.get(key: key)
-//	}
-//	public static func unset(key: String) {
-//		Pequod.basket.unset(key: key)
-//	}
-
 	public static func installAetherFromBundle(name: String) {
 		let atPath: String = Bundle.main.path(forResource: (Oo.iPhone ? "\(name) iP" : name), ofType: "oo")!
 		let path = NSSearchPathForDirectoriesInDomains(.documentDirectory, .userDomainMask, true)[0]
