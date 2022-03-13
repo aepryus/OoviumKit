@@ -9,11 +9,11 @@
 import UIKit
 
 public class KeySlot {
-	let row: CGFloat
-	let col: CGFloat
-	let w: CGFloat
-	let h: CGFloat
-	let key: UIControl
+	public let row: CGFloat
+	public let col: CGFloat
+	public let w: CGFloat
+	public let h: CGFloat
+	public let key: UIControl
 	
 	public init(row: CGFloat, col: CGFloat, w: CGFloat, h: CGFloat, key: UIControl) {
 		self.row = row
