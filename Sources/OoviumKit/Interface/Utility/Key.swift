@@ -18,7 +18,7 @@ public class Key: UIControl {
 		return isHighlighted ? UIColor.red : (active ? activeColor : uiColor)
 	}
 
-	var active: Bool = false {
+	public var active: Bool = false {
 		didSet { setNeedsDisplay() }
 	}
 	
