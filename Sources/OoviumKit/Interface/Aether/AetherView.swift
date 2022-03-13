@@ -66,7 +66,7 @@ public class AetherView: UIView, UIScrollViewDelegate, UIGestureRecognizerDelega
 			oldValue?.removeFromSuperview()
 			if let backView = backView, burn {
 				addSubview(backView)
-				sendSubviewToBack(scrollView)
+				sendSubviewToBack(backView)
 			}
 		}
 	}
