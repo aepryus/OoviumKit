@@ -12,7 +12,7 @@ public enum Orientations {
 	case portrait, landscape, both
 }
 
-public class Modal: Hover {
+open class Modal: Hover {
 	var forcedOrientation: UIInterfaceOrientationMask = .all
 	let orientations: Orientations
 
@@ -20,5 +20,5 @@ public class Modal: Hover {
 		self.orientations = orientations
 		super.init(aetherView: aetherView, anchor: anchor, size: size, offset: offset)
 	}
-	required init?(coder: NSCoder) { fatalError() }
+	public required init?(coder: NSCoder) { fatalError() }
 }
