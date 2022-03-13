@@ -10,7 +10,7 @@ import Acheron
 import UIKit
 
 public class AetherExplorer: UIView, UITableViewDataSource, SpaceDelegate {
-	var space: Space = Space.local {
+	public var space: Space = Space.local {
 		didSet {
 			tableView.setContentOffset(.zero, animated: false)
 			navigator.transform = .identity

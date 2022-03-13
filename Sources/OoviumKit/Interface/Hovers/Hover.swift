@@ -27,7 +27,7 @@ open class Hover: Gadget {
 		return aetherView.hoverScale
 	}
 
-	func render() {
+	public func render() {
 		var x: CGFloat
 		var y: CGFloat
 
@@ -44,9 +44,9 @@ open class Hover: Gadget {
 
 		frame = CGRect(x: x, y: y, width: hs*size.width, height: hs*size.height)
 	}
-	func reRender() {}
-	func rescale() {}
-	func retract() {}
+	public func reRender() {}
+	public func rescale() {}
+	public func retract() {}
 	
 // Events ==========================================================================================
 	open func onFadeIn() {}
