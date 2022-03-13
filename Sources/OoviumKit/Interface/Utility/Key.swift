@@ -8,7 +8,7 @@
 
 import UIKit
 
-class Key: UIControl {
+public class Key: UIControl {
 	let text: String
 	let uiColor: UIColor
 	let activeColor: UIColor
@@ -22,7 +22,7 @@ class Key: UIControl {
 		didSet { setNeedsDisplay() }
 	}
 	
-	init(text: String, uiColor: UIColor, activeColor: UIColor? = nil, font: UIFont, _ closure: @escaping()->()) {
+	public init(text: String, uiColor: UIColor, activeColor: UIColor? = nil, font: UIFont, _ closure: @escaping()->()) {
 		self.text = text
 		self.uiColor = uiColor
 		self.activeColor = activeColor ?? uiColor.tint(0.5)
@@ -31,18 +31,18 @@ class Key: UIControl {
 		addAction { closure() }
 		backgroundColor = UIColor.clear
 	}
-	convenience init(text: String, uiColor: UIColor, activeColor: UIColor? = nil, _ closure: @escaping()->()) {
+	public convenience init(text: String, uiColor: UIColor, activeColor: UIColor? = nil, _ closure: @escaping()->()) {
 		self.init(text: text, uiColor: uiColor, activeColor: activeColor, font: UIFont(name: "Verdana", size: 14*Oo.s)!, closure)
 	}
 	required init?(coder aDecoder: NSCoder) {fatalError()}
 	
 // UIView ==========================================================================================
-	override func draw(_ rect: CGRect) {
+	override public func draw(_ rect: CGRect) {
 		let path = CGPath(roundedRect: rect.insetBy(dx: floor(3*Oo.s), dy: floor(3*Oo.s)), cornerWidth: 7*Oo.s, cornerHeight: 7*Oo.s, transform: nil)
 		Skin.key(path: path, uiColor: current)
 		Skin.key(text: text, rect: rect.offsetBy(dx: 0, dy: -0.5), font: font)
 	}
-	override var isHighlighted: Bool {
+	override public var isHighlighted: Bool {
 		didSet { setNeedsDisplay() }
 	}
 }
