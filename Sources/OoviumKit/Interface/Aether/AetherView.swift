@@ -79,7 +79,7 @@ public class AetherView: UIView, UIScrollViewDelegate, UIGestureRecognizerDelega
 	lazy var anchorPan: AnchorPan = { AnchorPan(aetherView: self) }()
 	
 	public var needsStretch: Bool = false
-	var lockVerticalScrolling: Bool = false
+	public var lockVerticalScrolling: Bool = false
 
 	var slid: Bool = false
 	

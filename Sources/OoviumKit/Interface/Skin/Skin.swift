@@ -140,10 +140,10 @@ public class Skin {
 	public static func bubble(path: CGPath, uiColor: UIColor, width: CGFloat) {
 		skin.bubble(path: path, uiColor: uiColor, width: width)
 	}
-	static func bubble(text: String, x: CGFloat, y: CGFloat, uiColor: UIColor? = nil, pen: Pen? = nil) {
+	public static func bubble(text: String, x: CGFloat, y: CGFloat, uiColor: UIColor? = nil, pen: Pen? = nil) {
 		skin.bubble(text: text, x: x, y: y, uiColor: uiColor, pen: pen)
 	}
-	static func bubble(text: String, rect: CGRect, uiColor: UIColor? = nil, pen: Pen? = nil) {
+	public static func bubble(text: String, rect: CGRect, uiColor: UIColor? = nil, pen: Pen? = nil) {
 		skin.bubble(text: text, rect: rect, uiColor: uiColor, pen: pen)
 	}
 	static func shape(text: String, rect: CGRect, uiColor: UIColor, maxWidth: CGFloat? = nil) {
@@ -176,10 +176,10 @@ public class Skin {
 	static func plasma(path: CGPath, uiColor: UIColor) {
 		skin.plasma(path: path, uiColor: uiColor)
 	}
-	static func about(text: String, x: CGFloat, y: CGFloat, uiColor: UIColor, font: UIFont) {
+	public static func about(text: String, x: CGFloat, y: CGFloat, uiColor: UIColor, font: UIFont) {
 		skin.about(text: text, x: x, y: y, uiColor: uiColor, font: font)
 	}
-	static func about(path: CGPath, uiColor: UIColor) {
+	public static func about(path: CGPath, uiColor: UIColor) {
 		skin.about(path: path, uiColor: uiColor)
 	}
 	static func end(path: CGPath, uiColor: UIColor) {
