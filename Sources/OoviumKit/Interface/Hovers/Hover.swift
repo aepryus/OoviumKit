@@ -9,7 +9,7 @@
 import UIKit
 
 open class Hover: Gadget {
-	unowned let aetherView: AetherView
+	public unowned let aetherView: AetherView
 	let anchor: Position
 	let offset: UIOffset
 	var fixed: UIOffset
