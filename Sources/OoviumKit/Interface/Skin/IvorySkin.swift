@@ -72,7 +72,7 @@ public class IvorySkin: Skin {
 	}
 	
 	// Panel
-	override public func panel (path: CGPath, uiColor: UIColor) {
+	override func panel (path: CGPath, uiColor: UIColor) {
 		let rgb = RGB(uiColor: uiColor)
 		let field = rgb.blend(rgb: RGB.white, percent: 0.5)
 		let accent = rgb.blend(rgb: RGB.black, percent: 0.5)
@@ -84,7 +84,7 @@ public class IvorySkin: Skin {
 		c.addPath(path)
 		c.drawPath(using: .fillStroke)
 	}
-	override public func panel(text: String, rect: CGRect, pen: Pen) {
+	override func panel(text: String, rect: CGRect, pen: Pen) {
 		let newPen = pen.clone(color: pen.color.shade(0.5))
 		let c = UIGraphicsGetCurrentContext()!
 		c.saveGState()
@@ -92,7 +92,7 @@ public class IvorySkin: Skin {
 		(text as NSString).draw(in: rect, withAttributes: newPen.attributes)
 		c.restoreGState()
 	}
-	override public func panelOverride(text: String, rect: CGRect, pen: Pen) {
+	override func panelOverride(text: String, rect: CGRect, pen: Pen) {
 		let c = UIGraphicsGetCurrentContext()!
 		c.saveGState()
 		c.setShadow(offset: CGSize(width: 2, height: 2), blur: 2)

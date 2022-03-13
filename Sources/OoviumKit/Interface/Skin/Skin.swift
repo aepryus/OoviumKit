@@ -45,9 +45,9 @@ public class Skin {
 		c.drawPath(using: .stroke)
 	}
 	
-	public func panel(path: CGPath, uiColor: UIColor) {}
-	public func panel(text: String, rect: CGRect, pen: Pen) {}
-	public func panelOverride(text: String, rect: CGRect, pen: Pen) {}
+	func panel(path: CGPath, uiColor: UIColor) {}
+	func panel(text: String, rect: CGRect, pen: Pen) {}
+	func panelOverride(text: String, rect: CGRect, pen: Pen) {}
 	func key(path: CGPath, uiColor: UIColor) {}
 	func key(text: String, rect: CGRect, font: UIFont) {}
 	func key(image: UIImage, rect: CGRect, font: UIFont) {}
@@ -116,13 +116,13 @@ public class Skin {
 		skin.doodle(c: c, path: path, color: color, asleep: asleep)
 	}
 	
-	static func panel(path: CGPath, uiColor: UIColor) {
+	public static func panel(path: CGPath, uiColor: UIColor) {
 		skin.panel(path: path, uiColor: uiColor)
 	}
-	static func panel(text: String, rect: CGRect, pen: Pen) {
+	public static func panel(text: String, rect: CGRect, pen: Pen) {
 		skin.panel(text: text, rect: rect, pen: pen)
 	}
-	static func panelOverride(text: String, rect: CGRect, pen: Pen) {
+	public static func panelOverride(text: String, rect: CGRect, pen: Pen) {
 		skin.panelOverride(text: text, rect: rect, pen: pen)
 	}
 	static func key(path: CGPath, uiColor: UIColor) {
