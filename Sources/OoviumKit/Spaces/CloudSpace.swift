@@ -21,7 +21,7 @@ public class CloudSpace: Space {
 	let operationQueue: OperationQueue = OperationQueue()
 	let queue: DispatchQueue = DispatchQueue(label: "CloudSpace")
 
-	init?(path: String, parent: Space, complete: (()->())? = nil) {
+	public init?(path: String, parent: Space, complete: (()->())? = nil) {
 		self.complete = complete
 		guard let rootURL: URL = FileManager.default.url(forUbiquityContainerIdentifier: nil) else { self.complete?(); return nil }
 		query.operationQueue = operationQueue

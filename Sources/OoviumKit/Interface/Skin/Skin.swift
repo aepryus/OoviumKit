@@ -45,9 +45,9 @@ public class Skin {
 		c.drawPath(using: .stroke)
 	}
 	
-	func panel(path: CGPath, uiColor: UIColor) {}
-	func panel(text: String, rect: CGRect, pen: Pen) {}
-	func panelOverride(text: String, rect: CGRect, pen: Pen) {}
+	public func panel(path: CGPath, uiColor: UIColor) {}
+	public func panel(text: String, rect: CGRect, pen: Pen) {}
+	public func panelOverride(text: String, rect: CGRect, pen: Pen) {}
 	func key(path: CGPath, uiColor: UIColor) {}
 	func key(text: String, rect: CGRect, font: UIFont) {}
 	func key(image: UIImage, rect: CGRect, font: UIFont) {}

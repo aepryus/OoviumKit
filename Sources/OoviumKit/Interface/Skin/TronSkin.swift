@@ -49,7 +49,7 @@ public class TronSkin: Skin {
 		pen = pen.clone(color: UIColor.white.shade(0.3))
 		(text as NSString).draw(in: rect, withAttributes: pen.attributes)
 	}
-	override func panelOverride(text: String, rect: CGRect, pen: Pen) {
+	override public func panelOverride(text: String, rect: CGRect, pen: Pen) {
 		let c = UIGraphicsGetCurrentContext()!
 		c.saveGState()
 		c.setShadow(offset: CGSize(width: 2, height: 2), blur: 2)
@@ -99,7 +99,7 @@ public class TronSkin: Skin {
 	}
 	
 	// Panel
-	override func panel (path: CGPath, uiColor: UIColor) {
+	override public func panel (path: CGPath, uiColor: UIColor) {
 		let c = UIGraphicsGetCurrentContext()!
 		let width: CGFloat = 4/3*Oo.s
 		
@@ -122,7 +122,7 @@ public class TronSkin: Skin {
 		c.addPath(path)
 		c.drawPath(using: .stroke)
 	}
-	override func panel(text: String, rect: CGRect, pen: Pen) {
+	override public func panel(text: String, rect: CGRect, pen: Pen) {
 		let pen = pen.clone(color: pen.color.shade(0.7))
 		let c = UIGraphicsGetCurrentContext()!
 		c.saveGState()
