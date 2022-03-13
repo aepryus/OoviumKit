@@ -8,13 +8,13 @@
 
 import UIKit
 
-class Oo {
-	static var iPhone: Bool {
+public class Oo {
+	public static var iPhone: Bool {
 		return UIDevice.current.userInterfaceIdiom == .phone
 	}
-	static var iPad: Bool {
+	public static var iPad: Bool {
 		return UIDevice.current.userInterfaceIdiom == .pad
 	}
 	
-	static var s: CGFloat = Oo.iPhone ? 1 : 1.5
+	public static var s: CGFloat = Oo.iPhone ? 1 : 1.5
 }
