@@ -13,7 +13,7 @@ public enum Orientations {
 }
 
 open class Modal: Hover {
-	var forcedOrientation: UIInterfaceOrientationMask = .all
+	public var forcedOrientation: UIInterfaceOrientationMask = .all
 	let orientations: Orientations
 
 	public init(aetherView: AetherView, anchor: Position, size: CGSize = .zero, offset: UIOffset = .zero, fixed: UIOffset = .zero, orientations: Orientations = .both) {

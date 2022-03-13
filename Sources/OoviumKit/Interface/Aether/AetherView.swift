@@ -188,7 +188,7 @@ public class AetherView: UIView, UIScrollViewDelegate, UIGestureRecognizerDelega
 		closeCurrentAether()
 		openAether(aether)
 	}
-	func makePannable() {
+	public func makePannable() {
 		guard Screen.mac else { return }
 		let gesture = UIPanGestureRecognizer(target: self, action: #selector(onPan(_:)))
 		scrollView.addGestureRecognizer(gesture)
