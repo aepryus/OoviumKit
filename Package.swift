@@ -14,6 +14,13 @@ let package = Package(
 		.package(url: "https://github.com/aepryus/OoviumEngine.git", branch: "master"),
     ],
     targets: [
-        .target(name: "OoviumKit", dependencies: ["OoviumEngine"]),
+        .target(
+			name: "OoviumKit",
+			dependencies: ["OoviumEngine"],
+			resources: [
+				.process("Resources/Fonts/ChicagoFLF.ttf"),
+				.process("Resources/Fonts/Roboto-Medium.ttf")
+			]
+		),
     ]
 )
