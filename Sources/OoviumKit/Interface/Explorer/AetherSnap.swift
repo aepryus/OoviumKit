@@ -14,7 +14,7 @@ class AetherSnap: UIControl {
 
 	private var path: CGPath = CGPath(rect: .zero, transform: nil)
 
-	static let pen: Pen = Pen(font: UIFont(name: "ChicagoFLF", size: 19*Screen.s)!, color: UIColor.green.tint(0.7), alignment: .right)
+	static let pen: Pen = Pen(font: UIFont(name: "Resources/ChicagoFLF", size: 19*Screen.s)!, color: UIColor.green.tint(0.7), alignment: .right)
 	static let highlightPen: Pen = pen.clone(color: UIColor.green.tint(0.97))
 
 	init(space: Space, navigator: AetherNavigator) {
