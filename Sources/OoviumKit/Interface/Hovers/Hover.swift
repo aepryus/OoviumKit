@@ -49,10 +49,10 @@ open class Hover: Gadget {
 	func retract() {}
 	
 // Events ==========================================================================================
-	func onFadeIn() {}
-	func onFadeOut() {}
-	func onInvoke() {}
-	func onDismiss() {}
+	public func onFadeIn() {}
+	public func onFadeOut() {}
+	public func onInvoke() {}
+	public func onDismiss() {}
 
 // Gadget ==========================================================================================
 	override var size: CGSize {
