@@ -33,7 +33,7 @@ public class Orbit: Gadget {
 	func onDismiss() {}
 	
 // Gadget ==========================================================================================
-	override var size: CGSize {
+	override public var size: CGSize {
 		didSet {}
 	}
 }

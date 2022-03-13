@@ -9,7 +9,7 @@
 import UIKit
 
 open class Gadget: UIView {
-	var size: CGSize = CGSize.zero
+	public var size: CGSize = CGSize.zero
 	
 	public func invoke(animated: Bool = true) {}
 	public func dismiss(animated: Bool = true) {}

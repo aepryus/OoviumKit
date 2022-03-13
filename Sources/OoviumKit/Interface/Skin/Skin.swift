@@ -73,13 +73,13 @@ public class Skin {
 	// Static ==========================================================================================
 	public static var skin: Skin = TronSkin()
 	
-	static var backColor: UIColor {
+	public static var backColor: UIColor {
 		return skin.backColor
 	}
-	static var statusBarStyle: UIStatusBarStyle {
+	public static var statusBarStyle: UIStatusBarStyle {
 		return skin.statusBarStyle
 	}
-	static var fadePercent: CGFloat {
+	public static var fadePercent: CGFloat {
 		return skin.fadePercent
 	}
 	

@@ -55,7 +55,7 @@ open class Hover: Gadget {
 	open func onDismiss() {}
 
 // Gadget ==========================================================================================
-	override var size: CGSize {
+	override public var size: CGSize {
 		didSet { render() }
 	}
 	public override func invoke(animated: Bool = true) {

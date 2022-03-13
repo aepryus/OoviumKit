@@ -184,7 +184,7 @@ public class AetherView: UIView, UIScrollViewDelegate, UIGestureRecognizerDelega
 	}
 	public required init?(coder aDecoder: NSCoder) {fatalError()}
 	
-	func reload() {
+	public func reload() {
 		closeCurrentAether()
 		openAether(aether)
 	}

@@ -10,7 +10,7 @@ import Acheron
 import UIKit
 
 public class PathButton: UIButton {
-	var path: CGPath {
+	public var path: CGPath {
 		didSet {
 			let box = path.boundingBox.insetBy(dx: -2, dy: -2)
 			var transform = CGAffineTransform(translationX: -box.origin.x, y: -box.origin.y)
@@ -22,7 +22,7 @@ public class PathButton: UIButton {
 	var key: String
 	var offset: UIOffset
 	
-	var pen: Pen
+	public var pen: Pen
 	
 	public init(uiColor: UIColor = UIColor.white, key: String) {
 		path = CGMutablePath()
