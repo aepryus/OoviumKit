@@ -45,8 +45,8 @@ open class Hover: Gadget {
 		frame = CGRect(x: x, y: y, width: hs*size.width, height: hs*size.height)
 	}
 	public func reRender() {}
-	public func rescale() {}
-	public func retract() {}
+	open func rescale() {}
+	open func retract() {}
 	
 // Events ==========================================================================================
 	open func onFadeIn() {}
