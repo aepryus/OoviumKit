@@ -879,12 +879,12 @@ public class AetherView: UIView, UIScrollViewDelegate, UIGestureRecognizerDelega
 	func contractColorToolBar() {
 		colorToolBar?.contract()
 	}
-	func invokeMessageHover(_ message: String) {
+	public func invokeMessageHover(_ message: String) {
 		let messageHover: MessageHover = MessageHover(aetherView: self)
 		messageHover.message = message
 		messageHover.invoke()
 	}
-	func invokeConfirmHover(_ message: String, _ closure: @escaping()->()) {
+	public func invokeConfirmHover(_ message: String, _ closure: @escaping()->()) {
 		let confirmHover: ConfirmHover = ConfirmHover(aetherView: self)
 		confirmHover.message = message
 		confirmHover.closure = closure
