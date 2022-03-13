@@ -15,7 +15,7 @@ protocol SpaceDelegate: AnyObject {
 }
 
 public class Space {
-	enum SpaceType: String { case anchor, local, cloud, pequod }
+	public enum SpaceType: String { case anchor, local, cloud, pequod }
 	
 	let type: SpaceType
 	let path: String
@@ -23,24 +23,24 @@ public class Space {
 	unowned let parent: Space?
 	weak var delegate: SpaceDelegate? = nil
 
-	init(type: SpaceType, path: String, name: String, parent: Space? = nil) {
+	public init(type: SpaceType, path: String, name: String, parent: Space? = nil) {
 		self.type = type
 		self.path = path
 		self.name = name
 		self.parent = parent
 	}
 
-	var key: String {
+	public var key: String {
 		return "\(type.rawValue)::\(path)"
 	}
 
-	func loadSpaces(complete: @escaping ([Space])->()) { complete([]) }
-	func loadNames(complete: @escaping ([String])->()) { complete([]) }
-	func loadAether(name: String, complete: @escaping (String?)->()) { complete(nil) }
-	func storeAether(_ aether: Aether, complete: @escaping (Bool)->() = {(Bool) in}) { complete(true) }
-	func removeAether(name: String, complete: @escaping (Bool)->() = {(Bool) in}) { complete(true) }
+	public func loadSpaces(complete: @escaping ([Space])->()) { complete([]) }
+	public func loadNames(complete: @escaping ([String])->()) { complete([]) }
+	public func loadAether(name: String, complete: @escaping (String?)->()) { complete(nil) }
+	public func storeAether(_ aether: Aether, complete: @escaping (Bool)->() = {(Bool) in}) { complete(true) }
+	public func removeAether(name: String, complete: @escaping (Bool)->() = {(Bool) in}) { complete(true) }
 
-	func newAether(complete: @escaping (Aether?)->()) {
+	public func newAether(complete: @escaping (Aether?)->()) {
 		loadNames { (names: [String]) in
 			let aether = Aether()
 			var aetherNo: Int = 0
@@ -56,7 +56,7 @@ public class Space {
 		}
 	}
 
-	func loadDeepSpaces(complete: ([Space])->()) {
+	public func loadDeepSpaces(complete: ([Space])->()) {
 		var deepSpaces: [Space] = [self]
 		let group = DispatchGroup()
 		group.enter()
@@ -78,7 +78,7 @@ public class Space {
 		complete(deepSpaces)
 	}
 
-	func aetherPath(aether: Aether) -> String {
+	public func aetherPath(aether: Aether) -> String {
 		if path == "" { return "\(key)\(aether.name)" }
 		else { return "\(key)/\(aether.name)" }
 	}
