@@ -18,8 +18,8 @@ let package = Package(
 			name: "OoviumKit",
 			dependencies: ["OoviumEngine"],
 			resources: [
-				.process("Resources/Fonts/ChicagoFLF.ttf"),
-				.process("Resources/Fonts/Roboto-Medium.ttf")
+				.copy("Resources/Fonts/ChicagoFLF.ttf"),
+				.copy("Resources/Fonts/Roboto-Medium.ttf")
 			]
 		),
     ]
