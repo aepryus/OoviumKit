@@ -10,7 +10,7 @@ import Acheron
 import Foundation
 import OoviumEngine
 
-class CloudSpace: Space {
+public class CloudSpace: Space {
 	let url: URL
 	let query: NSMetadataQuery = NSMetadataQuery()
 	private var metadata: [String:NSMetadataItem] = [:]
@@ -101,13 +101,13 @@ class CloudSpace: Space {
 	@objc func queryGatheringProgress(_ notification: Notification) {}
 
 // Space ===========================================================================================
-	override func loadSpaces(complete: @escaping ([Space]) -> ()) {
+	override public func loadSpaces(complete: @escaping ([Space]) -> ()) {
 		complete(cachedSpaces)
 	}
-	override func loadNames(complete: @escaping ([String]) -> ()) {
+	override public func loadNames(complete: @escaping ([String]) -> ()) {
 		complete(cachedNames)
 	}
-	override func loadAether(name: String, complete: @escaping (String?) -> ()) {
+	override public func loadAether(name: String, complete: @escaping (String?) -> ()) {
 		guard let url = metadata[name]?.value(forAttribute: NSMetadataItemURLKey) as? URL else { return }
 
 		let aetherDocument: AetherDocument = documents[name] ?? {
@@ -123,7 +123,7 @@ class CloudSpace: Space {
 			}
 		}
 	}
-	override func storeAether(_ aether: Aether, complete: @escaping (Bool) -> ()) {
+	override public func storeAether(_ aether: Aether, complete: @escaping (Bool) -> ()) {
 		if let url = metadata[aether.name]?.value(forAttribute: NSMetadataItemURLKey) as? URL {
 			let aetherDocument: AetherDocument = documents[aether.name] ?? {
 				let document = AetherDocument(fileURL: url)
@@ -151,7 +151,7 @@ class CloudSpace: Space {
 			}
 		}
 	}
-	override func removeAether(name: String, complete: @escaping (Bool) -> ()) {
+	override public func removeAether(name: String, complete: @escaping (Bool) -> ()) {
 		do {
 			try FileManager.default.removeItem(atPath: path(name: name))
 			complete(true)

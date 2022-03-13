@@ -84,20 +84,20 @@ public class Space {
 	}
 
 // Static ==========================================================================================
-	static let anchor: AnchorSpace = AnchorSpace()
+	public static let anchor: AnchorSpace = AnchorSpace()
 	public static let local: LocalSpace = LocalSpace(path: "", parent: Space.anchor)
-	static var cloud: CloudSpace? = nil
-	static let pequod: PequodSpace = PequodSpace(path: "", parent: Space.anchor)
+	public static var cloud: CloudSpace? = nil
+	public static let pequod: PequodSpace = PequodSpace(path: "", parent: Space.anchor)
 
-	static var spaces: [String:Space] = [:]
-	static func loadSpaces(complete: ()->()) {
+	public static var spaces: [String:Space] = [:]
+	public static func loadSpaces(complete: ()->()) {
 		Space.anchor.loadDeepSpaces { (spaces: [Space]) in
 			spaces.forEach { self.spaces[$0.key] = $0 }
 			print("Available Spaces ================================")
 			self.spaces.forEach { print("\t \($0.key)") }
 		}
 	}
-	static func split(aetherPath: String) -> (String, String) {
+	public static func split(aetherPath: String) -> (String, String) {
 		if let p: Int = aetherPath.lastLoc(of: "/") {
 			return (aetherPath[...(p-1)], aetherPath[(p+1)...])
 		} else if let p: Int = aetherPath.loc(of: "::") {
@@ -106,13 +106,13 @@ public class Space {
 			fatalError()
 		}
 	}
-	static func digest(space: Space, name: String, complete: @escaping (Aether?)->()) {
+	public static func digest(space: Space, name: String, complete: @escaping (Aether?)->()) {
 		space.loadAether(name: name) { (json: String?) in
 			guard let json = json else { complete(nil); return }
 			complete(Aether(json: Migrate.migrateAether(json: json)))
 		}
 	}
-	static func digest(aetherPath: String, complete: @escaping ((Space, Aether)?)->()) {
+	public static func digest(aetherPath: String, complete: @escaping ((Space, Aether)?)->()) {
 		let (key, name) = split(aetherPath: aetherPath)
 
 		guard let space: Space = spaces[key] else { return }

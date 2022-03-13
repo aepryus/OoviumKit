@@ -179,7 +179,7 @@ public class AetherView: UIView, UIScrollViewDelegate, UIGestureRecognizerDelega
 		
 		self.init(aether: aether, toolBox: ToolBox(tools), toolsOn: toolsOn, burn: burn)
 	}
-	convenience init() {
+	public convenience init() {
 		self.init(aether: Aether())
 	}
 	public required init?(coder aDecoder: NSCoder) {fatalError()}

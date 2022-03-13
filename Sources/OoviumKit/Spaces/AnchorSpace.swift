@@ -8,12 +8,12 @@
 
 import Foundation
 
-class AnchorSpace: Space {
+public class AnchorSpace: Space {
 
 	init() { super.init(type: .anchor, path: "", name: "◎") }
 
 // Space ===========================================================================================
-	override func loadSpaces(complete: @escaping ([Space]) -> ()) {
+	override public func loadSpaces(complete: @escaping ([Space]) -> ()) {
 		var spaces: [Space] = []
 		spaces += [Space.local]
 		if let cloud = Space.cloud { spaces += [cloud] }

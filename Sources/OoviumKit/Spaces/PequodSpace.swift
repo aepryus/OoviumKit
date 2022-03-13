@@ -8,7 +8,7 @@
 
 import Foundation
 
-class PequodSpace: Space {
+public class PequodSpace: Space {
 
 	init(path: String, parent: Space) {
 		super.init(type: .pequod, path: path, name: "Aepryus", parent: parent)
