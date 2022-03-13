@@ -60,7 +60,7 @@ public class AetherView: UIView, UIScrollViewDelegate, UIGestureRecognizerDelega
 	public var toolBarOffset: UIOffset?
 	
 	public var orb: Orb = ScreenOrb()
-	let backView: UIView? = nil
+	public var backView: UIView? = nil
 
 	let hookView: HookView = HookView()
 	
