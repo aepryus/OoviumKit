@@ -11,8 +11,8 @@ import OoviumEngine
 import UIKit
 
 public class BehindView: UIView {
-	let leftExplorer: AetherExplorer
-	let rightExplorer: AetherExplorer
+	public let leftExplorer: AetherExplorer
+	public let rightExplorer: AetherExplorer
 	let newTrapezoid: Trapezoid = Trapezoid(title: "New Aether".localized)
 	let expandTrapezoid: Trapezoid = Trapezoid(title: "Manage".localized, flipped: true)
 

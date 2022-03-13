@@ -50,7 +50,7 @@ public class AetherView: UIView, UIScrollViewDelegate, UIGestureRecognizerDelega
 	var currentTextLeaf: TextLeaf? = nil
 	let oldPicker: Bool
 	
-	var hovers: [Hover] = []
+	public var hovers: [Hover] = []
 	public var aetherPicker: AetherPicker? = nil
 	var bubbleToolBar: BubbleToolBar? = nil
 	var shapeToolBar: ShapeToolBar? = nil
