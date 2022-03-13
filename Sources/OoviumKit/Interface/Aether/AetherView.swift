@@ -60,7 +60,16 @@ public class AetherView: UIView, UIScrollViewDelegate, UIGestureRecognizerDelega
 	public var toolBarOffset: UIOffset?
 	
 	public var orb: Orb = ScreenOrb()
-	public var backView: UIView? = nil
+	private var burn: Bool
+	public var backView: UIView? = nil {
+		didSet {
+			oldValue?.removeFromSuperview()
+			if let backView = backView, burn {
+				addSubview(backView)
+				sendSubviewToBack(scrollView)
+			}
+		}
+	}
 
 	let hookView: HookView = HookView()
 	
@@ -85,6 +94,7 @@ public class AetherView: UIView, UIScrollViewDelegate, UIGestureRecognizerDelega
 	
 	public init(aether: Aether, toolBox: ToolBox, toolsOn: Bool = true, burn: Bool = true, oldPicker: Bool = false) {
 		self.aether = aether
+		self.burn = burn
 		self.oldPicker = oldPicker
 
 		super.init(frame: CGRect(x: 0, y: 0, width: self.aether.width, height: self.aether.height))
@@ -92,7 +102,6 @@ public class AetherView: UIView, UIScrollViewDelegate, UIGestureRecognizerDelega
 		backgroundColor = UIColor.clear
 		scrollView.backgroundColor = UIColor.clear
 
-		if let backView = backView, burn { addSubview(backView) }
 		addSubview(scrollView)
 
 		if !oldPicker {
