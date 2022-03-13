@@ -40,8 +40,8 @@ public class BehindView: UIView {
 
 // UIView ==========================================================================================
 	override public func layoutSubviews() {
-		let y: CGFloat = 5*s + (Screen.mac ? Screen.safeTop : 0)
-		leftExplorer.frame = CGRect(x: 5*s, y: y, width: 355*s, height: Screen.height-Screen.safeBottom-5*s-y)
+		let y: CGFloat = 5*s + (Screen.mac ? Screen.safeTop : 0) + 44*s
+		leftExplorer.frame = CGRect(x: 5*s, y: y, width: 355*s, height: Screen.height - Screen.safeBottom - y - 88*s)
 		newTrapezoid.frame = CGRect(x: leftExplorer.right - 172*s - 25*s, y: leftExplorer.top - 4*s-40*s, width: 172*s, height: 40*s)
 		expandTrapezoid.frame = CGRect(x: leftExplorer.right - 172*s - 25*s, y: leftExplorer.bottom + 4*s, width: 172*s, height: 40*s)
 	}
