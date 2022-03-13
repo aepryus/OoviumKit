@@ -16,7 +16,7 @@ public class ChainEditor: Orbit {
 	
 	lazy private var cyanKeyPad: CyanKeyPad = {CyanKeyPad(chainEditor: self)}()
 	let keyView: KeyView
-	let customSchematic: CustomSchematic?
+	public let customSchematic: CustomSchematic?
 
 	unowned var chainView: ChainView!
 
