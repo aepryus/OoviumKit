@@ -32,9 +32,9 @@ class AetherDocument: UIDocument {
 	override func load(fromContents contents: Any, ofType typeName: String?) throws {
 		print("Loading [\(n)]...")
 		guard let data = contents as? Data, let json: String = String(data: data, encoding: .utf8) else { return }
-		self.json = json
+		self.json = Migrate.migrateAether(json: json)
 		aether = Aether()
-		aether.load(attributes: json.toAttributes())
+		aether.load(attributes: self.json.toAttributes())
 
 		switch documentState {
 			case .inConflict:
