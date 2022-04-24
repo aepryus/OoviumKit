@@ -488,6 +488,10 @@ public class AetherView: UIView, UIScrollViewDelegate, UIGestureRecognizerDelega
 	}
 	
 	public func markPositions() {
+		aether.version = Aether.engineVersion
+
+		guard !readOnly else { return }
+
 		aether.xOffset = Double(scrollView.contentOffset.x)
 		aether.yOffset = Double(scrollView.contentOffset.y)
 		aether.width = Double(bounds.size.width)
@@ -496,7 +500,6 @@ public class AetherView: UIView, UIScrollViewDelegate, UIGestureRecognizerDelega
 			bubble.aexel.x = Double(bubble.left)
 			bubble.aexel.y = Double(bubble.top)
 		}
-		aether.version = Aether.engineVersion
 	}
 	
 // Links ===========================================================================================
