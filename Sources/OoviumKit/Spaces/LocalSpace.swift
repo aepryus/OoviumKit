@@ -12,11 +12,15 @@ import OoviumEngine
 public class LocalSpace: Space {
 	let url: URL
 
-	init(path: String, parent: Space) {
-		self.url = FileManager.default.urls(for: .documentDirectory, in: .userDomainMask).first!.appendingPathComponent(path)
-		super.init(type: .local, path: path, name: path == "" ? "Local" : url.lastPathComponent, parent: parent)
+	init(parent: Space) {
+		self.url = FileManager.default.urls(for: .documentDirectory, in: .userDomainMask).first!.appendingPathComponent("")
+        super.init(type: .local, path: "", name: "Local".localized, parent: parent)
 	}
-	init(url: URL, parent: Space) {
+//    init(path: String, parent: Space) {
+//        self.url = FileManager.default.urls(for: .documentDirectory, in: .userDomainMask).first!.appendingPathComponent(path)
+//        super.init(type: .local, path: path, name: path == "" ? "Local" : url.lastPathComponent, parent: parent)
+//    }
+	private init(url: URL, parent: Space) {
 		self.url = url
 		var path: String = url.relativePath
 		let p: Int = path.lastLoc(of: "Documents")!

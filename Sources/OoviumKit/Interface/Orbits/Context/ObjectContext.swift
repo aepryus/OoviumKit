@@ -18,7 +18,7 @@ class ObjectContext: Context {
 			objectBub.objectLeaf.openLabel()
 		}))
 		self.schematic.add(row: 1, col: 0, key: Key(text: NSLocalizedString("delete", tableName: nil, bundle: Bundle(for: type(of: self)), value: "", comment: ""), uiColor: UIColor(red: 0.5, green: 0.6, blue: 0.7, alpha: 1), {
-			self.aetherView!.invokeConfirmHover(NSLocalizedString("deleteOneConfirm", tableName: nil, bundle: Bundle(for: type(of: self)), value: "", comment: ""), {
+			self.aetherView!.invokeConfirmModal(NSLocalizedString("deleteOneConfirm", tableName: nil, bundle: Bundle(for: type(of: self)), value: "", comment: ""), {
 				me.dismiss()
 				me.aetherView?.deleteSelected()
 				me.aetherView?.unselectAll()

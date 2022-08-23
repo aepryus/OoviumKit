@@ -10,16 +10,10 @@ import UIKit
 
 open class Hover: Gadget {
 	public unowned let aetherView: AetherView
-	let anchor: Position
-	let offset: UIOffset
-	var fixed: UIOffset
 	
 	public init(aetherView: AetherView, anchor: Position, size: CGSize, offset: UIOffset, fixed: UIOffset = .zero) {
 		self.aetherView = aetherView
-		self.anchor = anchor
-		self.offset = offset
-		self.fixed = fixed
-		super.init(size: size)
+		super.init(guideView: aetherView, anchor: anchor, size: size, offset: offset, fixed: fixed)
 	}
 	public required init?(coder: NSCoder) { fatalError() }
 	
@@ -27,23 +21,6 @@ open class Hover: Gadget {
 		return aetherView.hoverScale
 	}
 
-	public func render() {
-		var x: CGFloat
-		var y: CGFloat
-
-		let offsetX: CGFloat = fixed.horizontal + hs*offset.horizontal
-		let offsetY: CGFloat = fixed.vertical + hs*offset.vertical
-		
-		if anchor.isLeft() { x = offsetX }
-		else if anchor.isRight() { x = aetherView.width - hs*size.width + offsetX }
-		else { x = (aetherView.width - hs*size.width) / 2 + offsetX}
-		
-		if anchor.isTop() { y = offsetY }
-		else if anchor.isBottom() { y = aetherView.height - hs*size.height + offsetY }
-		else { y = (aetherView.height - hs*size.height) / 2 + offsetY }
-
-		frame = CGRect(x: x, y: y, width: hs*size.width, height: hs*size.height)
-	}
 	public func reRender() {}
 	open func rescale() {}
 	open func retract() {}

@@ -1,5 +1,5 @@
 //
-//  MessageHover.swift
+//  MessageModal.swift
 //  Oovium
 //
 //  Created by Joe Charlier on 8/7/17.

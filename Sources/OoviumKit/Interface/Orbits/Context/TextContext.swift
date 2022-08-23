@@ -26,7 +26,7 @@ class TextContext: Context {
 			self.orb?.toggle(orbit: self.shapeContext)
 		}))
 		self.schematic.add(row: 2, col: 0, key: Key(text: NSLocalizedString("delete", tableName: nil, bundle: Bundle(for: type(of: self)), value: "", comment: ""), uiColor: UIColor(red: 0.5, green: 0.6, blue: 0.7, alpha: 1), {
-			self.aetherView!.invokeConfirmHover(NSLocalizedString("deleteOneConfirm", tableName: nil, bundle: Bundle(for: type(of: self)), value: "", comment: "")) { [weak self] in
+			self.aetherView!.invokeConfirmModal(NSLocalizedString("deleteOneConfirm", tableName: nil, bundle: Bundle(for: type(of: self)), value: "", comment: "")) { [weak self] in
 				guard let me = self, let aetherView = me.aetherView else {return}
 				
 				var edges: Set<Edge> = Set<Edge>()

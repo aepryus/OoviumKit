@@ -85,7 +85,7 @@ public class Space {
 
 // Static ==========================================================================================
 	public static let anchor: AnchorSpace = AnchorSpace()
-	public static let local: LocalSpace = LocalSpace(path: "", parent: Space.anchor)
+	public static let local: LocalSpace = LocalSpace(parent: Space.anchor)
 	public static var cloud: CloudSpace? = nil
 	public static let pequod: PequodSpace = PequodSpace(path: "", parent: Space.anchor)
 
@@ -103,7 +103,8 @@ public class Space {
 		} else if let p: Int = aetherPath.loc(of: "::") {
 			return (aetherPath[...(p+1)], aetherPath[(p+2)...])
 		} else {
-			fatalError()
+            return ("", "")
+//			fatalError()
 		}
 	}
 	public static func digest(space: Space, name: String, complete: @escaping (Aether?)->()) {

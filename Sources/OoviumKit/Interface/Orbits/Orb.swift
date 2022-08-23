@@ -10,6 +10,7 @@ import Acheron
 import UIKit
 
 public class Orb {
+    var guideView: UIView { fatalError() }
 	var orbits: [Orbit] = []
 	
 	func orb(it orbit: Orbit) {
@@ -57,6 +58,8 @@ class ScreenOrb: Orb {
 	var orbit: Orbit? = nil
 
 // Orb =============================================================================================
+    override var guideView: UIView { Screen.keyWindow! }
+    
 	private func render(orbit: Orbit) {
 		var x: CGFloat
 		var y: CGFloat
@@ -114,6 +117,8 @@ class AetherViewOrb: Orb {
 	}
 	
 // Orb =============================================================================================
+    override var guideView: UIView { aetherView }
+
 	override func orb(it orbit: Orbit) {
 		super.orb(it: orbit)
 		aetherView.orb(it: orbit)

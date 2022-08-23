@@ -24,6 +24,7 @@ public class AetherExplorer: UIView, UITableViewDataSource, SpaceDelegate {
 	}
 
 	unowned let aetherView: AetherView
+    private lazy var controller: ExplorerController = { ExplorerController(aetherExplorer: self) }()
 
 	static let backColor: UIColor = UIColor(red: 32/255, green: 34/255, blue: 36/255, alpha: 1)
 

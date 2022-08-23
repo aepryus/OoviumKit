@@ -13,8 +13,9 @@ import UIKit
 public class BehindView: UIView {
 	public let leftExplorer: AetherExplorer
 	public let rightExplorer: AetherExplorer
-	let newTrapezoid: Trapezoid = Trapezoid(title: "New Aether".localized)
-	let expandTrapezoid: Trapezoid = Trapezoid(title: "Manage".localized, flipped: true)
+    let newAetherTrap: Trapezoid = Trapezoid(title: "New Aether".localized, leftSlant: .up)
+    let newFolderTrap: Trapezoid = Trapezoid(title: "New Folder", rightSlant: .up)
+    let manageTrap: Trapezoid = Trapezoid(title: "Manage".localized, leftSlant: .down)
 
 	public init(aetherView: AetherView) {
 		leftExplorer = AetherExplorer(aetherView: aetherView)
@@ -24,11 +25,12 @@ public class BehindView: UIView {
 
 		backgroundColor = UIColor(red: 32/255, green: 34/255, blue: 36/255, alpha: 1)
 
-		addSubview(newTrapezoid)
+        addSubview(newFolderTrap)
+		addSubview(newAetherTrap)
 		addSubview(leftExplorer)
-		addSubview(expandTrapezoid)
+		addSubview(manageTrap)
 
-		newTrapezoid.addAction { [unowned self] in
+        newAetherTrap.addAction { [unowned self] in
 			self.leftExplorer.space.newAether { (aether: Aether?) in
 				guard let aether = aether else { return }
 				self.leftExplorer.aetherView.swapToAether(space: self.leftExplorer.space, aether: aether)
@@ -40,9 +42,11 @@ public class BehindView: UIView {
 
 // UIView ==========================================================================================
 	override public func layoutSubviews() {
-		let y: CGFloat = 5*s + (Screen.mac ? Screen.safeTop : 0) + 44*s
-		leftExplorer.frame = CGRect(x: 5*s, y: y, width: 355*s, height: Screen.height - Screen.safeBottom - y - 44*s - 5*s)
-		newTrapezoid.frame = CGRect(x: leftExplorer.right - 172*s - 25*s, y: leftExplorer.top - 4*s-40*s, width: 172*s, height: 40*s)
-		expandTrapezoid.frame = CGRect(x: leftExplorer.right - 172*s - 25*s, y: leftExplorer.bottom + 4*s, width: 172*s, height: 40*s)
+        let h: CGFloat = 36*s
+		let y: CGFloat = 5*s + (Screen.mac ? Screen.safeTop : 0) + h + 4*s
+		leftExplorer.frame = CGRect(x: 5*s, y: y, width: 355*s, height: Screen.height - Screen.safeBottom - y - h - 4*s - 5*s)
+        newFolderTrap.frame = CGRect(x: 40*s, y: leftExplorer.top - 4*s-h, width: 156*s, height: h)
+        newAetherTrap.frame = CGRect(x: leftExplorer.right - 156*s - 25*s, y: leftExplorer.top - 4*s-h, width: 156*s, height: h)
+        manageTrap.frame = CGRect(x: leftExplorer.right - 172*s - 25*s, y: leftExplorer.bottom + 4*s, width: 172*s, height: h)
 	}
 }

@@ -14,10 +14,12 @@ class AetherNavigator: UIView {
 		didSet {
 			subviews.forEach { $0.removeFromSuperview() }
 			snaps = []
+            
+            if !(space is AnchorSpace) { snaps.append(NewSnap(controller: ExplorerController(aetherExplorer: explorer))) }
 
 			var space: Space? = self.space
 			while space != nil {
-				snaps.append(AetherSnap(space: space!, navigator: self))
+				snaps.append(SpaceSnap(space: space!, navigator: self))
 				space = space!.parent
 			}
 
@@ -27,7 +29,7 @@ class AetherNavigator: UIView {
 		}
 	}
 
-	var snaps: [AetherSnap] = []
+	var snaps: [Snap] = []
 
 	init(explorer: AetherExplorer) {
 		self.explorer = explorer

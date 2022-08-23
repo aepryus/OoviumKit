@@ -30,7 +30,7 @@ class HeaderEditor: KeyOrbit {
 			self.schematic = self.alignmentSchematic
 		}))
 		topSchematic.add(row: 0, col: 2, w: 1, h: 2, key: Key(text: "delete", uiColor: UIColor.cyan, {
-			self.headerCell.gridLeaf.aetherView.invokeConfirmHover("delete selected column?".localized) {
+			self.headerCell.gridLeaf.aetherView.invokeConfirmModal("delete selected column?".localized) {
 				self.headerCell.gridBub.aetherView.clearFocus()
 				if self.headerCell.gridBub.grid.columns.count > 1 {
 					self.headerCell.gridLeaf.deleteColumn(column: self.headerCell.column)

@@ -17,7 +17,7 @@ class LefterEditor: KeyOrbit {
 		super.init(size: CGSize(width: 8*30, height: 4*30), uiColor: UIColor.cyan, schematic: Schematic(rows: 3, cols: 1))
 
 		schematic.add(row: 0, col: 0, w: 1, h: 2, key: Key(text: "delete", uiColor: UIColor.cyan, {
-			self.lefterCell.gridLeaf.aetherView.invokeConfirmHover("delete selected row?".localized) {
+			self.lefterCell.gridLeaf.aetherView.invokeConfirmModal("delete selected row?".localized) {
 				self.lefterCell.gridLeaf.gridBub.aetherView.clearFocus()
 				if self.lefterCell.gridLeaf.grid.rows > 1 {
 					self.lefterCell.gridLeaf.deleteRow(rowNo: self.lefterCell.rowNo)

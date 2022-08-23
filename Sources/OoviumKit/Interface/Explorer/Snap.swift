@@ -1,5 +1,5 @@
 //
-//  AetherSnap.swift
+//  Snap.swift
 //  Oovium
 //
 //  Created by Joe Charlier on 3/28/21.
@@ -9,28 +9,26 @@
 import Acheron
 import UIKit
 
-class AetherSnap: UIControl {
-	var space: Space
-
+class Snap: UIControl {
+    private let text: String
+    private let anchor: Bool
 	private var path: CGPath = CGPath(rect: .zero, transform: nil)
 
 	static let pen: Pen = Pen(font: UIFont(name: "ChicagoFLF", size: 19*Screen.s)!, color: UIColor.green.tint(0.7), alignment: .right)
 	static let highlightPen: Pen = pen.clone(color: UIColor.green.tint(0.97))
 
-	init(space: Space, navigator: AetherNavigator) {
-		self.space = space
-
+    init(text: String, anchor: Bool = false) {
+        self.text = text
+        self.anchor = anchor
 		super.init(frame: .zero)
 		backgroundColor = .clear
 
 		addAction(for: [.touchDragEnter]) { [unowned self] in self.touch() }
 		addAction(for: [.touchDragExit]) { [unowned self] in self.untouch() }
-		addAction { navigator.explorer.space = space }
 	}
 	required init?(coder: NSCoder) { fatalError() }
 
-	var anchor: Bool { space.parent == nil }
-	var pen: Pen { touched ? AetherSnap.highlightPen : AetherSnap.pen }
+	var pen: Pen { touched ? Snap.highlightPen : Snap.pen }
 
 	var touched: Bool = false
 
@@ -44,7 +42,7 @@ class AetherSnap: UIControl {
 	}
 
 	func calcWidth() -> CGFloat {
-		return (space.name as NSString).boundingRect(with: .zero, options: [], attributes: pen.attributes, context: nil).width + (space.parent == nil ? 30*s : 64*s)
+		return (text as NSString).boundingRect(with: .zero, options: [], attributes: pen.attributes, context: nil).width + (anchor ? 30*s : 64*s)
 	}
 
 	let lw: CGFloat = 2*Screen.s
@@ -70,7 +68,7 @@ class AetherSnap: UIControl {
 		let path: CGMutablePath = CGMutablePath()
 		path.move(to: (p1+p4)/2)
 		path.addArc(tangent1End: p1, tangent2End: (p1+p2)/2, radius: wr)
-		if space.parent != nil {
+		if !anchor {
 			path.addArc(tangent1End: p2, tangent2End: (p2+p3)/2, radius: nr)
 			path.addArc(tangent1End: p3, tangent2End: (p3+p4)/2, radius: wr)
 		} else {
@@ -113,6 +111,6 @@ class AetherSnap: UIControl {
 		c.setLineWidth(lw)
 		c.drawPath(using: .fillStroke)
 
-		(space.name as NSString).draw(in: rect.offsetBy(dx: anchor ? -8*s : -31*s, dy: 4*s), pen: pen)
+		(text as NSString).draw(in: rect.offsetBy(dx: anchor ? -8*s : -31*s, dy: 4*s), pen: pen)
 	}
 }

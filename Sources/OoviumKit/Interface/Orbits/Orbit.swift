@@ -9,13 +9,11 @@
 import UIKit
 
 public class Orbit: Gadget {
-	weak var orb: Orb? = nil
-	let offset: UIOffset
+    weak var orb: Orb? = nil
 	weak var editable: Editable? = nil
 	
-	init(size: CGSize, offset: UIOffset = .zero) {
-		self.offset = offset
-		super.init(size: size)
+    init(size: CGSize, offset: UIOffset = .zero) {
+        super.init(guideView: UIView(), anchor: .bottomRight, size: size, offset: offset)
 	}
 	public required init?(coder: NSCoder) { fatalError() }
 

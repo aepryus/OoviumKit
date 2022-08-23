@@ -24,6 +24,7 @@ public class CloudSpace: Space {
 	public init?(path: String, parent: Space, complete: (()->())? = nil) {
 		self.complete = complete
 		guard let rootURL: URL = FileManager.default.url(forUbiquityContainerIdentifier: nil) else { self.complete?(); return nil }
+        operationQueue.maxConcurrentOperationCount = 1
 		query.operationQueue = operationQueue
 		if path == "" {
 			self.url = rootURL.appendingPathComponent("Documents")

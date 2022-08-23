@@ -19,9 +19,10 @@ extension Aether {
 		guard !not.contains(self) else {return []}
 		var names: [String] = []
 		aexels.forEach {
-			if $0 is Mechlike {names.append($0.name)}
-			else if $0 is Also {
-				names += ($0 as! Also).alsoAether!.functions(not: not+[self])
+			if $0 is Mechlike {
+                names.append($0.name)
+            } else if let also: Also = $0 as? Also, let alsoAether: Aether = also.alsoAether {
+				names += alsoAether.functions(not: not+[self])
 			}
 		}
 		return names.sorted { (left: String, right: String) -> Bool in

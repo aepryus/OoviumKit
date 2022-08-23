@@ -1,5 +1,5 @@
 //
-//  ConfirmHover.swift
+//  ConfirmModal.swift
 //  Oovium
 //
 //  Created by Joe Charlier on 9/21/17.
@@ -8,7 +8,7 @@
 
 import UIKit
 
-class ConfirmHover: Modal {
+class ConfirmModal: Modal {
 	var message: String = "" {
 		didSet { setNeedsDisplay() }
 	}
