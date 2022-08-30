@@ -18,4 +18,5 @@ public extension UIFont {
 	static func oovium(size: CGFloat) -> UIFont {
 		return UIFont.systemFont(ofSize: size)
 	}
+    static func ooExplore(size: CGFloat) -> UIFont { UIFont(name: "ChicagoFLF", size: size)! }
 }

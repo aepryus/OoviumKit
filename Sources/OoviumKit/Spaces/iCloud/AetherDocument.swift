@@ -17,8 +17,8 @@ class AetherDocument: UIDocument {
 	static var N: Int = 0
 
 	override init(fileURL url: URL) {
-		n = AetherDocument.N+1
-		AetherDocument.N += 1
+        AetherDocument.N += 1
+		n = AetherDocument.N
 		print("Creating [\(n)]")
 		super.init(fileURL: url)
 	}
@@ -30,7 +30,7 @@ class AetherDocument: UIDocument {
 		return data
 	}
 	override func load(fromContents contents: Any, ofType typeName: String?) throws {
-		print("Loading [\(n)]...")
+		print("Loading [\(n)][\(typeName ?? "{nil}")]...")
 		guard let data = contents as? Data, let json: String = String(data: data, encoding: .utf8) else { return }
 		self.json = Migrate.migrateAether(json: json)
 		aether = Aether()
@@ -38,7 +38,7 @@ class AetherDocument: UIDocument {
 
 		switch documentState {
 			case .inConflict:
-				print("inConflict")
+                print("[\(n)][\(aether.name)] inConflict")
 			default: break
 		}
 	}

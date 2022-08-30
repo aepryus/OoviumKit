@@ -15,7 +15,7 @@ class ConfirmModal: Modal {
 	var closure: ()->() = {}
 	
 	init(aetherView: AetherView) {
-		super.init(aetherView: aetherView, anchor: .center, size: CGSize(width: 200, height: 120), offset: .zero)
+		super.init(anchor: .center, size: CGSize(width: 200, height: 120), offset: .zero)
 
 		let gesture = UITapGestureRecognizer(target: self, action: #selector(onTap(_:)))
 		addGestureRecognizer(gesture)

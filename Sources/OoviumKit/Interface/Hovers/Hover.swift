@@ -25,12 +25,6 @@ open class Hover: Gadget {
 	open func rescale() {}
 	open func retract() {}
 	
-// Events ==========================================================================================
-	open func onFadeIn() {}
-	open func onFadeOut() {}
-	open func onInvoke() {}
-	open func onDismiss() {}
-
 // Gadget ==========================================================================================
 	override public var size: CGSize {
 		didSet { render() }
@@ -69,7 +63,7 @@ open class Hover: Gadget {
 			onFadeOut()
 		}
 	}
-	public override func toggle(animated: Bool = true) {
+	public func toggle(animated: Bool = true) {
 		if aetherView.invoked(hover: self) { dismiss() }
 		else { invoke() }
 	}

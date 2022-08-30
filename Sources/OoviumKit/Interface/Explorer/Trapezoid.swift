@@ -17,6 +17,7 @@ class Trapezoid: UIControl {
     let rightSlant: Slant
 
 	private var path: CGPath = CGPath(rect: .zero, transform: nil)
+    private var textRect: CGRect = .zero
 
 	static let pen: Pen = Pen(font: UIFont(name: "ChicagoFLF", size: 19*Screen.s)!, color: UIColor.green.tint(0.7), alignment: .center)
 	static let highlightPen: Pen = pen.clone(color: UIColor.green.tint(0.97))
@@ -82,6 +83,10 @@ class Trapezoid: UIControl {
         if rightSlant == .up { r2 = nr; r3 = wr }
         else if rightSlant == .down { r2 = wr; r3 = nr }
         else { r2 = ar; r3 = ar }
+        
+        let lx: CGFloat = (p1.x + p4.x)/2
+        let rx: CGFloat = (p2.x + p3.x)/2
+        textRect = CGRect(x: lx, y: height/6, width: rx-lx, height: y2-y1)
             
         let path: CGMutablePath = CGMutablePath()
         path.move(to: (p1+p4)/2)
@@ -125,8 +130,6 @@ class Trapezoid: UIControl {
 		c.setLineWidth(lw)
 		c.drawPath(using: .fillStroke)
 
-        let dx: CGFloat = leftSlant == .vertical ? -height/5 : height/5
-        let dy: CGFloat = height/5-2
-		(title as NSString).draw(in: rect.offsetBy(dx: dx, dy: dy), pen: pen)
+		(title as NSString).draw(in: textRect, pen: pen)
 	}
 }

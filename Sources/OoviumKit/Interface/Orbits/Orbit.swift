@@ -27,8 +27,6 @@ public class Orbit: Gadget {
 	func reRender() {}
 	func rescale() {}
 //	func retract() {}
-	func onInvoke() {}
-	func onDismiss() {}
 	
 // Gadget ==========================================================================================
 	override public var size: CGSize {

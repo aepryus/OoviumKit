@@ -61,10 +61,10 @@ public class ChainEditor: Orbit {
 	}
 
 // Hover ===========================================================================================
-	override func onInvoke() {
+	override open func onInvoke() {
 		if cyanOn {cyanKeyPad.invoke()}
 	}
-	override func onDismiss() {
+	override open func onDismiss() {
 		cyanKeyPad.dismiss()
 	}
 	override func reRender() {

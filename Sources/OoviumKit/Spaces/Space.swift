@@ -35,6 +35,7 @@ public class Space {
 	}
 
 	public func loadSpaces(complete: @escaping ([Space])->()) { complete([]) }
+    public func newSpace(name: String, _ complete: ()->()) { complete() }
 	public func loadNames(complete: @escaping ([String])->()) { complete([]) }
 	public func loadAether(name: String, complete: @escaping (String?)->()) { complete(nil) }
 	public func storeAether(_ aether: Aether, complete: @escaping (Bool)->() = {(Bool) in}) { complete(true) }

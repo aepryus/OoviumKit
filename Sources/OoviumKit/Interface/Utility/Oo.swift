@@ -17,4 +17,7 @@ public class Oo {
 	}
 	
 	public static var s: CGFloat = Oo.iPhone ? 1 : 1.5
+
+    public static var gS: CGFloat = s
+    public static var aS: CGFloat = s
 }

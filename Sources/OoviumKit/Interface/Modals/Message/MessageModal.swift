@@ -20,7 +20,7 @@ class MessageHover: Modal {
 		scrollView = UIScrollView()
 		imageView = UIImageView()
 		
-		super.init(aetherView: aetherView, anchor: .center, size: CGSize(width: 340, height: 340), offset: .zero)
+		super.init(anchor: .center, size: CGSize(width: 340, height: 340), offset: .zero)
 
 		let n: CGFloat = 7
 		scrollView.frame = CGRect(x: n, y: n, width: self.width-2*n, height: self.height-2*n)

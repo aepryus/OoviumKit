@@ -16,10 +16,6 @@ public class LocalSpace: Space {
 		self.url = FileManager.default.urls(for: .documentDirectory, in: .userDomainMask).first!.appendingPathComponent("")
         super.init(type: .local, path: "", name: "Local".localized, parent: parent)
 	}
-//    init(path: String, parent: Space) {
-//        self.url = FileManager.default.urls(for: .documentDirectory, in: .userDomainMask).first!.appendingPathComponent(path)
-//        super.init(type: .local, path: path, name: path == "" ? "Local" : url.lastPathComponent, parent: parent)
-//    }
 	private init(url: URL, parent: Space) {
 		self.url = url
 		var path: String = url.relativePath
