@@ -40,7 +40,7 @@ class AlsoLeaf: Leaf, Editable, DoubleTappable {
 //			let aether: Aether = space.loadAether(name: space.aetherNames[space.aetherNames[0] != aetherName ? 0 : 1])
 //			Oovium.aetherView.swapToAether(space: space, aether: aether)
 		}
-		get { Space.split(aetherPath: also.aetherPath).1 }
+		get { ""/*Space.split(aetherPath: also.aetherPath).1*/ }
 	}
 	
 	var uiColor: UIColor {
@@ -55,10 +55,10 @@ class AlsoLeaf: Leaf, Editable, DoubleTappable {
 // Events ==========================================================================================
 	@objc func onDoubleTap() {
 		aetherView.saveAether()
-		Space.digest(aetherPath: also.aetherPath) { (spaceAether: (Space, Aether)?) in
-			guard let spaceAether = spaceAether else { return }
-			self.aetherView.swapToAether(spaceAether)
-		}
+//		Space.digest(aetherPath: also.aetherPath) { (spaceAether: (Space, Aether)?) in
+//			guard let spaceAether = spaceAether else { return }
+//			self.aetherView.swapToAether(spaceAether)
+//		}
 	}
 
 // Editable ========================================================================================

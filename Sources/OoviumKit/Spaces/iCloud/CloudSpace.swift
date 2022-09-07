@@ -10,52 +10,181 @@ import Acheron
 import Foundation
 import OoviumEngine
 
+extension URL {
+    var itemName: String { self.deletingPathExtension().lastPathComponent }
+    var itemPath: String {
+        let index: Int = pathComponents.firstIndex { $0 == "Documents" } ?? 0
+        let paths: [String] = Array(pathComponents[index+1..<pathComponents.count-2])
+        var sb: String = ""
+        paths.forEach { sb += "\($0)/" }
+        return sb
+    }
+}
+
+extension NSMetadataItem {
+    var url: URL { value(forAttribute: NSMetadataItemURLKey) as! URL }
+    var name: String { url.deletingPathExtension().lastPathComponent }
+    var path: String {
+        var path: String = url.deletingLastPathComponent().absoluteString
+        path.removeFirst(Space.cloud!.url.absoluteString.lengthOfBytes(using: .utf8))
+        if path.last == "/" { path.removeLast() }
+        return path
+    }
+    var key: String { "\(path)/\(name)" }
+}
+
 public class CloudSpace: Space {
-    let url: URL
-    var spaces: [CloudSpace] = []
-    var names: [String] = []
+    let opQueue: OperationQueue = OperationQueue()
+    let query: NSMetadataQuery = NSMetadataQuery()
+
+    var facades: [String:[Facade]] = [:]
+    var folders: [String:Facade] = [:]
     var metadata: [String:NSMetadataItem] = [:]
     
-    public init(path: String, parent: Space) {
-        var space: Space = parent
-        while space.parent is CloudSpace { space = space.parent! }
-        let cloudURL: URL = FileManager.default.url(forUbiquityContainerIdentifier: nil)!.appendingPathComponent("Documents")
-        url = path == "" ? cloudURL : cloudURL.appendingPathComponent(path)
-        super.init(type: .cloud, path: path, name: path == "" ? "iCloud" : url.lastPathComponent, parent: parent)
+    private var complete: (()->())?
+    
+    public init?(_ complete: (()->())? = nil) {
+        self.complete = complete
+        super.init(
+            name: "iCloud".localized,
+            url: FileManager.default.url(forUbiquityContainerIdentifier: nil)!.appendingPathComponent("Documents")
+        )
+        
+        opQueue.maxConcurrentOperationCount = 1
+        query.operationQueue = opQueue
+        
+        query.predicate = NSPredicate(format: "%K LIKE '*/Documents/*.oo'", NSMetadataItemPathKey, NSMetadataItemPathKey)
+        query.searchScopes = [NSMetadataQueryUbiquitousDocumentsScope]
+        query.enableUpdates()
+
+        NotificationCenter.default.addObserver(forName: NSNotification.Name.NSMetadataQueryDidUpdate, object: query, queue: query.operationQueue, using: queryDidUpdate)
+        NotificationCenter.default.addObserver(forName: NSNotification.Name.NSMetadataQueryDidStartGathering, object: query, queue: query.operationQueue, using: queryDidStartGathering)
+        NotificationCenter.default.addObserver(forName: NSNotification.Name.NSMetadataQueryDidFinishGathering, object: query, queue: query.operationQueue, using: queryDidFinishGathering)
+        NotificationCenter.default.addObserver(forName: NSNotification.Name.NSMetadataQueryGatheringProgress, object: query, queue: query.operationQueue, using: queryGatheringProgress)
+
+        opQueue.addOperation { self.query.start() }
     }
     
-    func load(metadataItems: [NSMetadataItem]) {
-        metadataItems.forEach {
-            guard var name: String = $0.value(forAttribute: NSMetadataItemDisplayNameKey) as? String else { return }
-            if Screen.mac { name = (name as NSString).deletingPathExtension } // because of a Catalyst bug
-            names.append(name)
-            metadata[name] = $0
-        }
-        names.sort { $0.uppercased() < $1.uppercased() }
+    func loadFolders(for facade: Facade) {
+        folders[facade.path] = facade
+        facades[facade.path] = []
+        do {
+            let folderURLs: [URL] = try FileManager.default.contentsOfDirectory(at: facade.url, includingPropertiesForKeys: nil, options: [.skipsHiddenFiles]).filter( { $0.hasDirectoryPath } )
+            folderURLs.forEach {
+                let sub: Facade = Facade.create(url: $0)
+                loadFolders(for: sub)
+                facades[facade.path]!.append(sub)
+            }
+        } catch { print("loadFolders ERROR: [\(error)]") }
     }
-    func wipeAll() {
-        spaces = []
-        names = []
-        metadata = [:]
+    func loadFolders() { loadFolders(for: Facade.create(space: self)) }
+
+    func load(metadataItems: [NSMetadataItem]) {
+        loadFolders()
+        metadataItems.forEach {
+            metadata[$0.key] = $0
+            facades[$0.path]?.append(Facade.create(url: $0.url))
+        }
+        var sorted: [String:[Facade]] = [:]
+        facades.forEach {
+            sorted[$0.key] = $0.value.sorted { (a: Facade, b:Facade) in
+                if a.type != b.type { return a.type == .folder }
+                return a.name.uppercased() < b.name.uppercased()
+            }
+        }
+        facades = sorted
+        delegate?.onChanged(space: self)
+        complete?()
+        complete = nil
     }
     
 // Space ===========================================================================================
-    override public func loadSpaces(complete: @escaping ([Space]) -> ()) {
-        complete(spaces)
+    override public func loadFacades(facade: Facade, _ complete: @escaping ([Facade]) -> ()) {
+        complete(facades[facade.path] ?? [])
     }
-    override public func newSpace(name: String, _ complete: () -> ()) {
-        complete()
+    override public func loadAether(facade: Facade, _ complete: @escaping (String?) -> ()) {
+        let url: URL = facade.url
+        if facade.document == nil { facade.document = AetherDocument(fileURL: url) }
+        let document: AetherDocument = facade.document as! AetherDocument
+        opQueue.addOperation {
+            document.open { (success: Bool) in
+                print("Loaded [\(document.n)][\(success)]")
+                guard success else { return }
+                DispatchQueue.main.async { complete(document.json) }
+            }
+        }
     }
-    override public func loadNames(complete: @escaping ([String]) -> ()) {
-        complete(names)
+    override public func storeAether(facade: Facade, aether: Aether, _ complete: @escaping (Bool) -> ()) {
+        let url: URL = facade.url
+        if facade.document == nil { facade.document = AetherDocument(fileURL: url) }
+        let document: AetherDocument = facade.document as! AetherDocument
+        document.aether = aether
+        opQueue.addOperation {
+            document.save(to: url, for: .forOverwriting) { (success: Bool) in
+                DispatchQueue.main.async { complete(success) }
+            }
+        }
     }
-    override public func loadAether(name: String, complete: @escaping (String?) -> ()) {
-        Cloud.loadAether(key: path+name, complete: complete)
+    override public func renameAether(facade: Facade, name: String, _ complete: @escaping (Bool) -> ()) {
+        var url: URL = facade.url
+        var rv = URLResourceValues()
+        rv.name = name
+        do {
+            try url.setResourceValues(rv)
+            complete(true)
+        } catch {
+            print("renameAether ERROR:\(error)")
+            complete(false)
+        }
     }
-    override public func storeAether(_ aether: Aether, complete: @escaping (Bool) -> ()) {
-        Cloud.storeAether(aether, key: path+aether.name, complete: complete)
+    override public func removeAether(facade: Facade, _ complete: @escaping (Bool) -> ()) {
+        let url: URL = facade.url
+        do {
+            try FileManager.default.removeItem(atPath: url.path)
+            complete(true)
+        } catch {
+            print("removeAether ERROR: [\(error)]")
+            complete(false)
+        }
     }
-    override public func removeAether(name: String, complete: @escaping (Bool) -> ()) {
-        complete(true)
+    override public func createFolder(facade: Facade, name: String, _ complete: @escaping (Bool) -> ()) {
+        let url: URL = facade.url
+        do {
+            try FileManager.default.createDirectory(at: url.appendingPathComponent(name, isDirectory: true), withIntermediateDirectories: true)
+            complete(true)
+            load(metadataItems: Array(metadata.values))
+            delegate?.onChanged(space: facade.space)
+        } catch {
+            print("removeAether ERROR: [\(error)]")
+            complete(false)
+        }
     }
+
+// Events ==========================================================================================
+    @objc func queryDidUpdate(_ notification: Notification) {
+        print("== [ queryDidUpdate ]")
+        query.disableUpdates()
+        opQueue.addOperation { [unowned self] in
+            self.load(metadataItems: query.results as! [NSMetadataItem])
+            self.query.enableUpdates()
+        }
+    }
+    @objc func queryDidStartGathering(_ notification: Notification) {
+        print("== [ queryDidStartGathering ]")
+
+    }
+    @objc func queryDidFinishGathering(_ notification: Notification) {
+        print("== [ queryDidFinishGathering ]")
+        query.disableUpdates()
+        opQueue.addOperation { [unowned self] in
+            self.load(metadataItems: query.results as! [NSMetadataItem])
+            self.query.enableUpdates()
+        }
+    }
+    @objc func queryGatheringProgress(_ notification: Notification) {
+        print("== [ queryGatheringProgress ]")
+    }
+    
+// Static ==========================================================================================
+    public static func checkAvailability() -> Bool { FileManager.default.ubiquityIdentityToken != nil }
 }

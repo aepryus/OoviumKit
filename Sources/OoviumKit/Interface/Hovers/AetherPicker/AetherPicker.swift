@@ -357,9 +357,9 @@ public class AetherPicker: Hover, UITableViewDelegate, UITableViewDataSource {
 	var aetherNames: [String] = []
 
 	func loadAetherNames() {
-		Space.local.loadNames { (names: [String]) in
-			self.aetherNames = names
-		}
+//        Space.local.loadItems(for: "/") { (items: [Facade]) in
+//            self.aetherNames = items.map { $0.name }
+//        }
 	}
 
 	public func tableView(_ tableView: UITableView, numberOfRowsInSection section: Int) -> Int {

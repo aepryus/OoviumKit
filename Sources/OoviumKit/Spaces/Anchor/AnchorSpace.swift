@@ -10,14 +10,14 @@ import Foundation
 
 public class AnchorSpace: Space {
 
-	init() { super.init(type: .anchor, path: "", name: "◎") }
+    init() { super.init(name: "◎", url: URL(string: "oovium.com")!) }
 
 // Space ===========================================================================================
-	override public func loadSpaces(complete: @escaping ([Space]) -> ()) {
-		var spaces: [Space] = []
-		spaces += [Space.local]
-		if let cloud = Space.cloud { spaces += [cloud] }
-		spaces += [Space.pequod]
-		complete(spaces)
-	}
+    override public func loadFacades(facade: Facade, _ complete: @escaping ([Facade]) -> ()) {
+        var items: [Facade] = []
+        items += [Facade.create(space: Space.local)]
+        if let cloud = Space.cloud { items += [Facade.create(space: cloud)] }
+//        items += [Facade.create(space: Space.pequod)]
+        complete(items)
+    }
 }

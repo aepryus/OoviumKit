@@ -131,27 +131,28 @@ class AetherInfo: Hover, UITextFieldDelegate {
 		addSubview(cancelButton)
 		
 		okButton.addAction(for: .touchUpInside) { [unowned self] in
-			let aether: Aether = aetherView.aether
-			guard var name = nameField.text, name != aether.name else { return }
-			Space.local.loadNames { (names: [String]) in
-				if names.contains(name) {
-					var aetherNo: Int = 0
-					var test = name
-					repeat {
-						aetherNo += 1
-						test = String(format: "%@%02d", name, aetherNo)
-					} while names.contains(test)
-					name = test
-				}
-				Space.local.removeAether(name: aether.name) { (success: Bool) in
-					aether.name = name
-					Space.local.storeAether(aether) { (success: Bool) in
-						DispatchQueue.main.async {
-							aetherView.aetherPicker?.loadAetherNames()
-						}
-					}
-				}
-			}
+//			let aether: Aether = aetherView.aether
+//			guard var name = nameField.text, name != aether.name else { return }
+//            Space.local.loadItems(for: "") { (items: [Facade]) in
+//                let names: [String] = items.map { $0.name }
+//                if names.contains(name) {
+//                    var aetherNo: Int = 0
+//                    var test = name
+//                    repeat {
+//                        aetherNo += 1
+//                        test = String(format: "%@%02d", name, aetherNo)
+//                    } while names.contains(test)
+//                    name = test
+//                }
+//                Space.local.removeAether(at: aether.name) { (success: Bool) in
+//                    aether.name = name
+//                    Space.local.storeAether(aether: aether, at: aether.name) { (success: Bool) in
+//                        DispatchQueue.main.async {
+//                            aetherView.aetherPicker?.loadAetherNames()
+//                        }
+//                    }
+//                }
+//            }
 			dismiss()
 		}
 		addSubview(okButton)

@@ -15,7 +15,7 @@ class AetherExplorerCell: UITableViewCell {
 	var name: String = "" {
 		didSet { label.text = name }
 	}
-	var space: Space? = nil
+	var facade: Facade? = nil
 
 	let label: UILabel = UILabel()
 	let line: UIView = UIView()
@@ -42,16 +42,11 @@ class AetherExplorerCell: UITableViewCell {
 	}
 	required init?(coder: NSCoder) { fatalError() }
 
-	func bind(explorer: AetherExplorer, name: String) {
+	func bind(explorer: AetherExplorer, facade: Facade) {
 		self.explorer = explorer
-		self.name = name
-		self.space = nil
-	}
-	func bind(explorer: AetherExplorer, space: Space) {
-		self.explorer = explorer
-		self.name = "\(space.name)/"
-		self.space = space
-	}
+        self.facade = facade
+        self.name = facade.type == .aether ? facade.name : "\(facade.name)/"
+    }
 
 	func touch() {
 		label.pen = AetherExplorerCell.highlightPen
@@ -61,28 +56,26 @@ class AetherExplorerCell: UITableViewCell {
 		label.pen = AetherExplorerCell.pen
 		backgroundColor = UIColor.green.shade(0.9)
 	}
+    
+    private func digest(facade: Facade) {
+        Space.digest(facade: facade) { (aether: Aether?) in
+            guard let aether = aether else { return }
+            DispatchQueue.main.async {
+                self.explorer.aetherView.swapToAether(facade: facade, aether: aether)
+                if Screen.iPhone { self.explorer.aetherView.slideBack() }
+            }
+        }
+    }
 
 // Events ==========================================================================================
 	@objc func onTap() {
-		if let space = space {
-			explorer.space = space
-		} else {
-			Space.digest(space: explorer.space, name: name) { (aether: Aether?) in
-				guard let aether = aether else { return }
-				DispatchQueue.main.async {
-					self.explorer.aetherView.swapToAether(space: self.explorer.space, aether: aether)
-					if Screen.iPhone { self.explorer.aetherView.slideBack() }
-				}
-			}
-		}
+        guard let facade = facade else { return }
+        if facade.type != .aether { explorer.facade = facade }
+        else { digest(facade: facade) }
 	}
 	@objc func onDoubleTap() {
-		guard space == nil else { return }
-		Space.digest(space: explorer.space, name: name) { (aether: Aether?) in
-			guard let aether = aether else { return }
-			self.explorer.aetherView.swapToAether(space: self.explorer.space, aether: aether)
-			self.explorer.aetherView.slideBack()
-		}
+        guard let facade = facade, facade.type == .aether else { return }
+        digest(facade: facade)
 	}
 
 // UIView ==========================================================================================

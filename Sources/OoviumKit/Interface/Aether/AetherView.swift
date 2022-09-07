@@ -26,7 +26,7 @@ extension AetherViewDelegate {
 
 public class AetherView: UIView, UIScrollViewDelegate, UIGestureRecognizerDelegate {
 	public var aether: Aether
-	public var space: Space? = nil
+    public var facade: Facade?
 	
 	var scrollView: UIScrollView = UIScrollView()
 	
@@ -71,7 +71,7 @@ public class AetherView: UIView, UIScrollViewDelegate, UIGestureRecognizerDelega
 		}
 	}
 
-	let hookView: HookView = HookView()
+    lazy var aetherHover: AetherHover = { AetherHover(aetherView: self) }()
 	
 	lazy var anchoring: Anchoring = {
 		return Anchoring(aetherView: self)
@@ -105,9 +105,10 @@ public class AetherView: UIView, UIScrollViewDelegate, UIGestureRecognizerDelega
 		addSubview(scrollView)
 
 		if !oldPicker {
-			addSubview(hookView)
-			hookView.frame = CGRect(x: 3*s, y: Screen.mac ? 3*s : Screen.safeTop, width: Screen.mac ? 210*s : 168*s, height: Screen.mac ? 40*s : 32*s)
-			hookView.addAction { [unowned self] in
+			addSubview(aetherHover)
+            aetherHover.frame = CGRect(x: 4*gS, y: Screen.mac ? 3*gS : Screen.safeTop, width: Screen.mac ? 210*gS : 168*gS, height: Screen.mac ? 40*gS : 32*gS)
+            aetherHover.hookView.addAction { [unowned self] in
+                if aetherHover.aetherNameView.editing { aetherHover.controller.onAetherViewReturn() }
 				self.slideToggle()
 			}
 		} else {
@@ -400,7 +401,7 @@ public class AetherView: UIView, UIScrollViewDelegate, UIGestureRecognizerDelega
 		self.aether = aether
 		
 		aetherPicker?.aetherButton.setNeedsDisplay()
-		hookView.name = aether.name
+        aetherHover.aetherNameView.setNeedsDisplay()
 		
 		readOnly = aether.readOnly
 		if readOnly { dismissToolBars() }
@@ -437,37 +438,37 @@ public class AetherView: UIView, UIScrollViewDelegate, UIGestureRecognizerDelega
 	}
 	public func saveAether(complete: @escaping (Bool)->() = {Bool in}) {
 		markPositions()
-		space?.storeAether(aether, complete: { [unowned self] (success: Bool) in
-			complete(success)
-			self.aetherViewDelegate?.onSave(aetherView: self, aether: aether)
-		})
+        facade?.store(aether: aether, { (success: Bool) in
+            complete(success)
+            self.aetherViewDelegate?.onSave(aetherView: self, aether: self.aether)
+        })
 	}
-	public func swapToAether(space: Space? = nil, aether: Aether) {
+	public func swapToAether(facade: Facade? = nil, aether: Aether) {
 		closeCurrentAether()
-		self.space = space
+		self.facade = facade
 		openAether(aether)
 		if oldPicker { aetherPicker?.retract() }
 	}
-	public func swapToAether(_ spaceAether: (space: Space, aether: Aether)) {
-		swapToAether(space: spaceAether.0, aether: spaceAether.1)
+	public func swapToAether(_ facadeAether: (facade: Facade, aether: Aether)) {
+		swapToAether(facade: facadeAether.0, aether: facadeAether.1)
 	}
 	func swapToNewAether() {
 		closeCurrentAether()
-		Space.local.newAether { (aether: Aether?) in
-			guard let aether = aether else { return }
-			aether.width = Double(self.width)
-			aether.height = Double(self.height)
-			aether.xOffset = 400
-			aether.yOffset = 260
-			self.aetherViewDelegate?.onNew(aetherView: self, aether: aether)
-			self.space = Space.local
-			self.openAether(aether)
-			self.saveAether()
-			if self.oldPicker {
-				self.aetherPicker?.retract()
-				self.aetherPicker?.loadAetherNames()
-			}
-		}
+//		Space.local.newAether { (aether: Aether?) in
+//			guard let aether = aether else { return }
+//			aether.width = Double(self.width)
+//			aether.height = Double(self.height)
+//			aether.xOffset = 400
+//			aether.yOffset = 260
+//			self.aetherViewDelegate?.onNew(aetherView: self, aether: aether)
+//			self.space = Space.local
+//			self.openAether(aether)
+//			self.saveAether()
+//			if self.oldPicker {
+//				self.aetherPicker?.retract()
+//				self.aetherPicker?.loadAetherNames()
+//			}
+//		}
 	}
 	public func clearAether() {
 		self.aether.removeAllAexels()

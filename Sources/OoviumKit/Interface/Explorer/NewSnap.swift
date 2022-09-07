@@ -12,7 +12,7 @@ class NewSnap: Snap {
     
     init(controller: ExplorerController) {
         super.init(text: "\u{FF0B}")
-        addAction { controller.onNewAether() }
+        addAction { controller.onNewFolder() }
     }
     required init?(coder: NSCoder) { fatalError() }
 }

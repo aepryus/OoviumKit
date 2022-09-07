@@ -9,14 +9,14 @@
 import UIKit
 
 class SpaceSnap: Snap {
-    var space: Space
+    var item: Facade
 
-    init(space: Space, navigator: AetherNavigator) {
-        self.space = space
-        super.init(text: space.name, anchor: space.parent == nil)
-        addAction { navigator.explorer.space = space }
+    init(item: Facade, navigator: AetherNavigator) {
+        self.item = item
+        super.init(text: item.name, anchor: self.item.parent == nil)
+        addAction { navigator.explorer.facade = item }
     }
     required init?(coder: NSCoder) { fatalError() }
     
-    var anchor: Bool { space.parent == nil }
+    var anchor: Bool { item.parent == nil }
 }

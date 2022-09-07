@@ -33,8 +33,8 @@ class AlsoEditor: Orbit, UITableViewDataSource {
 		let schematic = Schematic(rows: 1, cols: 3)
 
 		schematic.add(row: 0, col: 0, key: Key(text: "Open".localized, uiColor: UIColor(red: 0.8, green: 1, blue: 0.8, alpha: 1).shade(0.5), { [unowned self] in
-			guard let (space, aether) = self.alsoLeaf.alsoBub.also.spaceAether else { return }
-			self.alsoLeaf.aetherView.swapToAether(space: space, aether: aether)
+			guard let (facade, aether) = self.alsoLeaf.alsoBub.also.facadeAether else { return }
+			self.alsoLeaf.aetherView.swapToAether(facade: facade, aether: aether)
 		}))
 		schematic.add(row: 0, col: 1, w: 2, h: 1, key: Key(text: "OK".localized, uiColor: UIColor(red: 0.8, green: 1, blue: 0.8, alpha: 1), { [unowned self] in
 			self.alsoLeaf.releaseFocus()
@@ -49,13 +49,14 @@ class AlsoEditor: Orbit, UITableViewDataSource {
 	required init?(coder aDecoder: NSCoder) {fatalError()}
 	
 	var aetherNames: [String] {
+        []
 
-		var aetherNames: [String] = []
-		Space.local.loadNames { (names: [String]) in
-			aetherNames = names
-		}
-		alsoLeaf.aetherView.aether.aethers.forEach { aetherNames.remove(object: $0.name) }
-		return aetherNames
+//		var aetherNames: [String] = []
+//		Space.local.loadNames { (names: [String]) in
+//			aetherNames = names
+//		}
+//		alsoLeaf.aetherView.aether.aethers.forEach { aetherNames.remove(object: $0.name) }
+//		return aetherNames
 	}
 	
 // Events ==========================================================================================

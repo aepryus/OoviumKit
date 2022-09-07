@@ -38,10 +38,11 @@ class AetherCell: UITableViewCell, UIContextMenuInteractionDelegate {
 			guard let self = self else { return }
 			switch self.state {
 				case .normal:
-					Space.digest(space: .local, name: self.aetherName) { (aether: Aether?) in
-						guard let aether = aether else { return }
-						self.aetherPicker.aetherView.swapToAether(space: Space.local, aether: aether)
-					}
+                    break
+//					Space.digest(space: .local, name: self.aetherName) { (aether: Aether?) in
+//						guard let aether = aether else { return }
+//						self.aetherPicker.aetherView.swapToAether(space: Space.local, aether: aether)
+//					}
 				case .deletable:
 					self.state = .normal
 					self.animateTransitionIfNeeded(state: self.state, duration: 0.3)
@@ -62,29 +63,29 @@ class AetherCell: UITableViewCell, UIContextMenuInteractionDelegate {
 			self.aetherPicker.retract()
 
 			if self.aetherName == self.aetherPicker.aetherView.aether.name {
-				Space.local.loadNames { (names: [String]) in
-					if names.count == 0 {
-						Space.local.newAether { (aether: Aether?) in
-							guard let aether = aether else { return }
-							self.aetherPicker.aetherView.swapToAether(space: Space.local, aether: aether)
-							Space.local.removeAether(name: self.aetherName) { (success: Bool) in
-								DispatchQueue.main.async { self.aetherPicker.loadAetherNames() }
-							}
-						}
-					} else {
-						Space.digest(space: .local, name: names[names[0] != self.aetherName ? 0 : 1]) { (aether: Aether?) in
-							guard let aether = aether else { return }
-							self.aetherPicker.aetherView.swapToAether(space: Space.local, aether: aether)
-							Space.local.removeAether(name: self.aetherName) { (success: Bool) in
-								DispatchQueue.main.async { self.aetherPicker.loadAetherNames() }
-							}
-						}
-					}
-				}
+//				Space.local.loadNames { (names: [String]) in
+//					if names.count == 0 {
+//						Space.local.newAether { (aether: Aether?) in
+//							guard let aether = aether else { return }
+//							self.aetherPicker.aetherView.swapToAether(space: Space.local, aether: aether)
+//							Space.local.removeAether(name: self.aetherName) { (success: Bool) in
+//								DispatchQueue.main.async { self.aetherPicker.loadAetherNames() }
+//							}
+//						}
+//					} else {
+//						Space.digest(space: .local, name: names[names[0] != self.aetherName ? 0 : 1]) { (aether: Aether?) in
+//							guard let aether = aether else { return }
+//							self.aetherPicker.aetherView.swapToAether(space: Space.local, aether: aether)
+//							Space.local.removeAether(name: self.aetherName) { (success: Bool) in
+//								DispatchQueue.main.async { self.aetherPicker.loadAetherNames() }
+//							}
+//						}
+//					}
+//				}
 			} else {
-				Space.local.removeAether(name: self.aetherName) { (success: Bool) in
-					DispatchQueue.main.async { self.aetherPicker.loadAetherNames() }
-				}
+//				Space.local.removeAether(name: self.aetherName) { (success: Bool) in
+//					DispatchQueue.main.async { self.aetherPicker.loadAetherNames() }
+//				}
 			}
 		}
 

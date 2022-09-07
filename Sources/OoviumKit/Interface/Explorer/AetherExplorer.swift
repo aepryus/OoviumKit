@@ -10,14 +10,14 @@ import Acheron
 import UIKit
 
 public class AetherExplorer: UIView, UITableViewDataSource, SpaceDelegate {
-	public var space: Space = Space.local {
+    public var facade: Facade = Facade.create(space: Space.local) {
 		didSet {
 			tableView.setContentOffset(.zero, animated: false)
 			navigator.transform = .identity
-			navigator.space = space
+			navigator.facade = facade
 			navigator.transform = CGAffineTransform(rotationAngle: -.pi/2)
 			navigator.topLeft(width: 32*s, height: navigator.width)
-			space.delegate = self
+            facade.space.delegate = self
 			loadSpace()
 			tableView.reloadData()
 		}
@@ -79,42 +79,30 @@ public class AetherExplorer: UIView, UITableViewDataSource, SpaceDelegate {
 	}
 
 // UITableViewDataSource ===========================================================================
-	var spaces: [Space] = []
+	var facades: [Facade] = []
 	var aetherNames: [String] = []
 	func loadSpace() {
-		let group = DispatchGroup()
-		group.enter()
-		space.loadSpaces { (spaces: [Space]) in
-			self.spaces = spaces
-			group.leave()
-		}
-		group.enter()
-		space.loadNames { (names: [String]) in
-			self.aetherNames = names
-			group.leave()
-		}
-		let semaphore = DispatchSemaphore(value: 1)
-		group.notify(queue: .main) {
-			semaphore.signal()
-		}
-		semaphore.wait()
+        facade.loadFacades { (facades: [Facade]) in
+            self.facades = facades
+        }
 	}
 
 	public func tableView(_ tableView: UITableView, numberOfRowsInSection section: Int) -> Int {
-		spaces.count + aetherNames.count
+        facades.count
 	}
 	public func tableView(_ tableView: UITableView, cellForRowAt indexPath: IndexPath) -> UITableViewCell {
 		let cell: AetherExplorerCell = tableView.dequeueReusableCell(withIdentifier: "cell") as! AetherExplorerCell
-		if indexPath.row < spaces.count {
-			cell.bind(explorer: self, space: spaces[indexPath.row])
-		} else {
-			cell.bind(explorer: self, name: aetherNames[indexPath.row - spaces.count])
-		}
+        cell.bind(explorer: self, facade: facades[indexPath.row])
 		return cell
 	}
 
 // SpaceDelegate ===================================================================================
 	func onChanged(space: Space) {
-		DispatchQueue.main.async { self.tableView.reloadData() }
+		DispatchQueue.main.async {
+            self.facade.loadFacades { (facades: [Facade]) in
+                self.facades = facades
+                self.tableView.reloadData()
+            }
+        }
 	}
 }

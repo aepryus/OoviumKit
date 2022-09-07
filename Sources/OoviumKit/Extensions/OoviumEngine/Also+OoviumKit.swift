@@ -10,16 +10,17 @@ import Foundation
 import OoviumEngine
 
 extension Also {
-	public var spaceAether: (Space, Aether)? {
-//		guard let (space, aether) = Space.digest(aetherPath: aetherPath) else { return nil }
-//		return (space, aether)
-		return nil
+	public var facadeAether: (Facade, Aether)? {
+//		guard let (facade, aether) = facadeSpace.digest(aetherPath: aetherPath) else { return nil }
+//		return (facade, aether)
+        return nil
 	}
 	public var aetherName: String {
-		Space.split(aetherPath: aetherPath).1
+        ""
+//		Space.split(aetherPath: aetherPath).1
 	}
 	public var alsoAether: Aether? {
-		spaceAether?.1
+		facadeAether?.1
 	}
 	public var functionCount: Int {
 		return alsoAether?.functions(not: [aether]).count ?? 0

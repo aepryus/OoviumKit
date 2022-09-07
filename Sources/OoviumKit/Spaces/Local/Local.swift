@@ -36,18 +36,18 @@ public class Local {
 		}
 	}
 	public static func archiveXML() {
-		Space.local.loadNames { (names: [String]) in
-			names.forEach { (name: String) in
-				let path = NSSearchPathForDirectoriesInDomains(.documentDirectory, .userDomainMask, true)[0]
-				let atPath: String = (path as NSString).appendingPathComponent("\(name).oo")
-				let toPath: String = (path as NSString).appendingPathComponent("\(name).xml")
-				guard !FileManager.default.fileExists(atPath: toPath) else { return }
-				do {
-					try FileManager.default.copyItem(atPath: atPath, toPath: toPath)
-					try FileManager.default.removeItem(atPath: atPath)
-				} catch {print("\(error)")}
-			}
-		}
+//        Space.local.loadItems(for: "/") { (items: [Facade]) in
+//            items.forEach { (item: Facade) in
+//                let path = NSSearchPathForDirectoriesInDomains(.documentDirectory, .userDomainMask, true)[0]
+//                let atPath: String = (path as NSString).appendingPathComponent("\(item.name).oo")
+//                let toPath: String = (path as NSString).appendingPathComponent("\(item.name).xml")
+//                guard !FileManager.default.fileExists(atPath: toPath) else { return }
+//                do {
+//                    try FileManager.default.copyItem(atPath: atPath, toPath: toPath)
+//                    try FileManager.default.removeItem(atPath: atPath)
+//                } catch {print("\(error)")}
+//            }
+//        }
 	}
 	public static func migrateXML() {
 		guard let url = FileManager.default.urls(for: .documentDirectory, in: .userDomainMask).first else {return}

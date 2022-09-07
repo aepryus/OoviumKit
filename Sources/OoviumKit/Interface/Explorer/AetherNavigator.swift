@@ -10,17 +10,17 @@ import UIKit
 
 class AetherNavigator: UIView {
 	unowned var explorer: AetherExplorer
-	var space: Space {
+	var facade: Facade {
 		didSet {
 			subviews.forEach { $0.removeFromSuperview() }
 			snaps = []
             
-            if !(space is AnchorSpace) { snaps.append(NewSnap(controller: ExplorerController(aetherExplorer: explorer))) }
+            if !(facade.space is AnchorSpace) { snaps.append(NewSnap(controller: ExplorerController(aetherExplorer: explorer))) }
 
-			var space: Space? = self.space
-			while space != nil {
-				snaps.append(SpaceSnap(space: space!, navigator: self))
-				space = space!.parent
+            var item: Facade? = facade
+			while item != nil {
+				snaps.append(SpaceSnap(item: item!, navigator: self))
+				item = item!.parent
 			}
 
 			snaps.forEach { addSubview($0) }
@@ -33,11 +33,11 @@ class AetherNavigator: UIView {
 
 	init(explorer: AetherExplorer) {
 		self.explorer = explorer
-		self.space = explorer.space
+		self.facade = explorer.facade
 
 		super.init(frame: .zero)
 
-		defer { space = explorer.space }
+		defer { facade = explorer.facade }
 	}
 	required init?(coder: NSCoder) { fatalError() }
 

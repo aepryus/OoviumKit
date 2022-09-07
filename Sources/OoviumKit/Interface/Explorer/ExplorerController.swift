@@ -15,16 +15,15 @@ class ExplorerController {
     }
     
     func onNewFolder() {
-        
-    }
-    func onNewAether() {
         let inputModal: InputModal = InputModal(message: "What name would you like for your new folder?".localized)
         inputModal.invoke { (input: String?) in
             guard let input = input else { return }
-            self.aetherExplorer.space.newSpace(name: input) {
-                print("new space [\(input)]")
+            self.aetherExplorer.facade.createFolder(name: input) { (success: Bool) in
+                self.aetherExplorer.facade.space.delegate?.onChanged(space: self.aetherExplorer.facade.space)
             }
         }
+    }
+    func onNewAether() {
     }
     func onManage() {
     }
