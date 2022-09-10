@@ -9,8 +9,8 @@
 import Acheron
 import UIKit
 
-class Trapezoid: UIControl {
-    enum Slant { case up, down, vertical }
+public class Trapezoid: UIControl {
+    public enum Slant { case up, down, vertical }
     
 	let title: String
     let leftSlant: Slant
@@ -22,7 +22,7 @@ class Trapezoid: UIControl {
 	static let pen: Pen = Pen(font: UIFont(name: "ChicagoFLF", size: 19*Screen.s)!, color: UIColor.green.tint(0.7), alignment: .center)
 	static let highlightPen: Pen = pen.clone(color: UIColor.green.tint(0.97))
 
-    init(title: String, leftSlant: Slant = .vertical, rightSlant: Slant = .vertical) {
+    public init(title: String, leftSlant: Slant = .vertical, rightSlant: Slant = .vertical) {
 		self.title = title
         self.leftSlant = leftSlant
         self.rightSlant = rightSlant
@@ -100,29 +100,29 @@ class Trapezoid: UIControl {
 	}
 
 // UIControl =======================================================================================
-		override func touchesBegan(_ touches: Set<UITouch>, with event: UIEvent?) {
+		public override func touchesBegan(_ touches: Set<UITouch>, with event: UIEvent?) {
 			touch()
 			super.touchesBegan(touches, with: event)
 		}
-		override func touchesEnded(_ touches: Set<UITouch>, with event: UIEvent?) {
+		public override func touchesEnded(_ touches: Set<UITouch>, with event: UIEvent?) {
 			untouch()
 			super.touchesEnded(touches, with: event)
 		}
-		override func touchesCancelled(_ touches: Set<UITouch>, with event: UIEvent?) {
+		public override func touchesCancelled(_ touches: Set<UITouch>, with event: UIEvent?) {
 			untouch()
 			super.touchesCancelled(touches, with: event)
 		}
 
 // UIView ==========================================================================================
-	override var frame: CGRect {
+	public override var frame: CGRect {
 		didSet { render() }
 	}
-	override func hitTest(_ point: CGPoint, with event: UIEvent?) -> UIView? {
+	public override func hitTest(_ point: CGPoint, with event: UIEvent?) -> UIView? {
 		let view = super.hitTest(point, with: event)
 		guard view == self else { return view }
 		return path.contains(point) ? self : nil
 	}
-	override func draw(_ rect: CGRect) {
+	public override func draw(_ rect: CGRect) {
 		let c: CGContext = UIGraphicsGetCurrentContext()!
 		c.addPath(path)
 		c.setStrokeColor(UIColor.green.tint(touched ? 0.93 : 0.8).cgColor)

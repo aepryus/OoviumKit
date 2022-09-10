@@ -108,7 +108,6 @@ public class CloudSpace: Space {
         let document: AetherDocument = facade.document as! AetherDocument
         opQueue.addOperation {
             document.open { (success: Bool) in
-                print("Loaded [\(document.n)][\(success)]")
                 guard success else { return }
                 DispatchQueue.main.async { complete(document.json) }
             }
@@ -128,7 +127,7 @@ public class CloudSpace: Space {
     override public func renameAether(facade: Facade, name: String, _ complete: @escaping (Bool) -> ()) {
         var url: URL = facade.url
         var rv = URLResourceValues()
-        rv.name = name
+        rv.name = "\(name).oo"
         do {
             try url.setResourceValues(rv)
             complete(true)
@@ -162,7 +161,7 @@ public class CloudSpace: Space {
 
 // Events ==========================================================================================
     @objc func queryDidUpdate(_ notification: Notification) {
-        print("== [ queryDidUpdate ]")
+//        print("== [ queryDidUpdate ]")
         query.disableUpdates()
         opQueue.addOperation { [unowned self] in
             self.load(metadataItems: query.results as! [NSMetadataItem])
@@ -170,11 +169,11 @@ public class CloudSpace: Space {
         }
     }
     @objc func queryDidStartGathering(_ notification: Notification) {
-        print("== [ queryDidStartGathering ]")
+//        print("== [ queryDidStartGathering ]")
 
     }
     @objc func queryDidFinishGathering(_ notification: Notification) {
-        print("== [ queryDidFinishGathering ]")
+//        print("== [ queryDidFinishGathering ]")
         query.disableUpdates()
         opQueue.addOperation { [unowned self] in
             self.load(metadataItems: query.results as! [NSMetadataItem])
@@ -182,7 +181,7 @@ public class CloudSpace: Space {
         }
     }
     @objc func queryGatheringProgress(_ notification: Notification) {
-        print("== [ queryGatheringProgress ]")
+//        print("== [ queryGatheringProgress ]")
     }
     
 // Static ==========================================================================================

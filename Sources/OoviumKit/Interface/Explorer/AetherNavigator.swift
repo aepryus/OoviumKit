@@ -9,13 +9,13 @@
 import UIKit
 
 class AetherNavigator: UIView {
-	unowned var explorer: AetherExplorer
+	unowned var controller: ExplorerController
 	var facade: Facade {
 		didSet {
 			subviews.forEach { $0.removeFromSuperview() }
 			snaps = []
             
-            if !(facade.space is AnchorSpace) { snaps.append(NewSnap(controller: ExplorerController(aetherExplorer: explorer))) }
+            if !(facade.space is AnchorSpace) { snaps.append(NewSnap(controller: controller)) }
 
             var item: Facade? = facade
 			while item != nil {
@@ -24,20 +24,20 @@ class AetherNavigator: UIView {
 			}
 
 			snaps.forEach { addSubview($0) }
-
-			render()
+            
+            render()
 		}
 	}
 
 	var snaps: [Snap] = []
 
-	init(explorer: AetherExplorer) {
-		self.explorer = explorer
-		self.facade = explorer.facade
+    init(controller: ExplorerController, facade: Facade) {
+		self.controller = controller
+        self.facade = facade
 
 		super.init(frame: .zero)
 
-		defer { facade = explorer.facade }
+        defer { self.facade = facade }
 	}
 	required init?(coder: NSCoder) { fatalError() }
 

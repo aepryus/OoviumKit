@@ -431,7 +431,7 @@ public class AetherView: UIView, UIScrollViewDelegate, UIGestureRecognizerDelega
 
 		let c0: CGPoint = CGPoint(x: aether.xOffset, y: aether.yOffset)
 		let a0: CGPoint = CGPoint(x: aether.width, y: aether.height)
-		let a1: CGPoint = CGPoint(x: width, y: height)
+        let a1: CGPoint = a0 == .zero ? .zero : CGPoint(x: width, y: height)
 		scrollView.setContentOffset(c0-a0+a1, animated: false)
 
 		aetherViewDelegate?.onOpen(aetherView: self, aether: aether)

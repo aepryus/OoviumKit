@@ -24,16 +24,17 @@ public class AetherExplorer: UIView, UITableViewDataSource, SpaceDelegate {
 	}
 
 	unowned let aetherView: AetherView
-    private lazy var controller: ExplorerController = { ExplorerController(aetherExplorer: self) }()
+    unowned let controller: ExplorerController
 
 	static let backColor: UIColor = UIColor(red: 32/255, green: 34/255, blue: 36/255, alpha: 1)
 
-	lazy var navigator: AetherNavigator = { AetherNavigator(explorer: self) }()
+    lazy var navigator: AetherNavigator = { AetherNavigator(controller: controller, facade: facade) }()
 	let tableView: UITableView = AETableView()
 
 	let lw: CGFloat = 2*Screen.s
 
-	init(aetherView: AetherView) {
+    init(controller: ExplorerController, aetherView: AetherView) {
+        self.controller = controller
 		self.aetherView = aetherView
 		
 		super.init(frame: .zero)
@@ -59,6 +60,9 @@ public class AetherExplorer: UIView, UITableViewDataSource, SpaceDelegate {
 		}
 	}
 	required init?(coder: NSCoder) { fatalError() }
+    
+    func setNavigator() {
+    }
 
 // Events ==========================================================================================
 	private var s0: CGPoint = .zero

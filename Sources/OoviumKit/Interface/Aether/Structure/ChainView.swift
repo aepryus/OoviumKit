@@ -445,14 +445,16 @@ class ChainView: UIView, UITextInput, UITextInputTraits, AnchorTappable {
 		}
 	}
 	override var keyCommands: [UIKeyCommand]? {
-		return [
-			UIKeyCommand(action: #selector(rightArrow), input: UIKeyCommand.inputRightArrow),
-			UIKeyCommand(action: #selector(leftArrow), input: UIKeyCommand.inputLeftArrow),
-			UIKeyCommand(action: #selector(upArrow), input: UIKeyCommand.inputUpArrow),
-			UIKeyCommand(action: #selector(downArrow), input: UIKeyCommand.inputDownArrow),
-			UIKeyCommand(action: #selector(backspace), input: "\u{8}"),
-			UIKeyCommand(action: #selector(tab), input: "\t")
-		]
+        let commands: [UIKeyCommand] = [
+            UIKeyCommand(action: #selector(rightArrow), input: UIKeyCommand.inputRightArrow),
+            UIKeyCommand(action: #selector(leftArrow), input: UIKeyCommand.inputLeftArrow),
+            UIKeyCommand(action: #selector(upArrow), input: UIKeyCommand.inputUpArrow),
+            UIKeyCommand(action: #selector(downArrow), input: UIKeyCommand.inputDownArrow),
+            UIKeyCommand(action: #selector(backspace), input: "\u{8}"),
+            UIKeyCommand(action: #selector(tab), input: "\t")
+        ]
+        if #available(iOS 15, *) { commands.forEach { $0.wantsPriorityOverSystemBehavior = true } }
+        return commands
 	}
 
 // UITextInputTraits ===============================================================================

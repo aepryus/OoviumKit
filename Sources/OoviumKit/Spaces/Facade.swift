@@ -21,7 +21,7 @@ public class Facade {
             Facade.facades[url.path] = self
         }
     }
-    unowned var parent: Facade?
+    public unowned var parent: Facade?
     unowned var _space: Space?
     var document: AnyObject?
     
@@ -46,13 +46,23 @@ public class Facade {
         guard parent.path.count > 0 else { return name }
         return "\(parent.path)/\(name)"
     }
-    public var spaceKey: String { "\(path)/\(name).oo" }
+    public var spaceKey: String { type == .aether ? "\(path)/\(name).oo" : path }
     public var ooviumKey: String { "\(space.name)::\(spaceKey)" }
     
     public func loadFacades(_ complete: @escaping ([Facade])->()) { space.loadFacades(facade: self, complete) }
     public func store(aether: Aether, _ complete: @escaping (Bool)->()) { space.storeAether(facade: self, aether: aether, complete) }
     public func renameAether(name: String, _ complete: @escaping (Bool)->()) { space.renameAether(facade: self, name: name, complete) }
     public func createFolder(name: String, _ complete: @escaping (Bool)->()) { space.createFolder(facade: self, name: name, complete) }
+    
+    public func print() {
+        Swift.print("[ Facade ] =======================================")
+        Swift.print("\tname: [\(name)] ")
+        Swift.print("\tpath: [\(path)] ")
+        Swift.print("\tspace: [\(space.name)] ")
+        Swift.print("\tspaceKey: [\(spaceKey)] ")
+        Swift.print("\tooviumKey: [\(ooviumKey)] ")
+        Swift.print("\turl: [\(url)]")
+    }
 
 // Static ==========================================================================================
     static var facades: [String:Facade] = [:]
