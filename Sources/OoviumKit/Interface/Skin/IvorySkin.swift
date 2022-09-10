@@ -374,4 +374,20 @@ public class IvorySkin: Skin {
 		c.addPath(path)
 		c.fillPath()
 	}
+    
+    static let expBackColor: UIColor = UIColor.green.shade(0.9)
+    static let expLineColor: UIColor = UIColor.green.tint(0.8)
+    static let expPen: Pen = Pen(font: .ooExplore(size: 16*Oo.gS), color: .green.tint(0.7), alignment: .center)
+    static let expLw: CGFloat = 2*Oo.gS
+
+    override func explorer(path: CGPath) {
+        tray(path: path, uiColor: .green.tint(0.7), width: IvorySkin.expLw)
+    }
+    override func explorer(text: String, rect: CGRect) {
+        let c = UIGraphicsGetCurrentContext()!
+        c.saveGState()
+        c.setShadow(offset: CGSize(width: 2, height: 2), blur: 2)
+        (text as NSString).draw(in: rect, pen: IvorySkin.expPen.clone(color: .green.tint(0.7).shade(0.5)))
+        c.restoreGState()
+    }
 }

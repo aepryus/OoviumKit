@@ -35,10 +35,13 @@ public class BehindView: UIView {
 	required init?(coder: NSCoder) { fatalError() }
     
 // UIView ==========================================================================================
+    override public var frame: CGRect {
+        didSet { setNeedsLayout() }
+    }
 	override public func layoutSubviews() {
         let h: CGFloat = 36*s
 		let y: CGFloat = 5*s + (Screen.mac ? Screen.safeTop : 0) + h + 4*s
-		leftExplorer.frame = CGRect(x: 5*s, y: y, width: 355*s, height: Screen.height - Screen.safeBottom - y - h - 4*s - 5*s)
+		leftExplorer.frame = CGRect(x: 5*s, y: y, width: 355*s, height: height - Screen.safeBottom - y - h - 4*s - 5*s)
         newAetherTrap.frame = CGRect(x: leftExplorer.right - 156*s - 25*s, y: leftExplorer.top - 4*s-h, width: 156*s, height: h)
         importTrap.frame = CGRect(x: leftExplorer.right - 172*s - 25*s, y: leftExplorer.bottom + 4*s, width: 172*s, height: h)
 	}

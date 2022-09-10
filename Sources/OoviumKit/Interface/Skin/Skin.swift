@@ -69,7 +69,9 @@ public class Skin {
 	func about(path: CGPath, uiColor: UIColor) {}
 	func end(path: CGPath, uiColor: UIColor) {}
 	func end(text: String, x: CGFloat, y: CGFloat, uiColor: UIColor) {}
-	
+    func explorer(path: CGPath) {}
+    func explorer(text: String, rect: CGRect) {}
+
 	// Static ==========================================================================================
 	public static var skin: Skin = TronSkin()
 	

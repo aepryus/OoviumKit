@@ -89,13 +89,8 @@ class AetherHover: UIView {
             path.addArc(tangent1End: p3, tangent2End: (p3+p4)/2, radius: wr)
             path.addArc(tangent1End: p4, tangent2End: (p4+p1)/2, radius: ar)
             path.closeSubpath()
-
-            let c: CGContext = UIGraphicsGetCurrentContext()!
-            c.addPath(path)
-            c.setStrokeColor(lineColor)
-            c.setFillColor(backColor)
-            c.setLineWidth(lw)
-            c.drawPath(using: .fillStroke)
+            
+            Skin.skin.explorer(path: path)
         }
     }
     class AetherNameView: UIView, UITextFieldDelegate {
@@ -157,15 +152,10 @@ class AetherHover: UIView {
             path.addArc(tangent1End: p4, tangent2End: (p4+p1)/2, radius: nr)
             path.closeSubpath()
 
-            let c: CGContext = UIGraphicsGetCurrentContext()!
-            c.addPath(path)
-            c.setStrokeColor(lineColor)
-            c.setFillColor(backColor)
-            c.setLineWidth(lw)
-            c.drawPath(using: .fillStroke)
+            Skin.skin.explorer(path: path)
             
             let name: String = controller.facade?.name ?? ""
-            if !editing { name.draw(in: CGRect(x: sw, y: 6*gS, width: width-2*sw, height: h), pen: pen) }
+            if !editing { Skin.skin.explorer(text: name, rect: CGRect(x: sw, y: 6*gS, width: width-2*sw, height: h)) }
         }
         override func layoutSubviews() {
             textField.center(width: 120*gS, height: h-6*gS)
@@ -209,12 +199,7 @@ class AetherHover: UIView {
             path.addArc(tangent1End: p4, tangent2End: (p4+p1)/2, radius: nr)
             path.closeSubpath()
 
-            let c: CGContext = UIGraphicsGetCurrentContext()!
-            c.addPath(path)
-            c.setStrokeColor(lineColor)
-            c.setFillColor(backColor)
-            c.setLineWidth(lw)
-            c.drawPath(using: .fillStroke)
+            Skin.skin.explorer(path: path)
         }
     }
     class PublicView: UIView {}

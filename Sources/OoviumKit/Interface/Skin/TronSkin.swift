@@ -383,4 +383,21 @@ public class TronSkin: Skin {
 		let pen = Pen(font: UIFont(name: "Verdana", size: 14)!, color: uiColor)
 		(text as NSString).draw(at: CGPoint(x: x, y: y), withAttributes: pen.attributes)
 	}
+    
+    static let expBackColor: CGColor = UIColor.green.shade(0.9).cgColor
+    static let expLineColor: CGColor = UIColor.green.tint(0.8).cgColor
+    static let expPen: Pen = Pen(font: .ooExplore(size: 16*Oo.gS), color: .green.tint(0.7), alignment: .center)
+    static let expLw: CGFloat = 2*Oo.gS
+
+    override func explorer(path: CGPath) {
+        let c: CGContext = UIGraphicsGetCurrentContext()!
+        c.addPath(path)
+        c.setStrokeColor(TronSkin.expLineColor)
+        c.setFillColor(TronSkin.expBackColor)
+        c.setLineWidth(TronSkin.expLw)
+        c.drawPath(using: .fillStroke)
+    }
+    override func explorer(text: String, rect: CGRect) {
+        text.draw(in: rect, pen: TronSkin.expPen)
+    }
 }
