@@ -24,7 +24,7 @@ class ColorLeaf: Leaf {
 	@objc func onTap() {
 		aetherView.orb.colorEditor.state = state
 		aetherView.orb.colorEditor.colorLeaf = self
-		aetherView.orb.orb(it: aetherView.orb.colorEditor)
+		aetherView.orb.launch(orbit: aetherView.orb.colorEditor)
 	}
 	
 // UIView ==========================================================================================

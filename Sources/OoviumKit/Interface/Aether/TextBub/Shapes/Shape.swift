@@ -11,6 +11,6 @@ import UIKit
 class Shape {
 	func drawIcon(color: UIColor) {}
 	func drawKey(_ rect: CGRect) {}
-	func bounds(size: CGSize) -> CGRect {return CGRect.zero}
+	func bounds(size: CGSize) -> CGRect { CGRect.zero }
 	func draw(rect: CGRect, uiColor: UIColor) {}
 }

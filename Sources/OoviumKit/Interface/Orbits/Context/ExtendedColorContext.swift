@@ -10,8 +10,8 @@ import OoviumEngine
 import UIKit
 
 class ExtendedColorContext: Context {
-	init() {
-		super.init(size: CGSize(width: 174, height: 174), uiColor: UIColor.yellow, schematic: Schematic(rows: 4, cols: 8))
+    init(orb: Orb) {
+        super.init(orb: orb, size: CGSize(width: 174, height: 174), uiColor: UIColor.yellow, schematic: Schematic(rows: 4, cols: 8))
 
 		self.schematic.add(row: 0, col: 0, key: Key(text: "", uiColor: OOColor.clear.uiColor, {self.execute(.clear)}))
 		self.schematic.add(row: 0, col: 1, key: Key(text: "", uiColor: OOColor.white.uiColor, {self.execute(.white)}))

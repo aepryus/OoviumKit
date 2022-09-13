@@ -46,27 +46,25 @@ private class ShapeKey: Key {
 class ShapeContext: Context {
 	unowned var colorContext: ColorContext!
 
-	init() {
-		super.init(size: CGSize(width: 74, height: 174), offset: UIOffset(horizontal: -84-3, vertical: 0), uiColor: .yellow, schematic: Schematic(rows: 4, cols: 1))
+    init(orb: Orb) {
+        super.init(orb: orb, size: CGSize(width: 74, height: 174), offset: UIOffset(horizontal: (-84-3)*Oo.gS, vertical: 0), uiColor: .yellow, schematic: Schematic(rows: 4, cols: 1))
 		
-		self.schematic.add(row: 0, col: 0, key: ShapeKey(shape: .ellipse, {self.execute(.ellipse)}))
-		self.schematic.add(row: 1, col: 0, key: ShapeKey(shape: .rounded, {self.execute(.rounded)}))
-		self.schematic.add(row: 2, col: 0, key: ShapeKey(shape: .rectangle, {self.execute(.rectangle)}))
-		self.schematic.add(row: 3, col: 0, key: ShapeKey(shape: .diamond, {self.execute(.diamond)}))
+		self.schematic.add(row: 0, col: 0, key: ShapeKey(shape: .ellipse,   { self.execute(.ellipse) }))
+		self.schematic.add(row: 1, col: 0, key: ShapeKey(shape: .rounded,   { self.execute(.rounded) }))
+		self.schematic.add(row: 2, col: 0, key: ShapeKey(shape: .rectangle, { self.execute(.rectangle) }))
+		self.schematic.add(row: 3, col: 0, key: ShapeKey(shape: .diamond,   { self.execute(.diamond) }))
 		
 		self.schematic = schematic
 	}
 	required init?(coder aDecoder: NSCoder) {fatalError()}
 	
 	func execute(_ ooShape: OOShape) {
-		orb?.remove(orbit: self)
-		for textBub in aetherView!.selected as! Set<TextBub> {
-			textBub.shape = ooShape
-		}
+        dismiss()
+        (aetherView.selected as! Set<TextBub>).forEach { $0.shape = ooShape }
 	}
 
 // Hover ===========================================================================================
 	override func onInvoke() {
-		orb?.remove(orbit: colorContext)
+		orb.remove(orbit: colorContext)
 	}
 }

@@ -18,8 +18,8 @@ class HeaderEditor: KeyOrbit {
 		return editable as! HeaderCell
 	}
 
-	init() {
-		super.init(size: CGSize(width: 8*30, height: 4*30), uiColor: UIColor.cyan, schematic: Schematic(rows: 3, cols: 3))
+    init(orb: Orb) {
+        super.init(orb: orb, size: CGSize(width: 8*30, height: 4*30), uiColor: UIColor.cyan, schematic: Schematic(rows: 3, cols: 3))
 
 		let tan: UIColor = UIColor(red: 0.95, green: 0.85, blue: 0.55, alpha: 1)
 		

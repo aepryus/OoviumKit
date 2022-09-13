@@ -9,8 +9,8 @@
 import Foundation
 
 class Context: KeyOrbit {
-	var aetherView: AetherView? = nil
-	
+    var aetherView: AetherView { orb.aetherView }
+    
 // Hover ===========================================================================================
 //	override func onRetract() {
 //		dismiss()

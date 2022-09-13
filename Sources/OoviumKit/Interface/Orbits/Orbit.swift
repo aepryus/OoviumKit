@@ -9,10 +9,11 @@
 import UIKit
 
 public class Orbit: Gadget {
-    weak var orb: Orb? = nil
+    unowned let orb: Orb
 	weak var editable: Editable? = nil
 	
-    init(size: CGSize, offset: UIOffset = .zero) {
+    init(orb: Orb, size: CGSize, offset: UIOffset = .zero) {
+        self.orb = orb
         super.init(guideView: UIView(), anchor: .bottomRight, size: size, offset: offset)
 	}
 	public required init?(coder: NSCoder) { fatalError() }
@@ -21,6 +22,10 @@ public class Orbit: Gadget {
 		self.editable = editable
 		return self
 	}
+
+    func add(orbit: Orbit) { orb.add(orbit: orbit) }
+    func remove(orbit: Orbit) { orb.remove(orbit: orbit) }
+    func toggle(orbit: Orbit) { orb.toggle(orbit: orbit) }
 
 // Events ==========================================================================================
 //	func render() {}

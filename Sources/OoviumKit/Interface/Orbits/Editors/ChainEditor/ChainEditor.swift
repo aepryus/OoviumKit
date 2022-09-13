@@ -20,13 +20,13 @@ public class ChainEditor: Orbit {
 
 	unowned var chainView: ChainView!
 
-	public init(schematics: [ChainSchematic], customSchematic: CustomSchematic? = nil) {
+    public init(orb: Orb, schematics: [ChainSchematic], customSchematic: CustomSchematic? = nil) {
 		self.schematics = schematics
 		if let customSchematic = customSchematic { self.schematics.append(customSchematic) }
 		self.customSchematic = customSchematic
 		self.keyView = KeyView(size: CGSize(width: 174, height: 214), uiColor: .orange, schematic: schematics[0])
 
-		super.init(size: CGSize(width: 174+54+3, height: 214))
+        super.init(orb: orb, size: CGSize(width: 174+54+3, height: 214))
 		
 		addSubview(keyView)
 		keyView.frame = CGRect(x: (54+3)*Oo.s, y: 0, width: keyView.width, height: keyView.height)
@@ -34,8 +34,8 @@ public class ChainEditor: Orbit {
 		schematics.forEach { $0.chainEditor = self }
 		keyView.schematic = self.schematics[0]
 	}
-	convenience init() {
-		self.init(schematics: [
+    convenience init(orb: Orb) {
+        self.init(orb: orb, schematics: [
 			NumberSchematic(),
 			ScientificSchematic(),
 			MiscellaneousSchematic(),

@@ -11,8 +11,8 @@ import OoviumEngine
 import UIKit
 
 public class IvorySkin: Skin {
-	//	let pen = Pen(font: UIFont(name: "HelveticaNeue", size: 16)!)
-	let pen = Pen(font: UIFont.systemFont(ofSize: 16))
+		let pen = Pen(font: UIFont(name: "HelveticaNeue", size: 16)!)
+//	let pen = Pen(font: UIFont.systemFont(ofSize: 16))
 	
 	// Skin ============================================================================================
 	override var fadePercent: CGFloat {
@@ -225,7 +225,30 @@ public class IvorySkin: Skin {
 		
 		(text as NSString).draw(in: textRect, withAttributes: pen.attributes)
 	}
-	
+    override func shapeKey(path: CGPath) {
+        let c = UIGraphicsGetCurrentContext()!
+        
+        c.addPath(path)
+        c.setLineWidth(0)
+        UIColor.black.alpha(0.7).setFill()
+        c.drawPath(using: .fill)
+        
+        c.addPath(path)
+        c.setLineWidth(6)
+        UIColor.black.alpha(0.4).setStroke()
+        c.drawPath(using: .stroke)
+        
+        c.addPath(path)
+        c.setLineWidth(4)
+        UIColor.black.alpha(0.6).setStroke()
+        c.drawPath(using: .stroke)
+        
+        c.addPath(path)
+        c.setLineWidth(2)
+        UIColor.white.setStroke()
+        c.drawPath(using: .stroke)
+    }
+
 	// Miscellaneous
 	override func message (text: String, rect: CGRect, uiColor: UIColor, font: UIFont) {
 		let style = NSMutableParagraphStyle()
@@ -310,7 +333,7 @@ public class IvorySkin: Skin {
 		let c = UIGraphicsGetCurrentContext()!
 		c.setFillColor(field.cgColor)
 		c.setStrokeColor(accent.cgColor)
-		c.setLineWidth(1.5)
+		c.setLineWidth(width)
 		c.addPath(path)
 		c.drawPath(using: .fillStroke)
 	}

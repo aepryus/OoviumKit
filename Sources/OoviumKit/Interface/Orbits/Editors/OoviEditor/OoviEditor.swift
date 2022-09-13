@@ -18,8 +18,8 @@ class OoviEditor: Orbit {
 		return editable as! OoviBub
 	}
 	
-	init() {
-		super.init(size: CGSize(width: 9*30, height: 4*30))
+    init(orb: Orb) {
+        super.init(orb: orb, size: CGSize(width: 9*30, height: 4*30))
 //		super.init(anchor: .bottomRight,offset: UIOffset(horizontal: -6, vertical: -6), size: CGSize(width: 9*30, height: 4*30), fixedOffset: UIOffset(horizontal: 0, vertical: 0), schematic: Schematic(rows: 4, cols: 9))
 
 		schematic.add(row: 0, col: 0, key: Key(text: "", uiColor: OOColor.red.uiColor, {self.execute(.red)}))

@@ -32,13 +32,17 @@ class TextLeaf: Leaf, Editable, DoubleTappable, Citable, Colorable, UITextFieldD
 	}
 	
 	var uiColor: UIColor {
-		if focused {return UIColor(red: 0.8, green: 0.8, blue: 0.8, alpha: 1)}
-		else if bubble.selected {return UIColor.yellow}
-		else {return text.color.uiColor}
+		if focused { return UIColor(red: 0.8, green: 0.8, blue: 0.8, alpha: 1) }
+		else if bubble.selected { return .yellow }
+		else { return text.color.uiColor }
 	}
 	
 	func render() {
-		let pen = Pen(font: UIFont(name: "HelveticaNeue", size: 16)!)
+        var pen = Pen(font: UIFont(name: "HelveticaNeue", size: 16)!, alignment: .center)
+        let style: NSMutableParagraphStyle = pen.style.mutableCopy() as! NSMutableParagraphStyle
+        style.lineBreakMode = .byWordWrapping
+        pen = pen.clone(style: style)
+        
 		var size: CGSize = CGSize.zero
 		
 		if textField != nil {

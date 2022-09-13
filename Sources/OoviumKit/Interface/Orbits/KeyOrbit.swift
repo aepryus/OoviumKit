@@ -14,10 +14,10 @@ public class KeyOrbit: Orbit {
 		didSet { renderSchematic() }
 	}
 	
-	init(size: CGSize, offset: UIOffset = .zero, uiColor: UIColor = UIColor.orange, schematic: Schematic = Schematic(rows: 1, cols: 1)) {
+    init(orb: Orb, size: CGSize, offset: UIOffset = .zero, uiColor: UIColor = UIColor.orange, schematic: Schematic = Schematic(rows: 1, cols: 1)) {
 		self.uiColor = uiColor
 		self.schematic = schematic
-		super.init(size: size, offset: offset)
+        super.init(orb: orb, size: size, offset: offset)
 	}
 	required init?(coder aDecoder: NSCoder) {fatalError()}
 

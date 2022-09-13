@@ -18,8 +18,8 @@ class AlsoEditor: Orbit, UITableViewDataSource {
 		return editable as! AlsoLeaf
 	}
 
-	init() {
-		super.init(size: CGSize(width: 180, height: 220))
+    init(orb: Orb) {
+        super.init(orb: orb, size: CGSize(width: 180, height: 220))
 //		super.init(anchor: .bottomRight,offset: UIOffset.zero, size: CGSize(width: 180, height: 220), fixedOffset: UIOffset(horizontal: 0, vertical: 0))
 
 		tableView.backgroundColor = .clear

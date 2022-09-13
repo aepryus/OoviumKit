@@ -13,8 +13,8 @@ class SignatureEditor: KeyOrbit {
 		return editable as! SignatureLeaf
 	}
 	
-	init() {
-		super.init(size: CGSize(width: 134, height: 174), uiColor: UIColor.orange, schematic: Schematic(rows: 4, cols: 1))
+    init(orb: Orb) {
+        super.init(orb: orb, size: CGSize(width: 134, height: 174), uiColor: UIColor.orange, schematic: Schematic(rows: 4, cols: 1))
 
 		schematic.add(row: 0, col: 0, key: Key(text: NSLocalizedString("addParam", tableName: nil, bundle: Bundle(for: type(of: self)), value: "", comment: ""), uiColor: UIColor(red: 0.8, green: 1, blue: 0.8, alpha: 1), {
 			self.signatureLeaf.addInput()

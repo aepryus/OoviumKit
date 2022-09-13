@@ -60,6 +60,8 @@ class AetherHover: UIView {
     }
 
     class HookView: UIControl {
+        private var path: CGMutablePath = CGMutablePath()
+        
         init() {
             super.init(frame: .zero)
             backgroundColor = .clear
@@ -67,6 +69,12 @@ class AetherHover: UIView {
         required init?(coder: NSCoder) { fatalError() }
         
         // UIView ==================================================================================
+        override func hitTest(_ point: CGPoint, with event: UIEvent?) -> UIView? {
+            let view: UIView? = super.hitTest(point, with: event)
+            if view !== self { return view }
+            if path.contains(point) { return self }
+            return nil
+        }
         override func draw(_ rect: CGRect) {
             let sw: CGFloat = h-lw
 
@@ -82,7 +90,7 @@ class AetherHover: UIView {
             let p3: CGPoint = CGPoint(x: x2, y: y2)
             let p4: CGPoint = CGPoint(x: x1, y: y2)
 
-            let path: CGMutablePath = CGMutablePath()
+            path = CGMutablePath()
             path.move(to: (p1+p4)/2)
             path.addArc(tangent1End: p1, tangent2End: (p1+p2)/2, radius: ar)
             path.addArc(tangent1End: p2, tangent2End: (p2+p3)/2, radius: nr)
@@ -98,6 +106,8 @@ class AetherHover: UIView {
         let textField: OOTextField = OOTextField(frame: .zero, backColor: Skin.color(.labelBack), foreColor: Skin.color(.labelFore), textColor: Skin.color(.labelText))
         
         var editing: Bool = false
+        
+        private var path: CGMutablePath = CGMutablePath()
         
         init(controller: AetherHoverController) {
             self.controller = controller
@@ -128,6 +138,12 @@ class AetherHover: UIView {
         }
         
         // UIView ==================================================================================
+        override func hitTest(_ point: CGPoint, with event: UIEvent?) -> UIView? {
+            let view: UIView? = super.hitTest(point, with: event)
+            if view !== self { return view }
+            if path.contains(point) { return self }
+            return nil
+        }
         override func draw(_ rect: CGRect) {
             let sw: CGFloat = h-lw
 
@@ -144,7 +160,7 @@ class AetherHover: UIView {
             let p3: CGPoint = CGPoint(x: x3, y: y2)
             let p4: CGPoint = CGPoint(x: x1, y: y2)
             
-            let path: CGMutablePath = CGMutablePath()
+            path = CGMutablePath()
             path.move(to: (p1+p4)/2)
             path.addArc(tangent1End: p1, tangent2End: (p1+p2)/2, radius: wr)
             path.addArc(tangent1End: p2, tangent2End: (p2+p3)/2, radius: nr)
@@ -168,6 +184,8 @@ class AetherHover: UIView {
         }
     }
     class ScrewView: UIControl {
+        private var path: CGMutablePath = CGMutablePath()
+
         init() {
             super.init(frame: .zero)
             backgroundColor = .clear
@@ -175,6 +193,12 @@ class AetherHover: UIView {
         required init?(coder: NSCoder) { fatalError() }
         
         // UIView ==================================================================================
+        override func hitTest(_ point: CGPoint, with event: UIEvent?) -> UIView? {
+            let view: UIView? = super.hitTest(point, with: event)
+            if view !== self { return view }
+            if path.contains(point) { return self }
+            return nil
+        }
         override func draw(_ rect: CGRect) {
             let sw: CGFloat = h-lw
 
@@ -191,7 +215,7 @@ class AetherHover: UIView {
             let p3: CGPoint = CGPoint(x: x4, y: y2)
             let p4: CGPoint = CGPoint(x: x1, y: y2)
 
-            let path: CGMutablePath = CGMutablePath()
+            path = CGMutablePath()
             path.move(to: (p1+p4)/2)
             path.addArc(tangent1End: p1, tangent2End: (p1+p2)/2, radius: wr)
             path.addArc(tangent1End: p2, tangent2End: (p2+p3)/2, radius: nr)
@@ -225,8 +249,10 @@ class AetherHover: UIView {
     
 // UIView ==========================================================================================
     override func layoutSubviews() {
-        hookView.left(width: 54*gS, height: AetherHover.h)
-        aetherNameView.left(dx: hookView.right - AetherHover.h + AetherHover.p, width: 180*gS, height: AetherHover.h)
-        screwView.left(dx: aetherNameView.right - AetherHover.h + AetherHover.p, width: 54*gS, height: AetherHover.h)
+        let hw: CGFloat = 54*gS
+        let sw: CGFloat = hw
+        hookView.left(width: hw, height: AetherHover.h)
+        aetherNameView.left(dx: hookView.right - AetherHover.h + AetherHover.p, width: width - hw - sw - 2*AetherHover.p + 2*AetherHover.h, height: AetherHover.h)
+        screwView.left(dx: aetherNameView.right - AetherHover.h + AetherHover.p, width: sw, height: AetherHover.h)
     }
 }

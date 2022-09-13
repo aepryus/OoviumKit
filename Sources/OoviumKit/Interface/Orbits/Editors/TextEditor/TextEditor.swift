@@ -38,8 +38,8 @@ class TextEditor: Orbit {
 	var inputsButton: PathButton = PathButton(key: "inputs")
 	var outputsButton: PathButton = PathButton(key: "outputs")
 
-	init() {
-		super.init(size: CGSize(width: 180, height: 220))
+    init(orb: Orb) {
+        super.init(orb: orb, size: CGSize(width: 180, height: 220))
 //		super.init(anchor: .bottomRight,offset: UIOffset.zero, size: CGSize(width: 180, height: 220), fixedOffset: UIOffset(horizontal: 0, vertical: 0))
 
 		inputsButton.uiColor = UIColor.white

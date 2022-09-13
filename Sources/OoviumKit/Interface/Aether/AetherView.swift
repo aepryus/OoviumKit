@@ -24,11 +24,11 @@ extension AetherViewDelegate {
 	func onSave(aetherView: AetherView, aether: Aether) {}
 }
 
-public class AetherView: UIView, UIScrollViewDelegate, UIGestureRecognizerDelegate {
+public class AetherView: UIView, UIScrollViewDelegate, UIGestureRecognizerDelegate, AnchorDoubleTappable {
 	public var aether: Aether
     public var facade: Facade?
 	
-	var scrollView: UIScrollView = UIScrollView()
+    let scrollView: UIScrollView = UIScrollView()
 	
 	public weak var aetherViewDelegate: AetherViewDelegate? = nil
 	
@@ -59,7 +59,7 @@ public class AetherView: UIView, UIScrollViewDelegate, UIGestureRecognizerDelega
 	public var aetherPickerOffset: UIOffset = UIOffset.zero
 	public var toolBarOffset: UIOffset?
 	
-	public var orb: Orb = ScreenOrb()
+    lazy public var orb: Orb = { Orb(aetherView: self, view: self, dx: -10*Oo.gS, dy: -10*Oo.gS) }()
 	private var burn: Bool
 	public var backView: UIView? = nil {
 		didSet {
@@ -73,18 +73,15 @@ public class AetherView: UIView, UIScrollViewDelegate, UIGestureRecognizerDelega
 
     lazy var aetherHover: AetherHover = { AetherHover(aetherView: self) }()
 	
-	lazy var anchoring: Anchoring = {
-		return Anchoring(aetherView: self)
-	}()
-	var anchored: Bool {
-		return anchoring.anchorTouch != nil
-	}
+	lazy var anchoring: Anchoring = { Anchoring(aetherView: self) }()
+	var anchored: Bool { anchoring.anchorTouch != nil }
 	
 	lazy var focusTapGesture: FocusTapGesture = { FocusTapGesture(aetherView: self) }()
 	let tapGesture: TapGesture = TapGesture()
 	lazy var doubleTap: DoubleTap = { DoubleTap(aetherView: self) }()
 	lazy var makeGesture: MakeGesture = { MakeGesture(aetherView: self) }()
 	lazy var anchorTap: AnchorTap = { AnchorTap(aetherView: self) }()
+    lazy var anchorDoubleTapGesture: AnchorDoubleTap = { AnchorDoubleTap(aetherView: self) }()
 	lazy var anchorPan: AnchorPan = { AnchorPan(aetherView: self) }()
 	
 	public var needsStretch: Bool = false
@@ -106,7 +103,7 @@ public class AetherView: UIView, UIScrollViewDelegate, UIGestureRecognizerDelega
 
 		if !oldPicker {
 			addSubview(aetherHover)
-            aetherHover.frame = CGRect(x: 4*gS, y: Screen.mac ? 3*gS : Screen.safeTop, width: Screen.mac ? 210*gS : 168*gS, height: Screen.mac ? 40*gS : 32*gS)
+            aetherHover.frame = CGRect(x: 4*gS, y: Screen.mac ? 3*gS : Screen.safeTop, width: Screen.mac ? 300*gS : 240*gS, height: Screen.mac ? 40*gS : 32*gS)
             aetherHover.hookView.addAction { [unowned self] in
                 if aetherHover.aetherNameView.editing { aetherHover.controller.onAetherViewReturn() }
 				self.slideToggle()
@@ -145,7 +142,7 @@ public class AetherView: UIView, UIScrollViewDelegate, UIGestureRecognizerDelega
 		
 		focusTapGesture.delegate = self
 		scrollView.addGestureRecognizer(focusTapGesture)
-		
+        
 		scrollView.addGestureRecognizer(tapGesture)
 		
 		doubleTap.delegate = self
@@ -157,6 +154,9 @@ public class AetherView: UIView, UIScrollViewDelegate, UIGestureRecognizerDelega
 		anchorTap.delegate = self
 		scrollView.addGestureRecognizer(anchorTap)
 		
+        anchorDoubleTapGesture.delegate = self
+        scrollView.addGestureRecognizer(anchorDoubleTapGesture)
+        
 		anchorPan.delegate = self
 		scrollView.addGestureRecognizer(anchorPan)
 		
@@ -358,10 +358,10 @@ public class AetherView: UIView, UIScrollViewDelegate, UIGestureRecognizerDelega
 		clearFocus(dismissEditor: dismissEditor)
 		focus = editable
 		editable.onMakeFocus()
-		orb.orb(it: editable.editor)
+        if !orb.hasOrbits { orb.launch(orbit: editable.editor) }
 	}
 	func clearFocus(dismissEditor: Bool = true) {
-		guard let focus = focus else {return}
+		guard let focus = focus else { return }
 		self.focus = nil
 		focus.onReleaseFocus()
 		if dismissEditor { orb.deorbit() }
@@ -451,24 +451,6 @@ public class AetherView: UIView, UIScrollViewDelegate, UIGestureRecognizerDelega
 	}
 	public func swapToAether(_ facadeAether: (facade: Facade, aether: Aether)) {
 		swapToAether(facade: facadeAether.0, aether: facadeAether.1)
-	}
-	func swapToNewAether() {
-		closeCurrentAether()
-//		Space.local.newAether { (aether: Aether?) in
-//			guard let aether = aether else { return }
-//			aether.width = Double(self.width)
-//			aether.height = Double(self.height)
-//			aether.xOffset = 400
-//			aether.yOffset = 260
-//			self.aetherViewDelegate?.onNew(aetherView: self, aether: aether)
-//			self.space = Space.local
-//			self.openAether(aether)
-//			self.saveAether()
-//			if self.oldPicker {
-//				self.aetherPicker?.retract()
-//				self.aetherPicker?.loadAetherNames()
-//			}
-//		}
 	}
 	public func clearAether() {
 		self.aether.removeAllAexels()
@@ -593,51 +575,41 @@ public class AetherView: UIView, UIScrollViewDelegate, UIGestureRecognizerDelega
 	}
 	
 // Selected ========================================================================================
-	static let multiContext = MultiContext()
-	private static func isHomogeneous(selected: Set<Bubble>) -> Bool {
-		let root = selected.first!
-		for bubble in selected {
-			if type(of: root) != type(of: bubble) {return false}
-		}
-		return true
-	}
+    private var selectedIsHomogeneous: Bool {
+        guard let first = selected.first else { return false }
+        return selected.allSatisfy { type(of: first) == type(of: $0) }
+    }
 	private func invokeContext() {
-		if selected.count == 0 {
-			if orb.orbits.count > 0, orb.orbits[0] is Context { orb.deorbit() }
-			return
-		}
-		
-		let newContext: Context
-		if selected.count == 1 {
-			newContext = selected.first!.context
-		} else {
-			if AetherView.isHomogeneous(selected: selected) {
-				newContext = selected.first!.multiContext
-			} else {
-				newContext = AetherView.multiContext
-			}
-		}
-		
-		if orb.orbits.count > 0 {
-			if orb.orbits[0] === newContext { return }
-			orb.deorbit()
-		}
-		
-		newContext.aetherView = self
-		orb.orb(it: newContext)
+        guard !orb.hasOrbits || orb.isContext else { return }
+        guard let first: Bubble = selected.first else { orb.deorbit(); return }
+        
+        let context: Context
+        if selected.count == 1 {
+            context = first.context
+        } else if selectedIsHomogeneous {
+            context = first.multiContext
+        } else {
+            context = orb.multiContext
+        }
+        
+        if orb.current === context { return }
+        if orb.current != nil { orb.deorbit() }
+        orb.launch(orbit: context)
 	}
 	func select(bubbles: [Bubble]) {
-		for bubble in bubbles {
-			guard bubble.selectable else {continue}
-			bubble.select()
-			selected.insert(bubble)
-		}
-		invokeContext()
+        guard bubbles.count > 0 else { return }
+        bubbles.forEach {
+            guard $0.selectable else { return }
+            $0.select()
+            selected.insert($0)
+        }
+        invokeContext()
 	}
 	func select(path: CGPath) {
 		select(bubbles: bubbles.filter({path.contains($0.center)}))
 	}
 	func select(bubble: Bubble) {
+        guard focus == nil else { return }
 		select(bubbles: [bubble])
 	}
 	func unselect(bubble: Bubble) {
@@ -653,12 +625,10 @@ public class AetherView: UIView, UIScrollViewDelegate, UIGestureRecognizerDelega
 		invokeContext()
 	}
 	func setSelectedsStartPoint() {
-		for bubble in selected {
-			bubble.setStartPoint()
-		}
+        selected.forEach { $0.setStartPoint() }
 	}
 	func moveSelected(by: CGPoint) {
-		selected.forEach {$0.move(by: by)}
+		selected.forEach { $0.move(by: by) }
 	}
 	func deleteSelected() {
 		remove(bubbles: selected)
@@ -737,6 +707,12 @@ public class AetherView: UIView, UIScrollViewDelegate, UIGestureRecognizerDelega
 			scrollView.setContentOffset(CGPoint(x: point.x, y: point.y+y+32), animated: true)
 		}
 	}
+
+// AnchorDoubleTappable ============================================================================
+    @objc func onAnchorDoubleTap(point: CGPoint) {
+        pasteBubbles(at: point)
+        stretch()
+    }
 
 // UIScrollViewDelegate ============================================================================
 	public func scrollViewDidScroll(_ scrollView: UIScrollView) {
@@ -905,11 +881,17 @@ public class AetherView: UIView, UIScrollViewDelegate, UIGestureRecognizerDelega
 	}
 
 // UIView ==========================================================================================
+    public override var frame: CGRect {
+        didSet {
+            stretch()
+            orb.layout()
+        }
+    }
 	public override func layoutSubviews() {
 		backView?.frame = bounds
 		scrollView.frame = bounds
 		hovers.forEach { $0.render() }
-		if orb is AetherViewOrb { orb.orbits.forEach { render(orbit: $0) } }
+//		if orb is AetherViewOrb { orb.orbits.forEach { render(orbit: $0) } }
 	}
 	
 // Static ==========================================================================================

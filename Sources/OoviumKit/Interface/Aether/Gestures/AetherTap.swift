@@ -8,31 +8,6 @@
 
 import UIKit
 
-//class Gesture {
-//	static func toString(_ state: UIGestureRecognizer.State) -> String {
-//		switch state {
-//			case .possible:		return "possible"
-//			case .began:		return "began"
-//			case .cancelled:	return "cancelled"
-//			case .ended:		return "ended"
-//			case .changed:		return "changed"
-//			case .failed:		return "failed"
-//			@unknown default:	return "unknown"
-//		}
-//	}
-//}
-//
-//extension UITapGestureRecognizer {
-//	override public var state: UIGestureRecognizer.State {
-//		didSet { print("\(String(describing: type(of: self))).state [\(Gesture.toString(state))]") }
-//	}
-//}
-//extension UIPanGestureRecognizer {
-//	override public var state: UIGestureRecognizer.State {
-//		didSet { print("\(String(describing: type(of: self))).state [\(Gesture.toString(state))]") }
-//	}
-//}
-
 class AetherTap: UITapGestureRecognizer {
 	unowned let aetherView: AetherView
 	

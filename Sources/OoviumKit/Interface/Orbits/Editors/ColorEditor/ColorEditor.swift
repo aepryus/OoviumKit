@@ -13,8 +13,8 @@ class ColorEditor: KeyOrbit {
 	var state: State? = nil
 	var colorLeaf: ColorLeaf? = nil
 
-	init() {
-		super.init(size: CGSize(width: 8*30, height: 4*30), offset: UIOffset(horizontal: -6, vertical: -6), uiColor: UIColor.white, schematic: Schematic(rows: 4, cols: 8))
+    init(orb: Orb) {
+        super.init(orb: orb, size: CGSize(width: 8*30, height: 4*30), offset: UIOffset(horizontal: -6, vertical: -6), uiColor: UIColor.white, schematic: Schematic(rows: 4, cols: 8))
 
 		schematic.add(row: 0, col: 0, key: Key(text: "", uiColor: OOColor.clear.uiColor, {self.execute(.clear)}))
 		schematic.add(row: 1, col: 0, key: Key(text: "", uiColor: OOColor.white.uiColor, {self.execute(.white)}))
@@ -55,7 +55,7 @@ class ColorEditor: KeyOrbit {
 	required init?(coder aDecoder: NSCoder) {fatalError()}
 	
 	func execute(_ ooColor: OOColor) {
-		orb?.deorbit()
+		orb.deorbit()
 		state?.color = ooColor.rawValue
 		colorLeaf?.setNeedsDisplay()
 	}
