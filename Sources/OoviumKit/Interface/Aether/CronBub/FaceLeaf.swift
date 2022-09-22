@@ -69,7 +69,7 @@ class FaceLeaf: Leaf, FocusTappable, TowerListener, Citable {
 	}
 	
 // TowerListener ===================================================================================
-	func onCalculate() {
+	func onTriggered() {
 		self.render()
 		self.setNeedsDisplay()
 	}

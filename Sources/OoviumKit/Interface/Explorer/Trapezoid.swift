@@ -130,6 +130,6 @@ public class Trapezoid: UIControl {
 		c.setLineWidth(lw)
 		c.drawPath(using: .fillStroke)
 
-		(title as NSString).draw(in: textRect, pen: pen)
+		title.draw(in: textRect, pen: pen)
 	}
 }

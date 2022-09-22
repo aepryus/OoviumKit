@@ -150,7 +150,7 @@ public class IvorySkin: Skin {
 		c.saveGState()
 		c.setShadow(offset: CGSize(width: 2, height: 2), blur: 2)
 		pen = pen.clone(color: accent.uiColor)
-		(text as NSString).draw(at: CGPoint(x: x, y: y), pen: pen)
+		text.draw(at: CGPoint(x: x, y: y), pen: pen)
 		c.restoreGState()
 	}
 	override func bubble(text: String, rect: CGRect, uiColor: UIColor? = nil, pen: Pen? = nil) {
@@ -158,14 +158,14 @@ public class IvorySkin: Skin {
 		var pen: Pen = pen ?? Pen(font: UIFont(name: "HelveticaNeue", size: 16)!, alignment: .center)
 		let rgb = RGB(uiColor: uiColor)
 		let accent = rgb.blend(rgb: RGB.black, percent: 0.5)
-		let size: CGSize = (text as NSString).size(pen: pen, width: rect.width)
+		let size: CGSize = text.size(pen: pen, width: rect.width)
 		let dy: CGFloat = (rect.height-size.height)/2 - 1
 		
 		let c = UIGraphicsGetCurrentContext()!
 		c.saveGState()
 		c.setShadow(offset: CGSize(width: 2, height: 2), blur: 2)
 		pen = pen.clone(color: accent.uiColor)
-		(text as NSString).draw(in: rect.offsetBy(dx: 0, dy: dy), pen: pen)
+		text.draw(in: rect.offsetBy(dx: 0, dy: dy), pen: pen)
 		c.restoreGState()
 	}
 	
@@ -177,7 +177,7 @@ public class IvorySkin: Skin {
 		c.saveGState()
 		c.setShadow(offset: CGSize(width: 2, height: 2), blur: 2)
 		let pen = Pen(font: font, color: accent.uiColor, alignment: align)
-		(text as NSString).draw(in: rect, withAttributes: pen.attributes)
+		text.draw(in: rect, withAttributes: pen.attributes)
 		c.restoreGState()
 	}
 	override func text(_ text: String, x: CGFloat, y: CGFloat, uiColor: UIColor) {
@@ -257,7 +257,7 @@ public class IvorySkin: Skin {
 		let accent = uiColor.shade(0.5)
 		let pen = Pen(font: font, color: accent, alignment: .left, style: style)
 		
-		guard let c = UIGraphicsGetCurrentContext() else {return}
+		guard let c = UIGraphicsGetCurrentContext() else { return }
 		c.saveGState()
 		c.setShadow(offset: CGSize(width: 2, height: 2), blur: 2)
 		(text as NSString).draw(in: rect, withAttributes: pen.attributes)
@@ -410,7 +410,7 @@ public class IvorySkin: Skin {
         let c = UIGraphicsGetCurrentContext()!
         c.saveGState()
         c.setShadow(offset: CGSize(width: 2, height: 2), blur: 2)
-        (text as NSString).draw(in: rect, pen: IvorySkin.expPen.clone(color: .green.tint(0.7).shade(0.5)))
+        text.draw(in: rect, pen: IvorySkin.expPen.clone(color: .green.tint(0.7).shade(0.5)))
         c.restoreGState()
     }
 }

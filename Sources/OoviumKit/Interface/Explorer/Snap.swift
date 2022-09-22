@@ -111,6 +111,6 @@ class Snap: UIControl {
 		c.setLineWidth(lw)
 		c.drawPath(using: .fillStroke)
 
-		(text as NSString).draw(in: rect.offsetBy(dx: anchor ? -8*s : -31*s, dy: 4*s), pen: pen)
+		text.draw(in: rect.offsetBy(dx: anchor ? -8*s : -31*s, dy: 4*s), pen: pen)
 	}
 }

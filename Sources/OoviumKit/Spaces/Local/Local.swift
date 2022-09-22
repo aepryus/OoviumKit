@@ -50,7 +50,7 @@ public class Local {
 //        }
 	}
 	public static func migrateXML() {
-		guard let url = FileManager.default.urls(for: .documentDirectory, in: .userDomainMask).first else {return}
+		guard let url = FileManager.default.urls(for: .documentDirectory, in: .userDomainMask).first else { return }
 		var aetherNames: [String] = []
 		do {
 			let contents: [URL] = try FileManager.default.contentsOfDirectory(at: url, includingPropertiesForKeys: nil, options: []).filter({$0.pathExtension == "xml"})

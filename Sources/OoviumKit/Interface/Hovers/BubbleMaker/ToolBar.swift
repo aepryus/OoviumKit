@@ -68,7 +68,7 @@ class ToolBar: Hover {
 	}
 	
 	func expand() {
-		guard !expanded else {return}
+		guard !expanded else { return }
 		expanded = true
 		onExpand()
 		self.size = CGSize(width: self.numberOfColumns*40, height: self.numberOfRows*40)

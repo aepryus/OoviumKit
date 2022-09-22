@@ -137,7 +137,7 @@ class SignatureLeaf: Leaf, Editable, Citable, UITextFieldDelegate {
 		setNeedsDisplay()
 	}
 	func removeInput() {
-		guard noOfParams > 0 else {return}
+		guard noOfParams > 0 else { return }
 		noOfParams -= 1
 		
 		let paramEdit = paramEdits.removeLast()
@@ -153,7 +153,7 @@ class SignatureLeaf: Leaf, Editable, Citable, UITextFieldDelegate {
 	
 // Events ==========================================================================================
 	func onTap(aetherView: AetherView) {
-		guard !open else {return}
+		guard !open else { return }
 		makeFocus()
 	}
 

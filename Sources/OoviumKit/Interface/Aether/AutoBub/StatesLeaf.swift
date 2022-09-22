@@ -250,7 +250,7 @@ class StatesLeaf: Leaf, ChainLeafDelegate, Colorable {
 		let rect = expanded
 			? CGRect(x: 51.5, y: 29.5+ey5+3, width: 24, height: 24).insetBy(dx: -5, dy: -5)
 			: CGRect(x: 51.5, y: 29.5, width: 24, height: 24).insetBy(dx: -5, dy: -5)
-		guard rect.contains(gesture.location(in: self)) else {return}
+		guard rect.contains(gesture.location(in: self)) else { return }
 		transform()
 	}
 	

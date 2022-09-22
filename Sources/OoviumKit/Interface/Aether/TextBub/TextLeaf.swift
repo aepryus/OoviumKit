@@ -77,7 +77,7 @@ class TextLeaf: Leaf, Editable, DoubleTappable, Citable, Colorable, UITextFieldD
 	}
 	
 	func readMode() {
-		guard let name = textField?.text else {return}
+		guard let name = textField?.text else { return }
 		if name.count > 0 {
 			text.name = textField!.text!
 			textField?.resignFirstResponder()
@@ -135,7 +135,7 @@ class TextLeaf: Leaf, Editable, DoubleTappable, Citable, Colorable, UITextFieldD
 		textBub.onOK()
 	}
 	func cite(_ citable: Citable, at: CGPoint) {
-		guard let other = citable as? TextLeaf else {return}
+		guard let other = citable as? TextLeaf else { return }
 		
 		let inward: Bool = orb.textEditor.inward
 		let from: TextLeaf = inward ? other : self
@@ -154,7 +154,7 @@ class TextLeaf: Leaf, Editable, DoubleTappable, Citable, Colorable, UITextFieldD
 		else {releaseFocus()}
 	}
 	@objc func onDoubleTap() {
-		guard (focused || textBub.aetherView.focus == nil) && !aetherView.readOnly else {return}
+		guard (focused || textBub.aetherView.focus == nil) && !aetherView.readOnly else { return }
 		if focused {releaseFocus()}
 		editMode()
 	}

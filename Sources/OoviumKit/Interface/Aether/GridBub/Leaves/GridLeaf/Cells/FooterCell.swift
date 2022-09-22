@@ -11,18 +11,31 @@ import OoviumEngine
 import UIKit
 
 class FooterCell: UICollectionViewCell, Citable, FocusTappable, TowerListener {
-	var column: Column! {
-		didSet { column.footerTower.listener = self }
-	}
+//	var column: Column! {
+//		didSet { column.footerTower.listener = self }
+//	}
 	var leftMost: Bool = false
 	unowned var gridLeaf: GridLeaf!
+    unowned let column: GridColumn
 	
-	override init(frame: CGRect) {
-		super.init(frame: frame)
+	init(column: GridColumn) {
+        self.column = column
+        super.init(frame: .zero)
 		backgroundColor = .clear
 	}
 	required init?(coder: NSCoder) {fatalError()}
-	
+    
+    private var _widthNeeded: CGFloat?
+    var widthNeeded: CGFloat {
+        if let _widthNeeded { return _widthNeeded }
+        _widthNeeded = 90
+        return _widthNeeded!
+    }
+    func clearWidthNeeded() {
+        _widthNeeded = nil
+        column.clearWidthNeeded()
+    }
+
 // Tappable ========================================================================================
 	func onTap(aetherView: AetherView) {}
 	
@@ -39,18 +52,18 @@ class FooterCell: UICollectionViewCell, Citable, FocusTappable, TowerListener {
 		
 		Skin.gridCalc(path: CGPath(rect: CGRect(x: 0, y: 0, width: width-p, height: height-p), transform: nil), uiColor: gridLeaf.uiColor.tint(0.25))
 		Skin.gridDraw(path: path, uiColor: gridLeaf.uiColor)
-		if column.aggregate != .none && column.aggregate != .running {
-			Skin.bubble(text: column.footerTower.obje.display, rect: CGRect(x: 3, y: 1, width: width-9, height: height-2), pen: Pen(color: gridLeaf.uiColor, alignment: column.alignment))
+        if column.column.aggregate != .none && column.column.aggregate != .running {
+			Skin.bubble(text: column.column.footerTower.obje.display, rect: CGRect(x: 3, y: 1, width: width-9, height: height-2), pen: Pen(color: gridLeaf.uiColor, alignment: column.column.alignment))
 		}
 	}
 	
 // Citable =========================================================================================
 	func token(at: CGPoint) -> Token? {
-		return column.footerTower.variableToken
+		return column.column.footerTower.variableToken
 	}
 	
 // TowerListener ===================================================================================
-	func onCalculate() {
+	func onTriggered() {
 		setNeedsDisplay()
 	}
 }

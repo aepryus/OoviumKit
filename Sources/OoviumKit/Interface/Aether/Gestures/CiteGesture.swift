@@ -30,8 +30,8 @@ class CiteGesture: UITapGestureRecognizer {
 	
 // Events =================referenceable=========================================================================
 	@objc func onTap() {
-		guard let focus = aetherView.focus else {return}
-		guard citable.relevant(editable: focus) else {return}
+		guard let focus = aetherView.focus else { return }
+		guard citable.relevant(editable: focus) else { return }
 		focus.cite(citable, at: at!)
 	}
 

@@ -19,12 +19,12 @@ public class MiscellaneousSchematic: ChainSchematic {
 		let almond: UIColor = UIColor(red: 0.93, green: 0.93, blue: 0.7, alpha: 1)
 		
 		add(row: 0, col: 0, key: Key(text: "round", uiColor: cherry, { [weak self] in
-			guard let me = self else {return}
+			guard let me = self else { return }
 			me.chainEditor.chainView.post(token: Token.round)
 			me.chainEditor.presentFirstSchematic()
 		}))
 		add(row: 0, col: 1, key: Key(text: "floor", uiColor: cherry, { [weak self] in
-			guard let me = self else {return}
+			guard let me = self else { return }
 			me.chainEditor.chainView.post(token: Token.floor)
 			me.chainEditor.presentFirstSchematic()
 		}))
@@ -34,65 +34,65 @@ public class MiscellaneousSchematic: ChainSchematic {
 //		}))
 		
 		add(row: 1, col: 0, key: Key(text: "if", uiColor: cherry, { [weak self] in
-			guard let me = self else {return}
+			guard let me = self else { return }
 			me.chainEditor.chainView.post(token: Token.iif)
 			me.chainEditor.presentFirstSchematic()
 		}))
 		add(row: 1, col: 1, key: Key(text: "min", uiColor: cherry, { [weak self] in
-			guard let me = self else {return}
+			guard let me = self else { return }
 			me.chainEditor.chainView.post(token: Token.min)
 			me.chainEditor.presentFirstSchematic()
 		}))
 		add(row: 1, col: 2, key: Key(text: "max", uiColor: cherry, { [weak self] in
-			guard let me = self else {return}
+			guard let me = self else { return }
 			me.chainEditor.chainView.post(token: Token.max)
 			me.chainEditor.presentFirstSchematic()
 		}))
 		
 		add(row: 2, col: 0, key: Key(text: "=", uiColor: plum, { [weak self] in
-			guard let me = self else {return}
+			guard let me = self else { return }
 			me.chainEditor.chainView.post(token: Token.equal)
 			me.chainEditor.presentFirstSchematic()
 		}))
 		add(row: 2, col: 1, key: Key(text: "<", uiColor: plum, { [weak self] in
-			guard let me = self else {return}
+			guard let me = self else { return }
 			me.chainEditor.chainView.post(token: Token.less)
 			me.chainEditor.presentFirstSchematic()
 		}))
 		add(row: 2, col: 2, key: Key(text: ">", uiColor: plum, { [weak self] in
-			guard let me = self else {return}
+			guard let me = self else { return }
 			me.chainEditor.chainView.post(token: Token.greater)
 			me.chainEditor.presentFirstSchematic()
 		}))
 		
 		add(row: 3, col: 0, key: Key(text: "\u{2260}", uiColor: plum, { [weak self] in
-			guard let me = self else {return}
+			guard let me = self else { return }
 			me.chainEditor.chainView.post(token: Token.notEqual)
 			me.chainEditor.presentFirstSchematic()
 		}))
 		add(row: 3, col: 1, key: Key(text: "\u{2264}", uiColor: plum, { [weak self] in
-			guard let me = self else {return}
+			guard let me = self else { return }
 			me.chainEditor.chainView.post(token: Token.lessOrEqual)
 			me.chainEditor.presentFirstSchematic()
 		}))
 		add(row: 3, col: 2, key: Key(text: "\u{2265}", uiColor: plum, { [weak self] in
-			guard let me = self else {return}
+			guard let me = self else { return }
 			me.chainEditor.chainView.post(token: Token.greaterOrEqual)
 			me.chainEditor.presentFirstSchematic()
 		}))
 		
 		add(row: 4, col: 0, key: Key(text: "∑", uiColor: cherry, { [weak self] in
-			guard let me = self else {return}
+			guard let me = self else { return }
 			me.chainEditor.chainView.post(token: Token.sum)
 			me.chainEditor.presentFirstSchematic()
 		}))
 		add(row: 4, col: 1, key: Key(text: "[ ]", uiColor: almond, { [weak self] in
-			guard let me = self else {return}
+			guard let me = self else { return }
 			me.chainEditor.chainView.braket()
 			me.chainEditor.presentFirstSchematic()
 		}))
 		add(row: 4, col: 2, key: Key(text: "k", uiColor: almond, font: UIFont(name: "TimesNewRomanPS-ItalicMT", size: 20*Oo.s)!, { [weak self] in
-			guard let me = self else {return}
+			guard let me = self else { return }
 			me.chainEditor.chainView.post(token: .k)
 			me.chainEditor.presentFirstSchematic()
 		}))

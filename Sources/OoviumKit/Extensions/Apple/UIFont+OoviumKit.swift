@@ -19,4 +19,5 @@ public extension UIFont {
 		return UIFont.systemFont(ofSize: size)
 	}
     static func ooExplore(size: CGFloat) -> UIFont { UIFont(name: "ChicagoFLF", size: size)! }
+    static func ooAether(size: CGFloat) -> UIFont { UIFont(name: "HelveticaNeue", size: size)! }
 }

@@ -144,10 +144,10 @@ class CronBub: Bubble, ChainLeafDelegate {
 		add(leaf: faceLeaf)
 		
 		playLeaf.playButton.onPlay = { [weak self] in
-			guard let me = self else {return}
+			guard let me = self else { return }
 			me.timer.configure(interval: 1/cron.rateTower.value, {
 				DispatchQueue.main.async { [weak self] in
-					guard let me = self else {return}
+					guard let me = self else { return }
 					let stop = me.cron.increment()
 					if stop {
 						me.playLeaf.playButton.stop()
@@ -166,17 +166,17 @@ class CronBub: Bubble, ChainLeafDelegate {
 //			}
 //		}
 		playLeaf.playButton.onStop = { [weak self] in
-			guard let me = self else {return}
+			guard let me = self else { return }
 			me.timer.stop()
 		}
 		playLeaf.resetButton.onReset = { [weak self] in
-			guard let me = self else {return}
+			guard let me = self else { return }
 			me.playLeaf.playButton.stop()
 			me.cron.reset()
 			me.cron.tower.trigger()
 		}
 		playLeaf.stepButton.onStep =  { [weak self] in
-			guard let me = self else {return}
+			guard let me = self else { return }
 			me.cron.sealed = false
 			_ = me.cron.increment()
 		}
@@ -290,7 +290,7 @@ class CronBub: Bubble, ChainLeafDelegate {
 		positionMoorings()
 		
 		plasma = CGMutablePath()
-		guard let plasma = plasma else {return}
+		guard let plasma = plasma else { return }
 
 		var a: CGPoint = CGPoint(x: faceLeaf.center.x-20, y: faceLeaf.center.y)						// PlayLeaf
 		var b: CGPoint = CGPoint(x: playLeaf.center.x-30, y: playLeaf.center.y)
@@ -302,7 +302,7 @@ class CronBub: Bubble, ChainLeafDelegate {
 		plasma.addQuadCurve(to: d, control: (c+d)/2+CGPoint(x: -30, y: 0))
 		plasma.closeSubpath()
 
-		guard cron.exposed else {return}
+		guard cron.exposed else { return }
 		
 		a = CGPoint(x: faceLeaf.center.x-20, y: faceLeaf.center.y)									// startLeaf
 		b = CGPoint(x: startLeaf.right-33, y: startLeaf.center.y)
@@ -372,7 +372,7 @@ class CronBub: Bubble, ChainLeafDelegate {
 	
 // UIView ==========================================================================================
 	override func draw(_ rect: CGRect) {
-		guard let plasma = plasma else {return}
+		guard let plasma = plasma else { return }
 		
 		let c = UIGraphicsGetCurrentContext()!
 		c.addPath(plasma)

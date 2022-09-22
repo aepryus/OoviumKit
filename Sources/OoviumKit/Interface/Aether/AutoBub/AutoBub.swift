@@ -263,7 +263,7 @@ class AutoBub: Bubble, ChainLeafDelegate {
 
 // UIView ==========================================================================================
 	public override func draw(_ rect: CGRect) {
-		guard let plasma = plasma else {return}
+		guard let plasma = plasma else { return }
 		
 		let c = UIGraphicsGetCurrentContext()!
 

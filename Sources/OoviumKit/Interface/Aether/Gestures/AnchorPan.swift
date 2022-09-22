@@ -37,7 +37,7 @@ class AnchorPan: UIPanGestureRecognizer {
 	
 // Events ==========================================================================================
 	@objc func onPan() {
-		guard let panStart = panStart, let panTouch = panTouch else {return}
+		guard let panStart = panStart, let panTouch = panTouch else { return }
 		let s = panTouch.location(in: aetherView.scrollView)
 		let t = CGPoint(x: s.x-panStart.x, y: s.y-panStart.y)
 		if let bubble = bubble, let bubbleStart = bubbleStart, !bubble.selected {

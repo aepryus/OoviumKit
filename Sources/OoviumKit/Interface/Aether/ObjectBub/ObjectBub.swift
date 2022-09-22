@@ -40,63 +40,43 @@ class ObjectMaker: Maker {
 	}
 }
 
-class ObjectBub: Bubble, ChainLeafDelegate, Citable {
-	var object: Object
+class ObjectBub: Bubble, Citable {
+	let object: Object
 	
-	lazy var objectLeaf: ObjectLeaf = {ObjectLeaf(bubble: self)}()
+	lazy var objectLeaf: ObjectLeaf = { ObjectLeaf(bubble: self) }()
 	
 	required init(_ object: Object, aetherView: AetherView) {
 		self.object = object
 		
-		super.init(aetherView: aetherView, aexel: object, origin: CGPoint(x: self.object.x, y: self.object.y), hitch: .center, size: CGSize.zero)
-
-		objectLeaf.size = CGSize(width: 100, height: 36)
+		super.init(aetherView: aetherView, aexel: object, origin: CGPoint(x: self.object.x, y: self.object.y), hitch: .center, size: .zero)
+        
 		add(leaf: objectLeaf)
 		objectLeaf.render()
 		
 		layoutLeaves()
 	}
-	required init?(coder aDecoder: NSCoder) {fatalError()}
+	required init?(coder aDecoder: NSCoder) { fatalError() }
+    
+    var isEmpty: Bool { object.chain.tokens.count == 0 && object.label.count == 0 }
 	
 // Events ==========================================================================================
-	override func onCreate() {
-		objectLeaf.makeFocus()
-	}
+	override func onCreate() { objectLeaf.makeFocus() }
+    override func onRemove() { objectLeaf.deinitMoorings() }
 	override func onSelect() {}
 	override func onUnselect() {}
-	override func onRemove() {
-		objectLeaf.deinitMoorings()
-	}
-	
+
+    func onOK() {
+        if isEmpty {
+            aetherView.aether.removeAexel(object)
+            aetherView.remove(bubble: self)
+            aetherView.aether.buildMemory()
+        }
+        aetherView.stretch()
+    }
+
 // Bubble ==========================================================================================
-	override var context: Context {
-		return orb.objectContext
-	}
+	override var context: Context { orb.objectContext }
 	
 // Citable =========================================================================================
-	func token(at: CGPoint) -> Token? {
-		return object.token
-	}
-	
-// ChainLeafDelegate ===============================================================================
-	func onChange() {
-		layoutLeavesIfNeeded()
-	}
-	func onEdit() {
-		layoutLeavesIfNeeded()
-	}
-	func onOK() {
-		if object.chain.tokens.count != 0 || object.label.count != 0 {
-			bounds = objectLeaf.bounds
-		} else {
-			aetherView.aether.removeAexel(object)
-			aetherView.remove(bubble: self)
-			aetherView.aether.buildMemory()
-		}
-		aetherView.stretch()
-	}
-	func onOK(leaf: ChainLeaf) {
-		onOK()
-	}
-	func onCalculate() {}
+	func token(at: CGPoint) -> Token? { object.token }
 }

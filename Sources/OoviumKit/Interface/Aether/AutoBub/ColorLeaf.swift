@@ -29,7 +29,7 @@ class ColorLeaf: Leaf {
 	
 // UIView ==========================================================================================
 	override func draw(_ rect: CGRect) {
-		guard let uiColor = OOColor(rawValue: state.color)?.uiColor else {return}
+		guard let uiColor = OOColor(rawValue: state.color)?.uiColor else { return }
 		let rgb = RGB(uiColor: uiColor)
 		let field = rgb.tint(0.5)
 		let c = UIGraphicsGetCurrentContext()!

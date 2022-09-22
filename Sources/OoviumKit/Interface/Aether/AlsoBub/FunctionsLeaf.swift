@@ -32,7 +32,7 @@ class FunctionsLeaf: Leaf, Citable {
 	
 // UIView ==========================================================================================
 	override func draw(_ rect: CGRect) {
-		guard also.functionCount > 0 else {return}
+		guard also.functionCount > 0 else { return }
 		let r: CGFloat = 13.5*s
 		let p: CGFloat = 2*s
 

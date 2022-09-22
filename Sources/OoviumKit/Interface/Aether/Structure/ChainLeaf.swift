@@ -22,10 +22,9 @@ extension ChainLeafDelegate {
 	func accept(citable: Citable) -> Bool {return true}
 }
 
-class ChainLeaf: Leaf, ChainViewDelegate, Editable, TowerListener {
-	
+class ChainLeaf: Leaf, ChainViewDelegate, Editable {
 	let chainView: ChainView = ChainView()
-	weak var delegate: ChainLeafDelegate!
+	weak var delegate: ChainLeafDelegate?
 	var placeholder: String = "" {
 		didSet { setNeedsDisplay() }
 	}
@@ -40,7 +39,7 @@ class ChainLeaf: Leaf, ChainViewDelegate, Editable, TowerListener {
 	var chain: Chain {
 		set {
 			chainView.chain = newValue
-			chainView.chain.tower.listener = self
+//			chainView.chain.tower.listener = self
 		}
 		get {return chainView.chain}
 	}
@@ -79,11 +78,9 @@ class ChainLeaf: Leaf, ChainViewDelegate, Editable, TowerListener {
 	}
 	required init?(coder aDecoder: NSCoder) {fatalError()}
 	
-	func calcWidth() -> CGFloat {
-		return max(chainView.calcWidth()+36, minWidth)
-	}
+	func calcWidth() -> CGFloat { max(chainView.widthNeeded+36, minWidth) }
 	func render() {
-		let cvw = chainView.calcWidth()
+		let cvw = chainView.widthNeeded
 		let cvwp = cvw+36
 		let w = max(cvwp + (!chainView.chain.editing ? -6 : 0), minWidth)
 		self.size = CGSize(width: w, height: 36)
@@ -104,7 +101,7 @@ class ChainLeaf: Leaf, ChainViewDelegate, Editable, TowerListener {
 		if chainView.chain.editing {
 			releaseFocus()
 		} else {
-			delegate.onWillEdit()
+			delegate?.onWillEdit()
 			makeFocus()
 		}
 	}
@@ -129,9 +126,7 @@ class ChainLeaf: Leaf, ChainViewDelegate, Editable, TowerListener {
 			hitPath = CGPath(roundedRect: bounds.insetBy(dx: 3, dy: 3), cornerWidth: radius, cornerHeight: radius, transform: nil)
 		}
 	}
-	override func layoutSubviews() {
-		render()
-	}
+	override func layoutSubviews() { render() }
 	override func setNeedsDisplay() {
 		super.setNeedsDisplay()
 		chainView.setNeedsDisplay()
@@ -152,45 +147,42 @@ class ChainLeaf: Leaf, ChainViewDelegate, Editable, TowerListener {
 		chainView.edit()
 		render()
 		mooring.wakeDoodles()
-		delegate.onEdit()
+		delegate?.onEdit()
 	}
 	func onReleaseFocus() {
 		chainView.ok()
 		render()
 		mooring.sleepDoodles()
-		delegate.onOK(leaf: self)
+		delegate?.onOK(leaf: self)
 	}
 	func cite(_ citable: Citable, at: CGPoint) {
-		guard let token = citable.token(at: at) else {return}
-		guard delegate.accept(citable: citable) else {return}
-		guard chainView.attemptToPost(token: token) else {return}
-		guard let mooring = bubble.aetherView.mooring(token: token) else {return}
+		guard let token = citable.token(at: at) else { return }
+		guard delegate?.accept(citable: citable) ?? false else { return }
+		guard chainView.attemptToPost(token: token) else { return }
+		guard let mooring = bubble.aetherView.mooring(token: token) else { return }
 		bubble.aetherView.link(from: self.mooring, to: mooring)
 	}
 	
 	func onEdit() {}
-	func onOK() {
-		releaseFocus()
-	}
+	func onOK() { releaseFocus() }
 
 // ChainViewDelegate ===============================================================================
-	var color: UIColor {
-		return bubble.selected ? UIColor.yellow : uiColor
-	}
-	
-	func onChange() {
-		render()
-		delegate.onChange()
-	}
-	func onBackspace(token: Token) {
-		onChange()
-		guard let mooring = bubble.aetherView.mooring(token: token) else {return}
-		self.mooring.unlink(mooring: mooring)
-	}
-	
-// TowerListener ===================================================================================
-	func onCalculate() {
-		render()
-		delegate.onCalculate()
-	}
+    var color: UIColor { bubble.selected ? UIColor.yellow : uiColor }
+
+    func onEditStart() {}
+    func onEditStop() { releaseFocus() }
+
+    func onTokenAdded(_ token: Token) {
+        guard let mooring = bubble.aetherView.mooring(token: token) else { return }
+        bubble.aetherView.link(from: self.mooring, to: mooring)
+    }
+    func onTokenRemoved(_ token: Token) {
+        guard let mooring = bubble.aetherView.mooring(token: token) else { return }
+        bubble.aetherView.unlink(from: self.mooring, to: mooring)
+    }
+
+    func onWidthChanged(width: CGFloat) {
+        render()
+        delegate?.onChange()
+    }
 }

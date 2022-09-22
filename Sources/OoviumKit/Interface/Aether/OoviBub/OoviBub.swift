@@ -197,7 +197,7 @@ public class OoviBub: Bubble, ChainLeafDelegate {
 
 		// Plasma ===========
 		plasma = CGMutablePath()
-		guard let plasma = plasma else {return}
+		guard let plasma = plasma else { return }
 		let d: CGFloat = 3.5
 		x = 169+(47+p)/2
 		w = 47+p
@@ -294,7 +294,7 @@ public class OoviBub: Bubble, ChainLeafDelegate {
 	
 // UIView ==========================================================================================
 	public override func draw(_ rect: CGRect) {
-		guard let plasma = plasma else {return}
+		guard let plasma = plasma else { return }
 
 		let c = UIGraphicsGetCurrentContext()!
 		c.addPath(plasma)

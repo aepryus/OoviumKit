@@ -211,22 +211,22 @@ public class TronSkin: Skin {
 	override func bubble(text: String, x: CGFloat, y: CGFloat, uiColor: UIColor? = nil, pen: Pen? = nil) {
 		let uiColor = uiColor ?? pen?.color ?? UIColor.white
 		var pen = (pen ?? Pen(font: UIFont(name: "HelveticaNeue", size: 16)!)).clone(color: uiColor.alpha(0.4))
-		(text as NSString).draw(at: CGPoint(x: x+1, y: y+1), pen: pen)
-		(text as NSString).draw(at: CGPoint(x: x-1, y: y-1), pen: pen)
+		text.draw(at: CGPoint(x: x+1, y: y+1), pen: pen)
+		text.draw(at: CGPoint(x: x-1, y: y-1), pen: pen)
 		
 		pen = pen.clone(color: UIColor.white)
-		(text as NSString).draw(at: CGPoint(x: x, y: y), pen: pen)
+		text.draw(at: CGPoint(x: x, y: y), pen: pen)
 	}
 	override func bubble(text: String, rect: CGRect, uiColor: UIColor? = nil, pen: Pen? = nil) {
 		let uiColor = uiColor ?? pen?.color ?? UIColor.white
 		var pen = (pen ?? Pen(font: UIFont(name: "Verdana", size: 15)!, alignment: .center)).clone(color: uiColor.alpha(0.4))
-		let size: CGSize = (text as NSString).size(pen: pen, width: rect.width)
+		let size: CGSize = text.size(pen: pen, width: rect.width)
 		let dy: CGFloat = (rect.height-size.height)/2 - 1
-		(text as NSString).draw(in: rect.offsetBy(dx: 1, dy: 1+dy), pen: pen)
-		(text as NSString).draw(in: rect.offsetBy(dx: -1, dy: -1+dy), pen: pen)
+		text.draw(in: rect.offsetBy(dx: 1, dy: 1+dy), pen: pen)
+		text.draw(in: rect.offsetBy(dx: -1, dy: -1+dy), pen: pen)
 		
 		pen = pen.clone(color: UIColor.white)
-		(text as NSString).draw(in: rect.offsetBy(dx: 0, dy: dy), pen: pen)
+		text.draw(in: rect.offsetBy(dx: 0, dy: dy), pen: pen)
 	}
 	// Shape
 	override func shape(text: String, rect: CGRect, uiColor: UIColor, maxWidth: CGFloat?) {

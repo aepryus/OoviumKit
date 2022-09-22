@@ -6,53 +6,69 @@
 //  Copyright © 2019 Aepryus Software. All rights reserved.
 //
 
+import Acheron
 import OoviumEngine
 import UIKit
 
-class GridCell: UICollectionViewCell, Editable, Citable, ChainViewDelegate, TowerListener {
-	var cell: Cell! {
-		didSet {
-			cell.tower.listener = self
-			chainView.chain = cell.chain
-			chainView.render()
-		}
-	}
+class GridCell: UICollectionViewCell, Editable, Citable, ChainViewDelegate {
+    unowned let controller: GridController
+    unowned let column: GridColumn
+    var cell: Cell
+    
 	var leftMost: Bool = false
 	var bottomMost: Bool = false
-	unowned var gridLeaf: GridLeaf!
 	var tapped: Bool = false
 	
 	let chainView: ChainView = ChainView()
+    
+    var gridLeaf: GridLeaf { controller.gridBub.gridLeaf }
 	
-	override init(frame: CGRect) {
-		super.init(frame: frame)
-		backgroundColor = UIColor.clear
-		
-		chainView.at = CGPoint(x: width-3, y: 1)
-		chainView.hitch = .topRight
+    init(controller: GridController, column: GridColumn, cell: Cell) {
+        self.controller = controller
+        self.column = column
+        self.cell = cell
+        
+        super.init(frame: .zero)
+
+        backgroundColor = UIColor.clear
+        
+        chainView.chain = cell.chain
 		chainView.delegate = self
+        chainView.keyDelegate = controller
 		addSubview(chainView)
+        
+        self.cell.tower.listener = chainView
 	}
-	required init?(coder: NSCoder) {fatalError()}
-	
-	var isFocus: Bool {
-		return self === gridLeaf.aetherView.focus
-	}
-	
+	required init?(coder: NSCoder) { fatalError() }
+    
+    private var _widthNeeded: CGFloat?
+    var widthNeeded: CGFloat {
+        if let widthNeeded: CGFloat = controller.widthNeededs[cell.iden] { return widthNeeded }
+        let widthNeeded: CGFloat = max(90, chainView.widthNeeded+6)
+        controller.widthNeededs[cell.iden] = widthNeeded
+        return widthNeeded
+    }
+    func clearWidthNeeded() {
+        _widthNeeded = nil
+        column.clearWidthNeeded()
+    }
+
+    var isFocus: Bool { self === gridLeaf.aetherView.focus }
+    
+    func load(cell: Cell) {
+        self.cell = cell
+        chainView.chain = cell.chain
+        chainView.render()
+    }
+    
 	func render() {
-		switch cell.column.justify {
-			case .left:
-				chainView.hitch = .topLeft
-				chainView.at = CGPoint(x: 3, y: 1)
-			case .center:
-				chainView.hitch = .top
-				chainView.at = CGPoint(x: width/2, y: 1)
-			case .right:
-				chainView.hitch = .topRight
-				chainView.at = CGPoint(x: width-3, y: 1)
-		}
-		chainView.render()
-		setNeedsDisplay()
+        let p: CGFloat = 3
+        let h: CGFloat = 24
+        switch cell.column.justify {
+            case .left:     chainView.left(dx: p, width: chainView.widthNeeded, height: h)
+            case .center:   chainView.center(width: chainView.widthNeeded, height: h)
+            case .right:    chainView.right(dx: -p, width: chainView.widthNeeded, height: h)
+        }
 	}
 
 // UIView ==========================================================================================
@@ -89,14 +105,11 @@ class GridCell: UICollectionViewCell, Editable, Citable, ChainViewDelegate, Towe
 
 // Tappable ========================================================================================
 	func onTap(aetherView: AetherView) {
-		guard !cell.column.calculated else {return}
+		guard !cell.column.calculated else { return }
 		if chainView.chain.editing {
 			tapped = true
 			releaseFocus()
-			onChange()
-		} else {
-			makeFocus()
-		}
+		} else { makeFocus() }
 	}
 
 // Editable ========================================================================================
@@ -106,62 +119,40 @@ class GridCell: UICollectionViewCell, Editable, Citable, ChainViewDelegate, Towe
 		return orb.chainEditor
 	}
 	func onMakeFocus() {
+        gridLeaf.focusCell = self
 		chainView.edit()
 		gridLeaf.gridBub.cellGainedFocus()
 	}
 	func onReleaseFocus() {
+        gridLeaf.focusCell = nil
 		chainView.ok()
+        controller.architect()
 		if !tapped { gridLeaf.released(cell: self) }
-		else {gridLeaf.gridBub.cellLostFocus()}
+		else { gridLeaf.gridBub.cellLostFocus() }
 		tapped = false
+        setNeedsDisplay()
 	}
 	func cite(_ citable: Citable, at: CGPoint) {
-		guard let token = citable.token(at: at) else {return}
+		guard let token = citable.token(at: at) else { return }
 		_ = chainView.attemptToPost(token: token)
 	}
 	
 // Citable =========================================================================================
-	func token(at: CGPoint) -> Token? {
-		return cell.token
-	}
+	func token(at: CGPoint) -> Token? { cell.token }
 	
 // ChainViewDelegate ===============================================================================
-	var color: UIColor {
-		return isFocus ? UIColor.cyan.shade(0.5) : gridLeaf.uiColor
-	}
-	
-	func onChange() {
-//		cell._width = nil
-		chainView.render()
-//		cell.column.renderWidth()
-		gridLeaf.render()
-		gridLeaf.gridBub.render()
-		setNeedsDisplay()
-	}
-	func onEdit() {
-		onChange()
-	}
-	func onOK() {
-		releaseFocus(dismissEditor: gridLeaf.grid.equalMode == .close)
-		onChange()
-	}
-	func onBackspace(token: Token) {
-		onChange()
-	}
-	func onUp() { tapped = true; gridLeaf.focus(arrow: .up, from: self) }
-	func onDown() { tapped = true; gridLeaf.focus(arrow: .down, from: self) }
-	func onLeft() { tapped = true; gridLeaf.focus(arrow: .left, from: self) }
-	func onRight() { tapped = true; gridLeaf.focus(arrow: .right, from: self) }
-	func onTab() {
-		gridLeaf.gridBub.rotateEndMode()
-	}
-	
-// TowerListener ===================================================================================
-	func onCalculate() {
-		render()
-		cell.renderWidth()
-//		cell.column.renderWidth()
-		gridLeaf.render()
-		gridLeaf.gridBub.render()
-	}
+    var color: UIColor { isFocus ? UIColor.cyan.shade(0.5) : gridLeaf.uiColor }
+
+    func onEditStart() { setNeedsDisplay() }
+    func onEditStop() { releaseFocus() }
+
+    func onTokenAdded(_ token: Token) {}
+    func onTokenRemoved(_ token: Token) {}
+
+    func onWidthChanged(width: CGFloat) {
+        clearWidthNeeded()
+        render()
+        controller.architect()
+        setNeedsDisplay()
+    }
 }

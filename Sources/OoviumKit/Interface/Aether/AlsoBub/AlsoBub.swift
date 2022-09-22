@@ -114,7 +114,7 @@ class AlsoBub: Bubble {
 		let c3: CGPoint = CGPoint(x: sw/2 * 0.1, y: sw/2 * 0.5)
 
 		plasma = CGMutablePath()
-		guard let plasma = plasma, also.functionCount>0 else {return}
+		guard let plasma = plasma, also.functionCount>0 else { return }
 		plasma.move(to: p1)
 		plasma.addCurve(to: p2, control1: p1 + c1, control2: p2 + c2)
 		plasma.addCurve(to: p3, control1: p2 + c3, control2: p3 + c4)
@@ -140,7 +140,7 @@ class AlsoBub: Bubble {
 	
 // UIView ==========================================================================================
 	override func draw(_ rect: CGRect) {
-		guard let plasma = plasma else {return}
+		guard let plasma = plasma else { return }
 		
 		let c = UIGraphicsGetCurrentContext()!
 		c.addPath(plasma)

@@ -49,15 +49,15 @@ class TypeLeaf: Leaf, Colorable {
 		let q: CGFloat = 7*s
 		
 		let pen: Pen = Pen(font: UIFont(name: "HelveticaNeue", size: 16)!)
-		w = max(w, (type.name as NSString).size(pen: pen).width+32)
+		w = max(w, type.name.size(pen: pen).width+32)
 		
 		if !isFocused {
 			for field in type.fields {
-				w = max(w, (field.name as NSString).size(pen: pen).width+46)
+				w = max(w, field.name.size(pen: pen).width+46)
 			}
 		} else {
 			for field in type.fields {
-				w = max(w, (field.type as NSString).size(pen: pen).width+120+30+10)
+				w = max(w, field.type.size(pen: pen).width+120+30+10)
 			}
 		}
 		
@@ -126,13 +126,13 @@ class TypeLeaf: Leaf, Colorable {
 		
 		var pen: Pen = Pen(font: UIFont(name: "HelveticaNeue", size: 16)!, color: uiColor)
 		if !isFocused {
-			let size: CGSize = (type.name as NSString).size(pen: pen)
+			let size: CGSize = type.name.size(pen: pen)
 			Skin.panel(text: type.name, rect: CGRect(x: (rect.size.width-size.width)/2, y: 9, width: size.width, height: size.height), pen: pen)
 			
 			pen = pen.clone(color: .white)
 			for i in 0..<n {
 				let field: Field = type.fields[i]
-				let size: CGSize = (field.name as NSString).size(pen: pen)
+				let size: CGSize = field.name.size(pen: pen)
 				Skin.panel(text: field.name, rect: CGRect(x: (rect.size.width-size.width)/2, y: 11+lh*(CGFloat(i)+1), width: size.width, height: size.height), pen: pen)
 			}
 		} else {

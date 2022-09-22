@@ -20,7 +20,7 @@ class GridView: UIScrollView {
 	weak var gridViewDelegate: GridViewDelegate? = nil
 	
 	func reloadData() {
-		guard let delegate = gridViewDelegate else {return}
+		guard let delegate = gridViewDelegate else { return }
 		
 		var x: CGFloat = 0
 		var y: CGFloat = 0
@@ -34,21 +34,21 @@ class GridView: UIScrollView {
 				let cell: UIView = delegate.cell(gridView: self, column: i, row: j)
 				size = delegate.size(gridView: self, column: i, row: j)
 				cell.frame = CGRect(x: x, y: y, width: size.width, height: size.height)
-				if let index: Int = current.firstIndex(of: cell) {current.remove(at: index)}
-				else {addSubview(cell)}
+				if let index: Int = current.firstIndex(of: cell) { current.remove(at: index) }
+				else { addSubview(cell) }
 				x += size.width
 			}
 			width = x
 			x = 0
 			y += size.height
 		}
-		current.forEach {$0.removeFromSuperview()}
+		current.forEach { $0.removeFromSuperview() }
 		height = y		
 		bounds.size = CGSize(width: width, height: height)
 	}
 	
 	func colNo(cx: CGFloat) -> Int {
-		guard let delegate = gridViewDelegate else {return 1}
+		guard let delegate = gridViewDelegate else { return 1 }
 		var size: CGSize = .zero
 		var x: CGFloat = 0
 		for i in 0..<delegate.numberOfColumns(gridView: self) {
@@ -59,7 +59,7 @@ class GridView: UIScrollView {
 		return delegate.numberOfColumns(gridView: self)-1
 	}
 	func hide(column: Column, cx: CGFloat) {
-		guard let delegate = gridViewDelegate else {return}
+		guard let delegate = gridViewDelegate else { return }
 		
 		var x: CGFloat = 0
 		var y: CGFloat = 0
@@ -93,7 +93,7 @@ class GridView: UIScrollView {
 	}
 	
 	func row(cy: CGFloat) -> Int {
-		guard let delegate = gridViewDelegate else {return 1}
+		guard let delegate = gridViewDelegate else { return 1 }
 		var size: CGSize = .zero
 		var y: CGFloat = 0
 		for i in 0..<delegate.numberOfRows(gridView: self) {
@@ -104,7 +104,7 @@ class GridView: UIScrollView {
 		return delegate.numberOfRows(gridView: self)-1
 	}
 	func hide(rowNo: Int, cy: CGFloat) {
-		guard let delegate = gridViewDelegate else {return}
+		guard let delegate = gridViewDelegate else { return }
 		
 		var x: CGFloat = 0
 		var y: CGFloat = 0

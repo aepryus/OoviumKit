@@ -73,12 +73,14 @@ class GridMaker: Maker {
 
 class GridBub: Bubble, ChainLeafDelegate {
 	let grid: Grid
+    
+    lazy var controller: GridController = { GridController(self) }()
 	
-	lazy var gridLeaf: GridLeaf = {GridLeaf(bubble: self, grid: grid)}()
-	lazy var addRowLeaf: PlusLeaf = {PlusLeaf(bubble: self)}()
-	lazy var addColumnLeaf: PlusLeaf = {PlusLeaf(bubble: self)}()
-	lazy var equalLeaf: EqualLeaf = {EqualLeaf(bubble: self)}()
-	lazy var chainLeaf: ChainLeaf = {ChainLeaf(bubble: self, delegate: self)}()
+	lazy var gridLeaf: GridLeaf = { GridLeaf(controller: controller) }()
+	lazy var addRowLeaf: PlusLeaf = { PlusLeaf(bubble: self) }()
+	lazy var addColumnLeaf: PlusLeaf = { PlusLeaf(bubble: self) }()
+	lazy var equalLeaf: EqualLeaf = { EqualLeaf(bubble: self) }()
+	lazy var chainLeaf: ChainLeaf = { ChainLeaf(bubble: self, delegate: self) }()
 	
 	var editingColNo: Int? = nil
 	var suppressChainLeafRemoval: Bool = false
@@ -98,24 +100,22 @@ class GridBub: Bubble, ChainLeafDelegate {
 		addColumnLeaf.hitch = .topLeft
 		add(leaf: addColumnLeaf)
 		addColumnLeaf.onTapped = { [unowned self] (aetherView: AetherView) in
-			self.addColumn()
+            controller.addColumn()
 		}
 		
 		addRowLeaf.size = CGSize(width: 39, height: 39)
 		addRowLeaf.hitch = .topLeft
 		add(leaf: addRowLeaf)
 		addRowLeaf.onTapped = { [unowned self] (aetherView: AetherView) in
-			self.addRow()
+            controller.addRow()
 		}
 		
 		equalLeaf.size = CGSize(width: 39, height: 39)
 		equalLeaf.hitch = .topLeft
 		add(leaf: equalLeaf)
 		equalLeaf.onTapped = { [unowned self] in
-			self.rotateEndMode()
+			rotateEndMode()
 		}
-		
-		grid.columns.forEach { $0.renderWidth() }
 		
 		gridLeaf.render()
 		
@@ -125,11 +125,11 @@ class GridBub: Bubble, ChainLeafDelegate {
 		chainLeaf.minWidth = 100
 		chainLeaf.radius = 15
 		
-		selectLeaves()
+        determineLeaves()
 	}
 	required init?(coder aDecoder: NSCoder) {fatalError()}
 	
-	private func selectLeaves() {
+	private func determineLeaves() {
 		if grid.exposed {
 			add(leaf: addRowLeaf)
 			add(leaf: addColumnLeaf)
@@ -146,7 +146,7 @@ class GridBub: Bubble, ChainLeafDelegate {
 	}
 	func morph() {
 		grid.exposed = !grid.exposed
-		selectLeaves()
+        determineLeaves()
 	}
 	func rotateEndMode() {
 		grid.equalMode = grid.equalMode.next
@@ -155,11 +155,11 @@ class GridBub: Bubble, ChainLeafDelegate {
 	
 	func cellGainedFocus() {
 		cellHasFocus = true
-		selectLeaves()
+        determineLeaves()
 	}
 	func cellLostFocus() {
 		cellHasFocus = false
-		selectLeaves()
+        determineLeaves()
 	}
 	
 	func attachChainLeaf(to headerCell: HeaderCell) {
@@ -175,18 +175,13 @@ class GridBub: Bubble, ChainLeafDelegate {
 		remove(leaf: chainLeaf)
 		render()
 	}
-	func addColumn() {
-		grid.addColumn()
-		gridLeaf.addColumn()
-		gridLeaf.render()
-		render()
-	}
-	func addRow() {
-		gridLeaf.addRow()
-		grid.addRow()
-		gridLeaf.render()
-		render()
-	}
+    func addColumn(with column: Column) { gridLeaf.addColumn(with: column) }
+    func addRow(with cells: [Cell]) { gridLeaf.addRow(with: cells) }
+    
+    func architect() {
+        gridLeaf.architect()
+        render()
+    }
 	
 	func render() {
 		addColumnLeaf.anchor = CGPoint(x: gridLeaf.size.width + 10, y: -4.5)
@@ -203,7 +198,7 @@ class GridBub: Bubble, ChainLeafDelegate {
 		layoutLeaves()
 		
 		plasma = CGMutablePath()
-		guard let plasma = plasma else {return}
+		guard let plasma = plasma else { return }
 		
 		var a: CGPoint = CGPoint.zero
 		var b: CGPoint = CGPoint.zero
@@ -278,7 +273,7 @@ class GridBub: Bubble, ChainLeafDelegate {
 		gridLeaf.setNeedsDisplay()
 	}
 	override func draw(_ rect: CGRect) {
-		guard let plasma = plasma else {return}
+		guard let plasma = plasma else { return }
 		
 		let c = UIGraphicsGetCurrentContext()!
 		c.addPath(plasma)
@@ -300,10 +295,11 @@ class GridBub: Bubble, ChainLeafDelegate {
 		layoutLeavesIfNeeded()
 	}
 	func onOK(leaf: ChainLeaf) {
-		guard let editingColNo = editingColNo, let column: Column = grid.column(colNo: editingColNo) else {fatalError()}
+		guard let editingColNo = editingColNo, let column: Column = grid.column(colNo: editingColNo) else { fatalError() }
 		column.disseminate()
 		column.calculate()
 		removeChainLeaf()
+        controller.architect()
 	}
 	func onCalculate() {}
 }

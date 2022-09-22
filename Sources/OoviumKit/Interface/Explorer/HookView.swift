@@ -10,8 +10,6 @@ import Acheron
 import UIKit
 
 class HookView: UIControl {
-//	static let backColor: UIColor = UIColor(red: 32/255, green: 34/255, blue: 36/255, alpha: 1)
-//	static let lineColor: UIColor = UIColor(red: 200/255, green: 255/255, blue: 240/255, alpha: 1)
 	static let backColor: UIColor = UIColor.green.shade(0.3)
 	static let lineColor: UIColor = UIColor.green.tint(0.8)
 
@@ -61,6 +59,6 @@ class HookView: UIControl {
 		c.setLineWidth(lw)
 		c.drawPath(using: .fillStroke)
 
-		(name as NSString).draw(in: rect.offsetBy(dx: 0*s, dy: 7*s), pen: pen)
+		name.draw(in: rect.offsetBy(dx: 0*s, dy: 7*s), pen: pen)
 	}
 }

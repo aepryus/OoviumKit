@@ -162,7 +162,7 @@ class GateBub: Bubble, ChainLeafDelegate, Citable {
 		elseLeaf.anchor = CGPoint(x: x7-p, y: y7-p)
 
 		plasma = CGMutablePath()
-		guard let plasma = plasma else {return}
+		guard let plasma = plasma else { return }
 		
 		plasma.move(to: CGPoint(x: x5, y: y5))
 		plasma.addQuadCurve(to: CGPoint(x: x2, y: y2), control: CGPoint(x: x2, y: y5))
@@ -193,7 +193,7 @@ class GateBub: Bubble, ChainLeafDelegate, Citable {
 	
 // UIView ==========================================================================================
 	override func draw(_ rect: CGRect) {
-		guard let plasma = plasma else {return}
+		guard let plasma = plasma else { return }
 		
 		let c = UIGraphicsGetCurrentContext()!
 		c.addPath(plasma)

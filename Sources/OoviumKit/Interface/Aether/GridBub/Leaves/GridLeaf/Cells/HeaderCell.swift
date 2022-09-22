@@ -10,29 +10,30 @@ import OoviumEngine
 import UIKit
 
 class HeaderCell: UICollectionViewCell, Editable, Citable, DoubleTappable, AnchorPannable, UITextFieldDelegate {
-	var column: Column! {
-		didSet {setNeedsDisplay()}
-	}
-	unowned var gridLeaf: GridLeaf!
+    let controller: GridController
+	let column: Column
+    
 	var leftMost: Bool = false
 	
 	var textField: UITextField? = nil
 	var editingName: Bool {
 		return textField != nil
 	}
-	var gridBub: GridBub {
-		return gridLeaf.gridBub
-	}
+
+    var gridBub: GridBub { controller.gridBub }
+    var gridLeaf: GridLeaf { gridBub.gridLeaf }
 	
-	override init(frame: CGRect) {
-		super.init(frame: frame)
+    init(controller: GridController, column: Column) {
+        self.controller = controller
+        self.column = column
+        
+        super.init(frame: .zero)
 		backgroundColor = .clear
 	}
 	required init?(coder: NSCoder) {fatalError()}
 	
-	var isFocus: Bool {
-		return self === gridLeaf.aetherView.focus
-	}
+    var widthNeeded: CGFloat { 90 }
+	var isFocus: Bool { self === gridLeaf.aetherView.focus }
 	
 	func openLabel() {
 		gridBub.aetherView.locked = true
@@ -71,7 +72,7 @@ class HeaderCell: UICollectionViewCell, Editable, Citable, DoubleTappable, Ancho
 
 // Events ==========================================================================================
 	@objc func onDoubleTap() {
-		guard !aetherView.readOnly else {return}
+		guard !aetherView.readOnly else { return }
 		if focused {releaseFocus()}
 		openLabel()
 	}

@@ -34,13 +34,13 @@ class PlayButton: UIView {
 	required init?(coder aDecoder: NSCoder) {fatalError()}
 	
 	func play() {
-		if playing {return}
+		if playing { return }
 		playing = true
 		self.setNeedsDisplay()
 		onPlay()
 	}
 	func stop() {
-		if !playing {return}
+		if !playing { return }
 		playing = false
 		self.setNeedsDisplay()
 		onStop()

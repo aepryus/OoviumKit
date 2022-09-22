@@ -118,7 +118,7 @@ class MechBub: Bubble, SignatureLeafDelegate, ChainLeafDelegate {
 		resultLeaf.anchor = CGPoint(x: x3, y: y4)
 
 		plasma = CGMutablePath()
-		guard let plasma = plasma else {return}
+		guard let plasma = plasma else { return }
 		plasma.move(to: CGPoint(x: x2, y: y2+p))
 		plasma.addQuadCurve(to: CGPoint(x: x3, y: y5), control: CGPoint(x: x3-15, y: y3))
 		plasma.addQuadCurve(to: CGPoint(x: x4, y: y2+p), control: CGPoint(x: x3+15, y: y3))
@@ -139,7 +139,7 @@ class MechBub: Bubble, SignatureLeafDelegate, ChainLeafDelegate {
 
 // UIView ==========================================================================================
 	override func draw(_ rect: CGRect) {
-		guard let plasma = plasma else {return}
+		guard let plasma = plasma else { return }
 		
 		let c = UIGraphicsGetCurrentContext()!
 		c.addPath(plasma)

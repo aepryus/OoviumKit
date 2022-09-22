@@ -45,14 +45,14 @@ class TextEditor: Orbit {
 		inputsButton.uiColor = UIColor.white
 		addSubview(inputsButton)
 		inputsButton.addAction(for: .touchUpInside) { [weak self] in
-			guard let me = self, !me.inward else {return}
+			guard let me = self, !me.inward else { return }
 			me.inward = true
 		}
 		
 		outputsButton.uiColor = UIColor.white
 		addSubview(outputsButton)
 		outputsButton.addAction(for: .touchUpInside) { [weak self] in
-			guard let me = self, me.inward else {return}
+			guard let me = self, me.inward else { return }
 			me.inward = false
 		}
 		

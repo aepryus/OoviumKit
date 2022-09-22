@@ -198,7 +198,7 @@ class TailBub: Bubble, SignatureLeafDelegate, ChainLeafDelegate {
 		layoutLeaves()
 
 		plasma = CGMutablePath()
-		guard let plasma = plasma else {return}
+		guard let plasma = plasma else { return }
 		
 		var a: CGPoint = CGPoint(x: signatureLeaf.left+10, y: signatureLeaf.top+30)
 		var b: CGPoint = CGPoint(x: whileLeaf.right-50, y: whileLeaf.center.y)
@@ -250,7 +250,7 @@ class TailBub: Bubble, SignatureLeafDelegate, ChainLeafDelegate {
 
 // UIView ==========================================================================================
 	override func draw(_ rect: CGRect) {
-		guard let plasma = plasma else {return}
+		guard let plasma = plasma else { return }
 		
 		let c = UIGraphicsGetCurrentContext()!
 		c.addPath(plasma)

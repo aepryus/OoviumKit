@@ -82,7 +82,7 @@ public class Bubble: UIView, AnchorTappable, Colorable, UIGestureRecognizerDeleg
 	}
 	
 	func add(leaf: Leaf) {
-		guard !leaves.contains(leaf) else {return}
+		guard !leaves.contains(leaf) else { return }
 		leaves.append(leaf)
 		addSubview(leaf)
 	}
@@ -152,7 +152,7 @@ public class Bubble: UIView, AnchorTappable, Colorable, UIGestureRecognizerDeleg
 		leafsNeedLayout = true
 	}
 	func layoutLeavesIfNeeded() {
-		guard leafsNeedLayout else {return}
+		guard leafsNeedLayout else { return }
 		layoutLeaves()
 		leafsNeedLayout = false
 	}
@@ -187,7 +187,7 @@ public class Bubble: UIView, AnchorTappable, Colorable, UIGestureRecognizerDeleg
 	func onUnload() {}
 	
 	func onAnchorTap(point: CGPoint) {
-		guard aetherView.focus == nil else {return}
+		guard aetherView.focus == nil else { return }
 		if !selected {
 			aetherView.select(bubble: self)
 		} else {

@@ -15,8 +15,8 @@ class LefterCell: UICollectionViewCell, Editable, AnchorPannable {
 	var bottomMost: Bool = false
 	unowned var gridLeaf: GridLeaf!
 
-	override init(frame: CGRect) {
-		super.init(frame: frame)
+	init() {
+        super.init(frame: .zero)
 		backgroundColor = UIColor.clear
 	}
 	required init?(coder: NSCoder) {fatalError()}

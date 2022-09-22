@@ -344,16 +344,15 @@ public class AetherView: UIView, UIScrollViewDelegate, UIGestureRecognizerDelega
 		scrollView.layer.insertSublayer(doodle, at: 0)
 	}
 	func remove(doodle: Doodle) {
+        doodle.removeFromSuperlayer()
 		doodles.remove(object: doodle)
-		doodle.removeFromSuperlayer()
 	}
 	func removeAllDoodles() {
-		for doodle in doodles {
-			doodle.removeFromSuperlayer()
-		}
+        doodles.forEach { $0.removeFromSuperlayer() }
 		doodles.removeAll()
 	}
 	
+// =================================================================================================
 	func makeFocus(editable: Editable, dismissEditor: Bool = true) {
 		clearFocus(dismissEditor: dismissEditor)
 		focus = editable
@@ -375,28 +374,6 @@ public class AetherView: UIView, UIScrollViewDelegate, UIGestureRecognizerDelega
 		removeAllBubbles()
 		removeAllDoodles()
 	}
-//	private static func createNewAether(width: CGFloat, height: CGFloat) -> Aether {
-//		let aether = Aether()
-//		aether.width = Double(width)
-//		aether.height = Double(height)
-//		aether.xOffset = 400
-//		aether.yOffset = 260
-//		return aether
-//	}
-//	private func newAether() {
-//		let aether = AetherView.createNewAether(width: width, height: height)
-//
-//		var aetherNo: Int = 0
-//		var name: String = ""
-//		repeat {
-//			aetherNo += 1
-//			name = String(format: "%@%02d", NSLocalizedString("aether", comment: ""), aetherNo)
-//		} while Oovium.space.hasAether(name: name)
-//		aether.name = name
-//
-//		aetherViewDelegate?.onNew(aetherView: self, aether: aether)
-//		openAether(aether)
-//	}
 	public func openAether(_ aether: Aether) {
 		self.aether = aether
 		
@@ -459,6 +436,7 @@ public class AetherView: UIView, UIScrollViewDelegate, UIGestureRecognizerDelega
 			self.doodles.forEach {$0.opacity = 0}
 		}) { (finsihed: Bool) in
 			self.removeAllBubbles()
+            self.removeAllDoodles()
 		}
 	}
 	
@@ -568,7 +546,7 @@ public class AetherView: UIView, UIScrollViewDelegate, UIGestureRecognizerDelega
 		stretch(animated: true)
 	}
 	func spread() {
-		guard bubbles.count > 0 else {return}
+		guard bubbles.count > 0 else { return }
 		let w = max(width, height)
 		let (_, _, orbitWidth, orbitHeight) = findOrbit()
 		scrollView.contentSize = CGSize(width: w*2+orbitWidth, height: w*2+orbitHeight)
@@ -662,7 +640,7 @@ public class AetherView: UIView, UIScrollViewDelegate, UIGestureRecognizerDelega
 		unselectAll()
 	}
 	func pasteBubbles(at: CGPoint) {
-		guard let first = copyBuffer.first else {return}
+		guard let first = copyBuffer.first else { return }
 		let anchor = first.frame.origin
 		for bubble in copyBuffer {
 			let copy: Bubble = bubble.copy() as! Bubble
@@ -775,15 +753,6 @@ public class AetherView: UIView, UIScrollViewDelegate, UIGestureRecognizerDelega
 			}
 		}
 	}
-	func registerToolBarsWithHovers() {
-//		guard let bubbleToolBar = bubbleToolBar else {return}
-//		Hovers.hovers.insert(bubbleToolBar)
-//		let toolBox: ToolBox = ToolBox(bubbleToolBar.tools)
-//		if toolBox.contains(AetherView.textTool) {
-//			Hovers.hovers.insert(shapeToolBar!)
-//			Hovers.hovers.insert(colorToolBar!)
-//		}
-	}
 	private func findOrigin() -> CGPoint {
 		var origin: CGPoint = CGPoint(x: 0, y: 0)
 		var view: UIView? = self
@@ -794,21 +763,7 @@ public class AetherView: UIView, UIScrollViewDelegate, UIGestureRecognizerDelega
 		return origin
 	}
 	public func placeToolBars() {
-//		let fullScreen: Bool = (width == Screen.width && height == Screen.height) || (width == Screen.height && height == Screen.width)
-//		let origin: CGPoint = findOrigin()
-
-		let fixedOffset: UIOffset = toolBarOffset ?? UIOffset(horizontal: -12, vertical: 12)
-//		if !Screen.mac {
-//			fixedOffset =
-////			fixedOffset = UIOffset(horizontal: origin.x+width+toolBarOffset.horizontal-Screen.width, vertical: origin.y+toolBarOffset.vertical+Screen.safeTop)
-//		} else if fullScreen {
-//			fixedOffset = UIOffset(horizontal: origin.x+width+toolBarOffset.horizontal-Screen.width, vertical: origin.y+toolBarOffset.vertical)
-////		} else if width == superview?.width {
-////			fixedOffset = UIOffset(horizontal: origin.x+width+toolBarOffset.horizontal-Screen.width, vertical: origin.y+toolBarOffset.vertical-Screen.safeTop)
-//		} else {
-//			fixedOffset = UIOffset(horizontal: -12, vertical: 12)
-//		}
-		
+		let fixedOffset: UIOffset = toolBarOffset ?? UIOffset(horizontal: -12, vertical: 12)		
 		bubbleToolBar?.fixed = fixedOffset
 		shapeToolBar?.fixed = fixedOffset
 		colorToolBar?.fixed = fixedOffset

@@ -48,8 +48,8 @@ class AlsoLeaf: Leaf, Editable, DoubleTappable {
 	}
 	
 	func render() {
-		let tw: CGFloat = (also.aetherName as NSString).size(pen: AlsoLeaf.pen).width
-		size = CGSize(width: max(130*s, tw+24*s), height: 40*s)
+//		let tw: CGFloat = also.aetherName.size(pen: AlsoLeaf.pen).width
+//		size = CGSize(width: max(130*s, tw+24*s), height: 40*s)
 	}
 	
 // Events ==========================================================================================

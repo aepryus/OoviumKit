@@ -43,7 +43,7 @@ class ConfirmModal: Modal {
 		let x10 = w-p-2*q+sp
 		let y9 = p+2*q-2*sp
 		
-		guard v.y > y9 else {return}
+		guard v.y > y9 else { return }
 		
 		if v.x < x9 {
 			executeYes()
