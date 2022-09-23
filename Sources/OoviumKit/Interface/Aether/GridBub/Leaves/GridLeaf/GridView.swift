@@ -21,8 +21,15 @@ class GridView: UIScrollView {
 	
 	func reloadData() {
 		guard let delegate = gridViewDelegate else { return }
-		
-		var x: CGFloat = 0
+        
+        // Force calculate column widths before laying anything out
+        for j in 0..<delegate.numberOfRows(gridView: self) {
+            for i in 0..<delegate.numberOfColumns(gridView: self) {
+                _ = delegate.cell(gridView: self, column: i, row: j)
+            }
+        }
+
+        var x: CGFloat = 0
 		var y: CGFloat = 0
 		var size: CGSize = .zero
 		var width: CGFloat = 0
