@@ -24,12 +24,16 @@ class MakeGesture: UITapGestureRecognizer {
 		let origin = location(in: aetherView.scrollView)
 		let at = V2(Double(origin.x),Double(origin.y))
         
+#if os(macOS)
         let commandKeyPressed: Bool = CGEventSource.keyState(.combinedSessionState, key: 0x37)
         if !commandKeyPressed {
             aetherView.triggerMaker(at: at)
         } else {
             aetherView.pasteBubbles(at: CGPoint(x: at.x, y: at.y))
         }
+#else
+        aetherView.triggerMaker(at: at)
+#endif
 	}
 	
 	// UIGestureRecognizer =============================================================================

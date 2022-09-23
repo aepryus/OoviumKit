@@ -109,7 +109,7 @@ class GridLeaf: Leaf, GridViewDelegate {
     func addColumn(with column: Column) {
         let gridColumn: GridColumn = GridColumn(controller: controller, column: column, headerCell: HeaderCell(controller: controller, column: column))
         columns.append(gridColumn)
-        if grid.hasFooter { gridColumn.footerCell = FooterCell(column: gridColumn) }
+        if grid.hasFooter { gridColumn.footerCell = FooterCell(controller: controller, column: column) }
         let cells: [Cell] = column.grid.cellsForColumn(i: column.colNo)
         for i in 0..<grid.rows { gridColumn.gridCells.append(GridCell(controller: controller, column: gridColumn, cell: cells[i])) }
 //        controller.architect()
@@ -220,11 +220,14 @@ class GridLeaf: Leaf, GridViewDelegate {
 		} else if grid.hasFooter && row == grid.rows+1 && column == 0 {
 			return bottomLeftCell
 		} else if grid.hasFooter && row == grid.rows+1 {
-            let cell: FooterCell = columns[cI].footerCell ?? FooterCell(column: columns[cI])
-			if cell.column !== grid.columns[cI] {
-				cell.leftMost = leftMost
-				cell.gridLeaf = self
-			}
+            let cell: FooterCell
+            if let footerCell: FooterCell = columns[cI].footerCell {
+                cell = footerCell
+            } else {
+                cell = FooterCell(controller: controller, column: columns[cI].column)
+                columns[cI].footerCell = cell
+            }
+            cell.leftMost = leftMost
 			cell.setNeedsDisplay()
 			return cell
 		} else if column == 0 {

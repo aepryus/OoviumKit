@@ -15,6 +15,7 @@ class GridController: ChainViewKeyDelegate {
     
     var cellWidthNeeded: [String:CGFloat] = [:]
     var headerWidthNeeded: [String:CGFloat] = [:]
+    var footerWidthNeeded: [String:CGFloat] = [:]
     var columnWidthNeeded: [String:CGFloat] = [:]
 
     init(_ gridBub: GridBub) {

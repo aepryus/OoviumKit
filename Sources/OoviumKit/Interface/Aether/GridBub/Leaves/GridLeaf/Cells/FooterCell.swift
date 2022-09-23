@@ -11,29 +11,41 @@ import OoviumEngine
 import UIKit
 
 class FooterCell: UICollectionViewCell, Citable, FocusTappable, TowerListener {
-//	var column: Column! {
-//		didSet { column.footerTower.listener = self }
-//	}
-	var leftMost: Bool = false
-	unowned var gridLeaf: GridLeaf!
-    unowned let column: GridColumn
+    unowned let controller: GridController
+    unowned let column: Column
+
+    var leftMost: Bool = false
+    
+    var gridBub: GridBub { controller.gridBub }
+    var gridLeaf: GridLeaf { gridBub.gridLeaf }
+
+    let pen: Pen
 	
-	init(column: GridColumn) {
+    init(controller: GridController, column: Column) {
+        self.controller = controller
         self.column = column
+        
+        pen = Pen(color: controller.gridBub.gridLeaf.uiColor, alignment: column.alignment)
+        
         super.init(frame: .zero)
+        
 		backgroundColor = .clear
+        
+        self.column.footerTower.listener = self
 	}
 	required init?(coder: NSCoder) {fatalError()}
     
-    private var _widthNeeded: CGFloat?
     var widthNeeded: CGFloat {
-        if let _widthNeeded { return _widthNeeded }
-        _widthNeeded = 90
-        return _widthNeeded!
+        if let widthNeeded: CGFloat = controller.footerWidthNeeded[column.iden] { return widthNeeded }
+        let widthNeeded: CGFloat
+        if column.aggregate == .none || column.aggregate == .running { widthNeeded = 0 }
+        else { widthNeeded = column.footerTower.obje.display.size(pen: pen).width + 12 }
+        controller.footerWidthNeeded[column.iden] = widthNeeded
+        return widthNeeded
     }
     func clearWidthNeeded() {
-        _widthNeeded = nil
-        column.clearWidthNeeded()
+        controller.footerWidthNeeded[column.iden] = nil
+        controller.columnWidthNeeded[column.iden] = nil
     }
 
 // Tappable ========================================================================================
@@ -52,18 +64,16 @@ class FooterCell: UICollectionViewCell, Citable, FocusTappable, TowerListener {
 		
 		Skin.gridCalc(path: CGPath(rect: CGRect(x: 0, y: 0, width: width-p, height: height-p), transform: nil), uiColor: gridLeaf.uiColor.tint(0.25))
 		Skin.gridDraw(path: path, uiColor: gridLeaf.uiColor)
-        if column.column.aggregate != .none && column.column.aggregate != .running {
-			Skin.bubble(text: column.column.footerTower.obje.display, rect: CGRect(x: 3, y: 1, width: width-9, height: height-2), pen: Pen(color: gridLeaf.uiColor, alignment: column.column.alignment))
+        if column.aggregate != .none && column.aggregate != .running {
+			Skin.bubble(text: column.footerTower.obje.display, rect: CGRect(x: 3, y: 1, width: width-9, height: height-2), pen: pen)
 		}
 	}
 	
 // Citable =========================================================================================
-	func token(at: CGPoint) -> Token? {
-		return column.column.footerTower.variableToken
-	}
+	func token(at: CGPoint) -> Token? { column.footerTower.variableToken }
 	
 // TowerListener ===================================================================================
 	func onTriggered() {
-		setNeedsDisplay()
-	}
+        clearWidthNeeded()
+    }
 }

@@ -76,7 +76,10 @@ fileprivate class ChainRange: UITextRange {
 
 class ChainView: UIView, UITextInput, UITextInputTraits, AnchorTappable, TowerListener {
     var chain: Chain = Chain() {
-        didSet { render() }
+        didSet {
+            chain.tower.listener = self
+            render()
+        }
     }
 	weak var delegate: ChainViewDelegate?
     weak var keyDelegate: ChainViewKeyDelegate?
@@ -428,6 +431,7 @@ class ChainView: UIView, UITextInput, UITextInputTraits, AnchorTappable, TowerLi
             delegate?.onWidthChanged(width: width)
         }
         oldWidth = width
+//        render()
     }
 
 // Static ==========================================================================================
