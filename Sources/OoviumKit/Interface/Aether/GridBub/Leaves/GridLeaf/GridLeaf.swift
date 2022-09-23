@@ -43,7 +43,7 @@ class GridLeaf: Leaf, GridViewDelegate {
 		for _ in 0..<grid.rows { lefterCells.append(LefterCell()) }
         
         grid.columns.forEach { (column: Column) in
-            let gridColumn: GridColumn = GridColumn(column: column, headerCell: HeaderCell(controller: controller, column: column))
+            let gridColumn: GridColumn = GridColumn(controller: controller, column: column, headerCell: HeaderCell(controller: controller, column: column))
             let cells: [Cell] = grid.cellsForColumn(i: column.colNo)
             cells.forEach { gridColumn.addGridCell(controller: controller, column: gridColumn, cell: $0) }
             columns.append(gridColumn)
@@ -77,11 +77,7 @@ class GridLeaf: Leaf, GridViewDelegate {
 		grid.deleteRow(rowNo: rowNo-1)
 		lefterCells[rowNo-1].removeFromSuperview()
 		lefterCells.remove(at: rowNo-1)
-//		for i in 0..<grid.columns.count {
-//			let cellNo: Int = rowNo*grid.columns.count-1-i
-//			gridCells[cellNo].removeFromSuperview()
-//			gridCells.remove(at: cellNo)
-//		}
+        columns.forEach { $0.gridCells.remove(at: rowNo-1) }
         controller.architect()
 	}
 	func slide(rowNo: Int, dy: CGFloat) {
@@ -97,6 +93,10 @@ class GridLeaf: Leaf, GridViewDelegate {
 	}
 	func move(rowNo: Int, to: Int) {
 		grid.move(rowNo: rowNo, to: to)
+        columns.forEach {
+            let gridCell: GridCell = $0.gridCells.remove(at: rowNo)
+            $0.gridCells.insert(gridCell, at: to)
+        }
         controller.architect()
 	}
     
@@ -107,7 +107,7 @@ class GridLeaf: Leaf, GridViewDelegate {
     }
 	
     func addColumn(with column: Column) {
-        let gridColumn: GridColumn = GridColumn(column: column, headerCell: HeaderCell(controller: controller, column: column))
+        let gridColumn: GridColumn = GridColumn(controller: controller, column: column, headerCell: HeaderCell(controller: controller, column: column))
         columns.append(gridColumn)
         if grid.hasFooter { gridColumn.footerCell = FooterCell(column: gridColumn) }
         let cells: [Cell] = column.grid.cellsForColumn(i: column.colNo)
@@ -199,15 +199,6 @@ class GridLeaf: Leaf, GridViewDelegate {
 	}
 	
 // UIView ==========================================================================================
-//	override func setNeedsDisplay() {
-//		super.setNeedsDisplay()
-//		anchorCell.setNeedsDisplay()
-//		bottomLeftCell.setNeedsDisplay()
-//		headerCells.forEach {$0.setNeedsDisplay()}
-//		footerCells.forEach {$0.setNeedsDisplay()}
-//		lefterCells.forEach {$0.setNeedsDisplay()}
-//		gridCells.forEach {$0.setNeedsDisplay()}
-//	}
 	override func layoutSubviews() {
 		gridView.frame = self.bounds
 	}
@@ -231,7 +222,6 @@ class GridLeaf: Leaf, GridViewDelegate {
 		} else if grid.hasFooter && row == grid.rows+1 {
             let cell: FooterCell = columns[cI].footerCell ?? FooterCell(column: columns[cI])
 			if cell.column !== grid.columns[cI] {
-//				cell.column = grid.columns[cI]
 				cell.leftMost = leftMost
 				cell.gridLeaf = self
 			}
@@ -240,7 +230,6 @@ class GridLeaf: Leaf, GridViewDelegate {
 		} else if column == 0 {
 			let cell: LefterCell = lefterCells[rI]
 			if cell.rowNo != row {
-//				cell.aetherView = aetherView
 				cell.rowNo = row
 				cell.bottomMost = bottomMost
 				cell.gridLeaf = self

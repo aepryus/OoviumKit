@@ -6,6 +6,7 @@
 //  Copyright © 2019 Aepryus Software. All rights reserved.
 //
 
+import Acheron
 import OoviumEngine
 import UIKit
 
@@ -22,6 +23,9 @@ class HeaderCell: UICollectionViewCell, Editable, Citable, DoubleTappable, Ancho
 
     var gridBub: GridBub { controller.gridBub }
     var gridLeaf: GridLeaf { gridBub.gridLeaf }
+    
+    static let pen: Pen = Pen(font: UIFont(name: "Verdana-Bold", size: 15)!)
+    var pen: Pen { HeaderCell.pen }
 	
     init(controller: GridController, column: Column) {
         self.controller = controller
@@ -32,8 +36,18 @@ class HeaderCell: UICollectionViewCell, Editable, Citable, DoubleTappable, Ancho
 	}
 	required init?(coder: NSCoder) {fatalError()}
 	
-    var widthNeeded: CGFloat { 90 }
-	var isFocus: Bool { self === gridLeaf.aetherView.focus }
+    var widthNeeded: CGFloat {
+        if let widthNeeded: CGFloat = controller.headerWidthNeeded[column.iden] { return widthNeeded }
+        let widthNeeded: CGFloat = column.name.size(pen: pen).width+20
+        controller.headerWidthNeeded[column.iden] = widthNeeded
+        return widthNeeded
+    }
+    func clearWidthNeeded() {
+        controller.headerWidthNeeded[column.iden] = nil
+        controller.columnWidthNeeded[column.iden] = nil
+    }
+
+    var isFocus: Bool { self === gridLeaf.aetherView.focus }
 	
 	func openLabel() {
 		gridBub.aetherView.locked = true
@@ -41,8 +55,8 @@ class HeaderCell: UICollectionViewCell, Editable, Citable, DoubleTappable, Ancho
 		textField!.delegate = self
 		textField!.text = column.name
 		textField!.textAlignment = column.alignment
-		textField!.font = UIFont(name: "Verdana-Bold", size: 15)!
-		textField!.textColor = UIColor.white
+        textField!.font = pen.font
+        textField!.textColor = .white
 		textField!.autocorrectionType = .no
 		textField!.keyboardAppearance = .dark
 		textField!.inputAssistantItem.leadingBarButtonGroups.removeAll()
@@ -54,15 +68,12 @@ class HeaderCell: UICollectionViewCell, Editable, Citable, DoubleTappable, Ancho
 		textField!.becomeFirstResponder()
 	}
 	func closeLabel() {
-//		column._width = nil
-//		column._headerWidth = nil
 		gridBub.aetherView.locked = false
 		column.name = textField!.text!
 		textField?.removeFromSuperview()
 		textField = nil
-		setNeedsDisplay()
-		gridLeaf.render()
-		gridBub.render()
+        clearWidthNeeded()
+        controller.architect()
 	}
 	func renderColumn() {
 		setNeedsDisplay()
@@ -107,9 +118,9 @@ class HeaderCell: UICollectionViewCell, Editable, Citable, DoubleTappable, Ancho
 		
 		if !editingName {
 			if isFocus {
-				Skin.text("\(column.name)", rect: rect.insetBy(dx: 6, dy: 5), uiColor: UIColor.cyan.shade(0.5), font: UIFont(name: "Verdana-Bold", size: 15)!, align: column.alignment)
+                Skin.text("\(column.name)", rect: rect.insetBy(dx: 6, dy: 5), uiColor: UIColor.cyan.shade(0.5), font: pen.font, align: column.alignment)
 			} else {
-				Skin.text("\(column.name)", rect: rect.insetBy(dx: 6, dy: 5), uiColor: gridLeaf.uiColor, font: UIFont(name: "Verdana-Bold", size: 15)!, align: column.alignment)
+                Skin.text("\(column.name)", rect: rect.insetBy(dx: 6, dy: 5), uiColor: gridLeaf.uiColor, font: pen.font, align: column.alignment)
 			}
 		}
 	}

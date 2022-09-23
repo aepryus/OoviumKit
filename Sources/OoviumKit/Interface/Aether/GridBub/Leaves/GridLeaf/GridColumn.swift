@@ -10,33 +10,32 @@ import Foundation
 import OoviumEngine
 
 class GridColumn {
+    let controller: GridController
     let column: Column
     let headerCell: HeaderCell
     var gridCells: [GridCell] = []
     var footerCell: FooterCell? = nil
         
-    init(column: Column, headerCell: HeaderCell) {
+    init(controller: GridController, column: Column, headerCell: HeaderCell) {
+        self.controller = controller
         self.column = column
         self.headerCell = headerCell
     }
-    
-    private var _widthNeeded: CGFloat?
+
     var widthNeeded: CGFloat {
-        guard _widthNeeded == nil else { return _widthNeeded! }
+        if let widthNeeded: CGFloat = controller.columnWidthNeeded[column.iden] { return widthNeeded }
         var widthNeeded: CGFloat = max(90, headerCell.widthNeeded)
         if let footerCell { widthNeeded = max(widthNeeded, footerCell.widthNeeded) }
         gridCells.forEach { widthNeeded = max(widthNeeded, $0.widthNeeded) }
-        _widthNeeded = widthNeeded
+        controller.cellWidthNeeded[column.iden] = widthNeeded
         return widthNeeded
     }
     func clearWidthNeeded() {
-        _widthNeeded = nil
-        
+        controller.columnWidthNeeded[column.iden] = nil
     }
 
     func addGridCell(controller: GridController, column: GridColumn, cell: Cell) {
         let gridCell: GridCell = GridCell(controller: controller, column: column, cell: cell)
         gridCells.append(gridCell)
-//        gridCell.render()
     }    
 }

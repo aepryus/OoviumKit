@@ -41,15 +41,14 @@ class GridCell: UICollectionViewCell, Editable, Citable, ChainViewDelegate {
 	}
 	required init?(coder: NSCoder) { fatalError() }
     
-    private var _widthNeeded: CGFloat?
     var widthNeeded: CGFloat {
-        if let widthNeeded: CGFloat = controller.widthNeededs[cell.iden] { return widthNeeded }
+        if let widthNeeded: CGFloat = controller.cellWidthNeeded[cell.iden] { return widthNeeded }
         let widthNeeded: CGFloat = max(90, chainView.widthNeeded+6)
-        controller.widthNeededs[cell.iden] = widthNeeded
+        controller.cellWidthNeeded[cell.iden] = widthNeeded
         return widthNeeded
     }
     func clearWidthNeeded() {
-        _widthNeeded = nil
+        controller.cellWidthNeeded[cell.iden] = nil
         column.clearWidthNeeded()
     }
 
@@ -58,7 +57,6 @@ class GridCell: UICollectionViewCell, Editable, Citable, ChainViewDelegate {
     func load(cell: Cell) {
         self.cell = cell
         chainView.chain = cell.chain
-        chainView.render()
     }
     
 	func render() {
@@ -122,6 +120,7 @@ class GridCell: UICollectionViewCell, Editable, Citable, ChainViewDelegate {
         gridLeaf.focusCell = self
 		chainView.edit()
 		gridLeaf.gridBub.cellGainedFocus()
+        controller.architect()
 	}
 	func onReleaseFocus() {
         gridLeaf.focusCell = nil
@@ -144,7 +143,7 @@ class GridCell: UICollectionViewCell, Editable, Citable, ChainViewDelegate {
     var color: UIColor { isFocus ? UIColor.cyan.shade(0.5) : gridLeaf.uiColor }
 
     func onEditStart() { setNeedsDisplay() }
-    func onEditStop() { releaseFocus() }
+    func onEditStop() { releaseFocus(dismissEditor: tapped || controller.grid.equalMode == .close) }
 
     func onTokenAdded(_ token: Token) {}
     func onTokenRemoved(_ token: Token) {}
@@ -152,7 +151,6 @@ class GridCell: UICollectionViewCell, Editable, Citable, ChainViewDelegate {
     func onWidthChanged(width: CGFloat) {
         clearWidthNeeded()
         render()
-        controller.architect()
         setNeedsDisplay()
     }
 }

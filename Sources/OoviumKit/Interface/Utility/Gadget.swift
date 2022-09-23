@@ -87,8 +87,4 @@ open class Gadget: UIView {
             onFadeOut()
         }
     }
-//    public func toggle(animated: Bool = true) {
-//        if aetherView.invoked(hover: self) { dismiss() }
-//        else { invoke() }
-//    }
 }

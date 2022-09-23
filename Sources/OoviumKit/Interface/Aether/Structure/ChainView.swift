@@ -75,7 +75,9 @@ fileprivate class ChainRange: UITextRange {
 }
 
 class ChainView: UIView, UITextInput, UITextInputTraits, AnchorTappable, TowerListener {
-    var chain: Chain = Chain()
+    var chain: Chain = Chain() {
+        didSet { render() }
+    }
 	weak var delegate: ChainViewDelegate?
     weak var keyDelegate: ChainViewKeyDelegate?
     
@@ -141,7 +143,7 @@ class ChainView: UIView, UITextInput, UITextInputTraits, AnchorTappable, TowerLi
 	}
 	
 // Chain ===========================================================================================
-    func render() {
+    private func render() {
         let width: CGFloat = widthNeeded
         if width != oldWidth {
             frame = CGRect(origin: frame.origin, size: CGSize(width: width, height: height))

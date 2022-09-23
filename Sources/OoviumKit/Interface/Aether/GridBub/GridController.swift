@@ -5,6 +5,7 @@
 //  Created by Joe Charlier on 9/16/22.
 //
 
+import Acheron
 import Foundation
 import OoviumEngine
 
@@ -12,8 +13,10 @@ class GridController: ChainViewKeyDelegate {
     unowned let grid: Grid
     unowned let gridBub: GridBub
     
-    var widthNeededs: [String:CGFloat] = [:]
-    
+    var cellWidthNeeded: [String:CGFloat] = [:]
+    var headerWidthNeeded: [String:CGFloat] = [:]
+    var columnWidthNeeded: [String:CGFloat] = [:]
+
     init(_ gridBub: GridBub) {
         self.gridBub = gridBub
         self.grid = gridBub.grid
