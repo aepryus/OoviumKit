@@ -148,7 +148,7 @@ class GridCell: UICollectionViewCell, Editable, Citable, ChainViewDelegate {
     func onTokenAdded(_ token: Token) {}
     func onTokenRemoved(_ token: Token) {}
 
-    func onWidthChanged(width: CGFloat) {
+    func onChanged(oldWidth: CGFloat?, newWidth: CGFloat) {
         clearWidthNeeded()
         render()
         setNeedsDisplay()

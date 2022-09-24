@@ -112,19 +112,11 @@ class GridLeaf: Leaf, GridViewDelegate {
         if grid.hasFooter { gridColumn.footerCell = FooterCell(controller: controller, column: column) }
         let cells: [Cell] = column.grid.cellsForColumn(i: column.colNo)
         for i in 0..<grid.rows { gridColumn.gridCells.append(GridCell(controller: controller, column: gridColumn, cell: cells[i])) }
-//        controller.architect()
 	}
 	func deleteColumn(column: Column) {
-//		let colNo: Int = column.colNo
-//		for rowNo in 0..<grid.rows {
-//			let cellNo = grid.columns.count*(grid.rows-1-rowNo)+colNo
-//			gridCells.remove(at: cellNo)
-//		}
-//		headerCells.remove(at: colNo)
-//		footerCells.remove(at: colNo)
-//		grid.deleteColumn(column)
-//		render()
-//		gridBub.render()
+        columns.remove(at: column.colNo)
+		grid.deleteColumn(column)
+        controller.architect()
 	}
 	func slide(column: Column, dx: CGFloat) {
 		let colNo: Int = column.colNo

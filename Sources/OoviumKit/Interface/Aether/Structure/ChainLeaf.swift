@@ -181,7 +181,7 @@ class ChainLeaf: Leaf, ChainViewDelegate, Editable {
         bubble.aetherView.unlink(from: self.mooring, to: mooring)
     }
 
-    func onWidthChanged(width: CGFloat) {
+    func onChanged(oldWidth: CGFloat?, newWidth: CGFloat) {
         render()
         delegate?.onChange()
     }

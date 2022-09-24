@@ -19,7 +19,7 @@ protocol ChainViewDelegate: AnyObject {
     func onTokenAdded(_ token: Token)
     func onTokenRemoved(_ token: Token)
 
-    func onWidthChanged(width: CGFloat)
+    func onChanged(oldWidth: CGFloat?, newWidth: CGFloat)
 }
 extension ChainViewDelegate {
     func onEditStart() {}
@@ -27,7 +27,7 @@ extension ChainViewDelegate {
     func onTokenRemoved(_ token: Token) {}
     func onEditStop() {}
 
-    func onWidthChanged(width: CGFloat) {}
+    func onChanged(oldWidth: CGFloat?, newWidth: CGFloat) {}
 }
 
 protocol ChainViewKeyDelegate: AnyObject {
@@ -147,12 +147,10 @@ class ChainView: UIView, UITextInput, UITextInputTraits, AnchorTappable, TowerLi
 	
 // Chain ===========================================================================================
     private func render() {
-        let width: CGFloat = widthNeeded
-        if width != oldWidth {
-            frame = CGRect(origin: frame.origin, size: CGSize(width: width, height: height))
-            oldWidth = width
-            delegate?.onWidthChanged(width: width)
-        }
+        let newWidth: CGFloat = widthNeeded
+        if newWidth != oldWidth { frame = CGRect(origin: frame.origin, size: CGSize(width: newWidth, height: height)) }
+        delegate?.onChanged(oldWidth: oldWidth, newWidth: newWidth)
+        oldWidth = newWidth
         setNeedsDisplay()
     }
 
@@ -425,13 +423,11 @@ class ChainView: UIView, UITextInput, UITextInputTraits, AnchorTappable, TowerLi
     
 // TowerListener ===================================================================================
     func onTriggered() {
-        let width: CGFloat = widthNeeded
-        if width != oldWidth {
-            frame = CGRect(origin: frame.origin, size: CGSize(width: width, height: height))
-            delegate?.onWidthChanged(width: width)
-        }
-        oldWidth = width
-//        render()
+        let newWidth: CGFloat = widthNeeded
+        if newWidth != oldWidth { frame = CGRect(origin: frame.origin, size: CGSize(width: newWidth, height: height)) }
+        delegate?.onChanged(oldWidth: oldWidth, newWidth: newWidth)
+        oldWidth = newWidth
+        setNeedsDisplay()
     }
 
 // Static ==========================================================================================

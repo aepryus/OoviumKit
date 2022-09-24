@@ -167,7 +167,7 @@ class ObjectLeaf: Leaf, Editable, ChainViewDelegate, DoubleTappable, Colorable, 
         bubble.aetherView.unlink(from: self.mooring, to: mooring)
     }
 
-    func onWidthChanged(width: CGFloat) {
+    func onChanged(oldWidth: CGFloat?, newWidth: CGFloat) {
         render()
         objectBub.layoutLeavesIfNeeded()
     }
