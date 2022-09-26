@@ -56,7 +56,7 @@ class HeaderCell: UICollectionViewCell, Editable, Citable, DoubleTappable, Ancho
 		textField!.text = column.name
 		textField!.textAlignment = column.alignment
         textField!.font = pen.font
-        textField!.textColor = .white
+        textField!.textColor = Skin.color(.headerText)
 		textField!.autocorrectionType = .no
 		textField!.keyboardAppearance = .dark
 		textField!.inputAssistantItem.leadingBarButtonGroups.removeAll()

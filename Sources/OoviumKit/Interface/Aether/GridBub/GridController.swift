@@ -26,6 +26,10 @@ class GridController: ChainViewKeyDelegate {
     func addRow() {
         let cells: [Cell] = grid.addRow()
         gridBub.addRow(with: cells)
+        grid.columns.filter({ $0.aggregate != .none }).forEach {
+            $0.footerTower.buildStream()
+            $0.footerTower.buildTask()
+        }
         architect()
     }
     func addColumn() {

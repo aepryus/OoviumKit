@@ -346,13 +346,12 @@ public class IvorySkin: Skin {
 		c.addPath(path)
 		c.drawPath(using: .fillStroke)
 	}
-	override func plasma(path: CGPath, uiColor: UIColor) {
-		let c = UIGraphicsGetCurrentContext()!
-		UIColor(red: 0.5, green: 0.5, blue: 0.5, alpha: 0.4).setFill()
-		UIColor(red: 0.7, green: 0.7, blue: 0.7, alpha: 1).setStroke()
-		c.addPath(path)
-		c.setLineWidth(1)
-		c.drawPath(using: .fillStroke)
+    override func plasma(path: CGPath, uiColor: UIColor, stroke: CGFloat, fill: CGFloat) {
+        let c = UIGraphicsGetCurrentContext()!
+        c.addPath(path)
+        uiColor.alpha(stroke).setStroke()
+        uiColor.alpha(fill).setFill()
+        c.drawPath(using: .fillStroke)
 	}
 	// About
 	override func about(text: String, x: CGFloat, y: CGFloat, uiColor: UIColor, font: UIFont) {

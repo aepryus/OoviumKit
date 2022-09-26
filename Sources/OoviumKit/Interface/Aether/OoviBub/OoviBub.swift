@@ -293,18 +293,11 @@ public class OoviBub: Bubble, ChainLeafDelegate {
 	}
 	
 // UIView ==========================================================================================
-	public override func draw(_ rect: CGRect) {
-		guard let plasma = plasma else { return }
+    public override func draw(_ rect: CGRect) {
+        guard let plasma = plasma else { return }
+        Skin.plasma(path: plasma, uiColor: uiColor, stroke: 0.5, fill: 0.2)
+    }
 
-		let c = UIGraphicsGetCurrentContext()!
-		c.addPath(plasma)
-		
-		uiColor.alpha(0.2).setFill()
-		uiColor.alpha(0.5).setStroke()
-		
-		c.drawPath(using: .fillStroke)
-	}
-	
 // ChainLeafDelegate ===============================================================================
 	func onChange() {
 		layoutLeavesIfNeeded()

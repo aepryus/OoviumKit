@@ -17,9 +17,9 @@ public class TronSkin: Skin {
 	override func color(_ skinColor: SkinColor) -> UIColor {
 		switch skinColor {
 			case .labelBack:	return UIColor(red: 0, green: 0.3, blue: 0, alpha: 0.5)
-			case .ovalBack:		return UIColor.black.alpha(0.3)
-			case .currentCell:	return UIColor.purple
-			default:			return UIColor.white
+			case .ovalBack:		return .black.alpha(0.3)
+			case .currentCell:	return .purple
+			default:			return .white
 		}
 	}
 	
@@ -342,6 +342,13 @@ public class TronSkin: Skin {
 		c.addPath(path)
 		c.drawPath(using: .fillStroke)
 	}
+    override func plasma(path: CGPath, uiColor: UIColor, stroke: CGFloat, fill: CGFloat) {
+        let c = UIGraphicsGetCurrentContext()!
+        c.addPath(path)
+        uiColor.alpha(stroke).setStroke()
+        uiColor.alpha(fill).setFill()
+        c.drawPath(using: .fillStroke)
+    }
 	// About
 	override func about(text: String, x: CGFloat, y: CGFloat, uiColor: UIColor, font: UIFont) {
 		var pen = Pen(font: font, color: uiColor.alpha(0.4))

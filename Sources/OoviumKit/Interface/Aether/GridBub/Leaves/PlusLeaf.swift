@@ -29,7 +29,10 @@ class PlusLeaf: Leaf, FocusTappable {
 // UIView ==========================================================================================
 	override func draw(_ rect: CGRect) {
 		let d: CGFloat = 6
-		Skin.bubble(path: CGPath(roundedRect: rect.insetBy(dx: d, dy: d), cornerWidth: (width-d)/2, cornerHeight: (height-d)/2, transform: nil), uiColor: bubble.uiColor, width: Oo.s)
+        let circlePath: CGPath = CGPath(roundedRect: rect.insetBy(dx: d, dy: d), cornerWidth: (width-d)/2, cornerHeight: (height-d)/2, transform: nil)
+        Skin.gridFill(path: circlePath, uiColor: bubble.uiColor)
+        Skin.gridDraw(path: circlePath, uiColor: bubble.uiColor)
+//		Skin.bubble(path: CGPath(roundedRect: rect.insetBy(dx: d, dy: d), cornerWidth: (width-d)/2, cornerHeight: (height-d)/2, transform: nil), uiColor: bubble.uiColor, width: Oo.s)
 			
 		let p: CGFloat = 13
 		let ir: CGFloat = width/2

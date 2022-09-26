@@ -44,9 +44,9 @@ class ChainLeaf: Leaf, ChainViewDelegate, Editable {
 		get {return chainView.chain}
 	}
 	var uiColor: UIColor {
-		if chain.editing {return UIColor(red: 0.8, green: 0.8, blue: 0.8, alpha: 1)}
-		else if let colorable = colorable {return colorable.uiColor}
-		else {return bubble.uiColor}
+		if chain.editing { return UIColor(red: 0.8, green: 0.8, blue: 0.8, alpha: 1) }
+		else if let colorable = colorable { return colorable.uiColor }
+		else { return bubble.uiColor }
 	}
 	
 	let mooring: Mooring = Mooring()

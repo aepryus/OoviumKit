@@ -64,7 +64,7 @@ public class Skin {
 	func wafer(text: String, x: CGFloat, y: CGFloat, uiColor: UIColor) -> CGFloat {return 0}
 	func tray(path: CGPath, uiColor: UIColor, width: CGFloat) {}
 	func tool(path: CGPath) {}
-	func plasma(path: CGPath, uiColor: UIColor) {}
+    func plasma(path: CGPath, uiColor: UIColor, stroke: CGFloat, fill: CGFloat) {}
 	func about(text: String, x: CGFloat, y: CGFloat, uiColor: UIColor, font: UIFont) {}
 	func about(path: CGPath, uiColor: UIColor) {}
 	func end(path: CGPath, uiColor: UIColor) {}
@@ -75,119 +75,45 @@ public class Skin {
 	// Static ==========================================================================================
 	public static var skin: Skin = TronSkin()
 	
-	public static var backColor: UIColor {
-		return skin.backColor
-	}
-	public static var statusBarStyle: UIStatusBarStyle {
-		return skin.statusBarStyle
-	}
-	public static var fadePercent: CGFloat {
-		return skin.fadePercent
-	}
+	public static var backColor: UIColor { skin.backColor }
+	public static var statusBarStyle: UIStatusBarStyle { skin.statusBarStyle }
+	public static var fadePercent: CGFloat { skin.fadePercent }
 	
-	static func color(_ skinColor: SkinColor) -> UIColor {
-		return skin.color(skinColor)
-	}
+	static func color(_ skinColor: SkinColor) -> UIColor { skin.color(skinColor) }
 	
-	static func text(_ text: String, rect: CGRect, uiColor: UIColor, font: UIFont, align: NSTextAlignment) {
-		skin.text(text, rect: rect, uiColor: uiColor, font: font, align: align)
-	}
-	static func text(_ text: String, x: CGFloat, y: CGFloat, uiColor: UIColor) {
-		skin.text(text, x: x, y: y, uiColor: uiColor)
-	}
-	static func placeholder(_ text: String, rect: CGRect, uiColor: UIColor, align: NSTextAlignment) {
-		skin.placeholder(text, rect: rect, uiColor: uiColor, align: align)
-	}
+	static func text(_ text: String, rect: CGRect, uiColor: UIColor, font: UIFont, align: NSTextAlignment) { skin.text(text, rect: rect, uiColor: uiColor, font: font, align: align) }
+	static func text(_ text: String, x: CGFloat, y: CGFloat, uiColor: UIColor) { skin.text(text, x: x, y: y, uiColor: uiColor) }
+	static func placeholder(_ text: String, rect: CGRect, uiColor: UIColor, align: NSTextAlignment) { skin.placeholder(text, rect: rect, uiColor: uiColor, align: align) }
 
-	static func gridDraw(path: CGPath, uiColor: UIColor) {
-		skin.gridDraw(path: path, uiColor: uiColor)
-	}
-	static func gridFill(path: CGPath, uiColor: UIColor) {
-		skin.gridFill(path: path, uiColor: uiColor)
-	}
-	public static func gridCalc(path: CGPath, uiColor: UIColor) {
-		skin.gridCalc(path: path, uiColor: uiColor)
-	}
-	static func pulse(context: CGContext, rect: CGRect, uiColor: UIColor) {
-		skin.pulse(context: context, rect: rect, uiColor: uiColor)
-	}
-	static func lasso(path: CGPath) {
-		skin.lasso(path: path)
-	}
-	static func doodle(c: CGContext, path: CGPath, color: UIColor, asleep: Bool) {
-		skin.doodle(c: c, path: path, color: color, asleep: asleep)
-	}
+	static func gridDraw(path: CGPath, uiColor: UIColor) { skin.gridDraw(path: path, uiColor: uiColor) }
+	static func gridFill(path: CGPath, uiColor: UIColor) { skin.gridFill(path: path, uiColor: uiColor) }
+	public static func gridCalc(path: CGPath, uiColor: UIColor) { skin.gridCalc(path: path, uiColor: uiColor) }
+	static func pulse(context: CGContext, rect: CGRect, uiColor: UIColor) { skin.pulse(context: context, rect: rect, uiColor: uiColor) }
+	static func lasso(path: CGPath) { skin.lasso(path: path) }
+	static func doodle(c: CGContext, path: CGPath, color: UIColor, asleep: Bool) { skin.doodle(c: c, path: path, color: color, asleep: asleep) }
 	
-	public static func panel(path: CGPath, uiColor: UIColor) {
-		skin.panel(path: path, uiColor: uiColor)
-	}
-	public static func panel(text: String, rect: CGRect, pen: Pen) {
-		skin.panel(text: text, rect: rect, pen: pen)
-	}
-	public static func panelOverride(text: String, rect: CGRect, pen: Pen) {
-		skin.panelOverride(text: text, rect: rect, pen: pen)
-	}
-	static func key(path: CGPath, uiColor: UIColor) {
-		skin.key(path: path, uiColor: uiColor)
-	}
-	static func key(text: String, rect: CGRect, font: UIFont) {
-		skin.key(text: text, rect: rect, font: font)
-	}
-	static func key(image: UIImage, rect: CGRect, font: UIFont) {
-		skin.key(image: image, rect: rect, font: font)
-	}
-	static func shapeKey(path: CGPath) {
-		skin.shapeKey(path: path)
-	}
-	public static func bubble(path: CGPath, uiColor: UIColor, width: CGFloat) {
-		skin.bubble(path: path, uiColor: uiColor, width: width)
-	}
-	public static func bubble(text: String, x: CGFloat, y: CGFloat, uiColor: UIColor? = nil, pen: Pen? = nil) {
-		skin.bubble(text: text, x: x, y: y, uiColor: uiColor, pen: pen)
-	}
-	public static func bubble(text: String, rect: CGRect, uiColor: UIColor? = nil, pen: Pen? = nil) {
-		skin.bubble(text: text, rect: rect, uiColor: uiColor, pen: pen)
-	}
-	static func shape(text: String, rect: CGRect, uiColor: UIColor, maxWidth: CGFloat? = nil) {
-		skin.shape(text: text, rect: rect, uiColor: uiColor, maxWidth: maxWidth)
-	}
-	public static func message(text: String, rect: CGRect, uiColor: UIColor, font: UIFont) {
-		skin.message(text: text, rect: rect, uiColor: uiColor, font: font)
-	}
-	static func aetherPicker(path: CGPath) {
-		skin.aetherPicker(path: path)
-	}
-	static func aetherPickerList(path: CGPath) {
-		skin.aetherPickerList(path: path)
-	}
-	static func aetherCell(path: CGPath, uiColor: UIColor? = nil) {
-		skin.aetherCell(path: path, uiColor: uiColor)
-	}
-	static func aetherCell(text: String, rect: CGRect, uiColor: UIColor? = nil) {
-		skin.aetherCell(text: text, rect: rect, uiColor: uiColor)
-	}
-	static func wafer(text: String, x: CGFloat, y: CGFloat, uiColor: UIColor) -> CGFloat {
-		return skin.wafer(text: text, x: x, y: y, uiColor: uiColor)
-	}
-	static func tray(path: CGPath, uiColor: UIColor, width: CGFloat) {
-		skin.tray(path: path, uiColor: uiColor, width: width)
-	}
-	static func tool(path: CGPath) {
-		skin.tool(path: path)
-	}
-	static func plasma(path: CGPath, uiColor: UIColor) {
-		skin.plasma(path: path, uiColor: uiColor)
-	}
-	public static func about(text: String, x: CGFloat, y: CGFloat, uiColor: UIColor, font: UIFont) {
-		skin.about(text: text, x: x, y: y, uiColor: uiColor, font: font)
-	}
-	public static func about(path: CGPath, uiColor: UIColor) {
-		skin.about(path: path, uiColor: uiColor)
-	}
-	static func end(path: CGPath, uiColor: UIColor) {
-		skin.end(path: path, uiColor: uiColor)
-	}
-	static func end(text: String, x: CGFloat, y: CGFloat, uiColor: UIColor) {
-		skin.end(text: text, x: x, y: y, uiColor: uiColor)
-	}
+	public static func panel(path: CGPath, uiColor: UIColor) { skin.panel(path: path, uiColor: uiColor) }
+	public static func panel(text: String, rect: CGRect, pen: Pen) { skin.panel(text: text, rect: rect, pen: pen) }
+	public static func panelOverride(text: String, rect: CGRect, pen: Pen) { skin.panelOverride(text: text, rect: rect, pen: pen) }
+	static func key(path: CGPath, uiColor: UIColor) { skin.key(path: path, uiColor: uiColor) }
+	static func key(text: String, rect: CGRect, font: UIFont) { skin.key(text: text, rect: rect, font: font) }
+	static func key(image: UIImage, rect: CGRect, font: UIFont) { skin.key(image: image, rect: rect, font: font) }
+	static func shapeKey(path: CGPath) { skin.shapeKey(path: path) }
+	public static func bubble(path: CGPath, uiColor: UIColor, width: CGFloat) { skin.bubble(path: path, uiColor: uiColor, width: width) }
+	public static func bubble(text: String, x: CGFloat, y: CGFloat, uiColor: UIColor? = nil, pen: Pen? = nil) { skin.bubble(text: text, x: x, y: y, uiColor: uiColor, pen: pen) }
+	public static func bubble(text: String, rect: CGRect, uiColor: UIColor? = nil, pen: Pen? = nil) { skin.bubble(text: text, rect: rect, uiColor: uiColor, pen: pen) }
+	static func shape(text: String, rect: CGRect, uiColor: UIColor, maxWidth: CGFloat? = nil) { skin.shape(text: text, rect: rect, uiColor: uiColor, maxWidth: maxWidth) }
+	public static func message(text: String, rect: CGRect, uiColor: UIColor, font: UIFont) { skin.message(text: text, rect: rect, uiColor: uiColor, font: font) }
+	static func aetherPicker(path: CGPath) { skin.aetherPicker(path: path) }
+	static func aetherPickerList(path: CGPath) { skin.aetherPickerList(path: path) }
+	static func aetherCell(path: CGPath, uiColor: UIColor? = nil) { skin.aetherCell(path: path, uiColor: uiColor) }
+	static func aetherCell(text: String, rect: CGRect, uiColor: UIColor? = nil) { skin.aetherCell(text: text, rect: rect, uiColor: uiColor) }
+	static func wafer(text: String, x: CGFloat, y: CGFloat, uiColor: UIColor) -> CGFloat { skin.wafer(text: text, x: x, y: y, uiColor: uiColor) }
+	static func tray(path: CGPath, uiColor: UIColor, width: CGFloat) { skin.tray(path: path, uiColor: uiColor, width: width) }
+	static func tool(path: CGPath) { skin.tool(path: path) }
+    static func plasma(path: CGPath, uiColor: UIColor, stroke: CGFloat = 1, fill: CGFloat = 0.4) { skin.plasma(path: path, uiColor: uiColor, stroke: stroke, fill: fill) }
+	public static func about(text: String, x: CGFloat, y: CGFloat, uiColor: UIColor, font: UIFont) { skin.about(text: text, x: x, y: y, uiColor: uiColor, font: font) }
+    public static func about(path: CGPath, uiColor: UIColor) { skin.about(path: path, uiColor: uiColor) }
+	static func end(path: CGPath, uiColor: UIColor) { skin.end(path: path, uiColor: uiColor) }
+	static func end(text: String, x: CGFloat, y: CGFloat, uiColor: UIColor) { skin.end(text: text, x: x, y: y, uiColor: uiColor) }
 }

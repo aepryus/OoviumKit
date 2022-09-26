@@ -371,18 +371,11 @@ class CronBub: Bubble, ChainLeafDelegate {
 	}
 	
 // UIView ==========================================================================================
-	override func draw(_ rect: CGRect) {
-		guard let plasma = plasma else { return }
-		
-		let c = UIGraphicsGetCurrentContext()!
-		c.addPath(plasma)
-		
-		uiColor.alpha(0.4).setFill()
-		uiColor.alpha(1).setStroke()
-		
-		c.drawPath(using: .fillStroke)
-	}
-	
+    override func draw(_ rect: CGRect) {
+        guard let plasma = plasma else { return }
+        Skin.plasma(path: plasma, uiColor: uiColor, stroke: 1)
+    }
+
 // ChainLeafDelegate ===============================================================================
 	func onChange() {
 		render()

@@ -25,12 +25,12 @@ class EqualLeaf: Leaf, Tappable {
 // UIView ==========================================================================================
 	override func draw(_ rect: CGRect) {
 		let d: CGFloat = 6
-		Skin.bubble(path: CGPath(roundedRect: rect.insetBy(dx: d, dy: d), cornerWidth: (width-d)/2, cornerHeight: (height-d)/2, transform: nil), uiColor: bubble.uiColor, width: Oo.s)
+        let circlePath: CGPath = CGPath(roundedRect: rect.insetBy(dx: d, dy: d), cornerWidth: (width-d)/2, cornerHeight: (height-d)/2, transform: nil)
+        Skin.gridFill(path: circlePath, uiColor: bubble.uiColor)
+        Skin.gridDraw(path: circlePath, uiColor: bubble.uiColor)
 		Skin.bubble(text: "=", rect: CGRect(x: 3, y: 8, width: rect.width-6, height: 24), pen: Pen(color: bubble.uiColor, alignment: .center))
 	}
 	
 // Tappable ========================================================================================
-	func onTap() {
-		onTapped()
-	}
+	func onTap() { onTapped() }
 }

@@ -78,7 +78,7 @@ class ChainView: UIView, UITextInput, UITextInputTraits, AnchorTappable, TowerLi
     var chain: Chain = Chain() {
         didSet {
             chain.tower.listener = self
-            render()
+//            render()
         }
     }
 	weak var delegate: ChainViewDelegate?
@@ -259,7 +259,7 @@ class ChainView: UIView, UITextInput, UITextInputTraits, AnchorTappable, TowerLi
 				path.move(to: CGPoint(x: x+1, y: 1))
 				path.addLine(to: CGPoint(x: x+1, y: 20))
 				let c = UIGraphicsGetCurrentContext()!
-				c.setStrokeColor(UIColor.white.cgColor)
+                c.setStrokeColor(Skin.color(.cursor).cgColor)
 				c.setLineWidth(2)
 				c.addPath(path)
 				c.drawPath(using: .stroke)
