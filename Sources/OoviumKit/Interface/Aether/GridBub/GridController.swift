@@ -6,7 +6,7 @@
 //
 
 import Acheron
-import Foundation
+import UIKit
 import OoviumEngine
 
 class GridController: ChainViewKeyDelegate {
