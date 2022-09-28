@@ -38,7 +38,7 @@ class CyanKeyPad: KeyView {
 		
 		(cyanSchematic.keySlots[0].key as! ImageKey).active = true
 	}
-	required init?(coder aDecoder: NSCoder) {fatalError()}
+	required init?(coder aDecoder: NSCoder) { fatalError() }
 	
 	var isInvoked: Bool {
 		return superview != nil

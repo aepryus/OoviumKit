@@ -61,7 +61,7 @@ class ObjectLeaf: Leaf, Editable, ChainViewDelegate, DoubleTappable, Colorable, 
 		var height: CGFloat = 35
 		
 		// Bounds Width
-		width = max(width, chainView.widthNeeded - 4)
+		width = max(width, chainView.width - 4)
 		if textField != nil { width = max(width, 74) }
         else if object.label.count > 0 { width = max(width, object.label.size(pen: Pen(font: .ooAether(size: 16))).width) }
 		width += 26
@@ -71,7 +71,7 @@ class ObjectLeaf: Leaf, Editable, ChainViewDelegate, DoubleTappable, Colorable, 
 
         size = CGSize(width: width, height: height)
 		bubble.layoutLeaves()
-        chainView.left(dx: 12, dy: object.label.count > 0 || textField != nil ? 13 : 0, width: chainView.widthNeeded, height: 21)
+        chainView.left(dx: 12, dy: object.label.count > 0 || textField != nil ? 13 : 0, height: 21)
 
         setNeedsDisplay()
         
@@ -167,10 +167,8 @@ class ObjectLeaf: Leaf, Editable, ChainViewDelegate, DoubleTappable, Colorable, 
         bubble.aetherView.unlink(from: self.mooring, to: mooring)
     }
 
-    func onChanged(oldWidth: CGFloat?, newWidth: CGFloat) {
-        render()
-        objectBub.layoutLeavesIfNeeded()
-    }
+    func onWidthChanged(oldWidth: CGFloat?, newWidth: CGFloat) { render() }
+    func onChanged() { objectBub.layoutLeavesIfNeeded() }
     
 // Colorable =======================================================================================
     var uiColor: UIColor { bubble.selected ? .yellow : (focused ? .black.tint(0.8) : chainView.chain.tower.obje.uiColor) }

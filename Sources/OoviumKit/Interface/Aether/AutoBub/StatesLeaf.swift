@@ -110,7 +110,7 @@ class StatesLeaf: Leaf, ChainLeafDelegate, Colorable {
 
 		addGestureRecognizer(UITapGestureRecognizer(target: self, action: #selector(onTap(_:))))
 	}
-	required init?(coder aDecoder: NSCoder) {fatalError()}
+	required init?(coder aDecoder: NSCoder) { fatalError() }
 	
 	func loadStateNo() {
 		let tower = (bubble as! AutoBub).auto.statesTower

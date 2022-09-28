@@ -18,7 +18,7 @@ class FaceLeaf: Leaf, FocusTappable, TowerListener, Citable {
 		super.init(bubble: bubble, hitch: .top, anchor: CGPoint.zero, size: CGSize(width: 80, height: 36))
 		initMoorings()
 	}
-	required init?(coder aDecoder: NSCoder) {fatalError()}
+	required init?(coder aDecoder: NSCoder) { fatalError() }
 	
 	var cronBub: CronBub {
 		return bubble as! CronBub

@@ -62,7 +62,7 @@ class TextEditor: Orbit {
 			self?.textLeaf.releaseFocus()
 		}
 	}
-	required init?(coder aDecoder: NSCoder) {fatalError()}
+	required init?(coder aDecoder: NSCoder) { fatalError() }
 	
 	func refresh() {
 		inputsView.reloadData()

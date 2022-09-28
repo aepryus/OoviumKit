@@ -54,7 +54,7 @@ class TextBub: Bubble, NSCopying {
 		
 		render()
 	}
-	required init?(coder aDecoder: NSCoder) {fatalError()}
+	required init?(coder aDecoder: NSCoder) { fatalError() }
 	
 	func render() {
 		textLeaf.render()

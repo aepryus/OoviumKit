@@ -16,7 +16,7 @@ class EqualLeaf: Leaf, Tappable {
 	init(bubble: Bubble) {
 		super.init(bubble: bubble, hitch: .top, anchor: CGPoint.zero, size: CGSize(width: 36, height: 36))
 	}
-	required init?(coder aDecoder: NSCoder) {fatalError()}
+	required init?(coder aDecoder: NSCoder) { fatalError() }
 		
 	var gridBub: GridBub {
 		return bubble as! GridBub

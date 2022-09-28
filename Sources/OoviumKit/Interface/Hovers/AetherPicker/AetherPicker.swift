@@ -153,7 +153,7 @@ public class AetherPicker: Hover, UITableViewDelegate, UITableViewDataSource {
 
 		loadAetherNames()
 	}
-	public required init?(coder aDecoder: NSCoder) {fatalError()}
+	public required init?(coder aDecoder: NSCoder) { fatalError() }
 	
 	func transformButtons() {
 		let showAetherList = self.expanded

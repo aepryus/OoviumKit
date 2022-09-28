@@ -7,11 +7,11 @@
 //
 
 import Acheron
-import GameController
 import OoviumEngine
 import UIKit
 
 protocol ChainViewDelegate: AnyObject {
+    var chainView: ChainView { get }
     var color: UIColor { get }
     
     func onEditStart()
@@ -19,7 +19,8 @@ protocol ChainViewDelegate: AnyObject {
     func onTokenAdded(_ token: Token)
     func onTokenRemoved(_ token: Token)
 
-    func onChanged(oldWidth: CGFloat?, newWidth: CGFloat)
+    func onChanged()
+    func onWidthChanged(oldWidth: CGFloat?, newWidth: CGFloat)
 }
 extension ChainViewDelegate {
     func onEditStart() {}
@@ -45,361 +46,283 @@ extension ChainViewKeyDelegate {
 	func onTab() {}
 }
 
-fileprivate class ChainPosition: UITextPosition {
-	let position: Int
-	
-	init(_ position: Int) {
-		self.position = position
-	}
-	
-	static let zero = ChainPosition(0)
-}
-fileprivate class ChainRange: UITextRange {
-	let range: NSRange
-	
-	init(_ range: NSRange) {
-		self.range = range
-	}
-	
-	override var start: UITextPosition {
-		return ChainPosition(range.location)
-	}
-    override var end: UITextPosition {
-		return ChainPosition(range.location + range.length)
-	}
-	override var isEmpty: Bool {
-		return range.length == 0
-	}
-	
-	static let zero = ChainRange(NSRange(location: 0, length: 0))
-}
-
 class ChainView: UIView, UITextInput, UITextInputTraits, AnchorTappable, TowerListener {
     var chain: Chain = Chain() {
         didSet {
             chain.tower.listener = self
-//            render()
+            resize()
         }
     }
-	weak var delegate: ChainViewDelegate?
+    weak var delegate: ChainViewDelegate?
     weak var keyDelegate: ChainViewKeyDelegate?
+    weak var responder: ChainResponder!
     
     var oldWidth: CGFloat?
     
     static let pen: Pen = Pen(font: .ooAether(size: 16))
-	
-	init() {
-		super.init(frame: .zero)
-		
-		backgroundColor = UIColor.clear
-
-		inputAssistantItem.leadingBarButtonGroups.removeAll()
-		inputAssistantItem.trailingBarButtonGroups.removeAll()
-	}
-	public required init?(coder aDecoder: NSCoder) { fatalError() }
-	
-    var blank: Bool { chain.tokens.count == 0 && !chain.editing }
-    var isResponder: Bool { Screen.mac || ChainView.hasExternalKeyboard }
-
-    private func displayWidthNeeded() -> CGFloat { "\(chain)".size(pen: ChainView.pen).width + 3 }
-    private func editingWidthNeeded() -> CGFloat {
-        var x: CGFloat = 3
-        var sb: String = ""
-        var token: Token
-        let to = chain.tokens.count
+    
+    init() {
+        super.init(frame: .zero)
         
-        var i: Int = 0
-        while i < to {
+        backgroundColor = UIColor.clear
+        
+        inputAssistantItem.leadingBarButtonGroups.removeAll()
+        inputAssistantItem.trailingBarButtonGroups.removeAll()
+    }
+    public required init?(coder aDecoder: NSCoder) { fatalError() }
+    
+    var blank: Bool { chain.tokens.count == 0 && !chain.editing }
+        
+    private func resize() {
+        var widthNeeded: CGFloat
+        if !chain.editing {
+            widthNeeded = "\(chain)".size(pen: ChainView.pen).width + 3
+        } else {
+            widthNeeded = 3
+            var sb: String = ""
+            var token: Token
+            let to = chain.tokens.count
+            
+            var i: Int = 0
+            while i < to {
+                repeat {
+                    token = chain.tokens[i]
+                    if ChainView.usesWafer(token: token) { break }
+                    sb.append(token.display)
+                    i += 1
+                } while (i < to)
+                if sb.count > 0 {
+                    widthNeeded += sb.size(pen: ChainView.pen).width
+                    sb = ""
+                }
+                if ChainView.usesWafer(token: token) {
+                    widthNeeded += max(9, token.display.size(pen: ChainView.pen).width)+12
+                    i += 1
+                }
+            }
+        }
+        widthNeeded = Screen.snapToPixel(widthNeeded)
+        
+        guard widthNeeded != oldWidth else { return }
+        frame = CGRect(origin: frame.origin, size: CGSize(width: widthNeeded, height: height))
+        delegate?.onWidthChanged(oldWidth: oldWidth, newWidth: widthNeeded)
+        oldWidth = widthNeeded
+        setNeedsDisplay()
+    }
+    
+    func moveCursor(to nx: CGFloat) {
+        var x: CGFloat = 3
+        var lx: CGFloat = 0
+        var pos: Int = 0
+        
+        for token in chain.tokens {
+            x += token.display.size(pen: ChainView.pen).width
+            if ChainView.usesWafer(token: token) {x += 9}
+            if nx < lx+(x-lx)/2 {break}
+            lx = x
+            pos += 1
+        }
+        chain.cursor = pos
+        resize()
+    }
+    
+// Chain ===========================================================================================
+    func attemptToPost(token: Token) -> Bool {
+        guard chain.attemptToPost(token: token) else { return false }
+        resize()
+        delegate?.onChanged()
+        delegate?.onTokenAdded(token)
+        return true
+    }
+    func post(token: Token) {
+        _ = attemptToPost(token: token)
+    }
+    func minusSign() {
+        chain.minusSign()
+        resize()
+        delegate?.onChanged()
+    }
+    func parenthesis() {
+        chain.parenthesis()
+        resize()
+        delegate?.onChanged()
+    }
+    func braket() {
+        chain.braket()
+        resize()
+        delegate?.onChanged()
+    }
+    func delete() {
+        guard let token = chain.delete() else { return }
+        resize()
+        delegate?.onChanged()
+        delegate?.onTokenRemoved(token)
+    }
+       
+    @objc func rightDelete() {
+        print("rightDelete")
+    }
+    func edit() {
+        chain.edit()
+        delegate?.onEditStart()
+        isUserInteractionEnabled = true
+        resize()
+        delegate?.onChanged()
+    }
+    func ok() {
+        isUserInteractionEnabled = false
+        chain.ok()
+        resize()
+        delegate?.onChanged()
+    }
+    public func okDelegate() {
+        delegate?.onEditStop()
+    }
+    
+// UIResponder =====================================================================================
+    override var canBecomeFirstResponder: Bool { true }
+    override var canResignFirstResponder: Bool { true }
+            
+// UIView ==========================================================================================
+    private func drawTokens(at x: CGFloat, from: Int, to: Int) -> CGFloat {
+        var x: CGFloat = x
+        var sb: String = ""
+        var pos: Int = from
+        var token: Token
+        while (pos < to) {
             repeat {
-                token = chain.tokens[i]
-                if ChainView.usesWafer(token: token) { break }
+                token = chain.tokens[pos]
+                if ChainView.usesWafer(token: token) {break}
                 sb.append(token.display)
-                i += 1
-            } while (i < to)
+                pos += 1
+            } while (pos < to)
             if sb.count > 0 {
+                Skin.bubble(text: sb as String, x: x, y: Screen.mac ? 1 : 0, uiColor: delegate?.color ?? UIColor.green)
                 x += sb.size(pen: ChainView.pen).width
                 sb = ""
             }
             if ChainView.usesWafer(token: token) {
-                x += max(9, token.display.size(pen: ChainView.pen).width)+12
-                i += 1
+                let uiColor: UIColor = {
+                    if token.status != .ok { return UIColor.red }
+                    if let token = token as? Defable, let def: Def = token.def { return def.uiColor }
+                    return UIColor.green
+                }()
+                x += Skin.wafer(text: token.display, x: x, y: Screen.mac ? 1 : 0, uiColor: uiColor)
+                pos += 1
             }
         }
         return x
     }
-    var widthNeeded: CGFloat { Screen.snapToPixel(chain.editing ? editingWidthNeeded() : displayWidthNeeded()) }
-
-	func moveCursor(to nx: CGFloat) {
-		var x: CGFloat = 3
-		var lx: CGFloat = 0
-		var pos: Int = 0
-		
-		for token in chain.tokens {
-			x += token.display.size(pen: ChainView.pen).width
-			if ChainView.usesWafer(token: token) {x += 9}
-			if nx < lx+(x-lx)/2 {break}
-			lx = x
-			pos += 1
-		}
-		chain.cursor = pos
-		setNeedsDisplay()
-	}
-	
-// Chain ===========================================================================================
-    private func render() {
-        let newWidth: CGFloat = widthNeeded
-        if newWidth != oldWidth { frame = CGRect(origin: frame.origin, size: CGSize(width: newWidth, height: height)) }
-        delegate?.onChanged(oldWidth: oldWidth, newWidth: newWidth)
-        oldWidth = newWidth
-        setNeedsDisplay()
-    }
-
-	func attemptToPost(token: Token) -> Bool {
-        guard chain.attemptToPost(token: token) else { return false }
-        render()
-        delegate?.onTokenAdded(token)
-        return true
-	}
-    func post(token: Token) {
-        _ = attemptToPost(token: token)
-	}
-	func minusSign() {
-		chain.minusSign()
-		render()
-	}
-	func parenthesis() {
-		chain.parenthesis()
-		render()
-	}
-	func braket() {
-		chain.braket()
-		render()
-	}
-	@objc func backspace() {
-		guard let token = chain.backspace() else { return }
-		render()
-		delegate?.onTokenRemoved(token)
-	}
-	func delete() {
-		guard let token = chain.delete() else { return }
-		render()
-        delegate?.onTokenRemoved(token)
-	}
-
-    @objc func leftArrow() {
-		if chain.leftArrow() { render() }
-        else { keyDelegate?.onArrowLeft() }
-	}
-	@objc func rightArrow() {
-		if chain.rightArrow() { render() }
-		else { keyDelegate?.onArrowRight() }
-	}
-	@objc func upArrow() { keyDelegate?.onArrowUp() }
-	@objc func downArrow() { keyDelegate?.onArrowDown() }
-	@objc func tab() { keyDelegate?.onTab() }
-
-    @objc func rightDelete() {
-		print("rightDelete")
-	}
-	func edit() {
-		chain.edit()
-		render()
-		delegate?.onEditStart()
-		isUserInteractionEnabled = true
-        if isResponder { DispatchQueue.main.async { self.becomeFirstResponder() } }
-	}
-	func ok() {
-        if isResponder { DispatchQueue.main.async { self.resignFirstResponder() } }
-		isUserInteractionEnabled = false
-		chain.ok()
-		render()
-	}
-	public func okDelegate() {
-		delegate?.onEditStop()
-	}
-
-// UIView ==========================================================================================
-	private func drawTokens(at x: CGFloat, from: Int, to: Int) -> CGFloat {
-		var x: CGFloat = x
-        var sb: String = ""
-		var pos: Int = from
-		var token: Token
-		while (pos < to) {
-			repeat {
-				token = chain.tokens[pos]
-				if ChainView.usesWafer(token: token) {break}
-				sb.append(token.display)
-				pos += 1
-			} while (pos < to)
-			if sb.count > 0 {
-				Skin.bubble(text: sb as String, x: x, y: Screen.mac ? 1 : 0, uiColor: delegate?.color ?? UIColor.green)
-				x += sb.size(pen: ChainView.pen).width
-                sb = ""
-			}
-			if ChainView.usesWafer(token: token) {
-				let uiColor: UIColor = {
-					if token.status != .ok { return UIColor.red }
-					if let token = token as? Defable, let def: Def = token.def { return def.uiColor }
-					return UIColor.green
-				}()
-				x += Skin.wafer(text: token.display, x: x, y: Screen.mac ? 1 : 0, uiColor: uiColor)
-				pos += 1
-			}
-		}
-		return x
-	}
-	override func draw(_ rect: CGRect) {
-		if !chain.editing {
-			Skin.bubble(text: "\(chain)", x: 1, y: Screen.mac ? 1 : 0, uiColor: delegate?.color ?? UIColor.green)
-		} else {
-			let x: CGFloat = drawTokens(at: 1, from: 0, to: chain.cursor)
-			// Cursor
-			if chain.tokens.count > 0 {
-				let path = CGMutablePath()
-				path.move(to: CGPoint(x: x+1, y: 1))
-				path.addLine(to: CGPoint(x: x+1, y: 20))
-				let c = UIGraphicsGetCurrentContext()!
+    override func draw(_ rect: CGRect) {
+        if !chain.editing {
+            Skin.bubble(text: "\(chain)", x: 1, y: Screen.mac ? 1 : 0, uiColor: delegate?.color ?? UIColor.green)
+        } else {
+            let x: CGFloat = drawTokens(at: 1, from: 0, to: chain.cursor)
+            // Cursor
+            if chain.tokens.count > 0 {
+                let path = CGMutablePath()
+                path.move(to: CGPoint(x: x+1, y: 1))
+                path.addLine(to: CGPoint(x: x+1, y: 20))
+                let c = UIGraphicsGetCurrentContext()!
                 c.setStrokeColor(Skin.color(.cursor).cgColor)
-				c.setLineWidth(2)
-				c.addPath(path)
-				c.drawPath(using: .stroke)
-			}
-
-			_ = drawTokens(at: x, from: chain.cursor, to: chain.tokens.count)
-		}
-	}
-	
-// UIResponder =====================================================================================
-	override var canBecomeFirstResponder: Bool { true }
-	override var canResignFirstResponder: Bool { true }
-	
+                c.setLineWidth(2)
+                c.addPath(path)
+                c.drawPath(using: .stroke)
+            }
+            
+            _ = drawTokens(at: x, from: chain.cursor, to: chain.tokens.count)
+        }
+    }
+    
+// AnchorTappable ==================================================================================
+    func onAnchorTap(point: CGPoint) {
+        guard chain.editing else { return }
+        moveCursor(to: point.x)
+    }
+    
+// TowerListener ===================================================================================
+    func onTriggered() { resize() }
+    
 // UITextInput =====================================================================================
-	var autocapitalizationType: UITextAutocapitalizationType {
-		get { .none }
-		set { fatalError() }
-	}
-	var keyboardAppearance: UIKeyboardAppearance {
-		get { .dark }
-		set { fatalError() }
-	}
-	var beginningOfDocument: UITextPosition { ChainPosition.zero }
-	var endOfDocument: UITextPosition { ChainPosition(chain.tokens.count) }
-	
-	private var markedText: String? = nil
-	func setMarkedText(_ markedText: String?, selectedRange: NSRange) {
-		defer {
-			self.markedText = markedText
-			let markedCount: Int = markedText?.count ?? 0
-			markedTextRange = ChainRange(NSRange(location: chain.cursor - markedCount, length: markedCount))
-		}
-		guard markedText?.count != 0 || self.markedText?.count != 1 else {
-			backspace()
-			return
-		}
-		for _ in 0..<(self.markedText?.count ?? 0) {
-			_ = chain.backspace()
-		}
-		guard let markedText = markedText else { return }
-		for c in markedText {
-			var token: Token? = nil
-			if c == "\n" && chain.inString && chain.unmatchedQuote {
-				token = Token.quote
-			} else if chain.inString {
-				token = Token.characterToken(tag: "\(c)")
-			}
-			_ = attemptToPost(token: token!)
-		}
-	}
-	func unmarkText() { markedText = nil }
-	func compare(_ position: UITextPosition, to other: UITextPosition) -> ComparisonResult {
-		let a: Int = (position as! ChainPosition).position
-		let b: Int = (other as! ChainPosition).position
-		if a == b {return .orderedSame}
-		return a < b ? .orderedAscending : .orderedDescending
-	}
+    var autocapitalizationType: UITextAutocapitalizationType {
+        get { responder.autocapitalizationType }
+        set { responder.autocapitalizationType = newValue }
+    }
+    var keyboardAppearance: UIKeyboardAppearance {
+        get { responder.keyboardAppearance }
+        set { responder.keyboardAppearance = newValue }
+    }
+    var markedTextStyle: [NSAttributedString.Key : Any]? {
+        get { responder.markedTextStyle }
+        set { responder.markedTextStyle = newValue }
+    }
+    var selectedTextRange: UITextRange? {
+        get { responder.selectedTextRange }
+        set { responder.selectedTextRange = newValue }
+    }
+    var inputDelegate: UITextInputDelegate? {
+        get { responder.inputDelegate }
+        set { responder.inputDelegate = newValue }
+    }
+    
+    var beginningOfDocument: UITextPosition { responder.beginningOfDocument }
+    var endOfDocument: UITextPosition { responder.endOfDocument }
+    
+    func setMarkedText(_ markedText: String?, selectedRange: NSRange) { responder.setMarkedText(markedText, selectedRange: selectedRange) }
+    func unmarkText() { responder.unmarkText() }
+    func compare(_ position: UITextPosition, to other: UITextPosition) -> ComparisonResult { responder.compare(position, to: other) }
+    
+// Stubbed
+    var markedTextRange: UITextRange? { responder.markedTextRange }
+    var tokenizer: UITextInputTokenizer { responder.tokenizer }
 
-	// Stubbed
-	var inputDelegate: UITextInputDelegate?
-	var selectedTextRange: UITextRange?
-	var markedTextRange: UITextRange?
-	var markedTextStyle: [NSAttributedString.Key : Any]?
-	var tokenizer: UITextInputTokenizer = UITextInputStringTokenizer()
-
-	func text(in range: UITextRange) -> String? { markedText }
-	func replace(_ range: UITextRange, withText text: String) {}
-	func textRange(from fromPosition: UITextPosition, to toPosition: UITextPosition) -> UITextRange? { nil }
-	func position(from position: UITextPosition, offset: Int) -> UITextPosition? { nil }
-	func position(from position: UITextPosition, in direction: UITextLayoutDirection, offset: Int) -> UITextPosition? { nil }
-    func offset(from: UITextPosition, to toPosition: UITextPosition) -> Int { 0 }
-	func position(within range: UITextRange, farthestIn direction: UITextLayoutDirection) -> UITextPosition? { nil }
-	func characterRange(byExtending position: UITextPosition, in direction: UITextLayoutDirection) -> UITextRange? { nil }
-	func baseWritingDirection(for position: UITextPosition, in direction: UITextStorageDirection) -> NSWritingDirection { .rightToLeft }
-	func setBaseWritingDirection(_ writingDirection: NSWritingDirection, for range: UITextRange) {}
-	func firstRect(for range: UITextRange) -> CGRect { .zero }
-	func caretRect(for position: UITextPosition) -> CGRect { .zero }
-	func selectionRects(for range: UITextRange) -> [UITextSelectionRect] { [] }
-	func closestPosition(to point: CGPoint) -> UITextPosition? { nil }
-	func closestPosition(to point: CGPoint, within range: UITextRange) -> UITextPosition? { nil }
-	func characterRange(at point: CGPoint) -> UITextRange? { nil }
+    func text(in range: UITextRange) -> String? { responder.text(in: range) }
+    func replace(_ range: UITextRange, withText text: String) { responder.replace(range, withText: text) }
+    func textRange(from fromPosition: UITextPosition, to toPosition: UITextPosition) -> UITextRange? { responder.textRange(from: fromPosition, to: toPosition) }
+    func position(from position: UITextPosition, offset: Int) -> UITextPosition? { responder.position(from: position, offset: offset) }
+    func position(from position: UITextPosition, in direction: UITextLayoutDirection, offset: Int) -> UITextPosition? { responder.position(from: position, in: direction, offset: offset) }
+    func offset(from: UITextPosition, to toPosition: UITextPosition) -> Int { responder.offset(from: from, to: toPosition) }
+    func position(within range: UITextRange, farthestIn direction: UITextLayoutDirection) -> UITextPosition? { responder.position(within: range, farthestIn: direction) }
+    func characterRange(byExtending position: UITextPosition, in direction: UITextLayoutDirection) -> UITextRange? { responder.characterRange(byExtending: position, in: direction) }
+    func baseWritingDirection(for position: UITextPosition, in direction: UITextStorageDirection) -> NSWritingDirection { responder.baseWritingDirection(for: position, in: direction) }
+    func setBaseWritingDirection(_ writingDirection: NSWritingDirection, for range: UITextRange) { responder.setBaseWritingDirection(writingDirection, for: range) }
+    func firstRect(for range: UITextRange) -> CGRect { responder.firstRect(for: range) }
+    func caretRect(for position: UITextPosition) -> CGRect { responder.caretRect(for: position) }
+    func selectionRects(for range: UITextRange) -> [UITextSelectionRect] { responder.selectionRects(for: range) }
+    func closestPosition(to point: CGPoint) -> UITextPosition? { responder.closestPosition(to: point) }
+    func closestPosition(to point: CGPoint, within range: UITextRange) -> UITextPosition? { responder.closestPosition(to: point, within: range) }
+    func characterRange(at point: CGPoint) -> UITextRange? { responder.characterRange(at: point) }
 
 // UIKeyInput ======================================================================================
-	private static func isNumeric(c: Character) -> Bool {
-		c >= "0" && c <= "9" || c == "."
-	}
-	private static func isOperator(c: Character) -> Bool {
-		c == "+" || c == "-" || c == "*" || c == "/" || c == "^" || c == "=" || c == "<" || c == ">"
-	}
-	private static func isSeparator(c: Character) -> Bool {
-		c == "(" || c == "," || c == ")" || c == "[" || c == "]" || c == "\""
-	}
-	private static func convert(s: String) -> String {
-		if s == "-" {return "\u{2212}"}
-		else if s == "*" {return "\u{00D7}"}
-		else if s == "/" {return "\u{00F7}"}
-		else {return s}
-	}
+    var hasText: Bool { responder.hasText }
+    func insertText(_ text: String) { responder.insertText(text) }
+    func deleteBackward() { responder.deleteBackward() }
+    
+    @objc func leftArrow() {
+        if chain.leftArrow() { setNeedsDisplay() }
+        else { keyDelegate?.onArrowLeft() }
+    }
+    @objc func rightArrow() {
+        if chain.rightArrow() { setNeedsDisplay() }
+        else { keyDelegate?.onArrowRight() }
+    }
+    @objc func backspace() {
+        guard let token = chain.backspace() else { return }
+        resize()
+        delegate?.onChanged()
+        delegate?.onTokenRemoved(token)
+    }
+//    func delete() {
+//        guard let token = chain.delete() else { return }
+//        render()
+//        delegate?.onTokenRemoved(token)
+//    }
 
-	var hasText: Bool { true }
-	func insertText(_ text: String) {
-		var token: Token? = nil
-		
-		if text == "\n" && chain.inString && chain.unmatchedQuote {
-			token = Token.quote
-		} else if ChainView.isSeparator(c: text[0]) {					// External Keyboard
-			token = Token.separatorToken(tag: text)
-		} else if text == "\n" || text == "\t" {						// External Keyboard
-			okDelegate()
-			return
-		} else if chain.inString {
-			token = Token.characterToken(tag: text)
-		} else if ChainView.isNumeric(c: text[0]) {						// External Keyboard
-			token = Token.digitToken(tag: text)
-		} else if text == "-" {
-			minusSign()
-			return
-		} else if ChainView.isOperator(c: text[0]) {					// External Keyboard
-			token = Token.operatorToken(tag: ChainView.convert(s: text))
-		} else if text == "|" {
-			token = Token.or
-		} else if text == "&" {
-			token = Token.and
-		}
-		if let token = token {
-			_ = attemptToPost(token: token)
-		} else {
-			print("[ \(text) ] has no token")
-		}
-	}
-	func deleteBackward() {
-		if ChainView.hasExternalKeyboard {
-			// actual backspace handled by key commands below; this now only triggers on (forward) delete
-			delete()
-		} else {
-			// unless virtual keyboard
-			backspace()
-		}
-	}
-	override var keyCommands: [UIKeyCommand]? {
+    @objc func upArrow() { responder.upArrow() }
+    @objc func downArrow() { responder.downArrow() }
+    @objc func tab() { responder.tab() }
+
+    override var keyCommands: [UIKeyCommand]? {
         let commands: [UIKeyCommand] = [
             UIKeyCommand(action: #selector(rightArrow), input: UIKeyCommand.inputRightArrow),
             UIKeyCommand(action: #selector(leftArrow), input: UIKeyCommand.inputLeftArrow),
@@ -410,34 +333,15 @@ class ChainView: UIView, UITextInput, UITextInputTraits, AnchorTappable, TowerLi
         ]
         if #available(iOS 15, *) { commands.forEach { $0.wantsPriorityOverSystemBehavior = true } }
         return commands
-	}
+    }
 
 // UITextInputTraits ===============================================================================
-	var smartQuotesType: UITextSmartQuotesType = .no
-
-// AnchorTappable ==================================================================================
-	func onAnchorTap(point: CGPoint) {
-		guard chain.editing else { return }
-		moveCursor(to: point.x)
-	}
-    
-// TowerListener ===================================================================================
-    func onTriggered() {
-        let newWidth: CGFloat = widthNeeded
-        if newWidth != oldWidth { frame = CGRect(origin: frame.origin, size: CGSize(width: newWidth, height: height)) }
-        delegate?.onChanged(oldWidth: oldWidth, newWidth: newWidth)
-        oldWidth = newWidth
-        setNeedsDisplay()
+    var smartQuotesType: UITextSmartQuotesType {
+        get { responder.smartQuotesType }
+        set { responder.smartQuotesType = newValue }
     }
 
 // Static ==========================================================================================
-	private static var hasExternalKeyboard: Bool {
-		if #available(iOS 14.0, *) {
-			return GCKeyboard.coalesced != nil
-		} else {
-			return false
-		}
-	}
 	private static func usesWafer(token: Token) -> Bool {
 		return token.type == .variable
 			|| (token.type == .constant && ![Token.pi, Token.e, Token.i].contains(token))

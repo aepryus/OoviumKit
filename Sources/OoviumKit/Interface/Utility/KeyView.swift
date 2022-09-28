@@ -20,7 +20,7 @@ class KeyView: UIView {
 		super.init(frame: CGRect(x: 0, y: 0, width: size.width*Oo.s, height: size.height*Oo.s))
 		backgroundColor = .clear
 	}
-	required init?(coder aDecoder: NSCoder) {fatalError()}
+	required init?(coder aDecoder: NSCoder) { fatalError() }
 
 	private func renderSchematic() {
 		subviews.forEach { $0.removeFromSuperview() }

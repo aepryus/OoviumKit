@@ -10,7 +10,7 @@ import Acheron
 import OoviumEngine
 import UIKit
 
-class GridCell: UICollectionViewCell, Editable, Citable, ChainViewDelegate {
+class GridCell: UICollectionViewCell, Sizable, Editable, Citable, ChainViewDelegate {
     unowned let controller: GridController
     unowned let column: GridColumn
     var cell: Cell
@@ -41,17 +41,6 @@ class GridCell: UICollectionViewCell, Editable, Citable, ChainViewDelegate {
 	}
 	required init?(coder: NSCoder) { fatalError() }
     
-    var widthNeeded: CGFloat {
-        if let widthNeeded: CGFloat = controller.cellWidthNeeded[cell.iden] { return widthNeeded }
-        let widthNeeded: CGFloat = max(90, chainView.widthNeeded+6)
-        controller.cellWidthNeeded[cell.iden] = widthNeeded
-        return widthNeeded
-    }
-    func clearWidthNeeded() {
-        controller.cellWidthNeeded[cell.iden] = nil
-        column.clearWidthNeeded()
-    }
-
     var isFocus: Bool { self === gridLeaf.aetherView.focus }
     
     func load(cell: Cell) {
@@ -59,27 +48,20 @@ class GridCell: UICollectionViewCell, Editable, Citable, ChainViewDelegate {
         chainView.chain = cell.chain
     }
     
-	func render() {
-        let p: CGFloat = 3
-        let h: CGFloat = 24
-        switch cell.column.justify {
-            case .left:     chainView.left(dx: p, width: chainView.widthNeeded, height: h)
-            case .center:   chainView.center(width: chainView.widthNeeded, height: h)
-            case .right:    chainView.right(dx: -p, width: chainView.widthNeeded, height: h)
-        }
-	}
-
 // UIView ==========================================================================================
-	override var frame: CGRect {
-		didSet {
-			guard frame.width != oldValue.width else { return }
-			render()
-		}
-	}
 	override func setNeedsDisplay() {
 		super.setNeedsDisplay()
 		chainView.setNeedsDisplay()
 	}
+    override func layoutSubviews() {
+        let p: CGFloat = 3
+        let h: CGFloat = 24
+        switch cell.column.justify {
+            case .left:     chainView.left(dx: p, height: h)
+            case .center:   chainView.center(height: h)
+            case .right:    chainView.right(dx: -p, height: h)
+        }
+    }
 	override func draw(_ rect: CGRect) {
 		let p: CGFloat = 1
 		let path: CGMutablePath = CGMutablePath()
@@ -100,6 +82,26 @@ class GridCell: UICollectionViewCell, Editable, Citable, ChainViewDelegate {
 		
 		Skin.gridDraw(path: path, uiColor: color)
 	}
+    
+// Sizable =========================================================================================
+    var widthNeeded: CGFloat = 90
+    func resize() {
+        widthNeeded = chainView.width+6
+        setNeedsDisplay()
+    }
+    func setNeedsResize() {
+        controller.needsResizing.append(self)
+        column.setNeedsResize()
+    }
+//    func resize() {
+//        let oldWidthNeeded: CGFloat? = controller.cellWidthNeeded[cell.iden]
+//        let newWidthNeeded: CGFloat = widthNeeded
+//
+//        if newWidthNeeded != oldWidthNeeded {
+//            column.setNeedsRearch()
+//            controller.cellWidthNeeded[cell.iden] = newWidthNeeded
+//        }
+//    }
 
 // Tappable ========================================================================================
 	func onTap(aetherView: AetherView) {
@@ -120,14 +122,18 @@ class GridCell: UICollectionViewCell, Editable, Citable, ChainViewDelegate {
         gridLeaf.focusCell = self
 		chainView.edit()
 		gridLeaf.gridBub.cellGainedFocus()
-        controller.architect()
+//        controller.architect()
 	}
 	func onReleaseFocus() {
         gridLeaf.focusCell = nil
 		chainView.ok()
-        controller.architect()
-		if !tapped { gridLeaf.released(cell: self) }
-		else { gridLeaf.gridBub.cellLostFocus() }
+//        controller.architect()
+		if !tapped {
+            gridLeaf.released(cell: self)
+        }
+		else {
+//            gridLeaf.gridBub.cellLostFocus()
+        }
 		tapped = false
         setNeedsDisplay()
 	}
@@ -148,9 +154,9 @@ class GridCell: UICollectionViewCell, Editable, Citable, ChainViewDelegate {
     func onTokenAdded(_ token: Token) {}
     func onTokenRemoved(_ token: Token) {}
 
-    func onChanged(oldWidth: CGFloat?, newWidth: CGFloat) {
-        clearWidthNeeded()
-        render()
-        setNeedsDisplay()
+    func onWidthChanged(oldWidth: CGFloat?, newWidth: CGFloat) {
+        guard oldWidth != newWidth else { return }
+        setNeedsResize()
     }
+    func onChanged() { controller.resize() }
 }

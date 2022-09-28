@@ -49,7 +49,7 @@ class ExtendedColorContext: Context {
 		
 		self.schematic = schematic
 	}
-	required init?(coder aDecoder: NSCoder) {fatalError()}
+	required init?(coder aDecoder: NSCoder) { fatalError() }
 	
 	func execute(_ ooColor: OOColor) {
 	}

@@ -32,7 +32,7 @@ class TypeLeaf: Leaf, Colorable {
 		
 		render()
 	}
-	required init?(coder aDecoder: NSCoder) {fatalError()}
+	required init?(coder aDecoder: NSCoder) { fatalError() }
 	
 	var uiColor: UIColor {
 		return type.color.uiColor

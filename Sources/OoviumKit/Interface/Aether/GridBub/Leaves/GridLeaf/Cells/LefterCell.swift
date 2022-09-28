@@ -19,7 +19,7 @@ class LefterCell: UICollectionViewCell, Editable, AnchorPannable {
         super.init(frame: .zero)
 		backgroundColor = UIColor.clear
 	}
-	required init?(coder: NSCoder) {fatalError()}
+	required init?(coder: NSCoder) { fatalError() }
 	
 // UIView ==========================================================================================
 	override func draw(_ rect: CGRect) {

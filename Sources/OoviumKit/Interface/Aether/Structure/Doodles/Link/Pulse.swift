@@ -20,7 +20,7 @@ class Pulse: CALayer {
 		super.init()
 		bounds = CGRect(x: 0, y: 0, width: 9, height: 9)
 	}
-	required init?(coder aDecoder: NSCoder) {fatalError()}
+	required init?(coder aDecoder: NSCoder) { fatalError() }
 	
 // CALayer =========================================================================================
 	override func draw(in ctx: CGContext) {

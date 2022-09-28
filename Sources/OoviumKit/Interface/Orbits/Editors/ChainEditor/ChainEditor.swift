@@ -42,7 +42,7 @@ public class ChainEditor: Orbit {
 			LexiconSchematic()
 		], customSchematic: CustomSchematic())
 	}
-	required init?(coder aDecoder: NSCoder) {fatalError()}
+	required init?(coder aDecoder: NSCoder) { fatalError() }
 	
 	func toggleCyanKeyPad() {
 		cyanOn = !cyanOn

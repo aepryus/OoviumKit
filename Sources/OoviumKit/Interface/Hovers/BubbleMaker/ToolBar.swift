@@ -49,7 +49,7 @@ class ToolBar: Hover {
 		selected.alpha = 1
 		addSubview(selected)
 	}
-	required init?(coder aDecoder: NSCoder) {fatalError()}
+	required init?(coder aDecoder: NSCoder) { fatalError() }
 
 	private func selectedOrigin() -> CGPoint {
 		var c: CGFloat = 0

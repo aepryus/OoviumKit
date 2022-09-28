@@ -30,7 +30,7 @@ class PlayLeaf: Leaf {
 		addSubview(stepButton)
 		addSubview(playButton)
 	}
-	required init?(coder aDecoder: NSCoder) {fatalError()}
+	required init?(coder aDecoder: NSCoder) { fatalError() }
 	
 	func renderPath() {
 		let p: CGFloat = 3						// padding

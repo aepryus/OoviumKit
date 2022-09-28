@@ -84,7 +84,7 @@ class AlsoBub: Bubble {
 		
 		render()
 	}
-	required init?(coder aDecoder: NSCoder) {fatalError()}
+	required init?(coder aDecoder: NSCoder) { fatalError() }
 	
 	func render() {
 		alsoLeaf.render()

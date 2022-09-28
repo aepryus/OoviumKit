@@ -27,7 +27,7 @@ class VarsLeaf: Leaf {
 			varViews.append(varView)
 		}
 	}
-	required init?(coder aDecoder: NSCoder) {fatalError()}
+	required init?(coder aDecoder: NSCoder) { fatalError() }
 	
 	private static func range(x: CGFloat, min: CGFloat, max: CGFloat) -> CGFloat {
 		if x < min {return min}

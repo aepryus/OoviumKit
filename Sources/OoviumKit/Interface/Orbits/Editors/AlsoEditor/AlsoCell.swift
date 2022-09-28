@@ -22,7 +22,7 @@ class AlsoCell: UITableViewCell {
 		let gesture = UITapGestureRecognizer(target: self, action: #selector(onTap))
 		addGestureRecognizer(gesture)
 	}
-	required init?(coder: NSCoder) {fatalError()}
+	required init?(coder: NSCoder) { fatalError() }
 	
 // Events ==========================================================================================
 	@objc func onTap() {

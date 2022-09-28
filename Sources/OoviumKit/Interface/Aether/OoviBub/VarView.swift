@@ -23,7 +23,7 @@ class VarView: UIView, Citable {
 		self.backgroundColor = UIColor.clear
 		self.bubble.aetherView.moorings[self.token] = self.mooring
 	}
-	required init?(coder aDecoder: NSCoder) {fatalError()}
+	required init?(coder aDecoder: NSCoder) { fatalError() }
 	
 // UIView ==========================================================================================
 	override var frame: CGRect {

@@ -44,7 +44,7 @@ public class OOTextField: UITextField {
 	public override convenience init(frame: CGRect) {
 		self.init(frame: frame, backColor: UIColor(red: 0.7, green: 0.7, blue: 0.3, alpha: 1), foreColor: UIColor(red: 0.5, green: 0.5, blue: 0.1, alpha: 1))
 	}
-	public required init?(coder aDecoder: NSCoder) {fatalError()}
+	public required init?(coder aDecoder: NSCoder) { fatalError() }
 
 // UIView ==========================================================================================
 	public override func draw(_ rect: CGRect) {

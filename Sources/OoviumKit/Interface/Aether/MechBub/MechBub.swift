@@ -94,7 +94,7 @@ class MechBub: Bubble, SignatureLeafDelegate, ChainLeafDelegate {
 
 		render()		
 	}
-	required init?(coder aDecoder: NSCoder) {fatalError()}
+	required init?(coder aDecoder: NSCoder) { fatalError() }
 	
 	func render() {
 		let p: CGFloat = 3

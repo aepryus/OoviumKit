@@ -27,7 +27,7 @@ class AetherInfoButton: UIButton {
 
 		super.init(frame: frame)
 	}
-	required init?(coder aDecoder: NSCoder) {fatalError()}
+	required init?(coder aDecoder: NSCoder) { fatalError() }
 	
 // UIView ==========================================================================================
 	override func hitTest(_ point: CGPoint, with event: UIEvent?) -> UIView? {

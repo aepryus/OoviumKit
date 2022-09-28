@@ -34,7 +34,7 @@ public class Key: UIControl {
 	public convenience init(text: String, uiColor: UIColor, activeColor: UIColor? = nil, _ closure: @escaping()->()) {
 		self.init(text: text, uiColor: uiColor, activeColor: activeColor, font: UIFont(name: "Verdana", size: 14*Oo.s)!, closure)
 	}
-	required init?(coder aDecoder: NSCoder) {fatalError()}
+	required init?(coder aDecoder: NSCoder) { fatalError() }
 	
 // UIView ==========================================================================================
 	override public func draw(_ rect: CGRect) {

@@ -6,6 +6,7 @@
 //  Copyright © 2019 Aepryus Software. All rights reserved.
 //
 
+import Acheron
 import OoviumEngine
 import UIKit
 
@@ -52,7 +53,7 @@ class GridView: UIScrollView {
 		current.forEach { $0.removeFromSuperview() }
 		height = y		
 		bounds.size = CGSize(width: width, height: height)
-	}
+    }
 	
 	func colNo(cx: CGFloat) -> Int {
 		guard let delegate = gridViewDelegate else { return 1 }

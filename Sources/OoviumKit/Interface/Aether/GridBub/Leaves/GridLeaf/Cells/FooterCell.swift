@@ -10,7 +10,7 @@ import Acheron
 import OoviumEngine
 import UIKit
 
-class FooterCell: UICollectionViewCell, Citable, FocusTappable, TowerListener {
+class FooterCell: UICollectionViewCell, Sizable, Citable, FocusTappable, TowerListener {
     unowned let controller: GridController
     unowned let column: Column
 
@@ -33,21 +33,8 @@ class FooterCell: UICollectionViewCell, Citable, FocusTappable, TowerListener {
         
         self.column.footerTower.listener = self
 	}
-	required init?(coder: NSCoder) {fatalError()}
+	required init?(coder: NSCoder) { fatalError() }
     
-    var widthNeeded: CGFloat {
-        if let widthNeeded: CGFloat = controller.footerWidthNeeded[column.iden] { return widthNeeded }
-        let widthNeeded: CGFloat
-        if column.aggregate == .none || column.aggregate == .running { widthNeeded = 0 }
-        else { widthNeeded = column.footerTower.obje.display.size(pen: pen).width + 12 }
-        controller.footerWidthNeeded[column.iden] = widthNeeded
-        return widthNeeded
-    }
-    func clearWidthNeeded() {
-        controller.footerWidthNeeded[column.iden] = nil
-        controller.columnWidthNeeded[column.iden] = nil
-    }
-
 // Tappable ========================================================================================
 	func onTap(aetherView: AetherView) {}
 	
@@ -69,11 +56,20 @@ class FooterCell: UICollectionViewCell, Citable, FocusTappable, TowerListener {
 		}
 	}
 	
+// Sizable =========================================================================================
+    var aetherView: AetherView { controller.gridBub.aetherView }
+    var widthNeeded: CGFloat = 0
+    func setNeedsResize() { controller.needsResizing.append(self) }
+    func resize() {
+        if column.aggregate == .none || column.aggregate == .running { widthNeeded = 0 }
+        else { widthNeeded = column.footerTower.obje.display.size(pen: pen).width + 12 }
+    }
+
 // Citable =========================================================================================
 	func token(at: CGPoint) -> Token? { column.footerTower.variableToken }
 	
 // TowerListener ===================================================================================
 	func onTriggered() {
-        clearWidthNeeded()
+        setNeedsResize()
     }
 }

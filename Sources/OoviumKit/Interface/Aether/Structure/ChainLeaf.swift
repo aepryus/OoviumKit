@@ -76,11 +76,11 @@ class ChainLeaf: Leaf, ChainViewDelegate, Editable {
 		chainView.delegate = self
 		addSubview(chainView)
 	}
-	required init?(coder aDecoder: NSCoder) {fatalError()}
+	required init?(coder aDecoder: NSCoder) { fatalError() }
 	
-	func calcWidth() -> CGFloat { max(chainView.widthNeeded+36, minWidth) }
+	func calcWidth() -> CGFloat { max(chainView.width+36, minWidth) }
 	func render() {
-		let cvw = chainView.widthNeeded
+		let cvw = chainView.width
 		let cvwp = cvw+36
 		let w = max(cvwp + (!chainView.chain.editing ? -6 : 0), minWidth)
 		self.size = CGSize(width: w, height: 36)
@@ -181,8 +181,6 @@ class ChainLeaf: Leaf, ChainViewDelegate, Editable {
         bubble.aetherView.unlink(from: self.mooring, to: mooring)
     }
 
-    func onChanged(oldWidth: CGFloat?, newWidth: CGFloat) {
-        render()
-        delegate?.onChange()
-    }
+    func onWidthChanged(oldWidth: CGFloat?, newWidth: CGFloat) { render() }
+    func onChanged() { delegate?.onChange() }
 }

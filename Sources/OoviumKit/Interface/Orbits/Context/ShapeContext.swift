@@ -16,7 +16,7 @@ private class ShapeKey: Key {
 		self.shape = shape
 		super.init(text: "", uiColor: UIColor.white, font: UIFont(name: "Verdana", size: 14)!, closure)
 	}
-	required init?(coder aDecoder: NSCoder) {fatalError()}
+	required init?(coder aDecoder: NSCoder) { fatalError() }
 	
 // UIView ==========================================================================================
 	override func draw(_ rect: CGRect) {
@@ -56,7 +56,7 @@ class ShapeContext: Context {
 		
 		self.schematic = schematic
 	}
-	required init?(coder aDecoder: NSCoder) {fatalError()}
+	required init?(coder aDecoder: NSCoder) { fatalError() }
 	
 	func execute(_ ooShape: OOShape) {
         dismiss()

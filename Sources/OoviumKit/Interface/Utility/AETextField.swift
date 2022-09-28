@@ -24,7 +24,7 @@ class AETextField: UITextField, NotTappable {
 			inputAssistantItem.trailingBarButtonGroups.removeAll()
 		}		
 	}
-	required init?(coder aDecoder: NSCoder) {fatalError()}
+	required init?(coder aDecoder: NSCoder) { fatalError() }
 	
 // UITextField =====================================================================================
 	var dy: CGFloat = 0

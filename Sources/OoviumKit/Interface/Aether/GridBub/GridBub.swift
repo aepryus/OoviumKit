@@ -117,7 +117,7 @@ class GridBub: Bubble, ChainLeafDelegate {
 			rotateEndMode()
 		}
 		
-		gridLeaf.render()
+		gridLeaf.resize()
 		
 		chainLeaf.delegate = self
 		chainLeaf.hitch = .top
@@ -127,7 +127,7 @@ class GridBub: Bubble, ChainLeafDelegate {
 		
         determineLeaves()
 	}
-	required init?(coder aDecoder: NSCoder) {fatalError()}
+	required init?(coder aDecoder: NSCoder) { fatalError() }
 	
 	private func determineLeaves() {
 		if grid.exposed {
@@ -155,11 +155,16 @@ class GridBub: Bubble, ChainLeafDelegate {
 	
 	func cellGainedFocus() {
 		cellHasFocus = true
-        determineLeaves()
+//        determineLeaves()
+        if !gridLeaf.isFirstResponder {
+            let result = gridLeaf.becomeFirstResponder()
+            print("QQ:\(result)")
+        }
 	}
 	func cellLostFocus() {
 		cellHasFocus = false
-        determineLeaves()
+//        determineLeaves()
+//        gridLeaf.resignFirstResponder()
 	}
 	
 	func attachChainLeaf(to headerCell: HeaderCell) {
@@ -179,7 +184,7 @@ class GridBub: Bubble, ChainLeafDelegate {
     func addRow(with cells: [Cell]) { gridLeaf.addRow(with: cells) }
     
     func architect() {
-        gridLeaf.architect()
+        gridLeaf.resize()
         render()
     }
 	
@@ -292,7 +297,7 @@ class GridBub: Bubble, ChainLeafDelegate {
 		column.disseminate()
 		column.calculate()
 		removeChainLeaf()
-        controller.architect()
+        controller.resize()
 	}
 	func onCalculate() {}
 }

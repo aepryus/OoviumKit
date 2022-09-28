@@ -27,6 +27,8 @@ extension AetherViewDelegate {
 public class AetherView: UIView, UIScrollViewDelegate, UIGestureRecognizerDelegate, AnchorDoubleTappable {
 	public var aether: Aether
     public var facade: Facade?
+    
+    lazy var responder: ChainResponder = { ChainResponder(aetherView: self) }()
 	
     let scrollView: UIScrollView = UIScrollView()
 	
@@ -192,7 +194,7 @@ public class AetherView: UIView, UIScrollViewDelegate, UIGestureRecognizerDelega
 	public convenience init() {
 		self.init(aether: Aether())
 	}
-	public required init?(coder aDecoder: NSCoder) {fatalError()}
+	public required init?(coder aDecoder: NSCoder) { fatalError() }
 	
 	public func reload() {
 		closeCurrentAether()
@@ -357,13 +359,25 @@ public class AetherView: UIView, UIScrollViewDelegate, UIGestureRecognizerDelega
 		clearFocus(dismissEditor: dismissEditor)
 		focus = editable
 		editable.onMakeFocus()
+        
+        if let delegate = editable as? ChainViewDelegate {
+            responder.chainView = delegate.chainView
+//            DispatchQueue.main.async {
+//                let result = self.responder.becomeFirstResponder()
+//                print("QQ:\(result)")
+//            }
+        }
+
         if !orb.hasOrbits { orb.launch(orbit: editable.editor) }
 	}
 	func clearFocus(dismissEditor: Bool = true) {
-		guard let focus = focus else { return }
+		guard let focus else { return }
 		self.focus = nil
 		focus.onReleaseFocus()
-		if dismissEditor { orb.deorbit() }
+		if dismissEditor {
+            orb.deorbit()
+            if focus is ChainViewDelegate { DispatchQueue.main.async { self.responder.resignFirstResponder() } }
+        }
 	}
 	
 // Aethers =========================================================================================

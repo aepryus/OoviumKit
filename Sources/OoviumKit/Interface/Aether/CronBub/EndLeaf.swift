@@ -14,7 +14,7 @@ class EndLeaf: Leaf, FocusTappable {
 	init(bubble: Bubble) {
 		super.init(bubble: bubble, hitch: .top, anchor: CGPoint.zero, size: CGSize(width: 39, height: 39))
 	}
-	required init?(coder aDecoder: NSCoder) {fatalError()}
+	required init?(coder aDecoder: NSCoder) { fatalError() }
 	
 	var cronBub: CronBub {
 		return bubble as! CronBub

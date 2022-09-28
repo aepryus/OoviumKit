@@ -49,7 +49,7 @@ public class MaskView: UIView {
 		mask.fillColor = UIColor.black.cgColor
 		layer.mask = mask
 	}
-	public required init?(coder aDecoder: NSCoder) {fatalError()}
+	public required init?(coder aDecoder: NSCoder) { fatalError() }
 		
 // UIView ==========================================================================================
 	public override var frame: CGRect {

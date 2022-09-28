@@ -237,7 +237,7 @@ class AutoBub: Bubble, ChainLeafDelegate {
 		statesLeaf.renderExpandedPath()
 		layoutLeaves()
 	}
-	required init?(coder aDecoder: NSCoder) {fatalError()}
+	required init?(coder aDecoder: NSCoder) { fatalError() }
 	
 	func renderMinSize() {
 		var w: CGFloat = max(x6+p,36+nextLeaf.width-6+p)

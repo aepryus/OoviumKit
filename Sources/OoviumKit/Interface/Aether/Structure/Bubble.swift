@@ -13,18 +13,10 @@ import UIKit
 public enum Position {
 	case center, top, bottom, left, right, topLeft, topRight, bottomLeft, bottomRight
 	
-	func isRight() -> Bool {
-		return self == .topRight || self == .right || self == .bottomRight
-	}
-	func isLeft() -> Bool {
-		return self == .topLeft || self == .left || self == .bottomLeft
-	}
-	func isTop() -> Bool {
-		return self == .topLeft || self == .top || self == .topRight
-	}
-	func isBottom() -> Bool {
-		return self == .bottomLeft || self == .bottom || self == .bottomRight
-	}
+	func isRight() -> Bool { self == .topRight || self == .right || self == .bottomRight }
+	func isLeft() -> Bool { self == .topLeft || self == .left || self == .bottomLeft }
+	func isTop() -> Bool { self == .topLeft || self == .top || self == .topRight }
+	func isBottom() -> Bool { self == .bottomLeft || self == .bottom || self == .bottomRight }
 }
 
 protocol Maker {
@@ -47,12 +39,8 @@ public class Bubble: UIView, AnchorTappable, Colorable, UIGestureRecognizerDeleg
 	var leafsNeedLayout: Bool = false
 	var oldHitchPoint: CGPoint? = nil
 	
-	var uiColor: UIColor {
-		return UIColor.white
-	}
-	var selectable: Bool {
-		return true
-	}
+    var uiColor: UIColor { .white }
+    var selectable: Bool { true }
 	
 	init(aetherView: AetherView, aexel: Aexel, origin: CGPoint, hitch: Position, size: CGSize) {
 		self.aetherView = aetherView
@@ -71,7 +59,7 @@ public class Bubble: UIView, AnchorTappable, Colorable, UIGestureRecognizerDeleg
 			addInteraction(UIContextMenuInteraction(delegate: self))
 		}
 	}
-	public required init?(coder aDecoder: NSCoder) {fatalError()}
+	public required init?(coder aDecoder: NSCoder) { fatalError() }
 
 	var orb: Orb { aetherView.orb }
 	var context: Context {
@@ -174,7 +162,7 @@ public class Bubble: UIView, AnchorTappable, Colorable, UIGestureRecognizerDeleg
 		startPoint = center
 	}
 	func move(by: CGPoint) {
-		guard let startPoint = startPoint else {fatalError()}
+		guard let startPoint = startPoint else { fatalError() }
 		center = startPoint + by
 	}
 	

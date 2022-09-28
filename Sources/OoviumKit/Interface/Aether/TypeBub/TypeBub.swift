@@ -76,7 +76,7 @@ class TypeBub: Bubble {
 		
 		layoutLeaves()
 	}
-	required init?(coder aDecoder: NSCoder) {fatalError()}
+	required init?(coder aDecoder: NSCoder) { fatalError() }
 
 // Bubble ==========================================================================================
 	override var context: Context {

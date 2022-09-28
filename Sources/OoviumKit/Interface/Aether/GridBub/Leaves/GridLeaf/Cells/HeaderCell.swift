@@ -10,7 +10,7 @@ import Acheron
 import OoviumEngine
 import UIKit
 
-class HeaderCell: UICollectionViewCell, Editable, Citable, DoubleTappable, AnchorPannable, UITextFieldDelegate {
+class HeaderCell: UICollectionViewCell, Sizable, Editable, Citable, DoubleTappable, AnchorPannable, UITextFieldDelegate {
     let controller: GridController
 	let column: Column
     
@@ -34,19 +34,8 @@ class HeaderCell: UICollectionViewCell, Editable, Citable, DoubleTappable, Ancho
         super.init(frame: .zero)
 		backgroundColor = .clear
 	}
-	required init?(coder: NSCoder) {fatalError()}
+	required init?(coder: NSCoder) { fatalError() }
 	
-    var widthNeeded: CGFloat {
-        if let widthNeeded: CGFloat = controller.headerWidthNeeded[column.iden] { return widthNeeded }
-        let widthNeeded: CGFloat = column.name.size(pen: pen).width+20
-        controller.headerWidthNeeded[column.iden] = widthNeeded
-        return widthNeeded
-    }
-    func clearWidthNeeded() {
-        controller.headerWidthNeeded[column.iden] = nil
-        controller.columnWidthNeeded[column.iden] = nil
-    }
-
     var isFocus: Bool { self === gridLeaf.aetherView.focus }
 	
 	func openLabel() {
@@ -72,12 +61,11 @@ class HeaderCell: UICollectionViewCell, Editable, Citable, DoubleTappable, Ancho
 		column.name = textField!.text!
 		textField?.removeFromSuperview()
 		textField = nil
-        clearWidthNeeded()
-        controller.architect()
+        setNeedsResize()
 	}
 	func renderColumn() {
 		setNeedsDisplay()
-		gridLeaf.render()
+		gridLeaf.resize()
 		gridBub.render()
 	}
 
@@ -125,6 +113,11 @@ class HeaderCell: UICollectionViewCell, Editable, Citable, DoubleTappable, Ancho
 		}
 	}
 
+// Sizable =========================================================================================
+    var widthNeeded: CGFloat = 0
+    func resize() { widthNeeded = column.name.size(pen: pen).width+20 }
+    func setNeedsResize() { controller.needsResizing.append(self) }
+    
 // Tappable ========================================================================================
 	func onTap(aetherView: AetherView) {
 		if aetherView.focus !== self {

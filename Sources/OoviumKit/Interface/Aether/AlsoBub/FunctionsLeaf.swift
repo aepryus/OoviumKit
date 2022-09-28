@@ -16,7 +16,7 @@ class FunctionsLeaf: Leaf, Citable {
 		also = (bubble as! AlsoBub).also
 		super.init(bubble: bubble)
 	}
-	required init?(coder aDecoder: NSCoder) {fatalError()}
+	required init?(coder aDecoder: NSCoder) { fatalError() }
 	
 	var alsoBub: AlsoBub {
 		return bubble as! AlsoBub

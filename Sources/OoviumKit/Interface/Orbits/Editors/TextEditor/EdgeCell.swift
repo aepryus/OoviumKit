@@ -23,7 +23,7 @@ class EdgeCell: UITableViewCell {
 		let gesture = UISwipeGestureRecognizer(target: self, action: #selector(onSwipe))
 		addGestureRecognizer(gesture)
 	}
-	required init?(coder aDecoder: NSCoder) {fatalError()}
+	required init?(coder aDecoder: NSCoder) { fatalError() }
 	
 // Events ==========================================================================================
 	@objc func onSwipe() {

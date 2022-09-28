@@ -27,5 +27,5 @@ class MiruBub: Bubble {
 		self.miru = miru
 		super.init(aetherView: aetherView, aexel: miru, origin: CGPoint(x: self.miru.x, y: self.miru.y), hitch: .center, size: CGSize(width: 36, height: 36))
 	}
-	required init?(coder aDecoder: NSCoder) {fatalError()}
+	required init?(coder aDecoder: NSCoder) { fatalError() }
 }

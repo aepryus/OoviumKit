@@ -34,7 +34,7 @@ public class PathButton: UIButton {
 
 		super.init(frame: CGRect.zero)
 	}
-	required init?(coder aDecoder: NSCoder) {fatalError()}
+	required init?(coder aDecoder: NSCoder) { fatalError() }
 	
 	func draw(path: CGPath) {
 		Skin.bubble(path: path, uiColor: uiColor, width: 2)

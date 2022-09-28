@@ -28,7 +28,7 @@ class LinkDoodle: Doodle, CAAnimationDelegate {
 		pulse.position = to.point
 		render()
 	}
-	required init?(coder aDecoder: NSCoder) {fatalError()}
+	required init?(coder aDecoder: NSCoder) { fatalError() }
 	
 	private func startPulse() {
 		pulse.color = to.color

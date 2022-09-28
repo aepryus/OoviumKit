@@ -19,7 +19,7 @@ class ColorField: UIView {
 		super.init(frame: CGRect.zero)
 		self.backgroundColor = UIColor.clear
 	}
-	required init?(coder aDecoder: NSCoder) {fatalError()}
+	required init?(coder aDecoder: NSCoder) { fatalError() }
 	
 // UIView ==========================================================================================
 	override func draw(_ rect: CGRect) {

@@ -32,7 +32,7 @@ class EdgesView: UITableView, UITableViewDelegate, UITableViewDataSource {
 		allowsSelection = false
 		rowHeight = 26*Oo.s
 	}
-	required init?(coder aDecoder: NSCoder) {fatalError()}
+	required init?(coder aDecoder: NSCoder) { fatalError() }
 	
 // UITableViewDelegate =============================================================================
 	
@@ -42,7 +42,7 @@ class EdgesView: UITableView, UITableViewDelegate, UITableViewDataSource {
 		return input ? textBub.text.edges.count : textBub.text.outputEdges.count
 	}
 	public func tableView(_ tableView: UITableView, cellForRowAt indexPath: IndexPath) -> UITableViewCell {
-		guard let textBub = textBub else {fatalError()}
+		guard let textBub = textBub else { fatalError() }
 		let cell: EdgeCell = tableView.dequeueReusableCell(withIdentifier: "cell")! as! EdgeCell
 		cell.edge = input ? textBub.text.edges[indexPath.row] : textBub.text.outputEdges[indexPath.row]
 		cell.input = input

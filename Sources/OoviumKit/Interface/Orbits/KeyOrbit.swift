@@ -19,7 +19,7 @@ public class KeyOrbit: Orbit {
 		self.schematic = schematic
         super.init(orb: orb, size: size, offset: offset)
 	}
-	required init?(coder aDecoder: NSCoder) {fatalError()}
+	required init?(coder aDecoder: NSCoder) { fatalError() }
 
 	func renderSchematic() {
 		subviews.forEach { $0.removeFromSuperview() }

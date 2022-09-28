@@ -33,7 +33,7 @@ class OoviLeaf: Leaf, UITextFieldDelegate, Editable {
 
 //		NotificationCenter.default.addObserver(self, selector: #selector(onKeyboardWillHide), name: .UIKeyboardWillHide, object: nil)
 	}
-	required init?(coder aDecoder: NSCoder) {fatalError()}
+	required init?(coder aDecoder: NSCoder) { fatalError() }
 	
 	var ooviBub: OoviBub {
 		return bubble as! OoviBub

@@ -52,7 +52,7 @@ class ColorEditor: KeyOrbit {
 
 		renderSchematic()
 	}
-	required init?(coder aDecoder: NSCoder) {fatalError()}
+	required init?(coder aDecoder: NSCoder) { fatalError() }
 	
 	func execute(_ ooColor: OOColor) {
 		orb.deorbit()

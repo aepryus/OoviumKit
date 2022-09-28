@@ -175,7 +175,7 @@ class TailBub: Bubble, SignatureLeafDelegate, ChainLeafDelegate {
 		
 		render()
 	}
-	required init?(coder aDecoder: NSCoder) {fatalError()}
+	required init?(coder aDecoder: NSCoder) { fatalError() }
 	
 	func render() {
 		let n: CGFloat = CGFloat(tail.vertebras.count-1)

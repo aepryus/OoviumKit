@@ -271,7 +271,7 @@ public class OoviBub: Bubble, ChainLeafDelegate {
 		plasma.addLine(to: p3)
 		plasma.addQuadCurve(to: p4, control: c2)
 	}
-	public required init?(coder aDecoder: NSCoder) {fatalError()}
+	public required init?(coder aDecoder: NSCoder) { fatalError() }
 
 	func ok() {
 		ooviLeaf.releaseFocus()

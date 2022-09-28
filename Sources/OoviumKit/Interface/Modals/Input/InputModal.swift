@@ -37,7 +37,7 @@ class InputModal: Modal, UITextFieldDelegate {
         cancel.addAction { [weak self] in self?.dismiss() }
         ok.addAction { [weak self] in self?.onOK() }
     }
-    required init?(coder aDecoder: NSCoder) {fatalError()}
+    required init?(coder aDecoder: NSCoder) { fatalError() }
     
     func invoke(_ complete: @escaping (String?)->()) {
         super.invoke()

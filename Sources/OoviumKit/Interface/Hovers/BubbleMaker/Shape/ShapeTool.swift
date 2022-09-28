@@ -16,7 +16,7 @@ class ShapeTool: Tool {
 		self.shape = shape
 		super.init()
 	}
-	required init?(coder aDecoder: NSCoder) {fatalError()}
+	required init?(coder aDecoder: NSCoder) { fatalError() }
 
 // UIView ==========================================================================================
 	override func draw(_ rect: CGRect) {

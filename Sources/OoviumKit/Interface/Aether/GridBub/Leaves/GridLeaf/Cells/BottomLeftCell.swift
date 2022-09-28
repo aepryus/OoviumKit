@@ -15,7 +15,7 @@ class BottomLeftCell: UICollectionViewCell {
 		super.init(frame: frame)
 		backgroundColor = .clear
 	}
-	required init?(coder: NSCoder) {fatalError()}
+	required init?(coder: NSCoder) { fatalError() }
 	
 // UIView ==========================================================================================
 	override func draw(_ rect: CGRect) {

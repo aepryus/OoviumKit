@@ -22,17 +22,38 @@ class GridColumn {
         self.headerCell = headerCell
     }
 
-    var widthNeeded: CGFloat {
-        if let widthNeeded: CGFloat = controller.columnWidthNeeded[column.iden] { return widthNeeded }
-        var widthNeeded: CGFloat = max(90, headerCell.widthNeeded)
+    var widthNeeded: CGFloat = 90
+    func resize() {
+        widthNeeded = max(90, headerCell.widthNeeded)
         if let footerCell { widthNeeded = max(widthNeeded, footerCell.widthNeeded) }
         gridCells.forEach { widthNeeded = max(widthNeeded, $0.widthNeeded) }
-        controller.cellWidthNeeded[column.iden] = widthNeeded
-        return widthNeeded
     }
-    func clearWidthNeeded() {
-        controller.columnWidthNeeded[column.iden] = nil
+    func setNeedsResize() {
+        controller.columnNeedsResizing.append(self)
+        controller.gridBub.gridLeaf.setNeedsResize()
     }
+
+//    var widthNeeded: CGFloat = 90
+//    func calculateWidthNeeded() {
+//        widthNeeded = max(90, headerCell.widthNeeded)
+//        if let footerCell { widthNeeded = max(widthNeeded, footerCell.widthNeeded) }
+//        gridCells.forEach { widthNeeded = max(widthNeeded, $0.widthNeeded) }
+//    }
+
+//    func clearWidthNeeded() {
+//        controller.columnWidthNeeded[column.iden] = nil
+//    }
+    
+//    func setNeedsRearch() { controller.gridBub.gridLeaf.columnsNeedingRearch.append(self) }
+//    func rearch() {
+//        let oldWidthNeeded: CGFloat? = controller.columnWidthNeeded[column.iden]
+//        let newWidthNeeded: CGFloat = widthNeeded
+//        
+//        if newWidthNeeded != oldWidthNeeded {
+//            controller.gridBub.gridLeaf.setNeedsRearch()
+//            controller.columnWidthNeeded[column.iden] = newWidthNeeded
+//        }
+//    }
 
     func addGridCell(controller: GridController, column: GridColumn, cell: Cell) {
         let gridCell: GridCell = GridCell(controller: controller, column: column, cell: cell)

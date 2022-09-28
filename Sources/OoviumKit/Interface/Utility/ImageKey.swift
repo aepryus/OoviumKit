@@ -34,7 +34,7 @@ class ImageKey: UIControl {
 	convenience init(image: UIImage, uiColor: UIColor, activeColor: UIColor? = nil, _ closure: @escaping()->()) {
 		self.init(image: image, uiColor: uiColor, activeColor: activeColor, font: UIFont(name: "Verdana", size: 14*Oo.s)!, closure)
 	}
-	required init?(coder aDecoder: NSCoder) {fatalError()}
+	required init?(coder aDecoder: NSCoder) { fatalError() }
 	
 // UIView ==========================================================================================
 	override func draw(_ rect: CGRect) {

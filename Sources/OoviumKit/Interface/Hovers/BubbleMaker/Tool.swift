@@ -36,7 +36,7 @@ public class Tool: UIView {
 		let gesture = UITapGestureRecognizer(target: self, action: #selector(onTap))
 		addGestureRecognizer(gesture)
 	}
-	public required init?(coder aDecoder: NSCoder) {fatalError()}
+	public required init?(coder aDecoder: NSCoder) { fatalError() }
 	
 	func render() {}
 	func rescale() {}

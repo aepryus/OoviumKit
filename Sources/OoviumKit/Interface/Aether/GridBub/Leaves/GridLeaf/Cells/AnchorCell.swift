@@ -15,7 +15,7 @@ class AnchorCell: UICollectionViewCell, Tappable {
 		super.init(frame: frame)
 		backgroundColor = UIColor.black.alpha(0.7)
 	}
-	required init?(coder: NSCoder) {fatalError()}
+	required init?(coder: NSCoder) { fatalError() }
 	
 // UIView ==========================================================================================
 	override func draw(_ rect: CGRect) {

@@ -10,8 +10,9 @@ import Acheron
 import OoviumEngine
 import UIKit
 
-class GridLeaf: Leaf, GridViewDelegate {
+class GridLeaf: Leaf, GridViewDelegate, UITextInput, UITextInputTraits {
     unowned let controller: GridController
+    unowned let responder: ChainResponder
     
 	enum Arrow {
 		case left, right, up, down
@@ -31,9 +32,14 @@ class GridLeaf: Leaf, GridViewDelegate {
 	var gridBub: GridBub { bubble as! GridBub }
 	var uiColor: UIColor { gridBub.uiColor }
     
+    var cellsNeedingRearch: [GridCell] = []
+    var columnsNeedingRearch: [GridColumn] = []
+    var needingRearch: Bool = false
+    
     init(controller: GridController) {
         self.controller = controller
         self.grid = controller.grid
+        self.responder = controller.gridBub.aetherView.responder
 		
         super.init(bubble: controller.gridBub)
 		
@@ -56,29 +62,27 @@ class GridLeaf: Leaf, GridViewDelegate {
 		gridView.gridViewDelegate = self
 		addSubview(gridView)
 	}
-	required init?(coder aDecoder: NSCoder) {fatalError()}
+	required init?(coder aDecoder: NSCoder) { fatalError() }
     
-    func architect() {
+    func setNeedsResize() {
+        controller.leafNeedsResizing = true
+    }
+    func resize() {
         gridView.reloadData()
         size = gridView.bounds.size
     }
-	
-	func render() {
-		gridView.reloadData()
-		size = gridView.bounds.size
-	}
-
+    	
     func addRow(with cells: [Cell]) {
 		lefterCells.append(LefterCell())
         columns.enumerated().forEach { $0.1.addGridCell(controller: controller, column: $0.1, cell: cells[$0.0]) }
-        controller.architect()
+        controller.resize()
 	}
 	func deleteRow(rowNo: Int) {
 		grid.deleteRow(rowNo: rowNo-1)
 		lefterCells[rowNo-1].removeFromSuperview()
 		lefterCells.remove(at: rowNo-1)
         columns.forEach { $0.gridCells.remove(at: rowNo-1) }
-        controller.architect()
+        controller.resize()
 	}
 	func slide(rowNo: Int, dy: CGFloat) {
 		let lefterCell: LefterCell = lefterCells[rowNo]
@@ -97,12 +101,10 @@ class GridLeaf: Leaf, GridViewDelegate {
             let gridCell: GridCell = $0.gridCells.remove(at: rowNo)
             $0.gridCells.insert(gridCell, at: to)
         }
-        controller.architect()
+        controller.resize()
 	}
     
     func handle(arrow: GridLeaf.Arrow) {
-        guard let focusCell else { return }
-        focusCell.tapped = true
         focus(arrow: arrow)
     }
 	
@@ -116,7 +118,7 @@ class GridLeaf: Leaf, GridViewDelegate {
 	func deleteColumn(column: Column) {
         columns.remove(at: column.colNo)
 		grid.deleteColumn(column)
-        controller.architect()
+        controller.resize()
 	}
 	func slide(column: Column, dx: CGFloat) {
 		let colNo: Int = column.colNo
@@ -138,7 +140,7 @@ class GridLeaf: Leaf, GridViewDelegate {
 
         grid.move(column: column, to: to)
 
-        controller.architect()
+        controller.resize()
 	}
 	
 	private func nextCol(colNo: Int) -> Int {
@@ -195,6 +197,10 @@ class GridLeaf: Leaf, GridViewDelegate {
 		gridView.frame = self.bounds
 	}
 	
+// UIResponder =====================================================================================
+    override var canBecomeFirstResponder: Bool { true }
+    override var canResignFirstResponder: Bool { true }
+        
 // GridViewDelegate ================================================================================
 	func numberOfRows(gridView: GridView) -> Int {
 		return grid.rows + 1 + (grid.hasFooter ? 1 : 0)
@@ -244,7 +250,7 @@ class GridLeaf: Leaf, GridViewDelegate {
                 gridCell.leftMost = leftMost
                 gridCell.bottomMost = bottomMost
                 gridCell.bounds.size = size(gridView: gridView, column: column, row: row)
-                gridCell.render()
+                gridCell.setNeedsLayout()
 			}
 			return gridCell
 		}
@@ -256,4 +262,86 @@ class GridLeaf: Leaf, GridViewDelegate {
         )
     }
 
+// UITextInput =====================================================================================
+    var autocapitalizationType: UITextAutocapitalizationType {
+        get { responder.autocapitalizationType }
+        set { responder.autocapitalizationType = newValue }
+    }
+    var keyboardAppearance: UIKeyboardAppearance {
+        get { responder.keyboardAppearance }
+        set { responder.keyboardAppearance = newValue }
+    }
+    var markedTextStyle: [NSAttributedString.Key : Any]? {
+        get { responder.markedTextStyle }
+        set { responder.markedTextStyle = newValue }
+    }
+    var selectedTextRange: UITextRange? {
+        get { responder.selectedTextRange }
+        set { responder.selectedTextRange = newValue }
+    }
+    var inputDelegate: UITextInputDelegate? {
+        get { responder.inputDelegate }
+        set { responder.inputDelegate = newValue }
+    }
+    
+    var beginningOfDocument: UITextPosition { responder.beginningOfDocument }
+    var endOfDocument: UITextPosition { responder.endOfDocument }
+    
+    func setMarkedText(_ markedText: String?, selectedRange: NSRange) { responder.setMarkedText(markedText, selectedRange: selectedRange) }
+    func unmarkText() { responder.unmarkText() }
+    func compare(_ position: UITextPosition, to other: UITextPosition) -> ComparisonResult { responder.compare(position, to: other) }
+    
+// Stubbed
+    var markedTextRange: UITextRange? { responder.markedTextRange }
+    var tokenizer: UITextInputTokenizer { responder.tokenizer }
+
+    func text(in range: UITextRange) -> String? { responder.text(in: range) }
+    func replace(_ range: UITextRange, withText text: String) { responder.replace(range, withText: text) }
+    func textRange(from fromPosition: UITextPosition, to toPosition: UITextPosition) -> UITextRange? { responder.textRange(from: fromPosition, to: toPosition) }
+    func position(from position: UITextPosition, offset: Int) -> UITextPosition? { responder.position(from: position, offset: offset) }
+    func position(from position: UITextPosition, in direction: UITextLayoutDirection, offset: Int) -> UITextPosition? { responder.position(from: position, in: direction, offset: offset) }
+    func offset(from: UITextPosition, to toPosition: UITextPosition) -> Int { responder.offset(from: from, to: toPosition) }
+    func position(within range: UITextRange, farthestIn direction: UITextLayoutDirection) -> UITextPosition? { responder.position(within: range, farthestIn: direction) }
+    func characterRange(byExtending position: UITextPosition, in direction: UITextLayoutDirection) -> UITextRange? { responder.characterRange(byExtending: position, in: direction) }
+    func baseWritingDirection(for position: UITextPosition, in direction: UITextStorageDirection) -> NSWritingDirection { responder.baseWritingDirection(for: position, in: direction) }
+    func setBaseWritingDirection(_ writingDirection: NSWritingDirection, for range: UITextRange) { responder.setBaseWritingDirection(writingDirection, for: range) }
+    func firstRect(for range: UITextRange) -> CGRect { responder.firstRect(for: range) }
+    func caretRect(for position: UITextPosition) -> CGRect { responder.caretRect(for: position) }
+    func selectionRects(for range: UITextRange) -> [UITextSelectionRect] { responder.selectionRects(for: range) }
+    func closestPosition(to point: CGPoint) -> UITextPosition? { responder.closestPosition(to: point) }
+    func closestPosition(to point: CGPoint, within range: UITextRange) -> UITextPosition? { responder.closestPosition(to: point, within: range) }
+    func characterRange(at point: CGPoint) -> UITextRange? { responder.characterRange(at: point) }
+
+// UIKeyInput ======================================================================================
+    var hasText: Bool { responder.hasText }
+    func insertText(_ text: String) {
+        responder.insertText(text)
+    }
+    func deleteBackward() { responder.deleteBackward() }
+    
+    @objc func leftArrow() { responder.leftArrow() }
+    @objc func rightArrow() { responder.rightArrow() }
+    @objc func upArrow() { responder.upArrow() }
+    @objc func downArrow() { responder.downArrow() }
+    @objc func tab() { responder.tab() }
+    @objc func backspace() { responder.backspace() }
+
+    override var keyCommands: [UIKeyCommand]? {
+        let commands: [UIKeyCommand] = [
+            UIKeyCommand(action: #selector(rightArrow), input: UIKeyCommand.inputRightArrow),
+            UIKeyCommand(action: #selector(leftArrow), input: UIKeyCommand.inputLeftArrow),
+            UIKeyCommand(action: #selector(upArrow), input: UIKeyCommand.inputUpArrow),
+            UIKeyCommand(action: #selector(downArrow), input: UIKeyCommand.inputDownArrow),
+            UIKeyCommand(action: #selector(backspace), input: "\u{8}"),
+            UIKeyCommand(action: #selector(tab), input: "\t")
+        ]
+        if #available(iOS 15, *) { commands.forEach { $0.wantsPriorityOverSystemBehavior = true } }
+        return commands
+    }
+
+// UITextInputTraits ===============================================================================
+    var smartQuotesType: UITextSmartQuotesType {
+        get { responder.smartQuotesType }
+        set { responder.smartQuotesType = newValue }
+    }
 }

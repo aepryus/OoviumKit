@@ -16,7 +16,7 @@ class ColorTool: Tool {
 		self.color = color
 		super.init()
 	}
-	required init?(coder aDecoder: NSCoder) {fatalError()}
+	required init?(coder aDecoder: NSCoder) { fatalError() }
 
 // UIView ==========================================================================================
 	override func draw(_ rect: CGRect) {

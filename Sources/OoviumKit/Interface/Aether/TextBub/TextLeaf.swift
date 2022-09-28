@@ -25,7 +25,7 @@ class TextLeaf: Leaf, Editable, DoubleTappable, Citable, Colorable, UITextFieldD
 		mooring.colorable = self
 		self.backgroundColor = UIColor.clear
 	}
-	required init?(coder aDecoder: NSCoder) {fatalError()}
+	required init?(coder aDecoder: NSCoder) { fatalError() }
 	
 	var textBub: TextBub {
 		return bubble as! TextBub

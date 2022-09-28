@@ -21,7 +21,7 @@ class ShapeToolBar: ToolBar {
 		
 		super.init(aetherView: aetherView, toolBox: ToolBox(tools), offset: UIOffset(horizontal: -40, vertical: 0), fixed: ToolBar.fixed)
 	}
-	required init?(coder aDecoder: NSCoder) {fatalError()}
+	required init?(coder aDecoder: NSCoder) { fatalError() }
 	
 // Events ==========================================================================================
 	override func onExpand() {

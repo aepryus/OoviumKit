@@ -23,7 +23,7 @@ class AlsoLeaf: Leaf, Editable, DoubleTappable {
 //		gesture.delegate = bubble.aetherView
 //		addGestureRecognizer(gesture)
 	}
-	required init?(coder aDecoder: NSCoder) {fatalError()}
+	required init?(coder aDecoder: NSCoder) { fatalError() }
 	
 	var alsoBub: AlsoBub {
 		return bubble as! AlsoBub

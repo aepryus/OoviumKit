@@ -35,7 +35,7 @@ class MessageHover: Modal {
 		let gesture = UITapGestureRecognizer(target: self, action: #selector(onTap))
 		addGestureRecognizer(gesture)
 	}
-	required init?(coder aDecoder: NSCoder) {fatalError()}
+	required init?(coder aDecoder: NSCoder) { fatalError() }
 	
 // Events ==========================================================================================
 	@objc func onTap() {

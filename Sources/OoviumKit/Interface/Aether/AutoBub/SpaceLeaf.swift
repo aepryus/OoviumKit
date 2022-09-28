@@ -22,7 +22,7 @@ class SpaceLeaf: Leaf, Citable {
 		mooring.colorable = self.bubble
 		self.bubble.aetherView.moorings[self.token] = self.mooring
 	}
-	required init?(coder aDecoder: NSCoder) {fatalError()}
+	required init?(coder aDecoder: NSCoder) { fatalError() }
 	
 // Leaf ============================================================================================
 	override func positionMoorings() {

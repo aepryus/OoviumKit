@@ -220,7 +220,7 @@ class CronBub: Bubble, ChainLeafDelegate {
 		
 		selectLeaves()
 	}
-	required init?(coder aDecoder: NSCoder) {fatalError()}
+	required init?(coder aDecoder: NSCoder) { fatalError() }
 	
 	func morph() {
 		cron.exposed = !cron.exposed

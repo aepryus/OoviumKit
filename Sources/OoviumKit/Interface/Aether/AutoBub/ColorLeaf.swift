@@ -18,7 +18,7 @@ class ColorLeaf: Leaf {
 		backgroundColor = UIColor.clear
 		addGestureRecognizer(UITapGestureRecognizer(target: self, action: #selector(onTap)))
 	}
-	required init?(coder aDecoder: NSCoder) {fatalError()}
+	required init?(coder aDecoder: NSCoder) { fatalError() }
 	
 // Events ==========================================================================================
 	@objc func onTap() {

@@ -69,7 +69,7 @@ class LassoDoodle: Doodle, CAAnimationDelegate {
 		
 		frame = CGRect(x: range.left-p, y: range.top-p, width: range.width+2*p, height: range.height+2*p)
 	}
-	required init?(coder aDecoder: NSCoder) {fatalError()}
+	required init?(coder aDecoder: NSCoder) { fatalError() }
 	
 	func add(touch: UITouch) {
 		next = touch.location(in: aetherView.scrollView)

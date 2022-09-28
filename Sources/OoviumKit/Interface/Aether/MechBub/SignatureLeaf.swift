@@ -57,7 +57,7 @@ class SignatureLeaf: Leaf, Editable, Citable, UITextFieldDelegate {
 		
 		render()
 	}
-	required init?(coder aDecoder: NSCoder) {fatalError()}
+	required init?(coder aDecoder: NSCoder) { fatalError() }
 	
 	func render() {
 		let p: CGFloat = 3						// padding
@@ -265,7 +265,7 @@ class SignatureLeaf: Leaf, Editable, Citable, UITextFieldDelegate {
 	
 // Citable =========================================================================================
 	func token(at: CGPoint) -> Token? {
-		guard let delegate = delegate else {fatalError()}
+		guard let delegate = delegate else { fatalError() }
 		if at.y < 33 {
 			if bubble.aetherView.anchored {
 				return delegate.recipeToken

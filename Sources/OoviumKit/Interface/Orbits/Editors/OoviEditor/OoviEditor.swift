@@ -53,7 +53,7 @@ class OoviEditor: Orbit {
 		
 		schematic.add(row: 0, col: 7, w: 2, h: 4, key: Key(text: "OK", uiColor: UIColor.gray, {self.ooviBub.ok()}))
 	}
-	required init?(coder aDecoder: NSCoder) {fatalError()}
+	required init?(coder aDecoder: NSCoder) { fatalError() }
 
 	func execute(_ ooColor: OOColor) {
 		oovi.color = ooColor
