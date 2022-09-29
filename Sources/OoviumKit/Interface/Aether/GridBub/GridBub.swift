@@ -117,7 +117,7 @@ class GridBub: Bubble, ChainLeafDelegate {
 			rotateEndMode()
 		}
 		
-		gridLeaf.resize()
+        controller.resizeEverything()
 		
 		chainLeaf.delegate = self
 		chainLeaf.hitch = .top
@@ -129,7 +129,7 @@ class GridBub: Bubble, ChainLeafDelegate {
 	}
 	required init?(coder aDecoder: NSCoder) { fatalError() }
 	
-	private func determineLeaves() {
+	func determineLeaves() {
 		if grid.exposed {
 			add(leaf: addRowLeaf)
 			add(leaf: addColumnLeaf)
@@ -137,7 +137,7 @@ class GridBub: Bubble, ChainLeafDelegate {
 			remove(leaf: addRowLeaf)
 			remove(leaf: addColumnLeaf)
 		}
-		if cellHasFocus {
+        if gridLeaf.beingEdited {
 			add(leaf: equalLeaf)
 		} else {
 			remove(leaf: equalLeaf)
@@ -156,10 +156,7 @@ class GridBub: Bubble, ChainLeafDelegate {
 	func cellGainedFocus() {
 		cellHasFocus = true
 //        determineLeaves()
-        if !gridLeaf.isFirstResponder {
-            let result = gridLeaf.becomeFirstResponder()
-            print("QQ:\(result)")
-        }
+        if !gridLeaf.isFirstResponder { gridLeaf.becomeFirstResponder() }
 	}
 	func cellLostFocus() {
 		cellHasFocus = false
@@ -183,11 +180,6 @@ class GridBub: Bubble, ChainLeafDelegate {
     func addColumn(with column: Column) { gridLeaf.addColumn(with: column) }
     func addRow(with cells: [Cell]) { gridLeaf.addRow(with: cells) }
     
-    func architect() {
-        gridLeaf.resize()
-        render()
-    }
-	
 	func render() {
 		addColumnLeaf.anchor = CGPoint(x: gridLeaf.size.width + 10, y: -4.5)
 		addRowLeaf.anchor = CGPoint(x: -4.5, y: gridLeaf.size.height + 10)
@@ -227,7 +219,7 @@ class GridBub: Bubble, ChainLeafDelegate {
 			plasma.closeSubpath()
 		}
 		
-		if cellHasFocus {
+        if gridLeaf.beingEdited {
 			a = CGPoint(x: gridLeaf.right-3, y: gridLeaf.bottom-17)
 			b = CGPoint(x: equalLeaf.center.x, y: equalLeaf.center.y)
 			c = CGPoint(x: gridLeaf.right-17, y: gridLeaf.bottom-3)

@@ -19,7 +19,7 @@ class GridCell: UICollectionViewCell, Sizable, Editable, Citable, ChainViewDeleg
 	var bottomMost: Bool = false
 	var tapped: Bool = false
 	
-	let chainView: ChainView = ChainView()
+	let chainView: ChainView = ChainView(responder: nil)
     
     var gridLeaf: GridLeaf { controller.gridBub.gridLeaf }
 	
@@ -148,8 +148,22 @@ class GridCell: UICollectionViewCell, Sizable, Editable, Citable, ChainViewDeleg
 // ChainViewDelegate ===============================================================================
     var color: UIColor { isFocus ? UIColor.cyan.shade(0.5) : gridLeaf.uiColor }
 
-    func onEditStart() { setNeedsDisplay() }
-    func onEditStop() { releaseFocus(dismissEditor: tapped || controller.grid.equalMode == .close) }
+    func onEditStart() {
+        if !gridLeaf.beingEdited {
+            gridLeaf.beingEdited = true
+            controller.gridBub.determineLeaves()
+        }
+        setNeedsDisplay()
+    }
+    func onEditStop() {
+        let dismissEditor: Bool = tapped || controller.grid.equalMode == .close
+        releaseFocus(dismissEditor: dismissEditor)
+        if dismissEditor {
+            gridLeaf.beingEdited = false
+            controller.gridBub.determineLeaves()
+        }
+        setNeedsDisplay()
+    }
 
     func onTokenAdded(_ token: Token) {}
     func onTokenRemoved(_ token: Token) {}

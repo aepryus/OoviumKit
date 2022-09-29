@@ -376,7 +376,7 @@ public class AetherView: UIView, UIScrollViewDelegate, UIGestureRecognizerDelega
 		focus.onReleaseFocus()
 		if dismissEditor {
             orb.deorbit()
-            if focus is ChainViewDelegate { DispatchQueue.main.async { self.responder.resignFirstResponder() } }
+//            if focus is ChainViewDelegate { DispatchQueue.main.async { self.responder.resignFirstResponder() } }
         }
 	}
 	

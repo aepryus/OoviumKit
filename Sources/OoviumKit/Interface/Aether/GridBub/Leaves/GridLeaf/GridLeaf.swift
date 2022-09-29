@@ -28,6 +28,7 @@ class GridLeaf: Leaf, GridViewDelegate, UITextInput, UITextInputTraits {
     var columns: [GridColumn] = []
     
     var focusCell: GridCell?
+    var beingEdited: Bool = false
 	
 	var gridBub: GridBub { bubble as! GridBub }
 	var uiColor: UIColor { gridBub.uiColor }
@@ -61,6 +62,9 @@ class GridLeaf: Leaf, GridViewDelegate, UITextInput, UITextInputTraits {
 		}
 		gridView.gridViewDelegate = self
 		addSubview(gridView)
+        
+        inputAssistantItem.leadingBarButtonGroups.removeAll()
+        inputAssistantItem.trailingBarButtonGroups.removeAll()
 	}
 	required init?(coder aDecoder: NSCoder) { fatalError() }
     
@@ -101,7 +105,7 @@ class GridLeaf: Leaf, GridViewDelegate, UITextInput, UITextInputTraits {
             let gridCell: GridCell = $0.gridCells.remove(at: rowNo)
             $0.gridCells.insert(gridCell, at: to)
         }
-        controller.resize()
+        controller.resizeEverything()
 	}
     
     func handle(arrow: GridLeaf.Arrow) {
@@ -140,7 +144,7 @@ class GridLeaf: Leaf, GridViewDelegate, UITextInput, UITextInputTraits {
 
         grid.move(column: column, to: to)
 
-        controller.resize()
+        controller.resizeEverything()
 	}
 	
 	private func nextCol(colNo: Int) -> Int {

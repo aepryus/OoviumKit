@@ -13,7 +13,7 @@ import UIKit
 class ObjectLeaf: Leaf, Editable, ChainViewDelegate, DoubleTappable, Colorable, UITextFieldDelegate {
 	let object: Object
 	
-	let chainView: ChainView = ChainView()
+    lazy var chainView: ChainView = { ChainView(responder: aetherView.responder) }()
 	var textField: OOTextField? = nil
 
 	var mooring: Mooring = Mooring()
@@ -140,8 +140,11 @@ class ObjectLeaf: Leaf, Editable, ChainViewDelegate, DoubleTappable, Colorable, 
 		render()
         objectBub.layoutLeavesIfNeeded()
 		mooring.wakeDoodles()
+//        chainView.responder = aetherView.responder
+        chainView.becomeFirstResponder()
 	}
 	func onReleaseFocus() {
+        chainView.resignFirstResponder()
 		chainView.ok()
 		render()
 		objectBub.onOK()

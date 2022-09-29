@@ -60,6 +60,14 @@ class GridController: ChainViewKeyDelegate {
         
         gridBub.layoutLeavesIfNeeded()
     }
+    func resizeEverything() {
+        gridBub.gridLeaf.columns.forEach {
+            $0.headerCell.setNeedsResize()
+            $0.footerCell?.setNeedsResize()
+            $0.gridCells.forEach { $0.setNeedsResize() }
+        }
+        resize()
+    }
     
 // ChainViewKeyDegate ==============================================================================
     func onArrowUp() { gridBub.gridLeaf.handle(arrow: .up) }

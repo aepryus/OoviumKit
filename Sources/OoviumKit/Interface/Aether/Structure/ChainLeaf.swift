@@ -23,7 +23,7 @@ extension ChainLeafDelegate {
 }
 
 class ChainLeaf: Leaf, ChainViewDelegate, Editable {
-	let chainView: ChainView = ChainView()
+    lazy var chainView: ChainView = { ChainView(responder: aetherView.responder) }()
 	weak var delegate: ChainLeafDelegate?
 	var placeholder: String = "" {
 		didSet { setNeedsDisplay() }

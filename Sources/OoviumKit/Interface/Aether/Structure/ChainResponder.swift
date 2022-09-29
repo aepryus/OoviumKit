@@ -40,15 +40,15 @@ fileprivate class ChainRange: UITextRange {
     static let zero = ChainRange(NSRange(location: 0, length: 0))
 }
 
-class ChainResponder: UIResponder, UITextInput, UITextInputTraits {
+class ChainResponder/*: UIResponder, UITextInput, UITextInputTraits*/ {
     let aetherView: AetherView
     var chainView: ChainView!
     
     init(aetherView: AetherView) {
         self.aetherView = aetherView
-        super.init()
-        inputAssistantItem.leadingBarButtonGroups.removeAll()
-        inputAssistantItem.trailingBarButtonGroups.removeAll()
+//        super.init()
+//        inputAssistantItem.leadingBarButtonGroups.removeAll()
+//        inputAssistantItem.trailingBarButtonGroups.removeAll()
     }
     
     var isResponder: Bool { Screen.mac || ChainResponder.hasExternalKeyboard }

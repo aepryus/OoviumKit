@@ -55,13 +55,14 @@ class ChainView: UIView, UITextInput, UITextInputTraits, AnchorTappable, TowerLi
     }
     weak var delegate: ChainViewDelegate?
     weak var keyDelegate: ChainViewKeyDelegate?
-    weak var responder: ChainResponder!
+    unowned let responder: ChainResponder?
     
     var oldWidth: CGFloat?
     
     static let pen: Pen = Pen(font: .ooAether(size: 16))
     
-    init() {
+    init(responder: ChainResponder?) {
+        self.responder = responder
         super.init(frame: .zero)
         
         backgroundColor = UIColor.clear
@@ -103,11 +104,12 @@ class ChainView: UIView, UITextInput, UITextInputTraits, AnchorTappable, TowerLi
         }
         widthNeeded = Screen.snapToPixel(widthNeeded)
         
+        setNeedsDisplay()
+        
         guard widthNeeded != oldWidth else { return }
         frame = CGRect(origin: frame.origin, size: CGSize(width: widthNeeded, height: height))
         delegate?.onWidthChanged(oldWidth: oldWidth, newWidth: widthNeeded)
         oldWidth = widthNeeded
-        setNeedsDisplay()
     }
     
     func moveCursor(to nx: CGFloat) {
@@ -245,58 +247,58 @@ class ChainView: UIView, UITextInput, UITextInputTraits, AnchorTappable, TowerLi
     
 // UITextInput =====================================================================================
     var autocapitalizationType: UITextAutocapitalizationType {
-        get { responder.autocapitalizationType }
-        set { responder.autocapitalizationType = newValue }
+        get { responder!.autocapitalizationType }
+        set { responder!.autocapitalizationType = newValue }
     }
     var keyboardAppearance: UIKeyboardAppearance {
-        get { responder.keyboardAppearance }
-        set { responder.keyboardAppearance = newValue }
+        get { responder!.keyboardAppearance }
+        set { responder!.keyboardAppearance = newValue }
     }
     var markedTextStyle: [NSAttributedString.Key : Any]? {
-        get { responder.markedTextStyle }
-        set { responder.markedTextStyle = newValue }
+        get { responder!.markedTextStyle }
+        set { responder!.markedTextStyle = newValue }
     }
     var selectedTextRange: UITextRange? {
-        get { responder.selectedTextRange }
-        set { responder.selectedTextRange = newValue }
+        get { responder!.selectedTextRange }
+        set { responder!.selectedTextRange = newValue }
     }
     var inputDelegate: UITextInputDelegate? {
-        get { responder.inputDelegate }
-        set { responder.inputDelegate = newValue }
+        get { responder!.inputDelegate }
+        set { responder!.inputDelegate = newValue }
     }
     
-    var beginningOfDocument: UITextPosition { responder.beginningOfDocument }
-    var endOfDocument: UITextPosition { responder.endOfDocument }
+    var beginningOfDocument: UITextPosition { responder!.beginningOfDocument }
+    var endOfDocument: UITextPosition { responder!.endOfDocument }
     
-    func setMarkedText(_ markedText: String?, selectedRange: NSRange) { responder.setMarkedText(markedText, selectedRange: selectedRange) }
-    func unmarkText() { responder.unmarkText() }
-    func compare(_ position: UITextPosition, to other: UITextPosition) -> ComparisonResult { responder.compare(position, to: other) }
+    func setMarkedText(_ markedText: String?, selectedRange: NSRange) { responder?.setMarkedText(markedText, selectedRange: selectedRange) }
+    func unmarkText() { responder!.unmarkText() }
+    func compare(_ position: UITextPosition, to other: UITextPosition) -> ComparisonResult { responder!.compare(position, to: other) }
     
 // Stubbed
-    var markedTextRange: UITextRange? { responder.markedTextRange }
-    var tokenizer: UITextInputTokenizer { responder.tokenizer }
+    var markedTextRange: UITextRange? { responder!.markedTextRange }
+    var tokenizer: UITextInputTokenizer { responder!.tokenizer }
 
-    func text(in range: UITextRange) -> String? { responder.text(in: range) }
-    func replace(_ range: UITextRange, withText text: String) { responder.replace(range, withText: text) }
-    func textRange(from fromPosition: UITextPosition, to toPosition: UITextPosition) -> UITextRange? { responder.textRange(from: fromPosition, to: toPosition) }
-    func position(from position: UITextPosition, offset: Int) -> UITextPosition? { responder.position(from: position, offset: offset) }
-    func position(from position: UITextPosition, in direction: UITextLayoutDirection, offset: Int) -> UITextPosition? { responder.position(from: position, in: direction, offset: offset) }
-    func offset(from: UITextPosition, to toPosition: UITextPosition) -> Int { responder.offset(from: from, to: toPosition) }
-    func position(within range: UITextRange, farthestIn direction: UITextLayoutDirection) -> UITextPosition? { responder.position(within: range, farthestIn: direction) }
-    func characterRange(byExtending position: UITextPosition, in direction: UITextLayoutDirection) -> UITextRange? { responder.characterRange(byExtending: position, in: direction) }
-    func baseWritingDirection(for position: UITextPosition, in direction: UITextStorageDirection) -> NSWritingDirection { responder.baseWritingDirection(for: position, in: direction) }
-    func setBaseWritingDirection(_ writingDirection: NSWritingDirection, for range: UITextRange) { responder.setBaseWritingDirection(writingDirection, for: range) }
-    func firstRect(for range: UITextRange) -> CGRect { responder.firstRect(for: range) }
-    func caretRect(for position: UITextPosition) -> CGRect { responder.caretRect(for: position) }
-    func selectionRects(for range: UITextRange) -> [UITextSelectionRect] { responder.selectionRects(for: range) }
-    func closestPosition(to point: CGPoint) -> UITextPosition? { responder.closestPosition(to: point) }
-    func closestPosition(to point: CGPoint, within range: UITextRange) -> UITextPosition? { responder.closestPosition(to: point, within: range) }
-    func characterRange(at point: CGPoint) -> UITextRange? { responder.characterRange(at: point) }
+    func text(in range: UITextRange) -> String? { responder!.text(in: range) }
+    func replace(_ range: UITextRange, withText text: String) { responder!.replace(range, withText: text) }
+    func textRange(from fromPosition: UITextPosition, to toPosition: UITextPosition) -> UITextRange? { responder!.textRange(from: fromPosition, to: toPosition) }
+    func position(from position: UITextPosition, offset: Int) -> UITextPosition? { responder!.position(from: position, offset: offset) }
+    func position(from position: UITextPosition, in direction: UITextLayoutDirection, offset: Int) -> UITextPosition? { responder!.position(from: position, in: direction, offset: offset) }
+    func offset(from: UITextPosition, to toPosition: UITextPosition) -> Int { responder!.offset(from: from, to: toPosition) }
+    func position(within range: UITextRange, farthestIn direction: UITextLayoutDirection) -> UITextPosition? { responder!.position(within: range, farthestIn: direction) }
+    func characterRange(byExtending position: UITextPosition, in direction: UITextLayoutDirection) -> UITextRange? { responder!.characterRange(byExtending: position, in: direction) }
+    func baseWritingDirection(for position: UITextPosition, in direction: UITextStorageDirection) -> NSWritingDirection { responder!.baseWritingDirection(for: position, in: direction) }
+    func setBaseWritingDirection(_ writingDirection: NSWritingDirection, for range: UITextRange) { responder!.setBaseWritingDirection(writingDirection, for: range) }
+    func firstRect(for range: UITextRange) -> CGRect { responder!.firstRect(for: range) }
+    func caretRect(for position: UITextPosition) -> CGRect { responder!.caretRect(for: position) }
+    func selectionRects(for range: UITextRange) -> [UITextSelectionRect] { responder!.selectionRects(for: range) }
+    func closestPosition(to point: CGPoint) -> UITextPosition? { responder!.closestPosition(to: point) }
+    func closestPosition(to point: CGPoint, within range: UITextRange) -> UITextPosition? { responder!.closestPosition(to: point, within: range) }
+    func characterRange(at point: CGPoint) -> UITextRange? { responder!.characterRange(at: point) }
 
 // UIKeyInput ======================================================================================
-    var hasText: Bool { responder.hasText }
-    func insertText(_ text: String) { responder.insertText(text) }
-    func deleteBackward() { responder.deleteBackward() }
+    var hasText: Bool { responder!.hasText }
+    func insertText(_ text: String) { responder!.insertText(text) }
+    func deleteBackward() { responder!.deleteBackward() }
     
     @objc func leftArrow() {
         if chain.leftArrow() { setNeedsDisplay() }
@@ -318,9 +320,9 @@ class ChainView: UIView, UITextInput, UITextInputTraits, AnchorTappable, TowerLi
 //        delegate?.onTokenRemoved(token)
 //    }
 
-    @objc func upArrow() { responder.upArrow() }
-    @objc func downArrow() { responder.downArrow() }
-    @objc func tab() { responder.tab() }
+    @objc func upArrow() { responder!.upArrow() }
+    @objc func downArrow() { responder!.downArrow() }
+    @objc func tab() { responder!.tab() }
 
     override var keyCommands: [UIKeyCommand]? {
         let commands: [UIKeyCommand] = [
@@ -337,8 +339,8 @@ class ChainView: UIView, UITextInput, UITextInputTraits, AnchorTappable, TowerLi
 
 // UITextInputTraits ===============================================================================
     var smartQuotesType: UITextSmartQuotesType {
-        get { responder.smartQuotesType }
-        set { responder.smartQuotesType = newValue }
+        get { responder!.smartQuotesType }
+        set { responder!.smartQuotesType = newValue }
     }
 
 // Static ==========================================================================================
