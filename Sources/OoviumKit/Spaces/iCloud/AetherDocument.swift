@@ -28,21 +28,6 @@ class AetherDocument: UIDocument {
 			case .inConflict:
                 print("[\(aether.name)] conflicted...", terminator: "")
                 
-//                var versions: [NSFileVersion] = []
-//                guard let current = NSFileVersion.currentVersionOfItem(at: fileURL),
-//                      let other = NSFileVersion.otherVersionsOfItem(at: fileURL)
-//                else { return }
-//
-//                versions.append(current)
-//                versions.append(contentsOf: other)
-//
-//                versions.forEach {
-//                    guard let date = $0.modificationDate else { return }
-//                    print(date)
-//                }
-
-//                try! current.replaceItem(at: fileURL)
-                
                 guard let other: [NSFileVersion] = NSFileVersion.otherVersionsOfItem(at: fileURL) else { return }
                 do {
                     try NSFileVersion.removeOtherVersionsOfItem(at: fileURL)
@@ -53,18 +38,6 @@ class AetherDocument: UIDocument {
                     print("inConflict resolution failed [\(error)]")
                 }
                 
-//            case .closed:
-//                print("[\(aether.name)] closed")
-//            case .editingDisabled:
-//                print("[\(aether.name)] editingDisabled")
-//            case .normal:
-//                print("[\(aether.name)] normal")
-//                guard let other = NSFileVersion.otherVersionsOfItem(at: fileURL) else { return }
-//                print(" >>>>>>>>>>> [\(other.count)]")
-//            case .progressAvailable:
-//                print("[\(aether.name)] progressAvailable")
-//            case .savingError:
-//                print("[\(aether.name)] savingError")
 			default: break
         }
 	}
