@@ -23,6 +23,8 @@ public class Space {
         self.url = url
     }
     
+    var documentsRoot: String { "Documents" }
+    
     public func loadFacades(facade: Facade, _ complete: @escaping ([Facade])->()) { complete([]) }
     public func loadAether(facade: Facade, _ complete: @escaping (String?)->()) { complete(nil) }
     public func storeAether(facade: Facade, aether: Aether, _ complete: @escaping (Bool)->()) { complete(true) }

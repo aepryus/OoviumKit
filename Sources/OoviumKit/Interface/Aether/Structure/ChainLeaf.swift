@@ -148,8 +148,10 @@ class ChainLeaf: Leaf, ChainViewDelegate, Editable {
 		render()
 		mooring.wakeDoodles()
 		delegate?.onEdit()
+        chainView.becomeFirstResponder()
 	}
 	func onReleaseFocus() {
+        chainView.resignFirstResponder()
 		chainView.ok()
 		render()
 		mooring.sleepDoodles()

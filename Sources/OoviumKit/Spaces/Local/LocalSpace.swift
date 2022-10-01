@@ -11,17 +11,19 @@ import OoviumEngine
 
 public class LocalSpace: Space {
 	init() {
-        super.init(
-            name: "Local".localized,
-            url: FileManager.default.urls(for: .documentDirectory, in: .userDomainMask).first!.appendingPathComponent("aethers", isDirectory: true)
-        )
-	}
-
-	static var rootPath: String {
-		FileManager.default.urls(for: .documentDirectory, in: .userDomainMask).first!.relativePath
+        let url: URL = FileManager.default.urls(for: .documentDirectory, in: .userDomainMask).first!.appendingPathComponent("aethers", isDirectory: true)
+        if !FileManager.default.fileExists(atPath: url.absoluteString) {
+            do  {
+                try FileManager.default.createDirectory(at: url, withIntermediateDirectories: true)
+            } catch {
+                print("LocalSpace.init ERROR [\(error)]")
+            }
+        }
+        super.init(name: "Local".localized, url: url)
 	}
 
 // Space ===========================================================================================
+    override var documentsRoot: String { "aethers" }
     override public func loadFacades(facade: Facade, _ complete: @escaping ([Facade]) -> ()) {
         let url: URL = facade.url
         var items: [Facade] = []

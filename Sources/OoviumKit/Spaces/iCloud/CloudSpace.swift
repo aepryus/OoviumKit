@@ -11,12 +11,38 @@ import Foundation
 import OoviumEngine
 
 extension URL {
-    var itemName: String { self.deletingPathExtension().lastPathComponent }
+    var pathStripingPrivate: String { path.replacingOccurrences(of: "/private/var/", with: "/var/") }
+    var itemName: String {
+        let url: URL = deletingPathExtension()
+        let index: Int = url.pathComponents.firstIndex { $0 == space.documentsRoot } ?? 0
+        let paths: [String] = Array(url.pathComponents[index+1..<url.pathComponents.count])
+        return paths.last ?? ""
+    }
     var itemPath: String {
-        let index: Int = pathComponents.firstIndex { $0 == "Documents" } ?? 0
-        let paths: [String] = Array(pathComponents[index+1..<pathComponents.count-2])
+        let url: URL = self
+        let index: Int = url.pathComponents.firstIndex { $0 == space.documentsRoot } ?? 0
+        let paths: [String]
+        if !url.hasDirectoryPath { paths = Array(url.pathComponents[index+1..<url.pathComponents.count-1]) }
+        else if index == url.pathComponents.count - 1 { paths = [] }
+        else { paths = Array(url.pathComponents[index+1..<url.pathComponents.count-1]) }
         var sb: String = ""
         paths.forEach { sb += "\($0)/" }
+        return sb
+    }
+    var space: Space {
+        var spaces: [Space] = [Space.local]
+        if let cloud = Space.cloud { spaces.append(cloud) }
+        guard let space: Space = spaces.first(where: { (space: Space) in
+            pathStripingPrivate.starts(with: space.url.pathStripingPrivate)
+        }) else { return Space.local }
+        return space
+    }
+    var ooviumKey: String {
+        var sb: String = space.name
+        guard itemName.count != 0 else { return sb }
+        sb += "::"
+        if itemPath.count != 0 { sb += itemPath }
+        sb += itemName
         return sb
     }
 }
@@ -36,6 +62,7 @@ extension NSMetadataItem {
 public class CloudSpace: Space {
     let opQueue: OperationQueue = OperationQueue()
     let query: NSMetadataQuery = NSMetadataQuery()
+    let queue: DispatchQueue = DispatchQueue(label: "CloudSpace")
 
     var facades: [String:[Facade]] = [:]
     var folders: [String:Facade] = [:]
@@ -80,27 +107,29 @@ public class CloudSpace: Space {
     func loadFolders() { loadFolders(for: Facade.create(space: self)) }
 
     func load(metadataItems: [NSMetadataItem]) {
-        loadFolders()
-        metadataItems.forEach {
-            metadata[$0.key] = $0
-            facades[$0.path]?.append(Facade.create(url: $0.url))
-        }
-        var sorted: [String:[Facade]] = [:]
-        facades.forEach {
-            sorted[$0.key] = $0.value.sorted { (a: Facade, b:Facade) in
-                if a.type != b.type { return a.type == .folder }
-                return a.name.uppercased() < b.name.uppercased()
+        queue.sync {
+            loadFolders()
+            metadataItems.forEach {
+                metadata[$0.key] = $0
+                self.facades[$0.path]?.append(Facade.create(url: $0.url))
             }
+            var sorted: [String:[Facade]] = [:]
+            self.facades.forEach {
+                sorted[$0.key] = $0.value.sorted { (a: Facade, b:Facade) in
+                    if a.type != b.type { return a.type == .folder }
+                    return a.name.uppercased() < b.name.uppercased()
+                }
+            }
+            self.facades = sorted
+            delegate?.onChanged(space: self)
+            complete?()
+            complete = nil
         }
-        facades = sorted
-        delegate?.onChanged(space: self)
-        complete?()
-        complete = nil
     }
     
 // Space ===========================================================================================
     override public func loadFacades(facade: Facade, _ complete: @escaping ([Facade]) -> ()) {
-        complete(facades[facade.path] ?? [])
+        queue.sync { complete(facades[facade.path] ?? []) }
     }
     override public func loadAether(facade: Facade, _ complete: @escaping (String?) -> ()) {
         let url: URL = facade.url
