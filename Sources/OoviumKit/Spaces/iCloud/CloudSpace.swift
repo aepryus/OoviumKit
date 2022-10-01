@@ -34,7 +34,7 @@ extension URL {
         if let cloud = Space.cloud { spaces.append(cloud) }
         guard let space: Space = spaces.first(where: { (space: Space) in
             pathStripingPrivate.starts(with: space.url.pathStripingPrivate)
-        }) else { return Space.local }
+        }) else { return Space.anchor }
         return space
     }
     var ooviumKey: String {
