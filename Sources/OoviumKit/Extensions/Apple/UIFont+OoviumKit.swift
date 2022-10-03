@@ -20,4 +20,5 @@ public extension UIFont {
 	}
     static func ooExplore(size: CGFloat) -> UIFont { UIFont(name: "ChicagoFLF", size: size)! }
     static func ooAether(size: CGFloat) -> UIFont { UIFont(name: "HelveticaNeue", size: size)! }
+    static func ooMath(size: CGFloat) -> UIFont { UIFont(name: "cambria", size: size)! }
 }

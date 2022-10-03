@@ -110,7 +110,7 @@ public class AetherView: UIView, UIScrollViewDelegate, UIGestureRecognizerDelega
                 if aetherHover.aetherNameView.editing { aetherHover.controller.onAetherViewReturn() }
 				self.slideToggle()
 			}
-		} else {
+		} else if toolsOn {
 			aetherPicker = AetherPicker(aetherView: self)
 			aetherPicker?.invoke()
 		}
@@ -176,7 +176,7 @@ public class AetherView: UIView, UIScrollViewDelegate, UIGestureRecognizerDelega
 		
 	}
 	
-	public convenience init(aether: Aether, toolsOn: Bool = true, burn: Bool = true) {
+    public convenience init(aether: Aether, toolsOn: Bool = true, burn: Bool = true, oldPicker: Bool = false) {
 		var tools: [[Tool?]] = Array(repeating: Array(repeating: nil, count: 6), count: 2)
 		
 		tools[0][0] = AetherView.objectTool
@@ -189,7 +189,7 @@ public class AetherView: UIView, UIScrollViewDelegate, UIGestureRecognizerDelega
 		tools[0][4] = AetherView.textTool
 		tools[0][5] = AetherView.alsoTool
 		
-		self.init(aether: aether, toolBox: ToolBox(tools), toolsOn: toolsOn, burn: burn)
+        self.init(aether: aether, toolBox: ToolBox(tools), toolsOn: toolsOn, burn: burn, oldPicker: oldPicker)
 	}
 	public convenience init() {
 		self.init(aether: Aether())

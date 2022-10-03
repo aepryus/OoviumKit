@@ -17,7 +17,9 @@ public class Facade {
     var name: String {
         didSet {
             Facade.facades[url.ooviumKey] = nil
-            url = space.url.appendingPathComponent(spaceKey)
+            var key: String = spaceKey
+            if type == .aether { key += ".oo" }
+            url = space.url.appendingPathComponent(key)
             Facade.facades[url.ooviumKey] = self
         }
     }
@@ -33,12 +35,25 @@ public class Facade {
         _space = space
     }
     private init(url: URL) {
+        if url.path.contains("/../") { fatalError() }
         self.url = url
         type = self.url.hasDirectoryPath ? .folder : .aether
         name = self.url.itemName
         if self.url.pathComponents.count > 1 { parent = Facade.create(url: self.url.deletingLastPathComponent()) }
     }
-    
+    private init(ooviumKey: String) {
+        var ooviumKey: String = ooviumKey
+        if !ooviumKey.contains("::") || ooviumKey.contains("::/") { ooviumKey = "Local::aether01" }
+        let loc: Int = ooviumKey.loc(of: "::")!
+        let spaceName: String = ooviumKey[0...loc-1]
+        let pathName: String = ooviumKey[(loc+2)...]
+        let spaceFacade: Facade = Facade.facades[spaceName]!
+        self.url = NSURL.fileURL(withPath: "\(spaceFacade.url.path)/\(pathName).oo")
+        type = self.url.hasDirectoryPath ? .folder : .aether
+        name = self.url.itemName
+        if self.url.pathComponents.count > 1 { parent = Facade.create(url: self.url.deletingLastPathComponent()) }
+    }
+
     var space: Space {
         if let space = _space { return space }
         if let parent = parent, self !== parent { return parent.space }
@@ -50,7 +65,12 @@ public class Facade {
         guard parent.path.count > 0 else { return name }
         return "\(parent.path)/\(name)"
     }
-    public var spaceKey: String { type == .aether ? "\(path)/\(name).oo" : path }
+    public var spaceKey: String {
+        var sb: String = ""
+        if path.count > 0 { sb += "\(path)/" }
+        sb += name
+        return sb
+    }
     public var ooviumKey: String { "\(space.name)::\(spaceKey)" }
     
     public func loadFacades(_ complete: @escaping ([Facade])->()) { space.loadFacades(facade: self, complete) }
@@ -78,6 +98,11 @@ public class Facade {
     public static func create(url: URL) -> Facade {
         let facade: Facade = facades[url.ooviumKey] ?? Facade(url: url)
         facades[url.ooviumKey] = facade
+        return facade
+    }
+    public static func create(ooviumKey: String) -> Facade {
+        let facade: Facade = facades[ooviumKey] ?? Facade(ooviumKey: ooviumKey)
+        facades[ooviumKey] = facade
         return facade
     }
 }
