@@ -98,7 +98,7 @@ public class AetherView: UIView, UIScrollViewDelegate, UIGestureRecognizerDelega
 
 		super.init(frame: CGRect(x: 0, y: 0, width: self.aether.width, height: self.aether.height))
 		
-		backgroundColor = UIColor.clear
+        backgroundColor = Skin.backColor
 		scrollView.backgroundColor = UIColor.clear
 
 		addSubview(scrollView)

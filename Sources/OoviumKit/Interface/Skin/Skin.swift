@@ -17,9 +17,7 @@ public class Skin {
 	
 	public init() {}
 	
-	var fadePercent: CGFloat {
-		return 0.2
-	}
+	var fadePercent: CGFloat { 0.2 }
 	var backColor: UIColor {
 		return UIColor.black
 	}

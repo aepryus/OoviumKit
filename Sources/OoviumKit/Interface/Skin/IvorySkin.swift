@@ -15,9 +15,7 @@ public class IvorySkin: Skin {
 //	let pen = Pen(font: UIFont.systemFont(ofSize: 16))
 	
 	// Skin ============================================================================================
-	override var fadePercent: CGFloat {
-		return 0.04
-	}
+	override var fadePercent: CGFloat { 0.04 }
 	override var backColor: UIColor {
 		return UIColor.white
 	}

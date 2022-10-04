@@ -40,9 +40,19 @@ public class BehindView: UIView {
     }
 	override public func layoutSubviews() {
         let h: CGFloat = 36*s
-		let y: CGFloat = 5*s + (Screen.mac ? Screen.safeTop : 0) + h + 4*s
-		leftExplorer.frame = CGRect(x: 5*s, y: y, width: 355*s, height: height - Screen.safeBottom - y - h - 4*s - 5*s)
-        newAetherTrap.frame = CGRect(x: leftExplorer.right - 156*s - 25*s, y: leftExplorer.top - 4*s-h, width: 156*s, height: h)
-        importTrap.frame = CGRect(x: leftExplorer.right - 172*s - 25*s, y: leftExplorer.bottom + 4*s, width: 172*s, height: h)
+        let p: CGFloat = 4*s
+
+        let y1: CGFloat = Screen.safeTop + 5*s
+        let y2: CGFloat = y1 + h + p
+        let y4: CGFloat = height - (Screen.safeBottom + 5*s)
+        let y3: CGFloat = y4 - p - (Screen.mac ? h : 0)
+        
+        let x1: CGFloat = 5*s
+        let x3: CGFloat = x1 + 355*s
+        let x2: CGFloat = x3 - 172*s - 25*s
+        
+        newAetherTrap.frame = CGRect(x: x2, y: y1, width: 172*s, height: h)
+		leftExplorer.frame = CGRect(x: x1, y: y2, width: x3-x1, height: y3-y2-p)
+        importTrap.frame = CGRect(x: x2, y: y3, width: 172*s, height: h)
 	}
 }
