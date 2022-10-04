@@ -243,7 +243,7 @@ class AetherHover: UIView {
         
         addSubview(hookView)
         addSubview(aetherNameView)
-        addSubview(screwView)
+//        addSubview(screwView)
     }
     required init?(coder: NSCoder) { fatalError() }
     

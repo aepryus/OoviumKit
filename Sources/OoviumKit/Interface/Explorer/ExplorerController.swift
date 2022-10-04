@@ -1,12 +1,13 @@
 //
-//  File.swift
+//  ExplorerController.swift
 //  
 //
 //  Created by Joe Charlier on 8/22/22.
 //
 
-import UIKit
 import OoviumEngine
+import UIKit
+import UniformTypeIdentifiers
 
 public class ExplorerController: NSObject, UIDocumentPickerDelegate {
     let behindView: BehindView
@@ -48,7 +49,8 @@ public class ExplorerController: NSObject, UIDocumentPickerDelegate {
     func onManage() {
     }
     func onImport() {
-        let controller = UIDocumentPickerViewController(documentTypes: ["public.folder", "com.aepryus.oovium.oo"], in: .import)
+        guard let ooviumType: UTType = UTType("com.aepryus.oovium.oo") else { return }
+        let controller: UIDocumentPickerViewController = UIDocumentPickerViewController(forOpeningContentTypes: [ooviumType])
         controller.delegate = self
         viewController?.present(controller, animated: true) {}
     }

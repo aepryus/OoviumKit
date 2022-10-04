@@ -40,7 +40,7 @@ fileprivate class ChainRange: UITextRange {
     static let zero = ChainRange(NSRange(location: 0, length: 0))
 }
 
-class ChainResponder/*: UIResponder, UITextInput, UITextInputTraits*/ {
+public class ChainResponder/*: UIResponder, UITextInput, UITextInputTraits*/ {
     let aetherView: AetherView
     var chainView: ChainView!
     
@@ -130,13 +130,13 @@ class ChainResponder/*: UIResponder, UITextInput, UITextInputTraits*/ {
     func characterRange(at point: CGPoint) -> UITextRange? { nil }
 
 // UIKeyInput ======================================================================================
-    private static var hasExternalKeyboard: Bool {
-        if #available(iOS 14.0, *) {
-            return GCKeyboard.coalesced != nil
-        } else {
-            return false
-        }
-    }
+    public static var hasExternalKeyboard: Bool { GCKeyboard.coalesced != nil }
+//        if #available(iOS 14.0, *) {
+//            return GCKeyboard.coalesced != nil
+//        } else {
+//            return false
+//        }
+//    }
     private static func isNumeric(c: Character) -> Bool {
         c >= "0" && c <= "9" || c == "."
     }

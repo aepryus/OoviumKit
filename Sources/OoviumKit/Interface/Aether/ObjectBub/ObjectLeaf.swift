@@ -141,10 +141,11 @@ class ObjectLeaf: Leaf, Editable, ChainViewDelegate, DoubleTappable, Colorable, 
         objectBub.layoutLeavesIfNeeded()
 		mooring.wakeDoodles()
 //        chainView.responder = aetherView.responder
-        chainView.becomeFirstResponder()
+        aetherView.responder.chainView = chainView
+        if ChainResponder.hasExternalKeyboard { chainView.becomeFirstResponder() }
 	}
 	func onReleaseFocus() {
-        chainView.resignFirstResponder()
+        if ChainResponder.hasExternalKeyboard { chainView.resignFirstResponder() }
 		chainView.ok()
 		render()
 		objectBub.onOK()

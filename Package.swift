@@ -5,7 +5,7 @@ import PackageDescription
 let package = Package(
     name: "OoviumKit",
 	platforms: [
-		.iOS(.v13), .macOS(.v10_13)
+		.iOS(.v14), .macOS(.v10_15)
 	],
     products: [
         .library(name: "OoviumKit", targets: ["OoviumKit"]),

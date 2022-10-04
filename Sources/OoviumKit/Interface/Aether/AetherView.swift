@@ -362,10 +362,6 @@ public class AetherView: UIView, UIScrollViewDelegate, UIGestureRecognizerDelega
         
         if let delegate = editable as? ChainViewDelegate {
             responder.chainView = delegate.chainView
-//            DispatchQueue.main.async {
-//                let result = self.responder.becomeFirstResponder()
-//                print("QQ:\(result)")
-//            }
         }
 
         if !orb.hasOrbits { orb.launch(orbit: editable.editor) }
