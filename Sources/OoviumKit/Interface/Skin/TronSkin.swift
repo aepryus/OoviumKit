@@ -228,7 +228,22 @@ public class TronSkin: Skin {
 		pen = pen.clone(color: UIColor.white)
 		text.draw(in: rect.offsetBy(dx: 0, dy: dy), pen: pen)
 	}
-	// Shape
+
+    // Shape
+    override func shape(path: CGPath, uiColor: UIColor) {
+        let width: CGFloat = 4/3*Oo.s
+        
+        let c = UIGraphicsGetCurrentContext()!
+        
+        c.setFillColor(uiColor.shade(0.5).alpha(0.7).cgColor)
+        c.addPath(path)
+        c.drawPath(using: .fill)
+
+        c.setStrokeColor(uiColor.tint(0.5).cgColor)
+        c.setLineWidth(width)
+        c.addPath(path)
+        c.drawPath(using: .stroke)
+    }
 	override func shape(text: String, rect: CGRect, uiColor: UIColor, maxWidth: CGFloat?) {
 		let style: NSMutableParagraphStyle = self.pen.style.mutableCopy() as! NSMutableParagraphStyle
 		style.lineBreakMode = .byWordWrapping
@@ -246,12 +261,12 @@ public class TronSkin: Skin {
 		
 		let textRect = CGRect(x: rect.origin.x+(rect.size.width-size.width)/2, y: rect.origin.y+(rect.size.height-size.height)/2-1, width: size.width+0.5, height: size.height+0.5)
 		
-		pen = pen.clone(color: uiColor.alpha(0.4))
-		(text as NSString).draw(in: textRect.offsetBy(dx: 1, dy: 1), withAttributes: pen.attributes)
-		(text as NSString).draw(in: textRect.offsetBy(dx: -1, dy: -1), withAttributes: pen.attributes)
+        pen = pen.clone(color: uiColor.shade(0.8))
+		text.draw(in: textRect.offsetBy(dx: 1, dy: 1), withAttributes: pen.attributes)
+		text.draw(in: textRect.offsetBy(dx: -1, dy: -1), withAttributes: pen.attributes)
 		
-		pen = pen.clone(color: UIColor.white)
-		(text as NSString).draw(in: textRect, withAttributes: pen.attributes)
+        pen = pen.clone(color: uiColor.tint(0.8))
+		text.draw(in: textRect, withAttributes: pen.attributes)
 	}
 	// Miscellaneous
 	override func message (text: String, rect: CGRect, uiColor: UIColor, font: UIFont) {

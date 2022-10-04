@@ -198,6 +198,9 @@ public class IvorySkin: Skin {
 	}
 	
 	// Shape
+    override func shape(path: CGPath, uiColor: UIColor) {
+        bubble(path: path, uiColor: uiColor, width: 4/3*Oo.s)
+    }
 	override func shape(text: String, rect: CGRect, uiColor: UIColor, maxWidth: CGFloat?) {
 		let rgb = RGB(uiColor: uiColor)
 		let accent = rgb.shade(0.5)

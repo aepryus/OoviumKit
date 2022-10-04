@@ -53,6 +53,7 @@ public class Skin {
 	func bubble(path: CGPath, uiColor: UIColor, width: CGFloat) {}
 	func bubble(text: String, x: CGFloat, y: CGFloat, uiColor: UIColor? = nil, pen: Pen? = nil) {}
 	func bubble(text: String, rect: CGRect, uiColor: UIColor? = nil, pen: Pen? = nil) {}
+    func shape(path: CGPath, uiColor: UIColor) {}
 	func shape(text: String, rect: CGRect, uiColor: UIColor, maxWidth: CGFloat? = nil) {}
 	func message(text: String, rect: CGRect, uiColor: UIColor, font: UIFont) {}
 	func aetherPicker(path: CGPath) {}
@@ -100,6 +101,7 @@ public class Skin {
 	public static func bubble(path: CGPath, uiColor: UIColor, width: CGFloat) { skin.bubble(path: path, uiColor: uiColor, width: width) }
 	public static func bubble(text: String, x: CGFloat, y: CGFloat, uiColor: UIColor? = nil, pen: Pen? = nil) { skin.bubble(text: text, x: x, y: y, uiColor: uiColor, pen: pen) }
 	public static func bubble(text: String, rect: CGRect, uiColor: UIColor? = nil, pen: Pen? = nil) { skin.bubble(text: text, rect: rect, uiColor: uiColor, pen: pen) }
+    static func shape(path: CGPath, uiColor: UIColor) { skin.shape(path: path, uiColor: uiColor) }
 	static func shape(text: String, rect: CGRect, uiColor: UIColor, maxWidth: CGFloat? = nil) { skin.shape(text: text, rect: rect, uiColor: uiColor, maxWidth: maxWidth) }
 	public static func message(text: String, rect: CGRect, uiColor: UIColor, font: UIFont) { skin.message(text: text, rect: rect, uiColor: uiColor, font: font) }
 	static func aetherPicker(path: CGPath) { skin.aetherPicker(path: path) }

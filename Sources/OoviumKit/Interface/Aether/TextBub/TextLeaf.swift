@@ -27,9 +27,7 @@ class TextLeaf: Leaf, Editable, DoubleTappable, Citable, Colorable, UITextFieldD
 	}
 	required init?(coder aDecoder: NSCoder) { fatalError() }
 	
-	var textBub: TextBub {
-		return bubble as! TextBub
-	}
+	var textBub: TextBub { bubble as! TextBub }
 	
 	var uiColor: UIColor {
 		if focused { return UIColor(red: 0.8, green: 0.8, blue: 0.8, alpha: 1) }
@@ -122,9 +120,7 @@ class TextLeaf: Leaf, Editable, DoubleTappable, Citable, Colorable, UITextFieldD
 	}
 	
 // Editable ========================================================================================
-	var editor: Orbit {
-		return orb.textEditor.edit(editable: self)
-	}
+	var editor: Orbit { orb.textEditor.edit(editable: self) }
 	func onMakeFocus() {
 		render()
 		mooring.wakeDoodles()
@@ -177,7 +173,5 @@ class TextLeaf: Leaf, Editable, DoubleTappable, Citable, Colorable, UITextFieldD
 	}
 	
 // Citable =========================================================================================
-	func token(at: CGPoint) -> Token? {
-		return nil
-	}
+    func token(at: CGPoint) -> Token? { nil }
 }

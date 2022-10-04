@@ -31,6 +31,6 @@ class RoundedShape: Shape {
 	}
 	override func draw(rect: CGRect, uiColor: UIColor) {
 		let path = CGPath(roundedRect: rect.insetBy(dx: 3, dy: 3), cornerWidth: 15, cornerHeight: 15, transform: nil)
-		Skin.bubble(path: path, uiColor: uiColor, width: 4/3*Oo.s)
+        Skin.shape(path: path, uiColor: uiColor)
 	}
 }
