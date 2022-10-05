@@ -231,18 +231,12 @@ public class TronSkin: Skin {
 
     // Shape
     override func shape(path: CGPath, uiColor: UIColor) {
-        let width: CGFloat = 4/3*Oo.s
-        
         let c = UIGraphicsGetCurrentContext()!
-        
-        c.setFillColor(uiColor.shade(0.5).alpha(0.7).cgColor)
         c.addPath(path)
-        c.drawPath(using: .fill)
-
+        c.setFillColor(uiColor.shade(0.0).alpha(0.3).cgColor)
         c.setStrokeColor(uiColor.tint(0.5).cgColor)
-        c.setLineWidth(width)
-        c.addPath(path)
-        c.drawPath(using: .stroke)
+        c.setLineWidth(1)
+        c.drawPath(using: .fillStroke)
     }
 	override func shape(text: String, rect: CGRect, uiColor: UIColor, maxWidth: CGFloat?) {
 		let style: NSMutableParagraphStyle = self.pen.style.mutableCopy() as! NSMutableParagraphStyle
