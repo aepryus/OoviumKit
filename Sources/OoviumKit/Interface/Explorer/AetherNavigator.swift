@@ -10,18 +10,20 @@ import UIKit
 
 class AetherNavigator: UIView {
 	unowned var controller: ExplorerController
-	var facade: Facade {
+	var facade: DirFacade {
 		didSet {
 			subviews.forEach { $0.removeFromSuperview() }
 			snaps = []
             
             if !(facade.space is AnchorSpace) { snaps.append(NewSnap(controller: controller)) }
 
-            var item: Facade? = facade
-			while item != nil {
-				snaps.append(SpaceSnap(item: item!, navigator: self))
-				item = item!.parent
+            var facade: DirFacade? = facade
+			while facade != nil {
+                snaps.append(FacadeSnap(controller: controller, facade: facade!))
+                facade = facade!.parent
 			}
+
+            if self.facade is FolderFacade, let facadeSnap = snaps[1] as? FacadeSnap { facadeSnap.enableDoubleClick() }
 
 			snaps.forEach { addSubview($0) }
             
@@ -31,13 +33,13 @@ class AetherNavigator: UIView {
 
 	var snaps: [Snap] = []
 
-    init(controller: ExplorerController, facade: Facade) {
+    init(controller: ExplorerController, facade: DirFacade) {
 		self.controller = controller
         self.facade = facade
 
 		super.init(frame: .zero)
 
-        defer { self.facade = facade }
+//        defer { self.facade = facade }
 	}
 	required init?(coder: NSCoder) { fatalError() }
 

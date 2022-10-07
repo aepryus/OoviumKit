@@ -56,6 +56,7 @@ extension NSMetadataItem {
         if path.last == "/" { path.removeLast() }
         return path
     }
+    var ooviumKey: String { "iCloud::\(path)" }
     var key: String { "\(path)/\(name)" }
 }
 
@@ -93,14 +94,14 @@ public class CloudSpace: Space {
     }
     
     func loadFolders(for facade: Facade) {
-        folders[facade.path] = facade
-        facades[facade.path] = []
+        folders[facade.ooviumKey] = facade
+        facades[facade.ooviumKey] = []
         do {
             let folderURLs: [URL] = try FileManager.default.contentsOfDirectory(at: facade.url, includingPropertiesForKeys: nil, options: [.skipsHiddenFiles]).filter( { $0.hasDirectoryPath } )
             folderURLs.forEach {
                 let sub: Facade = Facade.create(url: $0)
                 loadFolders(for: sub)
-                facades[facade.path]!.append(sub)
+                facades[facade.ooviumKey]!.append(sub)
             }
         } catch { print("loadFolders ERROR: [\(error)]") }
     }
@@ -111,12 +112,12 @@ public class CloudSpace: Space {
             loadFolders()
             metadataItems.forEach {
                 metadata[$0.key] = $0
-                self.facades[$0.path]?.append(Facade.create(url: $0.url))
+                self.facades[$0.ooviumKey]?.append(Facade.create(url: $0.url))
             }
             var sorted: [String:[Facade]] = [:]
             self.facades.forEach {
                 sorted[$0.key] = $0.value.sorted { (a: Facade, b:Facade) in
-                    if a.type != b.type { return a.type == .folder }
+                    if type(of: a) != type(of: b) { return a is FolderFacade }
                     return a.name.uppercased() < b.name.uppercased()
                 }
             }
@@ -129,9 +130,10 @@ public class CloudSpace: Space {
     
 // Space ===========================================================================================
     override public func loadFacades(facade: Facade, _ complete: @escaping ([Facade]) -> ()) {
-        queue.sync { complete(facades[facade.path] ?? []) }
+        queue.sync { complete(facades[facade.ooviumKey] ?? []) }
     }
     override public func loadAether(facade: Facade, _ complete: @escaping (String?) -> ()) {
+        let facade: AetherFacade = facade as! AetherFacade
         let url: URL = facade.url
         if facade.document == nil { facade.document = AetherDocument(fileURL: url) }
         let document: AetherDocument = facade.document as! AetherDocument
@@ -143,6 +145,7 @@ public class CloudSpace: Space {
         }
     }
     override public func storeAether(facade: Facade, aether: Aether, _ complete: @escaping (Bool) -> ()) {
+        let facade: AetherFacade = facade as! AetherFacade
         let url: URL = facade.url
         if facade.document == nil { facade.document = AetherDocument(fileURL: url) }
         let document: AetherDocument = facade.document as! AetherDocument
@@ -162,6 +165,19 @@ public class CloudSpace: Space {
             complete(true)
         } catch {
             print("renameAether ERROR:\(error)")
+            complete(false)
+        }
+    }
+    override public func renameFolder(facade: Facade, name: String, _ complete: @escaping (Bool) -> ()) {
+        print("renameFolder [\(facade.name)] to [\(name)]")
+        var url: URL = facade.url
+        var rv = URLResourceValues()
+        rv.name = name
+        do {
+            try url.setResourceValues(rv)
+            complete(true)
+        } catch {
+            print("renameFolder ERROR:\(error)")
             complete(false)
         }
     }

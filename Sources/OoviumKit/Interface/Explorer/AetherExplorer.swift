@@ -10,7 +10,7 @@ import Acheron
 import UIKit
 
 public class AetherExplorer: UIView, UITableViewDataSource, SpaceDelegate {
-    public var facade: Facade = Facade.create(space: Space.local) {
+    public var facade: DirFacade = Facade.create(space: Space.local) as! SpaceFacade {
 		didSet {
 			tableView.setContentOffset(.zero, animated: false)
 			navigator.transform = .identity
@@ -24,7 +24,7 @@ public class AetherExplorer: UIView, UITableViewDataSource, SpaceDelegate {
 	}
 
 	unowned let aetherView: AetherView
-    unowned let controller: ExplorerController
+    public lazy var controller: ExplorerController =  { ExplorerController(explorer: self) }()
 
 	static let backColor: UIColor = UIColor(red: 32/255, green: 34/255, blue: 36/255, alpha: 1)
 
@@ -33,8 +33,7 @@ public class AetherExplorer: UIView, UITableViewDataSource, SpaceDelegate {
 
 	let lw: CGFloat = 2*Screen.s
 
-    init(controller: ExplorerController, aetherView: AetherView) {
-        self.controller = controller
+    init(aetherView: AetherView) {
 		self.aetherView = aetherView
 		
 		super.init(frame: .zero)

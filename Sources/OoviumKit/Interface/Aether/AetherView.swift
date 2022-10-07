@@ -26,7 +26,7 @@ extension AetherViewDelegate {
 
 public class AetherView: UIView, UIScrollViewDelegate, UIGestureRecognizerDelegate, AnchorDoubleTappable {
 	public var aether: Aether
-    public var facade: Facade?
+    public var facade: AetherFacade?
     
     lazy var responder: ChainResponder = { ChainResponder(aetherView: self) }()
 	
@@ -177,7 +177,7 @@ public class AetherView: UIView, UIScrollViewDelegate, UIGestureRecognizerDelega
 	}
 	
     public convenience init(aether: Aether, toolsOn: Bool = true, burn: Bool = true, oldPicker: Bool = false) {
-		var tools: [[Tool?]] = Array(repeating: Array(repeating: nil, count: 6), count: 2)
+		var tools: [[Tool?]] = Array(repeating: Array(repeating: nil, count: 5), count: 2)
 		
 		tools[0][0] = AetherView.objectTool
 		tools[1][0] = AetherView.gateTool
@@ -187,7 +187,7 @@ public class AetherView: UIView, UIScrollViewDelegate, UIGestureRecognizerDelega
 //		tools[1][2] = AetherView.typeTool
 		tools[0][3] = AetherView.cronTool
 		tools[0][4] = AetherView.textTool
-		tools[0][5] = AetherView.alsoTool
+//		tools[0][5] = AetherView.alsoTool
 		
         self.init(aether: aether, toolBox: ToolBox(tools), toolsOn: toolsOn, burn: burn, oldPicker: oldPicker)
 	}
@@ -430,13 +430,13 @@ public class AetherView: UIView, UIScrollViewDelegate, UIGestureRecognizerDelega
             self.aetherViewDelegate?.onSave(aetherView: self, aether: self.aether)
         })
 	}
-	public func swapToAether(facade: Facade? = nil, aether: Aether) {
+	public func swapToAether(facade: AetherFacade? = nil, aether: Aether) {
 		closeCurrentAether()
 		self.facade = facade
 		openAether(aether)
 		if oldPicker { aetherPicker?.retract() }
 	}
-	public func swapToAether(_ facadeAether: (facade: Facade, aether: Aether)) {
+	public func swapToAether(_ facadeAether: (facade: AetherFacade, aether: Aether)) {
 		swapToAether(facade: facadeAether.0, aether: facadeAether.1)
 	}
 	public func clearAether() {

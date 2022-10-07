@@ -56,8 +56,19 @@ public class LocalSpace: Space {
     }
     override public func renameAether(facade: Facade, name: String, _ complete: @escaping (Bool) -> ()) {
         let fURL: URL = facade.url
-        facade.name = name
-        let tURL: URL = facade.url
+        let tURL: URL = fURL.deletingLastPathComponent().appendingPathComponent(name).appendingPathExtension("oo")
+        do {
+            try FileManager.default.moveItem(atPath: fURL.path, toPath: tURL.path)
+            delegate?.onChanged(space: self)
+            complete(true)
+        } catch {
+            print("renameAether ERROR: [\(error)]")
+            complete(false)
+        }
+    }
+    override public func renameFolder(facade: Facade, name: String, _ complete: @escaping (Bool) -> ()) {
+        let fURL: URL = facade.url
+        let tURL: URL = fURL.deletingLastPathComponent().appendingPathComponent(name)
         do {
             try FileManager.default.moveItem(atPath: fURL.path, toPath: tURL.path)
             delegate?.onChanged(space: self)

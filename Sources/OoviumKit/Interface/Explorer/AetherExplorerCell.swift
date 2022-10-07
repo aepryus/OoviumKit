@@ -45,7 +45,7 @@ class AetherExplorerCell: UITableViewCell {
 	func bind(explorer: AetherExplorer, facade: Facade) {
 		self.explorer = explorer
         self.facade = facade
-        self.name = facade.type == .aether ? facade.name : "\(facade.name)/"
+        self.name = facade.description
     }
 
 	func touch() {
@@ -57,7 +57,7 @@ class AetherExplorerCell: UITableViewCell {
 		backgroundColor = UIColor.green.shade(0.9)
 	}
     
-    private func digest(facade: Facade) {
+    private func digest(facade: AetherFacade) {
         Space.digest(facade: facade) { (aether: Aether?) in
             guard let aether = aether else { return }
             DispatchQueue.main.async {
@@ -69,12 +69,11 @@ class AetherExplorerCell: UITableViewCell {
 
 // Events ==========================================================================================
 	@objc func onTap() {
-        guard let facade = facade else { return }
-        if facade.type != .aether { explorer.facade = facade }
-        else { digest(facade: facade) }
+        if let facade: DirFacade = facade as? DirFacade { explorer.facade = facade }
+        else if let facade: AetherFacade = facade as? AetherFacade { digest(facade: facade) }
 	}
 	@objc func onDoubleTap() {
-        guard let facade = facade, facade.type == .aether else { return }
+        guard let facade: AetherFacade = facade as? AetherFacade else { return }
         digest(facade: facade)
 	}
 

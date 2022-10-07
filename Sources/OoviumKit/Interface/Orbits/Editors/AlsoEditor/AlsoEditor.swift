@@ -34,7 +34,7 @@ class AlsoEditor: Orbit, UITableViewDataSource {
 
 		schematic.add(row: 0, col: 0, key: Key(text: "Open".localized, uiColor: UIColor(red: 0.8, green: 1, blue: 0.8, alpha: 1).shade(0.5), { [unowned self] in
 			guard let (facade, aether) = self.alsoLeaf.alsoBub.also.facadeAether else { return }
-			self.alsoLeaf.aetherView.swapToAether(facade: facade, aether: aether)
+			self.alsoLeaf.aetherView.swapToAether(facade: facade as? AetherFacade, aether: aether)
 		}))
 		schematic.add(row: 0, col: 1, w: 2, h: 1, key: Key(text: "OK".localized, uiColor: UIColor(red: 0.8, green: 1, blue: 0.8, alpha: 1), { [unowned self] in
 			self.alsoLeaf.releaseFocus()

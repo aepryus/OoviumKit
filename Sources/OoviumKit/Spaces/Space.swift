@@ -29,6 +29,7 @@ public class Space {
     public func loadAether(facade: Facade, _ complete: @escaping (String?)->()) { complete(nil) }
     public func storeAether(facade: Facade, aether: Aether, _ complete: @escaping (Bool)->()) { complete(true) }
     public func renameAether(facade: Facade, name: String, _ complete: @escaping (Bool)->()) { complete(true) }
+    public func renameFolder(facade: Facade, name: String, _ complete: @escaping (Bool)->()) { complete(true) }
     public func removeAether(facade: Facade, _ complete: @escaping (Bool)->()) { complete(true) }
     public func createFolder(facade: Facade, name: String, _ complete: @escaping (Bool)->()) { complete(true) }
     

@@ -11,10 +11,9 @@ import OoviumEngine
 import UIKit
 
 public class BehindView: UIView {
-    public lazy var controller: ExplorerController = { ExplorerController(behindView: self) }()
     let aetherView: AetherView
-    lazy public var leftExplorer: AetherExplorer = { AetherExplorer(controller: controller, aetherView: aetherView) }()
-	lazy public var rightExplorer: AetherExplorer = { AetherExplorer(controller: controller, aetherView: aetherView) }()
+    lazy public var leftExplorer: AetherExplorer = { AetherExplorer(aetherView: aetherView) }()
+	lazy public var rightExplorer: AetherExplorer = { AetherExplorer(aetherView: aetherView) }()
     let newAetherTrap: Trapezoid = Trapezoid(title: "New Aether".localized, leftSlant: .up)
     let importTrap: Trapezoid = Trapezoid(title: "Import".localized, leftSlant: .down)
 
@@ -29,8 +28,8 @@ public class BehindView: UIView {
 		addSubview(leftExplorer)
         if Screen.mac { addSubview(importTrap) }
         
-        newAetherTrap.addAction { [unowned self] in controller.onNewAether() }
-        importTrap.addAction { [unowned self] in controller.onImport() }
+        newAetherTrap.addAction { [unowned self] in leftExplorer.controller.onNewAether() }
+        importTrap.addAction { [unowned self] in leftExplorer.controller.onImport() }
 	}
 	required init?(coder: NSCoder) { fatalError() }
     

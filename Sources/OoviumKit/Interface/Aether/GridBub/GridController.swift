@@ -37,12 +37,12 @@ class GridController: ChainViewKeyDelegate {
             $0.footerTower.buildStream()
             $0.footerTower.buildTask()
         }
-        resize()
+        resizeEverything()
     }
     func addColumn() {
         let column: Column = grid.addColumn()
         gridBub.addColumn(with: column)
-        resize()
+        resizeEverything()
     }
     
     func resize() {

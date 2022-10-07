@@ -15,24 +15,17 @@ class AetherHover: UIView {
     static let lineColor: CGColor = UIColor.green.tint(0.8).cgColor
     static let pen: Pen = Pen(font: .ooExplore(size: 16*Oo.gS), color: .green.tint(0.7), alignment: .center)
     
-    static let lw: CGFloat = 2*Oo.gS
+    static let lw: CGFloat = Oo.gS
     static let wr: CGFloat = 9*Oo.gS
     static let nr: CGFloat = 3*Oo.gS
     static let ar: CGFloat = (wr+nr)/2
     static let h: CGFloat = 32*Oo.s                                     // height of control
     static let l: CGFloat = h-3/2*lw                                    // height of path
-    static let p: CGFloat = l/4                                         // padding between elements
+    static let p: CGFloat = l/5                                         // padding between elements
     static let r: CGFloat = l/2                                         // radius of screw
     static let R: CGFloat = r+p                                         // radius of screw holder
     static let Q: CGFloat = 2*asin(l/(2*R))/2                           // (half) angle of screw holder
     static let dx: CGFloat = sqrt(pow(R,2)-pow(l/2,2))                  // center x of screw holder from right side
-    
-//    let l: CGFloat = y3-y1
-//    let p: CGFloat = l/5
-//    let r: CGFloat = l/2
-//    let R: CGFloat = l/2+p
-//    let Q: CGFloat = 2*asin(l/(2*R))/2
-//    let dx: CGFloat = sqrt(pow(R,2)-pow(l/2,2))
     
     class AetherHoverController {
         let aetherHover: AetherHover
@@ -48,11 +41,11 @@ class AetherHover: UIView {
         }
         func onAetherViewReturn() {
             aetherHover.aetherNameView.takeDisplayForm()
-            guard let facade = facade, let newName: String = aetherHover.aetherNameView.textField.text else { return }
+            guard let facade: AetherFacade = facade as? AetherFacade, let newName: String = aetherHover.aetherNameView.textField.text else { return }
             facade.renameAether(name: newName) { (success: Bool) in
                 guard success else { return }
                 self.aetherHover.aetherView.aether.name = newName
-                self.aetherHover.aetherView.facade?.name = newName
+//                self.aetherHover.aetherView.facade?.name = newName
                 self.aetherHover.aetherNameView.setNeedsDisplay()
                 facade.store(aether: self.aetherHover.aetherView.aether) { (success: Bool) in }
             }
@@ -78,12 +71,12 @@ class AetherHover: UIView {
         override func draw(_ rect: CGRect) {
             let sw: CGFloat = h-lw
 
-            let x1: CGFloat = lw/2
-            let x3: CGFloat = width - lw/2
+            let x1: CGFloat = lw
+            let x3: CGFloat = width - lw
             let x2: CGFloat = x3 - sw
 
-            let y1: CGFloat = lw/2
-            let y2: CGFloat = h - lw/2
+            let y1: CGFloat = lw
+            let y2: CGFloat = h - lw
 
             let p1: CGPoint = CGPoint(x: x1, y: y1)
             let p2: CGPoint = CGPoint(x: x3, y: y1)
@@ -97,6 +90,26 @@ class AetherHover: UIView {
             path.addArc(tangent1End: p3, tangent2End: (p3+p4)/2, radius: wr)
             path.addArc(tangent1End: p4, tangent2End: (p4+p1)/2, radius: ar)
             path.closeSubpath()
+            
+            Skin.skin.explorer(path: path)
+            
+            let dy: CGFloat = 5*Oo.gS
+            let dx: CGFloat = 5*Oo.gS
+            
+            let x4: CGFloat = 7*Oo.gS
+            let x5: CGFloat = 23*Oo.gS
+            
+            let y3: CGFloat = 10.5*Oo.gS
+            let y4: CGFloat = y3 + dy
+            let y5: CGFloat = y4 + dy
+            
+            let path: CGMutablePath = CGMutablePath()
+            path.move(to: CGPoint(x: x4, y: y3))
+            path.addLine(to: CGPoint(x: x5+2*dx, y: y3))
+            path.move(to: CGPoint(x: x4, y: y4))
+            path.addLine(to: CGPoint(x: x5+dx, y: y4))
+            path.move(to: CGPoint(x: x4, y: y5))
+            path.addLine(to: CGPoint(x: x5, y: y5))
             
             Skin.skin.explorer(path: path)
         }
@@ -147,13 +160,13 @@ class AetherHover: UIView {
         override func draw(_ rect: CGRect) {
             let sw: CGFloat = h-lw
 
-            let x1: CGFloat = lw/2
+            let x1: CGFloat = lw
             let x2: CGFloat = x1 + sw
-            let x4: CGFloat = width - lw/2
+            let x4: CGFloat = width - lw
             let x3: CGFloat = x4 - sw
 
-            let y1: CGFloat = lw/2
-            let y2: CGFloat = h - lw/2
+            let y1: CGFloat = lw
+            let y2: CGFloat = h - lw
             
             let p1: CGPoint = CGPoint(x: x2, y: y1)
             let p2: CGPoint = CGPoint(x: x4, y: y1)
@@ -202,13 +215,13 @@ class AetherHover: UIView {
         override func draw(_ rect: CGRect) {
             let sw: CGFloat = h-lw
 
-            let x1: CGFloat = lw/2
+            let x1: CGFloat = lw
             let x2: CGFloat = x1 + sw
-            let x4: CGFloat = width - lw/2
+            let x4: CGFloat = width - lw
 //            let x3: CGFloat = x4 - sw
 
-            let y1: CGFloat = lw/2
-            let y2: CGFloat = h - lw/2
+            let y1: CGFloat = lw
+            let y2: CGFloat = h - lw
             
             let p1: CGPoint = CGPoint(x: x2, y: y1)
             let p2: CGPoint = CGPoint(x: x4, y: y1)
