@@ -30,11 +30,12 @@ public class ExplorerController: NSObject, UIDocumentPickerDelegate {
         let inputModal: InputModal = InputModal(message: "What name would you like to use for this folder?".localized)
         inputModal.textField.text = facade.name
         inputModal.invoke { (input: String?) in
-//            guard let input = input, let facade = self.explorer.facade as? FolderFacade else { return }
-//            facade.renameFolder(name: input) { (success: Bool) in
-//                guard success else { return }
-//                self.explorer.facade.space.delegate?.onChanged(space: self.explorer.facade.space)
-//                
+            guard let input = input else { return }
+            facade.renameFolder(name: input) { (success: Bool) in
+                guard success else { return }
+                facade.space.delegate?.onChanged(space: facade.space)
+                self.explorer.facade = facade
+            }
 //                let pivot: FolderFacade = self.explorer.navigator.facade
 //                let parent: DirFacade = pivot.parent
 //                guard let aetherFacade: AetherFacade = self.explorer.aetherView.facade,
@@ -48,7 +49,6 @@ public class ExplorerController: NSObject, UIDocumentPickerDelegate {
 //                let facade: DirFacade = Facade.create(url: url) as! DirFacade
 //                self.explorer.facade = facade
 //                print("PP:[\(facade.ooviumKey)\(clothesLine)]")
-//            }
         }
     }
     func onNewAether() {

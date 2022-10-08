@@ -129,11 +129,10 @@ public class CloudSpace: Space {
     }
     
 // Space ===========================================================================================
-    override public func loadFacades(facade: Facade, _ complete: @escaping ([Facade]) -> ()) {
+    override public func loadFacades(facade: DirFacade, _ complete: @escaping ([Facade]) -> ()) {
         queue.sync { complete(facades[facade.ooviumKey] ?? []) }
     }
-    override public func loadAether(facade: Facade, _ complete: @escaping (String?) -> ()) {
-        let facade: AetherFacade = facade as! AetherFacade
+    override public func loadAether(facade: AetherFacade, _ complete: @escaping (String?) -> ()) {
         let url: URL = facade.url
         if facade.document == nil { facade.document = AetherDocument(fileURL: url) }
         let document: AetherDocument = facade.document as! AetherDocument
@@ -144,8 +143,7 @@ public class CloudSpace: Space {
             }
         }
     }
-    override public func storeAether(facade: Facade, aether: Aether, _ complete: @escaping (Bool) -> ()) {
-        let facade: AetherFacade = facade as! AetherFacade
+    override public func storeAether(facade: AetherFacade, aether: Aether, _ complete: @escaping (Bool) -> ()) {
         let url: URL = facade.url
         if facade.document == nil { facade.document = AetherDocument(fileURL: url) }
         let document: AetherDocument = facade.document as! AetherDocument
@@ -156,7 +154,7 @@ public class CloudSpace: Space {
             }
         }
     }
-    override public func renameAether(facade: Facade, name: String, _ complete: @escaping (Bool) -> ()) {
+    override public func renameAether(facade: AetherFacade, name: String, _ complete: @escaping (Bool) -> ()) {
         var url: URL = facade.url
         var rv = URLResourceValues()
         rv.name = "\(name).oo"
@@ -168,20 +166,21 @@ public class CloudSpace: Space {
             complete(false)
         }
     }
-    override public func renameFolder(facade: Facade, name: String, _ complete: @escaping (Bool) -> ()) {
+    override public func renameFolder(facade: FolderFacade, name: String, _ complete: @escaping (Bool) -> ()) {
         print("renameFolder [\(facade.name)] to [\(name)]")
         var url: URL = facade.url
         var rv = URLResourceValues()
         rv.name = name
         do {
             try url.setResourceValues(rv)
+            facade.name = name
             complete(true)
         } catch {
             print("renameFolder ERROR:\(error)")
             complete(false)
         }
     }
-    override public func removeAether(facade: Facade, _ complete: @escaping (Bool) -> ()) {
+    override public func removeAether(facade: AetherFacade, _ complete: @escaping (Bool) -> ()) {
         let url: URL = facade.url
         do {
             try FileManager.default.removeItem(atPath: url.path)
@@ -191,7 +190,7 @@ public class CloudSpace: Space {
             complete(false)
         }
     }
-    override public func createFolder(facade: Facade, name: String, _ complete: @escaping (Bool) -> ()) {
+    override public func createFolder(facade: DirFacade, name: String, _ complete: @escaping (Bool) -> ()) {
         let url: URL = facade.url
         do {
             try FileManager.default.createDirectory(at: url.appendingPathComponent(name, isDirectory: true), withIntermediateDirectories: true)

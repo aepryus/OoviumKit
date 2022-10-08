@@ -25,13 +25,13 @@ public class Space {
     
     var documentsRoot: String { "Documents" }
     
-    public func loadFacades(facade: Facade, _ complete: @escaping ([Facade])->()) { complete([]) }
-    public func loadAether(facade: Facade, _ complete: @escaping (String?)->()) { complete(nil) }
-    public func storeAether(facade: Facade, aether: Aether, _ complete: @escaping (Bool)->()) { complete(true) }
-    public func renameAether(facade: Facade, name: String, _ complete: @escaping (Bool)->()) { complete(true) }
-    public func renameFolder(facade: Facade, name: String, _ complete: @escaping (Bool)->()) { complete(true) }
-    public func removeAether(facade: Facade, _ complete: @escaping (Bool)->()) { complete(true) }
-    public func createFolder(facade: Facade, name: String, _ complete: @escaping (Bool)->()) { complete(true) }
+    public func loadFacades(facade: DirFacade, _ complete: @escaping ([Facade])->()) { complete([]) }
+    public func loadAether(facade: AetherFacade, _ complete: @escaping (String?)->()) { complete(nil) }
+    public func storeAether(facade: AetherFacade, aether: Aether, _ complete: @escaping (Bool)->()) { complete(true) }
+    public func renameAether(facade: AetherFacade, name: String, _ complete: @escaping (Bool)->()) { complete(true) }
+    public func renameFolder(facade: FolderFacade, name: String, _ complete: @escaping (Bool)->()) { complete(true) }
+    public func removeAether(facade: AetherFacade, _ complete: @escaping (Bool)->()) { complete(true) }
+    public func createFolder(facade: DirFacade, name: String, _ complete: @escaping (Bool)->()) { complete(true) }
     
 // Static ==========================================================================================
     public static let anchor: AnchorSpace = AnchorSpace()
@@ -39,7 +39,7 @@ public class Space {
     public static var cloud: CloudSpace?
     public static let pequod: PequodSpace = PequodSpace()
     
-    public static func digest(facade: Facade, complete: @escaping (Aether?)->()) {
+    public static func digest(facade: AetherFacade, complete: @escaping (Aether?)->()) {
         facade.space.loadAether(facade: facade) { (json: String?) in
             guard let json = json else { complete(nil); return }
             complete(Aether(json: Migrate.migrateAether(json: json)))

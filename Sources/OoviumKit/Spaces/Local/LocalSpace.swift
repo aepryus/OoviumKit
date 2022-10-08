@@ -24,7 +24,7 @@ public class LocalSpace: Space {
 
 // Space ===========================================================================================
     override var documentsRoot: String { "aethers" }
-    override public func loadFacades(facade: Facade, _ complete: @escaping ([Facade]) -> ()) {
+    override public func loadFacades(facade: DirFacade, _ complete: @escaping ([Facade]) -> ()) {
         let url: URL = facade.url
         var items: [Facade] = []
         do {
@@ -39,7 +39,7 @@ public class LocalSpace: Space {
         } catch { print("\(error)") }
         complete(items)
     }
-    override public func loadAether(facade: Facade, _ complete: @escaping (String?) -> ()) {
+    override public func loadAether(facade: AetherFacade, _ complete: @escaping (String?) -> ()) {
         let url: URL = facade.url
         if  let data = FileManager.default.contents(atPath: url.path),
             let json: String = String(data: data, encoding: .utf8) {
@@ -49,12 +49,12 @@ public class LocalSpace: Space {
             complete(nil)
         }
     }
-    override public func storeAether(facade: Facade, aether: Aether, _ complete: @escaping (Bool) -> ()) {
+    override public func storeAether(facade: AetherFacade, aether: Aether, _ complete: @escaping (Bool) -> ()) {
         let url: URL = facade.url
         FileManager.default.createFile(atPath: url.path, contents: aether.unload().toJSON().data(using: .utf8), attributes: nil)
         complete(true)
     }
-    override public func renameAether(facade: Facade, name: String, _ complete: @escaping (Bool) -> ()) {
+    override public func renameAether(facade: AetherFacade, name: String, _ complete: @escaping (Bool) -> ()) {
         let fURL: URL = facade.url
         let tURL: URL = fURL.deletingLastPathComponent().appendingPathComponent(name).appendingPathExtension("oo")
         do {
@@ -66,11 +66,12 @@ public class LocalSpace: Space {
             complete(false)
         }
     }
-    override public func renameFolder(facade: Facade, name: String, _ complete: @escaping (Bool) -> ()) {
+    override public func renameFolder(facade: FolderFacade, name: String, _ complete: @escaping (Bool) -> ()) {
         let fURL: URL = facade.url
         let tURL: URL = fURL.deletingLastPathComponent().appendingPathComponent(name)
         do {
             try FileManager.default.moveItem(atPath: fURL.path, toPath: tURL.path)
+            facade.name = name
             delegate?.onChanged(space: self)
             complete(true)
         } catch {
@@ -78,7 +79,7 @@ public class LocalSpace: Space {
             complete(false)
         }
     }
-    override public func removeAether(facade: Facade, _ complete: @escaping (Bool) -> ()) {
+    override public func removeAether(facade: AetherFacade, _ complete: @escaping (Bool) -> ()) {
         let url: URL = facade.url
         do {
             try FileManager.default.removeItem(atPath: url.path)
@@ -88,10 +89,9 @@ public class LocalSpace: Space {
             complete(false)
         }
     }
-    override public func createFolder(facade: Facade, name: String, _ complete: @escaping (Bool) -> ()) {
-        let url: URL = facade.url
+    override public func createFolder(facade: DirFacade, name: String, _ complete: @escaping (Bool) -> ()) {
         do {
-            try FileManager.default.createDirectory(at: url.appendingPathComponent(name, isDirectory: true), withIntermediateDirectories: true)
+            try FileManager.default.createDirectory(at: facade.url.appendingPathComponent(name, isDirectory: true), withIntermediateDirectories: true)
             complete(true)
         } catch {
             print("removeAether ERROR: [\(error)]")
