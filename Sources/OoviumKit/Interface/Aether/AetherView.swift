@@ -61,7 +61,18 @@ public class AetherView: UIView, UIScrollViewDelegate, UIGestureRecognizerDelega
 	public var aetherPickerOffset: UIOffset = UIOffset.zero
 	public var toolBarOffset: UIOffset?
 	
-    lazy public var orb: Orb = { Orb(aetherView: self, view: self, dx: -10*Oo.gS, dy: -10*Oo.gS) }()
+    lazy public var orb: Orb = {
+        var dx: CGFloat = -Screen.safeRight
+        var dy: CGFloat = -Screen.safeBottom
+        if Screen.mac {
+            dx -= 10*s
+            dy -= 10*s
+        } else {
+            dx -= 2*s
+            dy += 8*s
+        }
+        return Orb(aetherView: self, view: self, dx: dx, dy: dy)
+    }()
 	private var burn: Bool
 	public var backView: UIView? = nil {
 		didSet {
@@ -213,7 +224,6 @@ public class AetherView: UIView, UIScrollViewDelegate, UIGestureRecognizerDelega
 		self.layer.shadowColor = UIColor.black.cgColor
 		self.layer.shadowRadius = 8
 		lock()
-//		Oovium.window.turnOffDelay()
 		UIView.animate(withDuration: 0.2) { [unowned self] in
 			self.frame = self.frame.offsetBy(dx: dx, dy: 0)
 		}
@@ -228,7 +238,6 @@ public class AetherView: UIView, UIScrollViewDelegate, UIGestureRecognizerDelega
             self.frame = CGRect(x: 0, y: self.frame.origin.y, width: self.frame.size.width, height: self.frame.size.height)
 		} completion: { (complete: Bool) in
 			self.unlock()
-//			Oovium.window.turnOnDelay()
 		}
 	}
 	func slideToggle() {

@@ -36,19 +36,6 @@ public class ExplorerController: NSObject, UIDocumentPickerDelegate {
                 facade.space.delegate?.onChanged(space: facade.space)
                 self.explorer.facade = facade
             }
-//                let pivot: FolderFacade = self.explorer.navigator.facade
-//                let parent: DirFacade = pivot.parent
-//                guard let aetherFacade: AetherFacade = self.explorer.aetherView.facade,
-//                      let clothesLine: String = aetherFacade.clothesLine(facade: pivot)
-//                    else { return }
-//                print("AA:[\(pivot.ooviumKey)]")
-//                print("BB:[\(self.explorer.aetherView.facade!.ooviumKey)]")
-//                print("QQ:[\(clothesLine)]")
-//                let urlString: String = "\(parent.url)/\(input)"
-//                guard let url: URL = URL(string: urlString) else { return }
-//                let facade: DirFacade = Facade.create(url: url) as! DirFacade
-//                self.explorer.facade = facade
-//                print("PP:[\(facade.ooviumKey)\(clothesLine)]")
         }
     }
     func onNewAether() {
