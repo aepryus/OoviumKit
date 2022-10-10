@@ -14,8 +14,18 @@ public enum Orientations {
 }
 
 open class Modal: Gadget {
-    static var shieldView: UIView = {
-        let view: UIView = ColorView(.black.alpha(0.8))
+    class ShieldView: ColorView, GadgetDelegate {
+        init() { super.init(.black.alpha(0.8)) }
+        required init?(coder: NSCoder) { fatalError() }
+        
+        // GadgetDelegate ==========================================================================
+        var safeTop: CGFloat { 0 }
+        var safeBottom: CGFloat { 0 }
+        var safeLeft: CGFloat { 0 }
+        var safeRight: CGFloat { 0 }
+    }
+    static var shieldView: ShieldView = {
+        let view: ShieldView = ShieldView()
         view.frame = Screen.keyWindow!.bounds
         return view
     }()
@@ -25,7 +35,7 @@ open class Modal: Gadget {
 
 	public init(anchor: Position, size: CGSize = .zero, offset: UIOffset = .zero, fixed: UIOffset = .zero, orientations: Orientations = .both) {
 		self.orientations = orientations
-        super.init(guideView: Modal.shieldView, anchor: anchor, size: size, offset: offset)
+        super.init(delegate: Modal.shieldView, anchor: anchor, size: size, offset: offset)
 	}
 	public required init?(coder: NSCoder) { fatalError() }
     

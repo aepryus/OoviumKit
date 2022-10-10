@@ -13,7 +13,7 @@ open class Hover: Gadget {
 	
 	public init(aetherView: AetherView, anchor: Position, size: CGSize, offset: UIOffset, fixed: UIOffset = .zero) {
 		self.aetherView = aetherView
-		super.init(guideView: aetherView, anchor: anchor, size: size, offset: offset, fixed: fixed)
+		super.init(delegate: aetherView, anchor: anchor, size: size, offset: offset, fixed: fixed)
 	}
 	public required init?(coder: NSCoder) { fatalError() }
 	

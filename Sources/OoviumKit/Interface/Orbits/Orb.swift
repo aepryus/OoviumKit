@@ -28,7 +28,7 @@ public class Orb {
     
 // Private =========================================================================================
     private func layout(orbit: Orbit) {
-        orbit.bottomRight(dx: dx + orbit.offset.horizontal, dy: dy + orbit.offset.vertical)
+        orbit.bottomRight(dx: -aetherView.safeRight + orbit.offset.horizontal, dy: -aetherView.safeBottom + orbit.offset.vertical)
     }
     
 // Public ==========================================================================================

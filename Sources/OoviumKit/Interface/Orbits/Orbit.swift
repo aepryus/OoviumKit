@@ -14,7 +14,7 @@ public class Orbit: Gadget {
 	
     init(orb: Orb, size: CGSize, offset: UIOffset = .zero) {
         self.orb = orb
-        super.init(guideView: UIView(), anchor: .bottomRight, size: size, offset: offset)
+        super.init(delegate: nil, anchor: .bottomRight, size: size, offset: offset)
 	}
 	public required init?(coder: NSCoder) { fatalError() }
 

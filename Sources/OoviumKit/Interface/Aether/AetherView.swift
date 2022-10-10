@@ -24,7 +24,7 @@ extension AetherViewDelegate {
 	func onSave(aetherView: AetherView, aether: Aether) {}
 }
 
-public class AetherView: UIView, UIScrollViewDelegate, UIGestureRecognizerDelegate, AnchorDoubleTappable {
+public class AetherView: UIView, UIScrollViewDelegate, UIGestureRecognizerDelegate, AnchorDoubleTappable, GadgetDelegate {
 	public var aether: Aether
     public var facade: AetherFacade?
     
@@ -184,7 +184,9 @@ public class AetherView: UIView, UIScrollViewDelegate, UIGestureRecognizerDelega
 //		[[NSNotificationCenter defaultCenter] addObserver:self selector:@selector(keyboardWillShow:) name:UIKeyboardWillShowNotification object:nil];
 //		[[NSNotificationCenter defaultCenter] addObserver:self selector:@selector(keyboardDidShow:) name:UIKeyboardDidShowNotification object:nil];
 //		[[NSNotificationCenter defaultCenter] addObserver:self selector:@selector(keyboardWillHide:) name:UIKeyboardWillHideNotification object:nil];
-		
+        
+        safeZone.isUserInteractionEnabled = false
+//        addSubview(safeZone)
 	}
 	
     public convenience init(aether: Aether, toolsOn: Bool = true, burn: Bool = true, oldPicker: Bool = false) {
@@ -206,6 +208,36 @@ public class AetherView: UIView, UIScrollViewDelegate, UIGestureRecognizerDelega
 		self.init(aether: Aether())
 	}
 	public required init?(coder aDecoder: NSCoder) { fatalError() }
+    
+// GadgetDelegate ==================================================================================
+    let safeZone: UIView = ColorView(.red.alpha(0.5))
+    
+    private var isFullScreen: Bool { max(Screen.width, Screen.height) == max(width, height) && min(Screen.width, Screen.height) == min(width, height) }
+    private let macPadding: CGFloat = 6*Screen.s
+    private let iOSPadding: CGFloat = 3*Screen.s
+
+    public var safeTop: CGFloat {
+        if Screen.mac { return macPadding }
+        if isFullScreen { return max(Screen.safeTop+(Screen.iPhone ? -s : 3*s), iOSPadding) }
+        return iOSPadding
+    }
+    public var safeBottom: CGFloat {
+        if Screen.mac { return macPadding + 2*s }
+        if isFullScreen { return max(Screen.safeBottom, iOSPadding) }
+        return iOSPadding
+    }
+    public var safeLeft: CGFloat {
+        if Screen.mac { return macPadding }
+        if isFullScreen { return max(Screen.safeLeft, iOSPadding) }
+        return iOSPadding
+    }
+    public var safeRight: CGFloat {
+        if Screen.mac { return macPadding + 2*s }
+        if isFullScreen { return max(Screen.safeRight, iOSPadding) }
+        return iOSPadding
+    }
+    
+// =================================================================================================
 	
 	public func reload() {
 		closeCurrentAether()
@@ -858,13 +890,15 @@ public class AetherView: UIView, UIScrollViewDelegate, UIGestureRecognizerDelega
     public override var frame: CGRect {
         didSet {
             stretch()
-            orb.layout()
         }
     }
 	public override func layoutSubviews() {
 		backView?.frame = bounds
 		scrollView.frame = bounds
 		hovers.forEach { $0.render() }
+        aetherHover.frame = CGRect(x: safeLeft, y: safeTop, width: Screen.mac ? 300*gS : 270*gS, height: 32*Oo.s)
+        safeZone.frame = CGRect(x: safeLeft, y: safeTop, width: width-safeLeft-safeRight, height: height-safeTop-safeBottom)
+        orb.layout()
 //		if orb is AetherViewOrb { orb.orbits.forEach { render(orbit: $0) } }
 	}
 	

@@ -11,7 +11,7 @@ import UIKit
 class BubbleToolBar: ToolBar {
 	
 	init(aetherView: AetherView, toolBox: ToolBox) {
-		super.init(aetherView: aetherView, toolBox: toolBox, offset: .zero, fixed: ToolBar.fixed)
+        super.init(aetherView: aetherView, toolBox: toolBox, offset: .zero, fixed: UIOffset(horizontal: 1, vertical: -1))
 	}
 	required init?(coder aDecoder: NSCoder) { fatalError() }
 	

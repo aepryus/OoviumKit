@@ -6,16 +6,26 @@
 //  Copyright © 2021 Aepryus Software. All rights reserved.
 //
 
+import Acheron
 import UIKit
 
+public protocol GadgetDelegate: UIView {
+    var width: CGFloat { get }
+    var height: CGFloat { get }
+    var safeTop: CGFloat { get }
+    var safeBottom: CGFloat { get }
+    var safeLeft: CGFloat { get }
+    var safeRight: CGFloat { get }
+}
+
 open class Gadget: UIView {
-    let guideView: UIView
+    unowned let delegate: GadgetDelegate?
     let anchor: Position
     var offset: UIOffset
     var fixed: UIOffset
 
-    public init(guideView: UIView, anchor: Position, size: CGSize, offset: UIOffset, fixed: UIOffset = .zero) {
-        self.guideView = guideView
+    public init(delegate: GadgetDelegate?, anchor: Position, size: CGSize, offset: UIOffset, fixed: UIOffset = .zero) {
+        self.delegate = delegate
         self.anchor = anchor
 		self.size = size
         self.offset = offset
@@ -33,20 +43,21 @@ open class Gadget: UIView {
 
 // =================================================================================================
     public func render() {
+        guard let delegate else { return }
         var x: CGFloat
         var y: CGFloat
 
         let offsetX: CGFloat = fixed.horizontal + gS*offset.horizontal
         let offsetY: CGFloat = fixed.vertical + gS*offset.vertical
         
-        if anchor.isLeft() { x = offsetX }
-        else if anchor.isRight() { x = guideView.width - gS*size.width + offsetX }
-        else { x = (guideView.width - gS*size.width) / 2 + offsetX}
+        if anchor.isLeft() { x = delegate.safeLeft + offsetX }
+        else if anchor.isRight() { x = -delegate.safeRight + delegate.width - gS*size.width + offsetX }
+        else { x = (delegate.width - gS*size.width) / 2 + offsetX}
         
-        if anchor.isTop() { y = offsetY }
-        else if anchor.isBottom() { y = guideView.height - gS*size.height + offsetY }
-        else { y = (guideView.height - gS*size.height) / 2 + offsetY }
-
+        if anchor.isTop() { y = delegate.safeTop + offsetY }
+        else if anchor.isBottom() { y = -delegate.safeBottom + delegate.height - gS*size.height + offsetY }
+        else { y = (delegate.height - gS*size.height) / 2 + offsetY }
+        
         frame = CGRect(x: x, y: y, width: gS*size.width, height: gS*size.height)
     }
     
@@ -54,10 +65,11 @@ open class Gadget: UIView {
         didSet { render() }
     }
     public func invoke(animated: Bool = true) {
+        guard let delegate else { return }
 //        guard !guideView.invoked(hover: self) else { return }
         render()
         self.alpha = 0
-        guideView.addSubview(self)
+        delegate.addSubview(self)
         self.onInvoke()
         if animated {
             UIView.animate(withDuration: 0.2) {

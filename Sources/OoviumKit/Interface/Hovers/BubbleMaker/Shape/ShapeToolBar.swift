@@ -19,7 +19,7 @@ class ShapeToolBar: ToolBar {
 		tools[0][2] = ShapeTool(shape: .rectangle)
 		tools[0][3] = ShapeTool(shape: .diamond)
 		
-		super.init(aetherView: aetherView, toolBox: ToolBox(tools), offset: UIOffset(horizontal: -40, vertical: 0), fixed: ToolBar.fixed)
+        super.init(aetherView: aetherView, toolBox: ToolBox(tools), offset: UIOffset(horizontal: -40, vertical: 0), fixed: UIOffset(horizontal: 1, vertical: -1))
 	}
 	required init?(coder aDecoder: NSCoder) { fatalError() }
 	

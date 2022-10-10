@@ -21,10 +21,6 @@ class ToolBar: Hover {
 	
 	var contracting: Bool = false
 
-	static let fixed: UIOffset = Screen.mac ? UIOffset(horizontal: -14, vertical: 5)
-								: Screen.iPad ? UIOffset(horizontal: -4, vertical: Screen.safeTop)
-								: UIOffset(horizontal: -5, vertical: Screen.safeTop - 3)
-
 	init(aetherView: AetherView, toolBox: ToolBox, offset: UIOffset, fixed: UIOffset) {
 		self.tools = toolBox.tools
 		selected = self.tools[0][0]!

@@ -31,7 +31,7 @@ class ColorToolBar: ToolBar {
 		tools[3][2] = ColorTool(color: .magenta)
 		tools[3][3] = ColorTool(color: .violet)
 		
-		super.init(aetherView: aetherView, toolBox: ToolBox(tools), offset: UIOffset(horizontal: -80, vertical: 0), fixed: ToolBar.fixed)
+        super.init(aetherView: aetherView, toolBox: ToolBox(tools), offset: UIOffset(horizontal: -80, vertical: 0), fixed: UIOffset(horizontal: 1, vertical: -1))
 	}
 	required init?(coder aDecoder: NSCoder) { fatalError() }
 
