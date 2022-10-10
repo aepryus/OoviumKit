@@ -46,7 +46,7 @@ public class BehindView: UIView {
         let y4: CGFloat = height - (Screen.safeBottom + 5*s)
         let y3: CGFloat = y4 - p - (Screen.mac ? h : 0)
         
-        let x1: CGFloat = 5*s
+        let x1: CGFloat = Screen.safeLeft + 5*s
         let x3: CGFloat = x1 + 355*s
         let x2: CGFloat = x3 - 172*s - 25*s
         

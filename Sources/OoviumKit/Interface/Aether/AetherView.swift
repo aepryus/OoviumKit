@@ -248,7 +248,7 @@ public class AetherView: UIView, UIScrollViewDelegate, UIGestureRecognizerDelega
 		let gesture = UIPanGestureRecognizer(target: self, action: #selector(onPan(_:)))
 		scrollView.addGestureRecognizer(gesture)
 	}
-	let dx: CGFloat = Screen.iPhone ? Screen.width - 20*Screen.s : 365*Screen.s
+    var dx: CGFloat { Screen.iPhone ? Screen.width - 20*Screen.s + Screen.safeLeft : 355*Screen.s }
 	func slideOff() {
 		guard left == 0 else { return }
 		self.layer.shadowOffset = CGSize(width: -3, height: 0)
@@ -261,7 +261,7 @@ public class AetherView: UIView, UIScrollViewDelegate, UIGestureRecognizerDelega
 		}
 	}
 	func slideBack() {
-		guard abs(left-dx) < 0.00001 else { print("\(left) != \(dx)"); return }
+		guard left > 0.00001 else { print("\(left) != \(dx)"); return }
 		self.layer.shadowOffset = CGSize(width: -3, height: 0)
 		self.layer.shadowOpacity = 1
 		self.layer.shadowColor = UIColor.black.cgColor
