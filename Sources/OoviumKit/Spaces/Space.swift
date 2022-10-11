@@ -42,7 +42,7 @@ public class Space {
     public static func digest(facade: AetherFacade, complete: @escaping (Aether?)->()) {
         facade.space.loadAether(facade: facade) { (json: String?) in
             guard let json = json else { complete(nil); return }
-            complete(Aether(json: Migrate.migrateAether(json: json)))
+            complete(Aether(json: json))
         }
     }
 }
