@@ -69,6 +69,7 @@ class GridController: ChainViewKeyDelegate {
             $0.gridCells.forEach { $0.setNeedsResize() }
         }
         resize()
+        gridBub.render()
     }
     
 // ChainViewKeyDegate ==============================================================================

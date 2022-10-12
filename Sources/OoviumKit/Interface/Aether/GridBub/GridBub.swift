@@ -156,7 +156,7 @@ class GridBub: Bubble, ChainLeafDelegate {
 	func cellGainedFocus() {
 		cellHasFocus = true
 //        determineLeaves()
-        if !gridLeaf.isFirstResponder { gridLeaf.becomeFirstResponder() }
+        if !gridLeaf.isFirstResponder && ChainResponder.hasExternalKeyboard { gridLeaf.becomeFirstResponder() }
 	}
 	func cellLostFocus() {
 		cellHasFocus = false

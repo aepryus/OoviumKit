@@ -254,8 +254,8 @@ class GridLeaf: Leaf, GridViewDelegate, UITextInput, UITextInputTraits {
                 gridCell.leftMost = leftMost
                 gridCell.bottomMost = bottomMost
                 gridCell.bounds.size = size(gridView: gridView, column: column, row: row)
-                gridCell.setNeedsLayout()
 			}
+            gridCell.setNeedsLayout()
 			return gridCell
 		}
 	}

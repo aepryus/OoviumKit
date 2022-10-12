@@ -93,15 +93,6 @@ class GridCell: UICollectionViewCell, Sizable, Editable, Citable, ChainViewDeleg
         controller.needsResizing.append(self)
         column.setNeedsResize()
     }
-//    func resize() {
-//        let oldWidthNeeded: CGFloat? = controller.cellWidthNeeded[cell.iden]
-//        let newWidthNeeded: CGFloat = widthNeeded
-//
-//        if newWidthNeeded != oldWidthNeeded {
-//            column.setNeedsRearch()
-//            controller.cellWidthNeeded[cell.iden] = newWidthNeeded
-//        }
-//    }
 
 // Tappable ========================================================================================
 	func onTap(aetherView: AetherView) {
