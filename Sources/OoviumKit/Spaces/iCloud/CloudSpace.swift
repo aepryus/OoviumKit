@@ -144,7 +144,7 @@ public class CloudSpace: Space {
         let document: AetherDocument = facade.document as! AetherDocument
         opQueue.addOperation {
             document.open { (success: Bool) in
-                guard success else { return }
+                guard success else { complete(nil); return }
                 DispatchQueue.main.async { complete(document.json) }
             }
         }
