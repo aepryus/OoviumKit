@@ -58,8 +58,9 @@ class AetherExplorerCell: UITableViewCell {
 	}
     
     private func digest(facade: AetherFacade) {
-        Space.digest(facade: facade) { (aether: Aether?) in
-            guard let aether = aether else { return }
+        facade.load { (json: String?) in
+            guard let json else { return }
+            let aether: Aether = Aether(json: json)
             DispatchQueue.main.async {
                 self.explorer.aetherView.swapToAether(facade: facade, aether: aether)
                 if Screen.iPhone { self.explorer.aetherView.slideBack() }

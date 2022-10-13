@@ -10,21 +10,17 @@ import Foundation
 import OoviumEngine
 
 extension OOShape {
-	static let ellipseShape_ = EllipseShape()
-	static let roundedShape_ = RoundedShape()
-	static let rectangleShape_ = RectangleShape()
-	static let diamondShape_ = DiamondShape()
+	static let ellipseShape = EllipseShape()
+	static let roundedShape = RoundedShape()
+	static let rectangleShape = RectangleShape()
+	static let diamondShape = DiamondShape()
 
 	var shape: Shape {
 		switch self {
-			case .ellipse:
-				return OOShape.ellipseShape_
-			case .rounded:
-				return OOShape.roundedShape_
-			case .rectangle:
-				return OOShape.rectangleShape_
-			case .diamond:
-				return OOShape.diamondShape_
+			case .ellipse:      return OOShape.ellipseShape
+			case .rounded:      return OOShape.roundedShape
+			case .rectangle:    return OOShape.rectangleShape
+			case .diamond:      return OOShape.diamondShape
 		}
 	}
 }

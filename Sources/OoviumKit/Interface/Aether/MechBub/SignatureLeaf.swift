@@ -31,8 +31,8 @@ class SignatureLeaf: Leaf, Editable, Citable, UITextFieldDelegate {
 	
 	var path: CGMutablePath = CGMutablePath()
 	
-	var nameEdit: AETextField? = nil
-	var paramEdits: [AETextField] = []
+	var nameEdit: SignatureField? = nil
+	var paramEdits: [SignatureField] = []
 	
 	var recipeMooring: Mooring = Mooring()
 	var paramMoorings: [Mooring] = []
@@ -118,7 +118,7 @@ class SignatureLeaf: Leaf, Editable, Citable, UITextFieldDelegate {
 		let y1 = p
 		let y2 = y1+nh
 
-		let paramEdit = AETextField(frame: CGRect(x: x2, y: y2+CGFloat(noOfParams-1)*ph+1, width: pw, height: 20))
+		let paramEdit = SignatureField(frame: CGRect(x: x2, y: y2+CGFloat(noOfParams-1)*ph+1, width: pw, height: 20))
 		paramEdit.delegate = self
 		addSubview(paramEdit)
 		paramEdits.append(paramEdit)
@@ -187,14 +187,14 @@ class SignatureLeaf: Leaf, Editable, Citable, UITextFieldDelegate {
 		let y1 = p
 		let y2 = y1+nh
 
-		nameEdit = AETextField(frame: CGRect(x: x1, y: y1+0.5, width: nw, height: 28))
+		nameEdit = SignatureField(frame: CGRect(x: x1, y: y1+0.5, width: nw, height: 28))
 		nameEdit?.delegate = self
 		nameEdit?.text = delegate?.name
 		nameEdit?.textColor = Skin.color(.signatureText)
 		addSubview(nameEdit!)
 
 		for i in 0..<noOfParams {
-			let paramEdit = AETextField(frame: CGRect(x: x2, y: y2+CGFloat(i)*ph+1, width: pw, height: 20))
+			let paramEdit = SignatureField(frame: CGRect(x: x2, y: y2+CGFloat(i)*ph+1, width: pw, height: 20))
 			paramEdit.delegate = self
 			paramEdit.text = delegate?.params[i]
 			paramEdit.textColor = Skin.color(.signatureText)
@@ -236,10 +236,10 @@ class SignatureLeaf: Leaf, Editable, Citable, UITextFieldDelegate {
 		Skin.bubble(path: path, uiColor: !open ? bubble.uiColor : UIColor.white, width: Oo.s)
 
 		if !open, let delegate = delegate {
-			Skin.bubble(text: delegate.name, rect: CGRect(x: 3, y: 2.5, width: rect.width-6, height: 30), uiColor: bubble.uiColor)
+            Skin.bubble(text: delegate.name, rect: CGRect(x: 3, y: 3.5, width: rect.width-6, height: 30), uiColor: bubble.uiColor)
 			var i = 0
 			for param in delegate.params {
-				Skin.bubble(text: param, rect: CGRect(x: 13, y: 32+CGFloat(i)*24, width: rect.width-26, height: 24), uiColor: bubble.uiColor)
+                Skin.bubble(text: param, rect: CGRect(x: 13, y: 33+CGFloat(i)*24, width: rect.width-26, height: 24), uiColor: bubble.uiColor)
 				i += 1
 			}
 		}

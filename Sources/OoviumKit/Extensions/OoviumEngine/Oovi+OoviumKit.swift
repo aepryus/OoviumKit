@@ -10,7 +10,5 @@ import UIKit
 import OoviumEngine
 
 extension Oovi {
-	public var uiColor: UIColor {
-		return color.uiColor
-	}
+    public var uiColor: UIColor { color.uiColor }
 }

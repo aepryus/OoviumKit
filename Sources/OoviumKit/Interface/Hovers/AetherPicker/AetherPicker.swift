@@ -114,12 +114,9 @@ public class AetherPicker: Hover, UITableViewDelegate, UITableViewDataSource {
 		newButton.addAction(for: .touchUpInside) { [weak self] in
 			guard let self = self else { return }
 			if self.expanded {
-//				self.aetherView.swapToNewAether()
 				DispatchQueue.main.async {
 					self.aetherList.reloadData()
 				}
-			} else {
-				self.aetherView.invokeAetherInfo()
 			}
 		}
 		if showNewButton {addSubview(newButton)}

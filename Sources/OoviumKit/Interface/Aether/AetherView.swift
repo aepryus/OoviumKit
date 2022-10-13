@@ -850,11 +850,6 @@ public class AetherView: UIView, UIScrollViewDelegate, UIGestureRecognizerDelega
 		aetherPicker?.dismiss()
 	}
 
-	func invokeAetherInfo() {
-		let aetherInfo: AetherInfo = AetherInfo(aetherView: self)
-		aetherInfo.invoke()
-	}
-
 	func invokeShapeToolBar() {
 		shapeToolBar?.invoke()
 	}

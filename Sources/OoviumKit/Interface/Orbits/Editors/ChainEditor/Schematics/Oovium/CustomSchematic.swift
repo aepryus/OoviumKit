@@ -18,13 +18,12 @@ public class CustomSchematic: ChainSchematic {
 		let cherry = UIColor(red: 1, green: 0.77, blue: 0.68, alpha: 1)
 		
 		wipe()
-		
-		for (i , name) in aether.functions.enumerated() {
-			add(row: CGFloat(i), col: 0, w: 1, h: 1, key: Key(text: name, uiColor: cherry, font: UIFont.systemFont(ofSize: 16*Oo.s), { [weak self] in
-				guard let me = self else { return }
-				me.chainEditor.chainView.post(token: aether.functionToken(tag: name))
-				me.chainEditor.presentFirstSchematic()
-			}))
-		}
+
+        aether.functions.enumerated().forEach { (i: Int, name: String) in
+            add(row: CGFloat(i), col: 0, w: 1, h: 1, key: Key(text: name, uiColor: cherry, font: UIFont.systemFont(ofSize: 16*Oo.s), { [unowned self] in
+                self.chainEditor.chainView.post(token: aether.functionToken(tag: name))
+                self.chainEditor.presentFirstSchematic()
+            }))
+        }
 	}
 }

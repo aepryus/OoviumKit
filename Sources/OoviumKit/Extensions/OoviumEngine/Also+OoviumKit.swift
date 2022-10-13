@@ -19,10 +19,6 @@ extension Also {
         ""
 //		Space.split(aetherPath: aetherPath).1
 	}
-	public var alsoAether: Aether? {
-		facadeAether?.1
-	}
-	public var functionCount: Int {
-		return alsoAether?.functions(not: [aether]).count ?? 0
-	}
+	public var alsoAether: Aether? { facadeAether?.1 }
+	public var functionCount: Int { alsoAether?.functions(not: [aether]).count ?? 0 }
 }

@@ -10,9 +10,7 @@ import Foundation
 import OoviumEngine
 
 extension Aether {
-	public var aethers: [Aether] {
-		return [self] + aexels.compactMap { ($0 as? Also)?.alsoAether }
-	}
+	public var aethers: [Aether] { [self] + aexels.compactMap { ($0 as? Also)?.alsoAether } }
 
 // Functions =======================================================================================
 	public func functions(not: [Aether]) -> [String] {
@@ -29,22 +27,19 @@ extension Aether {
 			return left.uppercased() < right.uppercased()
 		}
 	}
-	public var functions: [String] {
-		return functions(not: [])
-	}
+	public var functions: [String] { functions(not: []) }
+
 	public func function(name: String, not: [Aether]) -> Mechlike? {
-		guard !not.contains(self) else {return nil}
+		guard !not.contains(self) else { return nil }
 		for aexel in aexels {
-			guard let function = aexel as? Mechlike else {continue}
-			if function.name == name {return function}
+			guard let function = aexel as? Mechlike else { continue }
+			if function.name == name { return function }
 		}
 		for aexel in aexels {
-			guard let also = aexel as? Also else {continue}
-			if let function = also.alsoAether?.function(name: name, not: not+[self]) {return function}
+			guard let also = aexel as? Also else { continue }
+			if let function = also.alsoAether?.function(name: name, not: not+[self]) { return function }
 		}
 		return nil
 	}
-	public func function(name: String) -> Mechlike? {
-		function(name: name, not: [])
-	}
+	public func function(name: String) -> Mechlike? { function(name: name, not: []) }
 }

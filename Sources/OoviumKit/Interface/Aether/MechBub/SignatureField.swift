@@ -1,5 +1,5 @@
 //
-//  AETextField.swift
+//  SignatureField.swift
 //  Pangaea
 //
 //  Created by Joe Charlier on 2/17/18.
@@ -8,7 +8,7 @@
 
 import UIKit
 
-class AETextField: UITextField, NotTappable {
+class SignatureField: UITextField, NotTappable {
 	override init(frame: CGRect) {
 		super.init(frame: frame)
 		
@@ -25,17 +25,4 @@ class AETextField: UITextField, NotTappable {
 		}		
 	}
 	required init?(coder aDecoder: NSCoder) { fatalError() }
-	
-// UITextField =====================================================================================
-	var dy: CGFloat = 0
-	override func editingRect(forBounds bounds: CGRect) -> CGRect {
-		return super.editingRect(forBounds: bounds).offsetBy(dx: 0, dy: 0.5)
-	}
-	override func textRect(forBounds bounds: CGRect) -> CGRect {
-		return super.textRect(forBounds: bounds).offsetBy(dx: 0, dy: dy)
-	}
-	override func resignFirstResponder() -> Bool {
-		dy = 0.5
-		return super.resignFirstResponder()
-	}
 }
