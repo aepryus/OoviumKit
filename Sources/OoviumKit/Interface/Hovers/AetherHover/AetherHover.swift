@@ -45,7 +45,7 @@ class AetherHover: UIView {
             facade.renameAether(name: newName) { (success: Bool) in
                 guard success else { return }
                 self.aetherHover.aetherView.aether.name = newName
-//                self.aetherHover.aetherView.facade?.name = newName
+                self.aetherHover.aetherView.facade?._name = newName
                 self.aetherHover.aetherNameView.setNeedsDisplay()
                 facade.store(aether: self.aetherHover.aetherView.aether) { (success: Bool) in }
             }

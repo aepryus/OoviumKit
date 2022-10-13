@@ -26,13 +26,13 @@ class Mooring {
 	}
 	
 	func refreshDoodles() {
-		doodles.forEach{$0.render()}
+		doodles.forEach{ $0.render() }
 	}
 	func wakeDoodles() {
-		doodles.forEach{$0.wake()}
+		doodles.forEach{ $0.wake() }
 	}
 	func sleepDoodles() {
-		doodles.forEach{$0.sleep()}
+		doodles.forEach{ $0.sleep() }
 	}
 	func hideDoodles() {
 		doodles.forEach{$0.isHidden = true}

@@ -56,8 +56,14 @@ extension NSMetadataItem {
         if path.last == "/" { path.removeLast() }
         return path
     }
-    var ooviumKey: String { "iCloud::\(path)" }
-    var key: String { "\(path)/\(name)" }
+    var ooviumKey: String {
+        guard path.count > 0 else { return "iCloud" }
+        return "iCloud::\(path)"
+    }
+    var key: String {
+        guard path.count > 0 else { return name }
+        return "\(path)/\(name)"
+    }
 }
 
 public class CloudSpace: Space {

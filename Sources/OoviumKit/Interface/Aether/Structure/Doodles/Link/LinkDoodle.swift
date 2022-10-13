@@ -43,11 +43,13 @@ class LinkDoodle: Doodle, CAAnimationDelegate {
 	func sleep() {
 		asleep = true
 		setNeedsDisplay()
+        pulse.isHidden = true
 		pulse.removeAnimation(forKey: "flowPulse")
 	}
 	func wake() {
 		asleep = false
 		setNeedsDisplay()
+        pulse.isHidden = false
 		startPulse()
 	}
 	

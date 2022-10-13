@@ -19,7 +19,7 @@ class InputModal: Modal, UITextFieldDelegate {
     var input: String? = nil
 
     init(message: String) {
-        super.init(anchor: .center, size: CGSize(width: 240*Oo.gS, height: 110*Oo.gS), offset: .zero)
+        super.init(anchor: .center, size: CGSize(width: 360, height: 165), offset: .zero)
 
         messageLabel.text = message
         messageLabel.textAlignment = .center

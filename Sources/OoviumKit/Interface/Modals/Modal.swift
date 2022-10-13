@@ -14,19 +14,28 @@ public enum Orientations {
 }
 
 open class Modal: Gadget {
-    class ShieldView: ColorView, GadgetDelegate {
+    public class ShieldView: ColorView, GadgetDelegate {
         init() { super.init(.black.alpha(0.8)) }
         required init?(coder: NSCoder) { fatalError() }
         
+        public func render() {
+            frame = Screen.keyWindow!.bounds
+        }
+        
+        // UIView ==================================================================================
+        override public var frame: CGRect {
+            didSet { Modal.current?.render() }
+        }
+        
         // GadgetDelegate ==========================================================================
-        var safeTop: CGFloat { 0 }
-        var safeBottom: CGFloat { 0 }
-        var safeLeft: CGFloat { 0 }
-        var safeRight: CGFloat { 0 }
+        public var safeTop: CGFloat { 0 }
+        public var safeBottom: CGFloat { 0 }
+        public var safeLeft: CGFloat { 0 }
+        public var safeRight: CGFloat { 0 }
     }
-    static var shieldView: ShieldView = {
+    public static var shieldView: ShieldView = {
         let view: ShieldView = ShieldView()
-        view.frame = Screen.keyWindow!.bounds
+        view.render()
         return view
     }()
     
@@ -41,10 +50,15 @@ open class Modal: Gadget {
     
 // Gadget ==========================================================================================
     override open func onInvoke() {
-        Modal.shieldView.frame = Screen.keyWindow!.bounds
+        Modal.shieldView.render()
         Screen.keyWindow!.addSubview(Modal.shieldView)
+        Modal.current = self
     }
     override open func onDismiss() {
         Modal.shieldView.removeFromSuperview()
+        Modal.current = nil
     }
+    
+// Static ==========================================================================================
+    public static var current: Modal?    
 }
