@@ -138,7 +138,7 @@ class CronBub: Bubble, ChainLeafDelegate {
 
 	init(_ cron: Cron, aetherView: AetherView) {
 		self.cron = cron
-        super.init(aetherView: aetherView, aexel: cron, hitch: .top, origin: CGPoint(x: self.cron.x, y: self.cron.y), size: CGSize.zero)
+        super.init(aetherView: aetherView, aexel: cron, origin: CGPoint(x: self.cron.x, y: self.cron.y), size: CGSize.zero)
 		
 		cron.tower.listener = faceLeaf
 		add(leaf: faceLeaf)
@@ -354,14 +354,15 @@ class CronBub: Bubble, ChainLeafDelegate {
 
 // Bubble ==========================================================================================
 	override var uiColor: UIColor { !selected ? OOColor.cobolt.uiColor : UIColor.yellow }
+    override var hitch: Position { .top }
 	override var hitchPoint: CGPoint { overrideHitchPoint }
-	override func wire() {
-		startLeaf.wire()
-		stopLeaf.wire()
-		stepsLeaf.wire()
-		rateLeaf.wire()
-		deltaLeaf.wire()
-		whileLeaf.wire()
+	override func wireMoorings() {
+		startLeaf.wireMoorings()
+		stopLeaf.wireMoorings()
+		stepsLeaf.wireMoorings()
+		rateLeaf.wireMoorings()
+		deltaLeaf.wireMoorings()
+		whileLeaf.wireMoorings()
 		cron.reset()
 		cron.tower.trigger()
 	}

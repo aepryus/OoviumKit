@@ -136,7 +136,7 @@ class TailBub: Bubble, SignatureLeafDelegate, ChainLeafDelegate {
 	init(_ tail: Tail, aetherView: AetherView) {
 		self.tail = tail
 		
-        super.init(aetherView: aetherView, aexel: tail, hitch: .center, origin: CGPoint(x: self.tail.x, y: self.tail.y), size: CGSize(width: 36, height: 36))
+        super.init(aetherView: aetherView, aexel: tail, origin: CGPoint(x: self.tail.x, y: self.tail.y), size: CGSize(width: 36, height: 36))
 
 		signatureLeaf = SignatureLeaf(bubble: self, anchor: CGPoint(x: 60, y: 0), hitch: .top, size: CGSize(width: 100, height: 90))
 		add(leaf: signatureLeaf)
@@ -241,12 +241,8 @@ class TailBub: Bubble, SignatureLeafDelegate, ChainLeafDelegate {
 	}
 
 // Bubble ==========================================================================================
-	override var uiColor: UIColor {
-		return !selected ? UIColor.blue : UIColor.yellow
-	}
-	override var hitchPoint: CGPoint {
-		return overrideHitchPoint
-	}
+	override var uiColor: UIColor { !selected ? UIColor.blue : UIColor.yellow }
+	override var hitchPoint: CGPoint { overrideHitchPoint }
 
 // UIView ==========================================================================================
     override func draw(_ rect: CGRect) {
@@ -255,9 +251,7 @@ class TailBub: Bubble, SignatureLeafDelegate, ChainLeafDelegate {
     }
 
 // SignatureLeafDelegate ===========================================================================
-	var name: String {
-		return tail.name
-	}
+	var name: String { tail.name }
 	var params: [String] {
 		var params: [String] = []
 		for vertebra in tail.vertebras {

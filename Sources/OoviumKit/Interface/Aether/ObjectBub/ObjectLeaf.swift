@@ -118,7 +118,7 @@ class ObjectLeaf: Leaf, Editable, ChainViewDelegate, DoubleTappable, Colorable, 
 	}
 	
 // Leaf ============================================================================================
-    override func wire() {
+    override func wireMoorings() {
         object.chain.tokens.forEach {
             guard let mooring = bubble.aetherView.moorings[$0] else { return }
             bubble.aetherView.link(from: self.mooring, to: mooring, wake: false)

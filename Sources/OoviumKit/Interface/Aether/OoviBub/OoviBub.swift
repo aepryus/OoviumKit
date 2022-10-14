@@ -134,7 +134,7 @@ public class OoviBub: Bubble, ChainLeafDelegate {
 	init(_ oovi: Oovi, aetherView: AetherView) {
 		self.oovi = oovi
 		
-        super.init(aetherView: aetherView, aexel: oovi, hitch: .topLeft, origin: CGPoint(x: self.oovi.x, y: self.oovi.y), size: CGSize(width: 500, height: 300))
+        super.init(aetherView: aetherView, aexel: oovi, origin: CGPoint(x: self.oovi.x, y: self.oovi.y), size: CGSize(width: 500, height: 300))
 		
 		self.backgroundColor = UIColor.clear
 
@@ -285,12 +285,9 @@ public class OoviBub: Bubble, ChainLeafDelegate {
 	}
 	
 // Bubble ==========================================================================================
-	override var selectable: Bool {
-		return false
-	}
-	override var uiColor: UIColor {
-		return !selected ? oovi.uiColor : UIColor.yellow
-	}
+    override var uiColor: UIColor { !selected ? oovi.uiColor : UIColor.yellow }
+    override var hitch: Position { .topLeft }
+	override var selectable: Bool { false }
 	
 // UIView ==========================================================================================
     public override func draw(_ rect: CGRect) {

@@ -50,12 +50,12 @@ open class Gadget: UIView {
         let offsetX: CGFloat = fixed.horizontal + gS*offset.horizontal
         let offsetY: CGFloat = fixed.vertical + gS*offset.vertical
         
-        if anchor.isLeft() { x = delegate.safeLeft + offsetX }
-        else if anchor.isRight() { x = -delegate.safeRight + delegate.width - gS*size.width + offsetX }
+        if anchor.isLeft { x = delegate.safeLeft + offsetX }
+        else if anchor.isRight { x = -delegate.safeRight + delegate.width - gS*size.width + offsetX }
         else { x = (delegate.width - gS*size.width) / 2 + offsetX}
         
-        if anchor.isTop() { y = delegate.safeTop + offsetY }
-        else if anchor.isBottom() { y = -delegate.safeBottom + delegate.height - gS*size.height + offsetY }
+        if anchor.isTop { y = delegate.safeTop + offsetY }
+        else if anchor.isBottom { y = -delegate.safeBottom + delegate.height - gS*size.height + offsetY }
         else { y = (delegate.height - gS*size.height) / 2 + offsetY }
         
         frame = CGRect(x: x, y: y, width: gS*size.width, height: gS*size.height)

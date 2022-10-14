@@ -50,7 +50,7 @@ class AutoBub: Bubble, ChainLeafDelegate {
 	init(_ auto: Auto, aetherView: AetherView) {
 		self.auto = auto
 		
-		super.init(aetherView: aetherView, aexel: auto, hitch: .topLeft, origin: CGPoint(x: self.auto.x, y: self.auto.y), size: CGSize(width: 36, height: 36))
+		super.init(aetherView: aetherView, aexel: auto, origin: CGPoint(x: self.auto.x, y: self.auto.y), size: CGSize(width: 36, height: 36))
 		
 		self.backgroundColor = UIColor.clear
 //		self.backgroundColor = UIColor.gray.alpha(0.5)
@@ -254,12 +254,9 @@ class AutoBub: Bubble, ChainLeafDelegate {
 	}
 	
 // Bubble ==========================================================================================
-	override var selectable: Bool {
-		return false
-	}
-	override var uiColor: UIColor {
-		return OOColor.cobolt.uiColor
-	}
+	override var uiColor: UIColor { OOColor.cobolt.uiColor }
+    override var hitch: Position { .topLeft }
+    override var selectable: Bool { false }
 
 // UIView ==========================================================================================
 	public override func draw(_ rect: CGRect) {

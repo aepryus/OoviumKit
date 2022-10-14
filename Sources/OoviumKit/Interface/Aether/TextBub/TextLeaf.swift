@@ -108,7 +108,7 @@ class TextLeaf: Leaf, Editable, DoubleTappable, Citable, Colorable, UITextFieldD
 	}
 	
 // Leaf ============================================================================================
-	override func wire() {
+	override func wireMoorings() {
 		for edge in text.edges {
 			let textBub: TextBub = bubble.aetherView.bubble(aexel: edge.other) as! TextBub
 			bubble.aetherView.link(from: mooring, to: textBub.textLeaf.mooring, wake: false)

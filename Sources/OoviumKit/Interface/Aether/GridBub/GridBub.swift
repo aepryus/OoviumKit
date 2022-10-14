@@ -89,7 +89,7 @@ class GridBub: Bubble, ChainLeafDelegate {
 	init(_ grid: Grid, aetherView: AetherView) {
 		self.grid = grid
 		
-		super.init(aetherView: aetherView, aexel: grid, hitch: .topLeft, origin: CGPoint(x: self.grid.x, y: self.grid.y), size: CGSize.zero)
+		super.init(aetherView: aetherView, aexel: grid, origin: CGPoint(x: self.grid.x, y: self.grid.y), size: CGSize.zero)
 		
 		gridLeaf.size = CGSize(width: 360, height: 360)
 		gridLeaf.hitch = .topLeft
@@ -256,13 +256,10 @@ class GridBub: Bubble, ChainLeafDelegate {
 	}
 
 // Bubble ==========================================================================================
-	override var hitchPoint: CGPoint {
-		return CGPoint(x: grid.exposed ? 4.5 : 0, y: editingColNo != nil ? 57 : (grid.exposed ? 4.5 : 0))
-	}
-	override var uiColor: UIColor {
-		return !selected ? UIColor.purple : UIColor.yellow
-	}
-	override func wire() {}
+    override var uiColor: UIColor { !selected ? UIColor.purple : UIColor.yellow }
+    override var hitch: Position { .topLeft }
+	override var hitchPoint: CGPoint { CGPoint(x: grid.exposed ? 4.5 : 0, y: editingColNo != nil ? 57 : (grid.exposed ? 4.5 : 0)) }
+	override func wireMoorings() {}
 	
 // UIView ==========================================================================================
 	override func setNeedsDisplay() {

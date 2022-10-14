@@ -98,21 +98,19 @@ class ChainLeaf: Leaf, ChainViewDelegate, Editable {
 	
 // FocusTappable ===================================================================================
 	func onTap(aetherView: AetherView) {
-		if chainView.chain.editing {
-			releaseFocus()
-		} else {
-			delegate?.onWillEdit()
+        if chainView.chain.editing { releaseFocus() }
+        else {
+            delegate?.onWillEdit()
 			makeFocus()
 		}
 	}
 	
 // Leaf ============================================================================================
-	override func wire() {
-		for token in chain.tokens {
-			if let mooring = bubble.aetherView.moorings[token] {
-				bubble.aetherView.link(from: self.mooring, to: mooring, wake: false)
-			}
-		}
+	override func wireMoorings() {
+        chain.tokens.forEach {
+            guard let mooring = bubble.aetherView.moorings[$0] else { return }
+            bubble.aetherView.link(from: self.mooring, to: mooring, wake: false)
+        }
 	}
 	override func positionMoorings() {
 		mooring.point = self.bubble.aetherView.scrollView.convert(self.center, from: self.superview)

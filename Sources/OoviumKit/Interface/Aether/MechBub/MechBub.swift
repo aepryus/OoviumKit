@@ -73,7 +73,7 @@ class MechBub: Bubble, SignatureLeafDelegate, ChainLeafDelegate {
 	init(_ mech: Mech, aetherView: AetherView) {
 		self.mech = mech
 		
-		super.init(aetherView: aetherView, aexel: mech, hitch: .top, origin: CGPoint(x: self.mech.x, y: self.mech.y), size: CGSize.zero)
+		super.init(aetherView: aetherView, aexel: mech, origin: CGPoint(x: self.mech.x, y: self.mech.y), size: CGSize.zero)
 		
 		signatureLeaf = SignatureLeaf(bubble: self, anchor: CGPoint(x: 60, y: 0), hitch: .top, size: CGSize(width: 100, height: 90))
 		add(leaf: signatureLeaf)
@@ -133,9 +133,8 @@ class MechBub: Bubble, SignatureLeafDelegate, ChainLeafDelegate {
 	}
 
 // Bubble ==========================================================================================
-	override var uiColor: UIColor {
-		return !selected ? UIColor.blue : UIColor.yellow
-	}
+	override var uiColor: UIColor { !selected ? UIColor.blue : UIColor.yellow }
+    override var hitch: Position { .top }
 
 // UIView ==========================================================================================
     override func draw(_ rect: CGRect) {

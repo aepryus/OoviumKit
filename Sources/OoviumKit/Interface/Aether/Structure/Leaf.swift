@@ -63,11 +63,11 @@ class Leaf: UIView {
 	required init?(coder aDecoder: NSCoder) { fatalError() }
 	
 	var aetherView: AetherView { bubble.aetherView }
-	var xL: CGFloat { hitch.isLeft() ? anchor.x : (hitch.isRight() ? anchor.x-size.width : anchor.x-size.width/2) }
+	var xL: CGFloat { hitch.isLeft ? anchor.x : (hitch.isRight ? anchor.x-size.width : anchor.x-size.width/2) }
     var xR: CGFloat { xL+size.width }
-    var yT: CGFloat { hitch.isTop() ? anchor.y : (hitch.isBottom() ? anchor.y-size.height : anchor.y-size.height/2) }
+    var yT: CGFloat { hitch.isTop ? anchor.y : (hitch.isBottom ? anchor.y-size.height : anchor.y-size.height/2) }
 	var yB: CGFloat { yT+size.height }
-	func wire() {}
+	func wireMoorings() {}
 	func positionMoorings() {}
 	
 	func removeFromBubble() {

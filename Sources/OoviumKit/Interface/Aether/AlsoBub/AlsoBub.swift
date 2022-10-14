@@ -69,7 +69,7 @@ class AlsoBub: Bubble {
 
 	init(_ also: Also, aetherView: AetherView) {
 		self.also = also
-		super.init(aetherView: aetherView, aexel: also, hitch: .top, origin: CGPoint(x: self.also.x, y: self.also.y), size: CGSize.zero)
+		super.init(aetherView: aetherView, aexel: also, origin: CGPoint(x: self.also.x, y: self.also.y), size: CGSize.zero)
 		
 		alsoLeaf.size = CGSize(width: 130, height: 40)
 		alsoLeaf.hitch = .top
@@ -134,9 +134,8 @@ class AlsoBub: Bubble {
 	}
 	
 // Bubble ==========================================================================================
-	override var uiColor: UIColor {
-		return !selected ? OOColor.lavender.uiColor : UIColor.yellow
-	}
+	override var uiColor: UIColor { !selected ? OOColor.lavender.uiColor : UIColor.yellow }
+    override var hitch: Position { .top }
 	
 // UIView ==========================================================================================
 	override func draw(_ rect: CGRect) {

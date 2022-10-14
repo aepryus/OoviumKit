@@ -85,7 +85,7 @@ class TypeLeaf: Leaf, Colorable {
 	}
 	
 // Leaf ============================================================================================
-	override func wire() {
+	override func wireMoorings() {
 		type.fields.enumerated().forEach { (i: Int, field: Field) in
 			guard let typeBub: TypeBub = bubble.aetherView.typeBub(name: field.typeName) else { return }
 			bubble.aetherView.link(from: fieldMoorings[i], to: typeBub.typeLeaf.mooring, wake: false)

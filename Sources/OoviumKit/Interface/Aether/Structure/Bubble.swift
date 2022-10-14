@@ -13,10 +13,10 @@ import UIKit
 public enum Position {
 	case center, top, bottom, left, right, topLeft, topRight, bottomLeft, bottomRight
 	
-	func isRight() -> Bool { self == .topRight || self == .right || self == .bottomRight }
-	func isLeft() -> Bool { self == .topLeft || self == .left || self == .bottomLeft }
-	func isTop() -> Bool { self == .topLeft || self == .top || self == .topRight }
-	func isBottom() -> Bool { self == .bottomLeft || self == .bottom || self == .bottomRight }
+    var isRight: Bool { self == .topRight || self == .right || self == .bottomRight }
+    var isLeft: Bool { self == .topLeft || self == .left || self == .bottomLeft }
+	var isTop: Bool { self == .topLeft || self == .top || self == .topRight }
+	var isBottom: Bool { self == .bottomLeft || self == .bottom || self == .bottomRight }
 }
 
 protocol Maker {
@@ -27,17 +27,15 @@ protocol Maker {
 public class Bubble: UIView, AnchorTappable, Colorable, UIGestureRecognizerDelegate, UIContextMenuInteractionDelegate {
 	unowned let aetherView: AetherView
 	let aexel: Aexel
-	let hitch: Position
 
     private var leaves: [Leaf] = []
     var plasma: CGMutablePath? = nil
 
     var selected: Bool = false
     
-	init(aetherView: AetherView, aexel: Aexel, hitch: Position, origin: CGPoint, size: CGSize) {
+	init(aetherView: AetherView, aexel: Aexel, origin: CGPoint, size: CGSize) {
 		self.aetherView = aetherView
 		self.aexel = aexel
-		self.hitch = hitch
 		
 		super.init(frame: CGRect(origin: origin, size: size))
 
@@ -52,13 +50,14 @@ public class Bubble: UIView, AnchorTappable, Colorable, UIGestureRecognizerDeleg
 	public required init?(coder aDecoder: NSCoder) { fatalError() }
 
     var uiColor: UIColor { .white }
+    var hitch: Position { .center }
     var selectable: Bool { true }
     
 	var orb: Orb { aetherView.orb }
 	var context: Context { orb.multiContext }
 	var multiContext: Context { orb.multiContext }
 	
-    func wire() { leaves.forEach { $0.wire() } }
+    func wireMoorings() { leaves.forEach { $0.wireMoorings() } }
     func positionMoorings() { leaves.forEach { $0.positionMoorings() } }
 
     func add(leaf: Leaf) {
@@ -83,8 +82,8 @@ public class Bubble: UIView, AnchorTappable, Colorable, UIGestureRecognizerDeleg
 	}
     var hitchPoint: CGPoint {
 		let size = calculateRect().size
-		let x: CGFloat = hitch.isRight() ? size.width : (!hitch.isLeft() ? size.width/2 : 0)
-		let y: CGFloat = hitch.isBottom() ? size.height : (!hitch.isTop() ? size.height/2 : 0)
+        let x: CGFloat = hitch.isLeft ? 0 : hitch.isRight ? size.width : size.width/2
+        let y: CGFloat = hitch.isTop ? 0 : hitch.isBottom ? size.height : size.height/2
 		return CGPoint(x: x, y: y)
 	}
     func currentAnchor() -> CGPoint { frame.origin + hitchPoint }

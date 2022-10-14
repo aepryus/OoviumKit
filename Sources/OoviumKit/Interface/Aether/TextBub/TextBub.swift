@@ -45,7 +45,7 @@ class TextBub: Bubble, NSCopying {
 	init(_ text: Text, aetherView: AetherView) {
 		self.text = text
 		
-		super.init(aetherView: aetherView, aexel: text, hitch: .center, origin: CGPoint(x: self.text.x, y: self.text.y), size: CGSize.zero)
+		super.init(aetherView: aetherView, aexel: text, origin: CGPoint(x: self.text.x, y: self.text.y), size: CGSize.zero)
 		
 		textLeaf = TextLeaf(bubble: self)
 		
