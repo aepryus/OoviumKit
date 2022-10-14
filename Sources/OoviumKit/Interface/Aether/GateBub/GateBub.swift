@@ -99,7 +99,7 @@ class GateBub: Bubble, ChainLeafDelegate, Citable {
 	init(_ gate: Gate, aetherView: AetherView) {
 		self.gate = gate
 		
-		super.init(aetherView: aetherView, aexel: gate, origin: CGPoint(x: self.gate.x, y: self.gate.y), hitch: .center, size: CGSize.zero)
+		super.init(aetherView: aetherView, aexel: gate, hitch: .center, origin: CGPoint(x: self.gate.x, y: self.gate.y), size: CGSize.zero)
 		
 		ifLeaf.chain = gate.ifChain
 		ifLeaf.minWidth = 70

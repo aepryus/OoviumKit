@@ -89,7 +89,7 @@ class GridBub: Bubble, ChainLeafDelegate {
 	init(_ grid: Grid, aetherView: AetherView) {
 		self.grid = grid
 		
-		super.init(aetherView: aetherView, aexel: grid, origin: CGPoint(x: self.grid.x, y: self.grid.y), hitch: .topLeft, size: CGSize.zero)
+		super.init(aetherView: aetherView, aexel: grid, hitch: .topLeft, origin: CGPoint(x: self.grid.x, y: self.grid.y), size: CGSize.zero)
 		
 		gridLeaf.size = CGSize(width: 360, height: 360)
 		gridLeaf.hitch = .topLeft

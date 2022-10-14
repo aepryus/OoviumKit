@@ -136,7 +136,7 @@ class TailBub: Bubble, SignatureLeafDelegate, ChainLeafDelegate {
 	init(_ tail: Tail, aetherView: AetherView) {
 		self.tail = tail
 		
-		super.init(aetherView: aetherView, aexel: tail, origin: CGPoint(x: self.tail.x, y: self.tail.y), hitch: .center, size: CGSize(width: 36, height: 36))
+        super.init(aetherView: aetherView, aexel: tail, hitch: .center, origin: CGPoint(x: self.tail.x, y: self.tail.y), size: CGSize(width: 36, height: 36))
 
 		signatureLeaf = SignatureLeaf(bubble: self, anchor: CGPoint(x: 60, y: 0), hitch: .top, size: CGSize(width: 100, height: 90))
 		add(leaf: signatureLeaf)

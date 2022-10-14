@@ -69,7 +69,7 @@ class AlsoBub: Bubble {
 
 	init(_ also: Also, aetherView: AetherView) {
 		self.also = also
-		super.init(aetherView: aetherView, aexel: also, origin: CGPoint(x: self.also.x, y: self.also.y), hitch: .top, size: CGSize.zero)
+		super.init(aetherView: aetherView, aexel: also, hitch: .top, origin: CGPoint(x: self.also.x, y: self.also.y), size: CGSize.zero)
 		
 		alsoLeaf.size = CGSize(width: 130, height: 40)
 		alsoLeaf.hitch = .top

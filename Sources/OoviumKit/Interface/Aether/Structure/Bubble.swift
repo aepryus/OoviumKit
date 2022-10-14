@@ -42,12 +42,12 @@ public class Bubble: UIView, AnchorTappable, Colorable, UIGestureRecognizerDeleg
     var uiColor: UIColor { .white }
     var selectable: Bool { true }
 	
-	init(aetherView: AetherView, aexel: Aexel, origin: CGPoint, hitch: Position, size: CGSize) {
+	init(aetherView: AetherView, aexel: Aexel, hitch: Position, origin: CGPoint, size: CGSize) {
 		self.aetherView = aetherView
 		self.aexel = aexel
 		self.hitch = hitch
 		
-		super.init(frame: CGRect(x: origin.x, y: origin.y, width: size.width, height: size.height))
+		super.init(frame: CGRect(origin: origin, size: size))
 
 		backgroundColor = UIColor.clear
 
@@ -55,9 +55,7 @@ public class Bubble: UIView, AnchorTappable, Colorable, UIGestureRecognizerDeleg
 		gesture.delegate = self
 		addGestureRecognizer(gesture)
 		
-		if Screen.mac {
-			addInteraction(UIContextMenuInteraction(delegate: self))
-		}
+		if Screen.mac { addInteraction(UIContextMenuInteraction(delegate: self)) }
 	}
 	public required init?(coder aDecoder: NSCoder) { fatalError() }
 

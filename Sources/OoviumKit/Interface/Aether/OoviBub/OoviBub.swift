@@ -134,7 +134,7 @@ public class OoviBub: Bubble, ChainLeafDelegate {
 	init(_ oovi: Oovi, aetherView: AetherView) {
 		self.oovi = oovi
 		
-		super.init(aetherView: aetherView, aexel: oovi, origin: CGPoint(x: self.oovi.x, y: self.oovi.y), hitch: .topLeft, size: CGSize(width: 500, height: 300))
+        super.init(aetherView: aetherView, aexel: oovi, hitch: .topLeft, origin: CGPoint(x: self.oovi.x, y: self.oovi.y), size: CGSize(width: 500, height: 300))
 		
 		self.backgroundColor = UIColor.clear
 

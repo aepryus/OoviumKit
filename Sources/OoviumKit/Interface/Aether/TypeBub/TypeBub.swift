@@ -69,7 +69,7 @@ class TypeBub: Bubble {
 	init(_ type: Type, aetherView: AetherView) {
 		self.type = type
 		
-		super.init(aetherView: aetherView, aexel: type, origin: CGPoint(x: self.type.x, y: self.type.y), hitch: .center, size: CGSize.zero)
+		super.init(aetherView: aetherView, aexel: type, hitch: .center, origin: CGPoint(x: self.type.x, y: self.type.y), size: CGSize.zero)
 		
 		typeLeaf = TypeLeaf(bubble: self, hitch: .center, anchor: CGPoint.zero, size: CGSize.zero)
 		add(leaf: typeLeaf)

@@ -138,7 +138,7 @@ class CronBub: Bubble, ChainLeafDelegate {
 
 	init(_ cron: Cron, aetherView: AetherView) {
 		self.cron = cron
-		super.init(aetherView: aetherView, aexel: cron, origin: CGPoint(x: self.cron.x, y: self.cron.y), hitch: .top, size: CGSize.zero)
+        super.init(aetherView: aetherView, aexel: cron, hitch: .top, origin: CGPoint(x: self.cron.x, y: self.cron.y), size: CGSize.zero)
 		
 		cron.tower.listener = faceLeaf
 		add(leaf: faceLeaf)
