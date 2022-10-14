@@ -229,7 +229,7 @@ class AutoBub: Bubble, ChainLeafDelegate {
 			statesLeaf.renderColorLeaves()
 		}
 		
-		padding = CGSize(width: 7, height: 7)
+//		padding = CGSize(width: 7, height: 7)
 		renderMinSize()
 		
 		setNeedsDisplay()
@@ -250,7 +250,7 @@ class AutoBub: Bubble, ChainLeafDelegate {
 //			w = max(w, qx3+p)
 			h = max(h, qy3+p)+7
 		}
-		minSize = CGSize(width: w, height: h)
+//		minSize = CGSize(width: w, height: h)
 	}
 	
 // Bubble ==========================================================================================

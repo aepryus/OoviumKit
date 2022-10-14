@@ -1,5 +1,5 @@
 //
-//  AETouchGesture.swift
+//  TouchGesture.swift
 //  Oovium
 //
 //  Created by Joe Charlier on 8/4/17.
@@ -12,9 +12,7 @@ public class TouchGesture: UIGestureRecognizer {
 
 // UIGestureRecognizer =============================================================================
 	public override func touchesBegan(_ touches: Set<UITouch>, with event: UIEvent) {
-		if state == .possible {
-			state = .recognized
-		}
+		if state == .possible { state = .recognized }
 	}
 	public override func touchesMoved(_ touches: Set<UITouch>, with event: UIEvent) {
 		state = .failed

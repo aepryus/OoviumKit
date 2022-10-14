@@ -80,12 +80,8 @@ class TextBub: Bubble, NSCopying {
 	override var uiColor: UIColor {
 		return !selected ? text.color.uiColor : UIColor.yellow
 	}
-	override var context: Context {
-		return orb.textContext
-	}
-	override var multiContext: Context {
-		return orb.textMultiContext
-	}
+	override var context: Context { orb.textContext }
+	override var multiContext: Context { orb.textMultiContext }
 	
 // UIView ==========================================================================================
 	override var frame: CGRect {

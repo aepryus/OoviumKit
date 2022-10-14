@@ -353,12 +353,8 @@ class CronBub: Bubble, ChainLeafDelegate {
 	}
 
 // Bubble ==========================================================================================
-	override var uiColor: UIColor {
-		return !selected ? OOColor.cobolt.uiColor : UIColor.yellow
-	}
-	override var hitchPoint: CGPoint {
-		return overrideHitchPoint
-	}
+	override var uiColor: UIColor { !selected ? OOColor.cobolt.uiColor : UIColor.yellow }
+	override var hitchPoint: CGPoint { overrideHitchPoint }
 	override func wire() {
 		startLeaf.wire()
 		stopLeaf.wire()

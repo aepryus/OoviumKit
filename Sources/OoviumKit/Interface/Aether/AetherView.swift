@@ -352,7 +352,6 @@ public class AetherView: UIView, UIScrollViewDelegate, UIGestureRecognizerDelega
 	func add(bubble: Bubble) {
 		bubbles.append(bubble)
 		scrollView.addSubview(bubble)
-		bubble.aetherView = self
 	}
 	func remove(bubbles: Set<Bubble>) {
 		for bubble in bubbles {

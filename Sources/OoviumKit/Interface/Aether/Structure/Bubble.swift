@@ -25,23 +25,15 @@ protocol Maker {
 }
 
 public class Bubble: UIView, AnchorTappable, Colorable, UIGestureRecognizerDelegate, UIContextMenuInteractionDelegate {
-	unowned var aetherView: AetherView
-	var aexel: Aexel
-	var hitch: Position
-	var minSize: CGSize? = nil
-	var padding: CGSize? = nil
-	var leaves: [Leaf] = []
-	var plasma: CGMutablePath? = nil
-	
-	var selected: Bool = false
-	var startPoint: CGPoint? = nil
-	
-	var leafsNeedLayout: Bool = false
-	var oldHitchPoint: CGPoint? = nil
-	
-    var uiColor: UIColor { .white }
-    var selectable: Bool { true }
-	
+	unowned let aetherView: AetherView
+	let aexel: Aexel
+	let hitch: Position
+
+    private var leaves: [Leaf] = []
+    var plasma: CGMutablePath? = nil
+
+    var selected: Bool = false
+    
 	init(aetherView: AetherView, aexel: Aexel, hitch: Position, origin: CGPoint, size: CGSize) {
 		self.aetherView = aetherView
 		self.aexel = aexel
@@ -49,7 +41,7 @@ public class Bubble: UIView, AnchorTappable, Colorable, UIGestureRecognizerDeleg
 		
 		super.init(frame: CGRect(origin: origin, size: size))
 
-		backgroundColor = UIColor.clear
+		backgroundColor = .clear
 
 		let gesture = TouchGesture(target: self, action: #selector(onTouch))
 		gesture.delegate = self
@@ -59,65 +51,46 @@ public class Bubble: UIView, AnchorTappable, Colorable, UIGestureRecognizerDeleg
 	}
 	public required init?(coder aDecoder: NSCoder) { fatalError() }
 
+    var uiColor: UIColor { .white }
+    var selectable: Bool { true }
+    
 	var orb: Orb { aetherView.orb }
-	var context: Context {
-		return orb.multiContext
-	}
-	var multiContext: Context {
-		return orb.multiContext
-	}
+	var context: Context { orb.multiContext }
+	var multiContext: Context { orb.multiContext }
 	
-	func add(leaf: Leaf) {
-		guard !leaves.contains(leaf) else { return }
-		leaves.append(leaf)
-		addSubview(leaf)
+    func wire() { leaves.forEach { $0.wire() } }
+    func positionMoorings() { leaves.forEach { $0.positionMoorings() } }
+
+    func add(leaf: Leaf) {
+        guard !leaves.contains(leaf) else { return }
+        leaves.append(leaf)
+        addSubview(leaf)
+    }
+    func remove(leaf: Leaf) {
+        leaves.remove(object: leaf)
+        leaf.removeFromSuperview()
+    }
+    
+    func calculateRect() -> CGRect {
+        guard leaves.count > 0 else { return CGRect(x: 0, y: 0, width: 36, height: 36) }
+        
+        let xL: CGFloat = leaves.min { $0.xL }
+        let xR: CGFloat = leaves.max { $0.xR }
+        let yT: CGFloat = leaves.min { $0.yT }
+        let yB: CGFloat = leaves.max { $0.yB }
+		
+		return CGRect(x: xL, y: yT, width: xR-xL, height: yB-yT)
 	}
-	func remove(leaf: Leaf) {
-		leaves.remove(object: leaf)
-		leaf.removeFromSuperview()
-	}
-	
-	func calculateRect() -> CGRect {
-		guard let first = leaves.first else {return CGRect(x: 0, y: 0, width: 36, height: 36)}
-		
-		var xL: CGFloat = first.xL
-		var xR: CGFloat = first.xR
-		var yT: CGFloat = first.yT
-		var yB: CGFloat = first.yB
-		
-		for leaf in leaves {
-			guard leaf !== first else {continue}
-			if xL > leaf.xL {xL = leaf.xL}
-			if xR < leaf.xR {xR = leaf.xR}
-			if yT > leaf.yT {yT = leaf.yT}
-			if yB < leaf.yB {yB = leaf.yB}
-		}
-		
-		var width = xR-xL
-		var height = yB-yT
-		
-		if let padding = padding {
-			width += padding.width
-			height += padding.height
-		}
-		
-		if let minSize = minSize {
-			width = max(width, minSize.width)
-			height = max(height, minSize.height)
-		}
-		
-		return CGRect(x: xL, y: yT, width: width, height: height)
-	}
-	func currentAnchor() -> CGPoint {
-		return frame.origin + hitchPoint
-	}
-	var hitchPoint: CGPoint {
+    var hitchPoint: CGPoint {
 		let size = calculateRect().size
 		let x: CGFloat = hitch.isRight() ? size.width : (!hitch.isLeft() ? size.width/2 : 0)
 		let y: CGFloat = hitch.isBottom() ? size.height : (!hitch.isTop() ? size.height/2 : 0)
 		return CGPoint(x: x, y: y)
 	}
-	func layoutLeaves() {
+    func currentAnchor() -> CGPoint { frame.origin + hitchPoint }
+
+    private var oldHitchPoint: CGPoint? = nil
+    func layoutLeaves() {
 		let rect = calculateRect()
 		if let oldHitchPoint = oldHitchPoint {
 			let newHitchPoint = hitchPoint
@@ -128,42 +101,30 @@ public class Bubble: UIView, AnchorTappable, Colorable, UIGestureRecognizerDeleg
 			oldHitchPoint = hitchPoint
 		}
 		
-		for leaf in leaves {
-			leaf.frame = CGRect(x: (padding?.width ?? 0)+leaf.xL-rect.origin.x, y: (padding?.height ?? 0)+leaf.yT-rect.origin.y, width: leaf.size.width, height: leaf.size.height)
-		}
-		
+        leaves.forEach { $0.frame = CGRect(origin: CGPoint(x: $0.xL-rect.origin.x, y: $0.yT-rect.origin.y), size: $0.size) }
+
 		setNeedsDisplay()
 	}
-	func setLeavesNeedLayout() {
-		leafsNeedLayout = true
-	}
+
+    private var leafsNeedLayout: Bool = false
+    func setLeavesNeedLayout() { leafsNeedLayout = true }
 	func layoutLeavesIfNeeded() {
 		guard leafsNeedLayout else { return }
 		layoutLeaves()
 		leafsNeedLayout = false
 	}
-	func setNeedsDisplayWithLeaves() {
-		setNeedsDisplay()
-		for leaf in leaves {
-			leaf.setNeedsDisplay()
-		}
-	}
-	func wire() {
-		for leaf in leaves {
-			leaf.wire()
-		}
-	}
-	func positionMoorings() {
-		leaves.forEach { $0.positionMoorings() }
-	}
-	func setStartPoint() {
-		startPoint = center
-	}
-	func move(by: CGPoint) {
+    func setNeedsDisplayWithLeaves() {
+        setNeedsDisplay()
+        leaves.forEach { $0.setNeedsDisplay() }
+    }
+
+    private var startPoint: CGPoint? = nil
+	func setStartPoint() { startPoint = center }
+    func move(by: CGPoint) {
 		guard let startPoint = startPoint else { fatalError() }
 		center = startPoint + by
 	}
-	
+    
 // Events ==========================================================================================
 	func onCreate() {}
 	func onRemove() {}
@@ -174,14 +135,11 @@ public class Bubble: UIView, AnchorTappable, Colorable, UIGestureRecognizerDeleg
 	
 	func onAnchorTap(point: CGPoint) {
 		guard aetherView.focus == nil else { return }
-		if !selected {
-			aetherView.select(bubble: self)
-		} else {
-			aetherView.unselect(bubble: self)
-		}
+		if !selected { aetherView.select(bubble: self) }
+        else { aetherView.unselect(bubble: self) }
 	}
 	@objc func onTouch() {
-		aetherView.bringSubviewToFront(self)
+        aetherView.scrollView.bringSubviewToFront(self)
 	}
 	
 // Actions =========================================================================================
@@ -190,35 +148,29 @@ public class Bubble: UIView, AnchorTappable, Colorable, UIGestureRecognizerDeleg
 	}
 	func select() {
 		selected = true
-		onSelect()
-		setNeedsDisplay()
-		for leaf in leaves {
-			leaf.setNeedsDisplay()
-		}
 		positionMoorings()
+        setNeedsDisplayWithLeaves()
+        onSelect()
 	}
 	func unselect() {
 		selected = false
-		onUnselect()
-		setNeedsDisplay()
-		for leaf in leaves {
-			leaf.setNeedsDisplay()
-		}
 		positionMoorings()
+        setNeedsDisplayWithLeaves()
+        onUnselect()
 	}
 	
 // UIView ==========================================================================================
+    public override var frame: CGRect {
+        didSet { positionMoorings() }
+    }
+    public override var center: CGPoint {
+        didSet { positionMoorings() }
+    }
 	public override func hitTest(_ point: CGPoint, with event: UIEvent?) -> UIView? {
 		let view: UIView? = super.hitTest(point, with: event)
 		if view !== self { return view }
 		if let plasma = plasma, plasma.contains(point) { return self }
 		return nil
-	}
-	public override var frame: CGRect {
-		didSet { positionMoorings() }
-	}
-	public override var center: CGPoint {
-		didSet { positionMoorings() }
 	}
 	public override func point(inside point: CGPoint, with event: UIEvent?) -> Bool {
 		let area = self.bounds.insetBy(dx: -4*Oo.s, dy: -4*Oo.s)
@@ -226,9 +178,7 @@ public class Bubble: UIView, AnchorTappable, Colorable, UIGestureRecognizerDeleg
 	}
 	
 // UIGestureRecognizerDelegate =====================================================================
-	public func gestureRecognizer(_ gestureRecognizer: UIGestureRecognizer, shouldRecognizeSimultaneouslyWith otherGestureRecognizer: UIGestureRecognizer) -> Bool {
-		return true
-	}
+	public func gestureRecognizer(_ gestureRecognizer: UIGestureRecognizer, shouldRecognizeSimultaneouslyWith otherGestureRecognizer: UIGestureRecognizer) -> Bool { true }
 
 // UIContextMenuInteractionDelegate ================================================================
 	public func contextMenuInteraction(_ interaction: UIContextMenuInteraction, configurationForMenuAtLocation location: CGPoint) -> UIContextMenuConfiguration? {
