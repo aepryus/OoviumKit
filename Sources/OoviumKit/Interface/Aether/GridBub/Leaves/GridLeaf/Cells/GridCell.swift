@@ -95,7 +95,7 @@ class GridCell: UICollectionViewCell, Sizable, Editable, Citable, ChainViewDeleg
     }
 
 // Tappable ========================================================================================
-	func onTap(aetherView: AetherView) {
+	func onFocusTap(aetherView: AetherView) {
 		guard !cell.column.calculated else { return }
 		if chainView.chain.editing {
 			tapped = true

@@ -52,7 +52,7 @@ class HeaderCell: UICollectionViewCell, Sizable, Editable, Citable, DoubleTappab
 		textField!.inputAssistantItem.trailingBarButtonGroups.removeAll()
 		addSubview(textField!)
 		let p: CGFloat = 6
-		textField!.frame = CGRect(x: p, y: 1.5, width: width-2*p, height: height-2)
+		textField!.frame = CGRect(x: p, y: 0, width: width-2*p, height: height-2)
 		setNeedsDisplay()
 		textField!.becomeFirstResponder()
 	}
@@ -87,16 +87,13 @@ class HeaderCell: UICollectionViewCell, Sizable, Editable, Citable, DoubleTappab
 		let p: CGFloat = 1
 		let path: CGMutablePath = CGMutablePath()
 
-		if isFocus {
-			Skin.gridCalc(path: CGPath(rect: rect, transform: nil), uiColor: UIColor.cyan.shade(0.5))
-		} else {
-			Skin.gridFill(path: CGPath(rect: rect, transform: nil), uiColor: UIColor.black)
-		}
+		if isFocus { Skin.gridCalc(path: CGPath(rect: rect, transform: nil), uiColor: UIColor.cyan.shade(0.5)) }
+        else {       Skin.gridFill(path: CGPath(rect: rect, transform: nil), uiColor: UIColor.black) }
 		
 		path.move(to: CGPoint(x: 0, y: p))
 		path.addLine(to: CGPoint(x: width-(leftMost ? p : 0), y: p))
 		
-		if !leftMost {path.move(to: CGPoint(x: width-p, y: p))}
+		if !leftMost { path.move(to: CGPoint(x: width-p, y: p)) }
 		path.addLine(to: CGPoint(x: width-p, y: height))
 		
 		path.move(to: CGPoint(x: 0, y: height-p))
@@ -105,11 +102,8 @@ class HeaderCell: UICollectionViewCell, Sizable, Editable, Citable, DoubleTappab
 		Skin.gridDraw(path: path, uiColor: gridLeaf.uiColor)
 		
 		if !editingName {
-			if isFocus {
-                Skin.text("\(column.name)", rect: rect.insetBy(dx: 6, dy: 5), uiColor: UIColor.cyan.shade(0.5), font: pen.font, align: column.alignment)
-			} else {
-                Skin.text("\(column.name)", rect: rect.insetBy(dx: 6, dy: 5), uiColor: gridLeaf.uiColor, font: pen.font, align: column.alignment)
-			}
+			if isFocus { Skin.text("\(column.name)", rect: rect.insetBy(dx: 6, dy: 5), uiColor: UIColor.cyan.shade(0.5), font: pen.font, align: column.alignment) }
+            else {       Skin.text("\(column.name)", rect: rect.insetBy(dx: 6, dy: 5), uiColor: gridLeaf.uiColor,        font: pen.font, align: column.alignment) }
 		}
 	}
 
@@ -119,12 +113,9 @@ class HeaderCell: UICollectionViewCell, Sizable, Editable, Citable, DoubleTappab
     func setNeedsResize() { controller.needsResizing.append(self) }
     
 // Tappable ========================================================================================
-	func onTap(aetherView: AetherView) {
-		if aetherView.focus !== self {
-			makeFocus()
-		} else {
-			releaseFocus()
-		}
+	func onFocusTap(aetherView: AetherView) {
+		if aetherView.focus !== self { makeFocus() }
+        else { releaseFocus() }
 	}
 
 // Editable ========================================================================================
@@ -143,7 +134,7 @@ class HeaderCell: UICollectionViewCell, Sizable, Editable, Citable, DoubleTappab
 		setNeedsDisplay()
 	}
 	func onReleaseFocus() {
-		if !gridBub.suppressChainLeafRemoval {gridBub.removeChainLeaf()}
+		if !gridBub.suppressChainLeafRemoval { gridBub.removeChainLeaf() }
 		setNeedsDisplay()
 	}
 	func cite(_ citable: Citable, at: CGPoint) {}
@@ -168,7 +159,8 @@ class HeaderCell: UICollectionViewCell, Sizable, Editable, Citable, DoubleTappab
 
 // UITextFieldDelegate =============================================================================
 	func textFieldShouldReturn(_ textField: UITextField) -> Bool {
-		closeLabel()
+        closeLabel()
+        setNeedsDisplay()
 		return true
 	}
 }

@@ -97,7 +97,7 @@ class ChainLeaf: Leaf, ChainViewDelegate, Editable {
 	}
 	
 // FocusTappable ===================================================================================
-	func onTap(aetherView: AetherView) {
+	func onFocusTap(aetherView: AetherView) {
         if chainView.chain.editing { releaseFocus() }
         else {
             delegate?.onWillEdit()

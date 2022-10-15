@@ -331,6 +331,7 @@ class GridLeaf: Leaf, GridViewDelegate, UITextInput, UITextInputTraits {
     @objc func backspace() { responder.backspace() }
 
     override var keyCommands: [UIKeyCommand]? {
+        guard isFirstResponder else { return nil }
         let commands: [UIKeyCommand] = [
             UIKeyCommand(action: #selector(rightArrow), input: UIKeyCommand.inputRightArrow),
             UIKeyCommand(action: #selector(leftArrow), input: UIKeyCommand.inputLeftArrow),

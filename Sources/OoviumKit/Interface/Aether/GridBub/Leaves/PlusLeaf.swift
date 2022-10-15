@@ -22,7 +22,7 @@ class PlusLeaf: Leaf, FocusTappable {
 	}
 		
 // Events ==========================================================================================
-	func onTap(aetherView: AetherView) {
+	func onFocusTap(aetherView: AetherView) {
 		onTapped(aetherView)
 	}
 		

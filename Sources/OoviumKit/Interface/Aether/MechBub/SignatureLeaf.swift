@@ -152,7 +152,7 @@ class SignatureLeaf: Leaf, Editable, Citable, UITextFieldDelegate {
 	}
 	
 // Events ==========================================================================================
-	func onTap(aetherView: AetherView) {
+	func onFocusTap(aetherView: AetherView) {
 		guard !open else { return }
 		makeFocus()
 	}

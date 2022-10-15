@@ -36,7 +36,7 @@ class FooterCell: UICollectionViewCell, Sizable, Citable, FocusTappable, TowerLi
 	required init?(coder: NSCoder) { fatalError() }
     
 // Tappable ========================================================================================
-	func onTap(aetherView: AetherView) {}
+	func onFocusTap(aetherView: AetherView) {}
 	
 // UIView ==========================================================================================
 	override func draw(_ rect: CGRect) {

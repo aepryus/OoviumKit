@@ -91,7 +91,7 @@ class ObjectLeaf: Leaf, Editable, ChainViewDelegate, DoubleTappable, Colorable, 
 	}
 
 // Events ==========================================================================================
-	func onTap(aetherView: AetherView) {
+	func onFocusTap(aetherView: AetherView) {
         if chainView.chain.editing { releaseFocus() }
         else { makeFocus() }
 	}

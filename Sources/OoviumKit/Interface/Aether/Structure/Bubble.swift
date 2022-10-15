@@ -86,7 +86,7 @@ public class Bubble: UIView, AnchorTappable, Colorable, UIGestureRecognizerDeleg
         let y: CGFloat = hitch.isTop ? 0 : hitch.isBottom ? size.height : size.height/2
 		return CGPoint(x: x, y: y)
 	}
-    func currentAnchor() -> CGPoint { frame.origin + hitchPoint }
+    var anchorPoint: CGPoint { frame.origin + hitchPoint }
 
     private var oldHitchPoint: CGPoint? = nil
     func layoutLeaves() {
@@ -99,18 +99,16 @@ public class Bubble: UIView, AnchorTappable, Colorable, UIGestureRecognizerDeleg
 			self.bounds = CGRect(origin: CGPoint.zero, size: rect.size)
 			oldHitchPoint = hitchPoint
 		}
-		
         leaves.forEach { $0.frame = CGRect(origin: CGPoint(x: $0.xL-rect.origin.x, y: $0.yT-rect.origin.y), size: $0.size) }
-
 		setNeedsDisplay()
 	}
 
-    private var leafsNeedLayout: Bool = false
-    func setLeavesNeedLayout() { leafsNeedLayout = true }
+    private var leavesNeedLayout: Bool = false
+    func setLeavesNeedLayout() { leavesNeedLayout = true }
 	func layoutLeavesIfNeeded() {
-		guard leafsNeedLayout else { return }
+		guard leavesNeedLayout else { return }
 		layoutLeaves()
-		leafsNeedLayout = false
+        leavesNeedLayout = false
 	}
     func setNeedsDisplayWithLeaves() {
         setNeedsDisplay()

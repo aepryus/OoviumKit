@@ -16,12 +16,10 @@ class EndLeaf: Leaf, FocusTappable {
 	}
 	required init?(coder aDecoder: NSCoder) { fatalError() }
 	
-	var cronBub: CronBub {
-		return bubble as! CronBub
-	}
+	var cronBub: CronBub { bubble as! CronBub }
 	
 // Events ==========================================================================================
-	func onTap(aetherView: AetherView) {
+	func onFocusTap(aetherView: AetherView) {
 		cronBub.cron.endMode = OOEndMode(rawValue: (cronBub.cron.endMode.rawValue+1) % 5)!
 		setNeedsDisplay()
 		cronBub.selectLeaves()

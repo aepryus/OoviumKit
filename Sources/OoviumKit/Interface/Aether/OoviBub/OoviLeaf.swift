@@ -44,7 +44,7 @@ class OoviLeaf: Leaf, UITextFieldDelegate, Editable {
 //	@objc func onKeyboardWillHide() {
 //		_ = textFieldShouldReturn(textField)
 //	}
-	func onTap(aetherView: AetherView) {
+	func onFocusTap(aetherView: AetherView) {
 		if !focus {
 			makeFocus()
 		} else {

@@ -154,9 +154,7 @@ class StatesLeaf: Leaf, ChainLeafDelegate, Colorable {
 		return colorLeaves
 	}
 	func renderColorLeaves() {
-		for leaf in colorLeaves {
-			leaf.removeFromBubble()
-		}
+        colorLeaves.forEach { $0.removeFromBubble() }
 		
 		if expanded {
 			colorLeaves = buildColorLeaves()
@@ -235,11 +233,9 @@ class StatesLeaf: Leaf, ChainLeafDelegate, Colorable {
 			? CGSize(width: x9-x1+2*pp, height: ey11-y3+2*pp)
 			: CGSize(width: x5-x1+2*pp, height: y6-y3+2*pp)
 
-		if expanded {
-			bubble.add(leaf: chainLeaf)
-		} else {
-			chainLeaf.removeFromBubble()
-		}
+		if expanded { bubble.add(leaf: chainLeaf) }
+        else { chainLeaf.removeFromBubble() }
+        
 		bubble.layoutLeaves()
 		render()
 		bubble.layoutLeaves()

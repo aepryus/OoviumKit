@@ -45,7 +45,7 @@ class FaceLeaf: Leaf, FocusTappable, TowerListener, Citable {
 	}
 	
 // Events ==========================================================================================
-	func onTap(aetherView: AetherView) {
+	func onFocusTap(aetherView: AetherView) {
 		cronBub.morph()
 	}
 	

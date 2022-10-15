@@ -20,9 +20,8 @@ protocol Editable: FocusTappable {
 }
 extension Editable {
 	var orb: Orb { aetherView.orb }
-	var focused: Bool {
-		return aetherView.focus === self
-	}
+    
+	var focused: Bool { aetherView.focus === self }
 	func makeFocus(dismissEditor: Bool = true) {
 		aetherView.makeFocus(editable: self, dismissEditor: dismissEditor)
 	}
@@ -30,12 +29,9 @@ extension Editable {
 		aetherView.clearFocus(dismissEditor: dismissEditor)
 	}
 	func onWillMakeFocus() {}
-	func onTap(aetherView: AetherView) {
-		if aetherView.focus == nil {
-			makeFocus()
-		} else if aetherView.focus === self {
-			releaseFocus()
-		}
+	func onFocusTap(aetherView: AetherView) {
+		if aetherView.focus == nil { makeFocus() }
+        else if aetherView.focus === self { releaseFocus() }
 	}
 }
 
@@ -63,16 +59,16 @@ class Leaf: UIView {
 	required init?(coder aDecoder: NSCoder) { fatalError() }
 	
 	var aetherView: AetherView { bubble.aetherView }
+    
 	var xL: CGFloat { hitch.isLeft ? anchor.x : (hitch.isRight ? anchor.x-size.width : anchor.x-size.width/2) }
     var xR: CGFloat { xL+size.width }
     var yT: CGFloat { hitch.isTop ? anchor.y : (hitch.isBottom ? anchor.y-size.height : anchor.y-size.height/2) }
 	var yB: CGFloat { yT+size.height }
+    
 	func wireMoorings() {}
 	func positionMoorings() {}
 	
-	func removeFromBubble() {
-		bubble.remove(leaf: self)
-	}
+    func removeFromBubble() { bubble.remove(leaf: self) }
 	
 // UIView ==========================================================================================
 	override func hitTest(_ point: CGPoint, with event: UIEvent?) -> UIView? {
