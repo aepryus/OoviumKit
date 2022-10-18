@@ -58,6 +58,7 @@ class AetherExplorerCell: UITableViewCell {
 	}
     
     private func digest(facade: AetherFacade) {
+        guard facade !== explorer.aetherView.facade else { return }
         facade.load { (json: String?) in
             guard let json else { return }
             let aether: Aether = Aether(json: json)

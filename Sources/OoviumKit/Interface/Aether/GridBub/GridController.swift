@@ -58,7 +58,7 @@ class GridController: ChainViewKeyDelegate {
         gridBub.gridLeaf.resize()
         leafNeedsResizing = false
         
-        gridBub.layoutLeavesIfNeeded()
+        gridBub.render()
     }
     func resizeEverything() {
         // This forces FooterCells to be generated, perhaps a more direct way is preferable

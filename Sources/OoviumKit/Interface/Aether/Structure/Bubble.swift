@@ -86,7 +86,7 @@ public class Bubble: UIView, AnchorTappable, Colorable, UIGestureRecognizerDeleg
         let y: CGFloat = hitch.isTop ? 0 : hitch.isBottom ? size.height : size.height/2
 		return CGPoint(x: x, y: y)
 	}
-    var anchorPoint: CGPoint { frame.origin + hitchPoint }
+//    public var anchorPoint: CGPoint { frame.origin + hitchPoint }
 
     private var oldHitchPoint: CGPoint? = nil
     func layoutLeaves() {

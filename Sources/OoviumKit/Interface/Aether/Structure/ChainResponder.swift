@@ -40,15 +40,12 @@ fileprivate class ChainRange: UITextRange {
     static let zero = ChainRange(NSRange(location: 0, length: 0))
 }
 
-public class ChainResponder/*: UIResponder, UITextInput, UITextInputTraits*/ {
+public class ChainResponder {
     let aetherView: AetherView
     var chainView: ChainView!
     
     init(aetherView: AetherView) {
         self.aetherView = aetherView
-//        super.init()
-//        inputAssistantItem.leadingBarButtonGroups.removeAll()
-//        inputAssistantItem.trailingBarButtonGroups.removeAll()
     }
     
     var isResponder: Bool { Screen.mac || ChainResponder.hasExternalKeyboard }
@@ -131,12 +128,6 @@ public class ChainResponder/*: UIResponder, UITextInput, UITextInputTraits*/ {
 
 // UIKeyInput ======================================================================================
     public static var hasExternalKeyboard: Bool { GCKeyboard.coalesced != nil }
-//        if #available(iOS 14.0, *) {
-//            return GCKeyboard.coalesced != nil
-//        } else {
-//            return false
-//        }
-//    }
     private static func isNumeric(c: Character) -> Bool {
         c >= "0" && c <= "9" || c == "."
     }
@@ -177,6 +168,9 @@ public class ChainResponder/*: UIResponder, UITextInput, UITextInputTraits*/ {
             token = Token.or
         } else if text == "&" {
             token = Token.and
+        } else {
+            _ = chainView.attemptToPost(token: Token.quote)
+            token = Token.characterToken(tag: text)
         }
         if let token = token {
             _ = chainView.attemptToPost(token: token)

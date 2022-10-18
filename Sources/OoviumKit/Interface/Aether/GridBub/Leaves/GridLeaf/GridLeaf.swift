@@ -17,6 +17,9 @@ class GridLeaf: Leaf, GridViewDelegate, UITextInput, UITextInputTraits {
 	enum Arrow {
 		case left, right, up, down
 	}
+    enum Release {
+        case keypad, tap, keyboard, arrow
+    }
 	
 	let grid: Grid
 	
@@ -32,6 +35,8 @@ class GridLeaf: Leaf, GridViewDelegate, UITextInput, UITextInputTraits {
 	
 	var gridBub: GridBub { bubble as! GridBub }
 	var uiColor: UIColor { gridBub.uiColor }
+    
+    var release: Release? = nil
     
     var cellsNeedingRearch: [GridCell] = []
     var columnsNeedingRearch: [GridColumn] = []
@@ -147,7 +152,14 @@ class GridLeaf: Leaf, GridViewDelegate, UITextInput, UITextInputTraits {
         controller.resizeEverything()
 	}
 	
-	private func nextCol(colNo: Int) -> Int {
+    private func nextColumnWrapping(colNo: Int) -> Int {
+        var nextNo = (colNo + 1) % grid.columns.count
+        while grid.column(colNo: nextNo)!.calculated {
+            nextNo = (nextNo + 1) % grid.columns.count
+        }
+        return nextNo
+    }
+	private func nextColumn(colNo: Int) -> Int {
         var testNo: Int = colNo+1
         var newNo: Int?
         while testNo < grid.columns.count && newNo == nil {
@@ -166,8 +178,9 @@ class GridLeaf: Leaf, GridViewDelegate, UITextInput, UITextInputTraits {
         return newNo ?? colNo
     }
 	func released(cell: GridCell) {
-		guard grid.equalMode != .close else {
+        guard grid.equalMode != .close && release != .arrow else {
 			gridBub.cellLostFocus()
+            release = nil
 			return
 		}
 		let colNo: Int
@@ -176,7 +189,7 @@ class GridLeaf: Leaf, GridViewDelegate, UITextInput, UITextInputTraits {
 			colNo = cell.cell.colNo
 			rowNo = cell.cell.rowNo + 1
 		} else /*if grid.equalMode == .right*/ {
-			colNo = nextCol(colNo: cell.cell.colNo)
+			colNo = nextColumnWrapping(colNo: cell.cell.colNo)
 			rowNo = cell.cell.rowNo + (colNo == 0 ? 1 : 0)
 		}
         if rowNo == grid.rows { controller.addRow() }
@@ -188,11 +201,12 @@ class GridLeaf: Leaf, GridViewDelegate, UITextInput, UITextInputTraits {
 		var rowNo: Int = cell.rowNo
 		switch arrow {
 			case .left: colNo = prevCol(colNo: colNo)
-			case .right: colNo = nextCol(colNo: colNo)
+			case .right: colNo = nextColumn(colNo: colNo)
 			case .up: rowNo -= 1
 			case .down: rowNo += 1
 		}
 		guard 0..<grid.columns.count ~= colNo && 0..<grid.rows ~= rowNo else { return }
+        release = .arrow
         columns[colNo].gridCells[rowNo].makeFocus(dismissEditor: false)
 	}
 	

@@ -111,7 +111,6 @@ class GridBub: Bubble, ChainLeafDelegate {
 		}
 		
 		equalLeaf.size = CGSize(width: 39, height: 39)
-		equalLeaf.hitch = .topLeft
 		add(leaf: equalLeaf)
 		equalLeaf.onTapped = { [unowned self] in
 			rotateEndMode()

@@ -14,7 +14,7 @@ class EqualLeaf: Leaf, Tappable {
 	var onTapped: ()->() = {}
 
 	init(bubble: Bubble) {
-		super.init(bubble: bubble, hitch: .top, anchor: CGPoint.zero, size: CGSize(width: 36, height: 36))
+		super.init(bubble: bubble, hitch: .topLeft, anchor: CGPoint.zero, size: CGSize(width: 36, height: 36))
 	}
 	required init?(coder aDecoder: NSCoder) { fatalError() }
 		
