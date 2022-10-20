@@ -271,6 +271,7 @@ class GridBub: Bubble, ChainLeafDelegate {
 	}
 	
 // ChainLeafDelegate ===============================================================================
+    var usesMooring: Bool { false }
 	func onChange() {
 		layoutLeavesIfNeeded()
 	}

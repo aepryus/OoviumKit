@@ -6,6 +6,7 @@
 //  Copyright © 2017 Aepryus Software. All rights reserved.
 //
 
+import Acheron
 import UIKit
 
 public class ChainEditor: Orbit {
@@ -62,7 +63,7 @@ public class ChainEditor: Orbit {
 
 // Hover ===========================================================================================
 	override open func onInvoke() {
-		if cyanOn {cyanKeyPad.invoke()}
+		if cyanOn { cyanKeyPad.invoke() }
 	}
 	override open func onDismiss() {
 		cyanKeyPad.dismiss()
@@ -71,4 +72,13 @@ public class ChainEditor: Orbit {
 		cyanKeyPad.setNeedsDisplay()
 		schematics.forEach { $0.keySlots.forEach { $0.key.setNeedsDisplay() } }
 	}
+    
+// UIView ==========================================================================================
+    public override func hitTest(_ point: CGPoint, with event: UIEvent?) -> UIView? {
+        let view: UIView? = super.hitTest(point, with: event)
+        if view !== self { return view }
+        let rect: CGRect = CGRect(x: left+(cyanOn ? 0 : 57*Oo.s), y: top, width: width-(cyanOn ? 0 : 57*Oo.s), height: height)
+        if rect.contains(point) { return self }
+        return nil
+    }
 }

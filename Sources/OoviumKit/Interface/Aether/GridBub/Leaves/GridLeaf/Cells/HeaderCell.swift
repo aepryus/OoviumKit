@@ -17,9 +17,7 @@ class HeaderCell: UICollectionViewCell, Sizable, Editable, Citable, DoubleTappab
 	var leftMost: Bool = false
 	
 	var textField: UITextField? = nil
-	var editingName: Bool {
-		return textField != nil
-	}
+	var editingName: Bool { textField != nil }
 
     var gridBub: GridBub { controller.gridBub }
     var gridLeaf: GridLeaf { gridBub.gridLeaf }
@@ -62,6 +60,7 @@ class HeaderCell: UICollectionViewCell, Sizable, Editable, Citable, DoubleTappab
 		textField?.removeFromSuperview()
 		textField = nil
         setNeedsResize()
+        controller.resizeEverything()
 	}
 	func renderColumn() {
 		setNeedsDisplay()
@@ -72,7 +71,7 @@ class HeaderCell: UICollectionViewCell, Sizable, Editable, Citable, DoubleTappab
 // Events ==========================================================================================
 	@objc func onDoubleTap() {
 		guard !aetherView.readOnly else { return }
-		if focused {releaseFocus()}
+		if focused { releaseFocus() }
 		openLabel()
 	}
 
@@ -109,7 +108,7 @@ class HeaderCell: UICollectionViewCell, Sizable, Editable, Citable, DoubleTappab
 
 // Sizable =========================================================================================
     var widthNeeded: CGFloat = 0
-    func resize() { widthNeeded = column.name.size(pen: pen).width+20 }
+    func resize() { widthNeeded = column.name.size(pen: pen).width+8*Oo.aS }
     func setNeedsResize() { controller.needsResizing.append(self) }
     
 // Tappable ========================================================================================
@@ -120,9 +119,7 @@ class HeaderCell: UICollectionViewCell, Sizable, Editable, Citable, DoubleTappab
 
 // Editable ========================================================================================
 	var aetherView: AetherView { gridLeaf.aetherView }
-	var editor: Orbit {
-		return orb.headerEditor.edit(editable: self)
-	}
+	var editor: Orbit { orb.headerEditor.edit(editable: self) }
 	func cedeFocusTo(other: FocusTappable) -> Bool {
 		if other === gridBub.chainLeaf {return true}
 		guard let headerCell = other as? HeaderCell else {return false}

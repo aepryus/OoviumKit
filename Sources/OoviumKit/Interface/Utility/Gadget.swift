@@ -83,7 +83,6 @@ open class Gadget: UIView {
         }
     }
     public func dismiss(animated: Bool = true) {
-//        guard aetherView.invoked(hover: self) else { return }
         self.onDismiss()
         if animated {
             UIView.animate(withDuration: 0.2) {

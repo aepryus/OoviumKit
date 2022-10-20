@@ -131,6 +131,10 @@ class ChainView: UIView, UITextInput, UITextInputTraits, AnchorTappable, TowerLi
 // Chain ===========================================================================================
     func attemptToPost(token: Token) -> Bool {
         guard chain.attemptToPost(token: token) else { return false }
+        if !ChainResponder.hasExternalKeyboard && chain.editing {
+            if chain.inString { becomeFirstResponder() }
+            else { resignFirstResponder() }
+        }
         resize()
         delegate?.onChanged()
         delegate?.onTokenAdded(token)

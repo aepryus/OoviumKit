@@ -60,7 +60,7 @@ class ObjectBub: Bubble, Citable {
     var isEmpty: Bool { object.chain.tokens.count == 0 && object.label.count == 0 }
 	
 // Events ==========================================================================================
-	override func onCreate() { objectLeaf.makeFocus() }
+	override func onCreate() { objectLeaf.makeFocus(dismissEditor: false) }
     override func onRemove() { objectLeaf.deinitMoorings() }
 	override func onSelect() {}
 	override func onUnselect() {}

@@ -50,6 +50,7 @@ public class Orb {
         UIView.animate(withDuration: 0.2) {
             orbit.alpha = 0
         } completion: { (completed: Bool) in
+            guard completed else { return }
             orbit.removeFromSuperview()
         }
     }

@@ -10,6 +10,7 @@ import OoviumEngine
 import UIKit
 
 protocol ChainLeafDelegate: AnyObject {
+    var usesMooring: Bool { get }
 	func onChange()
 	func onWillEdit()
 	func onEdit()
@@ -18,6 +19,7 @@ protocol ChainLeafDelegate: AnyObject {
 	func accept(citable: Citable) -> Bool
 }
 extension ChainLeafDelegate {
+    var usesMooring: Bool { true }
 	func onWillEdit() {}
 	func accept(citable: Citable) -> Bool {return true}
 }
@@ -90,9 +92,11 @@ class ChainLeaf: Leaf, ChainViewDelegate, Editable {
 	}
 	
 	func hideLinks() {
+        guard delegate?.usesMooring ?? true else { return }
 		mooring.doodles.forEach {$0.removeFromSuperlayer()}
 	}
 	func showLinks() {
+        guard delegate?.usesMooring ?? true else { return }
 		mooring.doodles.forEach {bubble.aetherView.layer.addSublayer($0)}
 	}
 	
@@ -107,12 +111,14 @@ class ChainLeaf: Leaf, ChainViewDelegate, Editable {
 	
 // Leaf ============================================================================================
 	override func wireMoorings() {
+        guard delegate?.usesMooring ?? true else { return }
         chain.tokens.forEach {
             guard let mooring = bubble.aetherView.moorings[$0] else { return }
             bubble.aetherView.link(from: self.mooring, to: mooring, wake: false)
         }
 	}
 	override func positionMoorings() {
+        guard delegate?.usesMooring ?? true else { return }
 		mooring.point = self.bubble.aetherView.scrollView.convert(self.center, from: self.superview)
 		mooring.positionDoodles()
 	}
@@ -159,6 +165,7 @@ class ChainLeaf: Leaf, ChainViewDelegate, Editable {
 		guard let token = citable.token(at: at) else { return }
 		guard delegate?.accept(citable: citable) ?? false else { return }
 		guard chainView.attemptToPost(token: token) else { return }
+        guard delegate?.usesMooring ?? true else { return }
 		guard let mooring = bubble.aetherView.mooring(token: token) else { return }
 		bubble.aetherView.link(from: self.mooring, to: mooring)
 	}
@@ -173,10 +180,12 @@ class ChainLeaf: Leaf, ChainViewDelegate, Editable {
     func onEditStop() { releaseFocus() }
 
     func onTokenAdded(_ token: Token) {
+        guard delegate?.usesMooring ?? true else { return }
         guard let mooring = bubble.aetherView.mooring(token: token) else { return }
         bubble.aetherView.link(from: self.mooring, to: mooring)
     }
     func onTokenRemoved(_ token: Token) {
+        guard delegate?.usesMooring ?? true else { return }
         guard let mooring = bubble.aetherView.mooring(token: token) else { return }
         bubble.aetherView.unlink(from: self.mooring, to: mooring)
     }
