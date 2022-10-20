@@ -138,6 +138,9 @@ class GridCell: UICollectionViewCell, Sizable, Editable, Citable, ChainViewDeleg
 	
 // ChainViewDelegate ===============================================================================
     var color: UIColor { isFocus ? UIColor.cyan.shade(0.5) : gridLeaf.uiColor }
+    
+    func becomeFirstResponder() { gridLeaf.becomeFirstResponder() }
+    func resignFirstResponder() { gridLeaf.resignFirstResponder() }
 
     func onEditStart() {
         if !gridLeaf.beingEdited {

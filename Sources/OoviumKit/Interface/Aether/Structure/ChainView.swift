@@ -14,6 +14,9 @@ protocol ChainViewDelegate: AnyObject {
     var chainView: ChainView { get }
     var color: UIColor { get }
     
+    func becomeFirstResponder()
+    func resignFirstResponder()
+    
     func onEditStart()
     func onEditStop()
     func onTokenAdded(_ token: Token)
@@ -132,8 +135,8 @@ class ChainView: UIView, UITextInput, UITextInputTraits, AnchorTappable, TowerLi
     func attemptToPost(token: Token) -> Bool {
         guard chain.attemptToPost(token: token) else { return false }
         if !ChainResponder.hasExternalKeyboard && chain.editing {
-            if chain.inString { becomeFirstResponder() }
-            else { resignFirstResponder() }
+            if chain.inString { delegate?.becomeFirstResponder() }
+            else { delegate?.resignFirstResponder() }
         }
         resize()
         delegate?.onChanged()

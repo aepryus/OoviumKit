@@ -38,9 +38,9 @@ class GridLeaf: Leaf, GridViewDelegate, UITextInput, UITextInputTraits {
     
     var release: Release? = nil
     
-    var cellsNeedingRearch: [GridCell] = []
-    var columnsNeedingRearch: [GridColumn] = []
-    var needingRearch: Bool = false
+//    var cellsNeedingRearch: [GridCell] = []
+//    var columnsNeedingRearch: [GridColumn] = []
+//    var needingRearch: Bool = false
     
     init(controller: GridController) {
         self.controller = controller
@@ -216,7 +216,7 @@ class GridLeaf: Leaf, GridViewDelegate, UITextInput, UITextInputTraits {
 	}
 	
 // UIResponder =====================================================================================
-    override var canBecomeFirstResponder: Bool { true }
+    override var canBecomeFirstResponder: Bool { focusCell != nil }
     override var canResignFirstResponder: Bool { true }
         
 // GridViewDelegate ================================================================================

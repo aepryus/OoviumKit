@@ -159,6 +159,9 @@ class ObjectLeaf: Leaf, Editable, ChainViewDelegate, DoubleTappable, Colorable, 
 // ChainViewDelegate ===============================================================================
     var color: UIColor { focused || object.tower.variableToken.status == .ok ? uiColor : UIColor.red }
     
+    func becomeFirstResponder() { chainView.becomeFirstResponder() }
+    func resignFirstResponder() { chainView.resignFirstResponder() }
+
     func onEditStart() {}
     func onEditStop() { releaseFocus() }
 

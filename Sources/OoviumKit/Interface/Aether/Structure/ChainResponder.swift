@@ -67,7 +67,10 @@ public class ChainResponder {
         set { fatalError() }
     }
     var beginningOfDocument: UITextPosition { ChainPosition.zero }
-    var endOfDocument: UITextPosition { ChainPosition(chainView.chain.tokens.count) }
+    var endOfDocument: UITextPosition {
+        guard let chainView else { return ChainPosition.zero }
+        return ChainPosition(chainView.chain.tokens.count)
+    }
     
     private var markedText: String? = nil
     func setMarkedText(_ markedText: String?, selectedRange: NSRange) {

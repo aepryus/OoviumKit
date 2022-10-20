@@ -178,6 +178,9 @@ class ChainLeaf: Leaf, ChainViewDelegate, Editable {
 
     func onEditStart() {}
     func onEditStop() { releaseFocus() }
+    
+    func becomeFirstResponder() { chainView.becomeFirstResponder() }
+    func resignFirstResponder() { chainView.resignFirstResponder() }
 
     func onTokenAdded(_ token: Token) {
         guard delegate?.usesMooring ?? true else { return }
