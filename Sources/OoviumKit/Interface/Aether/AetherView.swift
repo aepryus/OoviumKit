@@ -662,27 +662,13 @@ public class AetherView: UIView, UIScrollViewDelegate, UIGestureRecognizerDelega
 		remove(bubbles: selected)
 
 		var deleted: Set<Tower> = Set<Tower>()
-		selected.forEach {deleted.formUnion($0.aexel.towers)}
-		
-		var affected: Set<Tower> = Set<Tower>()
-		deleted.forEach {affected.formUnion($0.allDownstream())}
-		affected.subtract(deleted)
-		
-		for tower in deleted {
-			tower.variableToken.status = .deleted
-			tower.variableToken.label = "DELETED"
-			if tower.variableToken.type == .variable {
-				AEMemoryUnfix(aether.memory, tower.index)
-			}
-			tower.abstract()
-		}
-		
-		aether.evaluate(towers: affected)
+		selected.forEach { deleted.formUnion($0.aexel.towers) }
 
-		selected.forEach {aether.removeAexel($0.aexel)}
+        aether.delete(towers: deleted)
 
-		aether.buildMemory()
-		stretch()
+		selected.forEach { aether.removeAexel($0.aexel) }
+        aether.buildMemory()
+        stretch()
 		orb.chainEditor.customSchematic?.render(aether: aether)
 	}
 	func copyBubbles() {

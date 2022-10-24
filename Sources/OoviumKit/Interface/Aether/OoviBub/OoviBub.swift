@@ -14,7 +14,7 @@ class OoviMaker: Maker {
 	
 // Maker ===========================================================================================
 	func make(aetherView: AetherView, at: V2) -> Bubble {
-		let oovi = aetherView.aether.createOovi(at: at)
+        let oovi: Oovi = aetherView.aether.create(at: at)
 		return OoviBub(oovi, aetherView: aetherView)
 	}
 	func drawIcon() {

@@ -50,14 +50,14 @@ public class Facade {
             fatalError()
         }
     }
-    public static func create(ooviumKey: String) -> Facade {
+    public static func create(ooviumKey: String, forceDir: Bool = false) -> Facade {
         var facade: Facade? = facades[ooviumKey]
         if facade == nil {
             let sliceKey: (String, String) = Facade.sliceKey(ooviumKey: ooviumKey)
-            let parent: DirFacade = Facade.create(ooviumKey: sliceKey.0) as! DirFacade
+            let parent: DirFacade = Facade.create(ooviumKey: sliceKey.0, forceDir: true) as! DirFacade
             let url: URL = parent.url.appendingPathComponent(sliceKey.1)
             var isDir : ObjCBool = false
-            if FileManager.default.fileExists(atPath: url.path, isDirectory: &isDir), isDir.boolValue {
+            if forceDir || (FileManager.default.fileExists(atPath: url.path, isDirectory: &isDir) && isDir.boolValue) {
                 facade = FolderFacade(name: sliceKey.1, parent: parent)
             } else {
                 facade = AetherFacade(name: sliceKey.1, parent: parent)

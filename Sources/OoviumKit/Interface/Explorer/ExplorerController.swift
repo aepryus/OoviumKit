@@ -63,6 +63,7 @@ public class ExplorerController: NSObject, UIDocumentPickerDelegate {
     func onImport() {
         guard let ooviumType: UTType = UTType("com.aepryus.oovium.oo") else { return }
         let controller: UIDocumentPickerViewController = UIDocumentPickerViewController(forOpeningContentTypes: [ooviumType])
+        controller.allowsMultipleSelection = true
         controller.delegate = self
         viewController?.present(controller, animated: true) {}
     }
@@ -71,11 +72,12 @@ public class ExplorerController: NSObject, UIDocumentPickerDelegate {
     private func importAethers(urls: [URL]) {
         urls.forEach {
             guard let data: Data = FileManager.default.contents(atPath: $0.path),
-                  let xmlAtts: [String:Any] = String(data: data, encoding: .utf8)?.xmlToAttributes()
+                  let dataString = String(data: data, encoding: .utf8)
                 else { return }
             
             let name: String = $0.itemName
-            let jsonAtts: [String:Any] = Migrate.migrateXMLtoJSON(xmlAtts)
+            let xmlAtts: [String:Any] = dataString.xmlToAttributes()
+            let jsonAtts: [String:Any] = xmlAtts.count == 0 ? dataString.toAttributes() : Migrate.migrateXMLtoJSON(xmlAtts)
             let aether: Aether = Aether(json: Migrate.migrateAether(json: jsonAtts.toJSON()))
             let facade: AetherFacade = Facade.create(url: explorer.facade.url.appendingPathComponent(name).appendingPathExtension("oo")) as! AetherFacade
             facade.store(aether: aether) { (success: Bool) in

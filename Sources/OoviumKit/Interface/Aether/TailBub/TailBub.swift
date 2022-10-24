@@ -14,7 +14,7 @@ class TailMaker: Maker {
 	
 	// Maker ===========================================================================================
 	func make(aetherView: AetherView, at: V2) -> Bubble {
-		let tail = aetherView.aether.createTail(at: at)
+        let tail: Tail = aetherView.aether.create(at: at)
 		return TailBub(tail, aetherView: aetherView)
 	}
 	func drawIcon() {

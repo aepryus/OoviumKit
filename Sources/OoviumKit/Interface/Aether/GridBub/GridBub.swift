@@ -14,7 +14,7 @@ class GridMaker: Maker {
 	
 // Maker ===========================================================================================
 	func make(aetherView: AetherView, at: V2) -> Bubble {
-		let grid = aetherView.aether.createGrid(at: at)
+        let grid: Grid = aetherView.aether.create(at: at)
 		return GridBub(grid, aetherView: aetherView)
 	}
 	func drawIcon() {

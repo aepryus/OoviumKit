@@ -13,7 +13,7 @@ class TextMaker: Maker {
 	
 // Maker ===========================================================================================
 	func make(aetherView: AetherView, at: V2) -> Bubble {
-		let text = aetherView.aether.createText(at: at)
+        let text: Text = aetherView.aether.create(at: at)
 		text.shape = aetherView.shape
 		text.color = aetherView.color
 		return TextBub(text, aetherView: aetherView)
