@@ -353,11 +353,10 @@ public class AetherView: UIView, UIScrollViewDelegate, UIGestureRecognizerDelega
 		bubbles.append(bubble)
 		scrollView.addSubview(bubble)
 	}
-	func remove(bubbles: Set<Bubble>) {
+	private func remove(bubbles: Set<Bubble>) {
 		for bubble in bubbles {
 			for tower in bubble.aexel.towers {
 				moorings[tower.variableToken] = nil
-				aether.wipe(token: tower.variableToken)
 			}
 			bubble.onRemove()
 			bubble.removeFromSuperview()
