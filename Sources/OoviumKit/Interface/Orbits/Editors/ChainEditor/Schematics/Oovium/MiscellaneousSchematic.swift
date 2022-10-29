@@ -93,7 +93,7 @@ public class MiscellaneousSchematic: ChainSchematic {
 		}))
 		add(row: 4, col: 2, key: Key(text: "k", uiColor: almond, font: UIFont(name: "TimesNewRomanPS-ItalicMT", size: 20*Oo.s)!, { [weak self] in
 			guard let me = self else { return }
-			me.chainEditor.chainView.post(token: .k)
+//			me.chainEditor.chainView.post(token: .k)
 			me.chainEditor.presentFirstSchematic()
 		}))
 	}

@@ -68,6 +68,6 @@ class FunctionsLeaf: Leaf, Citable {
 	func token(at: CGPoint) -> Token? {
 		let i: Int = Int(at.y / 27*s)
 		guard i < also.functionCount, let name: String = also.alsoAether?.functions(not: [also.aether])[i] else {return nil}
-		return also.alsoAether?.function(name: name, not: [also.aether])?.functionToken ?? nil
+		return also.alsoAether?.function(name: name, not: [also.aether])?.mechlikeToken ?? nil
 	}
 }
