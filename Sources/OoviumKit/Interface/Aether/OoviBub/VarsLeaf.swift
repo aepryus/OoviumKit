@@ -20,12 +20,12 @@ class VarsLeaf: Leaf {
 		
 		self.backgroundColor = UIColor.clear
 		
-		for name in names {
-			let token = oovi.aether.variableToken(tag: "Oovi\(self.oovi.no).\(name)")
-			let varView = VarView(bubble: bubble , token: token)
-			addSubview(varView)
-			varViews.append(varView)
-		}
+//		for name in names {
+//			let token = oovi.aether.variableToken(tag: "Oovi\(self.oovi.no).\(name)")
+//			let varView = VarView(bubble: bubble , token: token)
+//			addSubview(varView)
+//			varViews.append(varView)
+//		}
 	}
 	required init?(coder aDecoder: NSCoder) { fatalError() }
 	

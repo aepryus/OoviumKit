@@ -173,12 +173,8 @@ class MechBub: Bubble, SignatureLeafDelegate, ChainLeafDelegate {
 		mech.resultTower.buildTask()
 		mech.tower.buildTask()
 	}
-	var token: Token {
-		return mech.functionToken
-	}
-	var recipeToken: Token {
-		return mech.variableToken
-	}
+	var token: Token { mech.mechlikeToken }
+	var recipeToken: Token { mech.variableToken }
 	var paramTokens: [Token] {
 		var tokens: [Token] = []
 		for input in mech.inputs {

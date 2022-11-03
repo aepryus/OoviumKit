@@ -22,16 +22,16 @@ class AutoMaker: Maker {
 
 class AutoBub: Bubble, ChainLeafDelegate {
 	let auto: Auto
-
-	lazy var aLeaf: SpaceLeaf = SpaceLeaf(bubble: self, name: "A", token: auto.aether.variableToken(tag: "Auto\(self.auto.no).A"))
-	lazy var bLeaf: SpaceLeaf = SpaceLeaf(bubble: self, name: "B", token: auto.aether.variableToken(tag: "Auto\(self.auto.no).B"))
-	lazy var cLeaf: SpaceLeaf = SpaceLeaf(bubble: self, name: "C", token: auto.aether.variableToken(tag: "Auto\(self.auto.no).C"))
-	lazy var dLeaf: SpaceLeaf = SpaceLeaf(bubble: self, name: "D", token: auto.aether.variableToken(tag: "Auto\(self.auto.no).D"))
-	lazy var eLeaf: SpaceLeaf = SpaceLeaf(bubble: self, name: "E", token: auto.aether.variableToken(tag: "Auto\(self.auto.no).E"))
-	lazy var fLeaf: SpaceLeaf = SpaceLeaf(bubble: self, name: "F", token: auto.aether.variableToken(tag: "Auto\(self.auto.no).F"))
-	lazy var gLeaf: SpaceLeaf = SpaceLeaf(bubble: self, name: "G", token: auto.aether.variableToken(tag: "Auto\(self.auto.no).G"))
-	lazy var hLeaf: SpaceLeaf = SpaceLeaf(bubble: self, name: "H", token: auto.aether.variableToken(tag: "Auto\(self.auto.no).H"))
-	lazy var selfLeaf: SpaceLeaf = SpaceLeaf(bubble: self, name: "Self", token: auto.aether.variableToken(tag: "Auto\(self.auto.no).Self"))
+    
+    lazy var aLeaf: SpaceLeaf = SpaceLeaf(bubble: self, name: "A", token: auto.spaceTowers.first!.variableToken)
+	lazy var bLeaf: SpaceLeaf = SpaceLeaf(bubble: self, name: "B", token: auto.spaceTowers.first!.variableToken)
+	lazy var cLeaf: SpaceLeaf = SpaceLeaf(bubble: self, name: "C", token: auto.spaceTowers.first!.variableToken)
+	lazy var dLeaf: SpaceLeaf = SpaceLeaf(bubble: self, name: "D", token: auto.spaceTowers.first!.variableToken)
+	lazy var eLeaf: SpaceLeaf = SpaceLeaf(bubble: self, name: "E", token: auto.spaceTowers.first!.variableToken)
+	lazy var fLeaf: SpaceLeaf = SpaceLeaf(bubble: self, name: "F", token: auto.spaceTowers.first!.variableToken)
+	lazy var gLeaf: SpaceLeaf = SpaceLeaf(bubble: self, name: "G", token: auto.spaceTowers.first!.variableToken)
+	lazy var hLeaf: SpaceLeaf = SpaceLeaf(bubble: self, name: "H", token: auto.spaceTowers.first!.variableToken)
+	lazy var selfLeaf: SpaceLeaf = SpaceLeaf(bubble: self, name: "Self", token: auto.spaceTowers.first!.variableToken)
 	
 	lazy var nextLeaf: ChainLeaf = {return ChainLeaf(bubble: self, delegate: self)}()
 	

@@ -21,7 +21,7 @@ public class CustomSchematic: ChainSchematic {
 
         aether.functions.enumerated().forEach { (i: Int, name: String) in
             add(row: CGFloat(i), col: 0, w: 1, h: 1, key: Key(text: name, uiColor: cherry, font: UIFont.systemFont(ofSize: 16*Oo.s), { [unowned self] in
-                self.chainEditor.chainView.post(token: aether.functionToken(tag: name))
+//                self.chainEditor.chainView.post(token: aether.functionToken(tag: name))
                 self.chainEditor.presentFirstSchematic()
             }))
         }

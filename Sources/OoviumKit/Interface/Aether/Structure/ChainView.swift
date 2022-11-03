@@ -212,7 +212,7 @@ class ChainView: UIView, UITextInput, UITextInputTraits, AnchorTappable, TowerLi
             }
             if ChainView.usesWafer(token: token) {
                 let uiColor: UIColor = {
-                    if token.status != .ok { return UIColor.red }
+                    if let token = token as? TowerToken, token.status != .ok  { return .red }
                     if let token = token as? Defable, let def: Def = token.def { return def.uiColor }
                     return UIColor.green
                 }()
@@ -352,8 +352,8 @@ class ChainView: UIView, UITextInput, UITextInputTraits, AnchorTappable, TowerLi
 
 // Static ==========================================================================================
 	private static func usesWafer(token: Token) -> Bool {
-		return token.type == .variable
-			|| (token.type == .constant && ![Token.pi, Token.e, Token.i].contains(token))
-			|| token.status == .deleted
+        if token.code == .cn && ![Token.pi, Token.e, Token.i].contains(token) { return true }
+        guard let token: TowerToken = token as? TowerToken else { return false }
+        return token.code == .va || token.status == .deleted
 	}
 }

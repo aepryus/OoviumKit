@@ -291,12 +291,8 @@ class TailBub: Bubble, SignatureLeafDelegate, ChainLeafDelegate {
 		tail.resultTower.buildTask()
 		tail.tower.buildTask()
 	}
-	var token: Token {
-		return tail.functionToken
-	}
-	var recipeToken: Token {
-		return tail.variableToken
-	}
+	var token: Token { tail.mechlikeToken }
+	var recipeToken: Token { tail.variableToken }
 	var paramTokens: [Token] {
 		var tokens: [Token] = []
 		for input in tail.vertebras {
