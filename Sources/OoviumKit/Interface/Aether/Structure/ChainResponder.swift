@@ -42,7 +42,7 @@ fileprivate class ChainRange: UITextRange {
 
 public class ChainResponder {
     let aetherView: AetherView
-    var chainView: ChainView!
+    weak var chainView: ChainView?
     
     init(aetherView: AetherView) {
         self.aetherView = aetherView
@@ -50,12 +50,12 @@ public class ChainResponder {
     
     var isResponder: Bool { Screen.mac || ChainResponder.hasExternalKeyboard }
     
-    func leftArrow() { chainView.leftArrow() }
-    func rightArrow() { chainView.rightArrow() }
-    func upArrow() { chainView.keyDelegate?.onArrowUp() }
-    func downArrow() { chainView.keyDelegate?.onArrowDown() }
-    func tab() { chainView.keyDelegate?.onTab() }
-    func backspace() { chainView.backspace() }
+    func leftArrow() { chainView?.leftArrow() }
+    func rightArrow() { chainView?.rightArrow() }
+    func upArrow() { chainView?.keyDelegate?.onArrowUp() }
+    func downArrow() { chainView?.keyDelegate?.onArrowDown() }
+    func tab() { chainView?.keyDelegate?.onTab() }
+    func backspace() { chainView?.backspace() }
     
 // UITextInput =====================================================================================
     var autocapitalizationType: UITextAutocapitalizationType {
@@ -74,6 +74,7 @@ public class ChainResponder {
     
     private var markedText: String? = nil
     func setMarkedText(_ markedText: String?, selectedRange: NSRange) {
+        guard let chainView else { return }
         defer {
             self.markedText = markedText
             let markedCount: Int = markedText?.count ?? 0
@@ -149,6 +150,7 @@ public class ChainResponder {
 
     var hasText: Bool { true }
     func insertText(_ text: String) {
+        guard let chainView else { return }
         var token: Token? = nil
         
         if text == "\n" && chainView.chain.inString && chainView.chain.unmatchedQuote {
@@ -182,6 +184,7 @@ public class ChainResponder {
         }
     }
     func deleteBackward() {
+        guard let chainView else { return }
         if ChainResponder.hasExternalKeyboard {
             // actual backspace handled by key commands below; this now only triggers on (forward) delete
             chainView.delete()
