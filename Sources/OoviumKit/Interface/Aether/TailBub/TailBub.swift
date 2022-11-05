@@ -275,6 +275,9 @@ class TailBub: Bubble, SignatureLeafDelegate, ChainLeafDelegate {
 		while tail.vertebras.count > signatureLeaf.noOfParams {
 			tail.removeVertebra()
 			let vertebraLeaf = vertebraLeaves.removeLast()
+            if let i: Int = signatureLeaf.overrides.firstIndex(where: { $0 === vertebraLeaf }) {
+                signatureLeaf.overrides.remove(at: i)
+            }
 			vertebraLeaf.removeFromBubble()
 		}
 		render()

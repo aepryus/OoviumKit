@@ -35,7 +35,7 @@ class ObjectLeaf: Leaf, Editable, ChainViewDelegate, DoubleTappable, Colorable, 
 	
     var objectBub: ObjectBub { bubble as! ObjectBub }
     var beingEdited: Bool { self === bubble.aetherView.focus }
-
+    
 	func openLabel() {
 		bubble.aetherView.locked = true
 		textField = OOTextField(frame: CGRect(x: 7, y: 6, width: 60, height: 28), backColor: Skin.color(.labelBack), foreColor: Skin.color(.labelFore), textColor: Skin.color(.labelText))
@@ -140,7 +140,6 @@ class ObjectLeaf: Leaf, Editable, ChainViewDelegate, DoubleTappable, Colorable, 
 		render()
         objectBub.layoutLeavesIfNeeded()
 		mooring.wakeDoodles()
-//        chainView.responder = aetherView.responder
         aetherView.responder.chainView = chainView
         if ChainResponder.hasExternalKeyboard { chainView.becomeFirstResponder() }
 	}

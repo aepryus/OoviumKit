@@ -123,6 +123,7 @@ class GridBub: Bubble, ChainLeafDelegate {
 		chainLeaf.size = CGSize(width: 100, height: 36)
 		chainLeaf.minWidth = 100
 		chainLeaf.radius = 15
+        chainLeaf.chainView.chain = grid.columns[0].chain
 		
         determineLeaves()
 	}

@@ -76,7 +76,7 @@ class ChainView: UIView, UITextInput, UITextInputTraits, AnchorTappable, TowerLi
     public required init?(coder aDecoder: NSCoder) { fatalError() }
     
     var blank: Bool { chain.tokens.count == 0 && !chain.editing }
-        
+
     private func resize() {
         var widthNeeded: CGFloat
         if !chain.editing {
@@ -349,11 +349,15 @@ class ChainView: UIView, UITextInput, UITextInputTraits, AnchorTappable, TowerLi
         get { responder!.smartQuotesType }
         set { responder!.smartQuotesType = newValue }
     }
+    var autocorrectionType: UITextAutocorrectionType {
+        get { .no }
+        set { fatalError() }
+    }
 
 // Static ==========================================================================================
 	private static func usesWafer(token: Token) -> Bool {
         if token.code == .cn && ![Token.pi, Token.e, Token.i].contains(token) { return true }
         guard let token: TowerToken = token as? TowerToken else { return false }
-        return token.code == .va || token.status == .deleted
+        return token.code == .va || token.code == .cl || token.status == .deleted
 	}
 }

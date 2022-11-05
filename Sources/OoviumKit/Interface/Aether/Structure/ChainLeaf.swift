@@ -43,7 +43,7 @@ class ChainLeaf: Leaf, ChainViewDelegate, Editable {
 			chainView.chain = newValue
 //			chainView.chain.tower.listener = self
 		}
-		get {return chainView.chain}
+		get { chainView.chain }
 	}
 	var uiColor: UIColor {
 		if chain.editing { return UIColor(red: 0.8, green: 0.8, blue: 0.8, alpha: 1) }

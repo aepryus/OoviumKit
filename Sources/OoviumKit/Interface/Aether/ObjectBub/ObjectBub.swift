@@ -67,9 +67,8 @@ class ObjectBub: Bubble, Citable {
 
     func onOK() {
         if isEmpty {
-            aetherView.aether.removeAexel(object)
+            aetherView.aether.remove(aexel: object)
             aetherView.remove(bubble: self)
-            aetherView.aether.buildMemory()
         }
         aetherView.stretch()
     }

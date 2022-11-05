@@ -33,8 +33,9 @@ class HeaderEditor: KeyOrbit {
 			self.headerCell.gridLeaf.aetherView.invokeConfirmModal("delete selected column?".localized) {
 				self.headerCell.gridBub.aetherView.clearFocus()
 				if self.headerCell.gridBub.grid.columns.count > 1 {
-					self.headerCell.gridLeaf.deleteColumn(column: self.headerCell.column)
+					self.headerCell.gridLeaf.delete(column: self.headerCell.column)
 				} else {
+                    self.headerCell.gridBub.aetherView.aether.remove(aexel: self.headerCell.gridBub.grid)
 					self.headerCell.gridBub.aetherView.remove(bubble: self.headerCell.gridBub)
 				}
 				self.dismiss()

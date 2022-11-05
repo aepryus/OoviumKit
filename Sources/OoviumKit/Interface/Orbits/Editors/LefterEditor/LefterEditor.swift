@@ -22,7 +22,8 @@ class LefterEditor: KeyOrbit {
 				if self.lefterCell.gridLeaf.grid.rows > 1 {
 					self.lefterCell.gridLeaf.deleteRow(rowNo: self.lefterCell.rowNo)
 				} else {
-					self.lefterCell.gridLeaf.gridBub.aetherView.remove(bubble: self.lefterCell.gridLeaf.gridBub)
+                    self.lefterCell.gridLeaf.gridBub.aetherView.aether.remove(aexel: self.lefterCell.gridLeaf.gridBub.grid)
+                    self.lefterCell.gridLeaf.gridBub.aetherView.remove(bubble: self.lefterCell.gridLeaf.gridBub)
 				}
 				self.dismiss()
 			}

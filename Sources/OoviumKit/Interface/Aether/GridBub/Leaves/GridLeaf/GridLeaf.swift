@@ -38,10 +38,6 @@ class GridLeaf: Leaf, GridViewDelegate, UITextInput, UITextInputTraits {
     
     var release: Release? = nil
     
-//    var cellsNeedingRearch: [GridCell] = []
-//    var columnsNeedingRearch: [GridColumn] = []
-//    var needingRearch: Bool = false
-    
     init(controller: GridController) {
         self.controller = controller
         self.grid = controller.grid
@@ -124,8 +120,9 @@ class GridLeaf: Leaf, GridViewDelegate, UITextInput, UITextInputTraits {
         let cells: [Cell] = column.grid.cellsForColumn(i: column.colNo)
         for i in 0..<grid.rows { gridColumn.gridCells.append(GridCell(controller: controller, column: gridColumn, cell: cells[i])) }
 	}
-	func deleteColumn(column: Column) {
+	func delete(column: Column) {
         columns.remove(at: column.colNo)
+        gridBub.chainLeaf.chain = columns[0].column.chain
 		grid.deleteColumn(column)
         controller.resizeEverything()
 	}

@@ -658,15 +658,8 @@ public class AetherView: UIView, UIScrollViewDelegate, UIGestureRecognizerDelega
 		selected.forEach { $0.move(by: by) }
 	}
 	func deleteSelected() {
-		remove(bubbles: selected)
-
-		var deleted: Set<Tower> = Set<Tower>()
-		selected.forEach { deleted.formUnion($0.aexel.towers) }
-
-        aether.delete(towers: deleted)
-
-		selected.forEach { aether.removeAexel($0.aexel) }
-        aether.buildMemory()
+        remove(bubbles: selected)
+        aether.remove(aexels: selected.map({ $0.aexel }))
         stretch()
 		orb.chainEditor.customSchematic?.render(aether: aether)
 	}
