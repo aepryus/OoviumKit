@@ -62,7 +62,7 @@ class TextBub: Bubble, NSCopying {
 	}
 	
 	func delete() {
-		aetherView.aether.removeAexel(text)
+        aetherView.aether.remove(aexel: text)
 		aetherView.remove(bubble: self)
 	}
 	

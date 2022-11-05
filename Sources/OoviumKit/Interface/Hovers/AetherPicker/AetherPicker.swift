@@ -105,14 +105,13 @@ public class AetherPicker: Hover, UITableViewDelegate, UITableViewDataSource {
 		backgroundColor = UIColor.clear
 		
 		aetherButton.aetherPicker = self
-		aetherButton.addAction(for: .touchUpInside) {
+		aetherButton.addAction(for: .touchUpInside) { [unowned self] in
 			self.toggleExpanded()
 		}
 		addSubview(aetherButton)
 		
 		newButton.aetherPicker = self
-		newButton.addAction(for: .touchUpInside) { [weak self] in
-			guard let self = self else { return }
+		newButton.addAction(for: .touchUpInside) { [unowned self] in
 			if self.expanded {
 				DispatchQueue.main.async {
 					self.aetherList.reloadData()

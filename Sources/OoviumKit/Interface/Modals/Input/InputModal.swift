@@ -36,8 +36,8 @@ class InputModal: Modal, UITextFieldDelegate {
         addSubview(cancel)
         addSubview(ok)
 
-        cancel.addAction { [weak self] in self?.dismiss() }
-        ok.addAction { [weak self] in self?.onOK() }
+        cancel.addAction { [unowned self] in self.dismiss() }
+        ok.addAction { [unowned self] in self.onOK() }
     }
     required init?(coder aDecoder: NSCoder) { fatalError() }
     

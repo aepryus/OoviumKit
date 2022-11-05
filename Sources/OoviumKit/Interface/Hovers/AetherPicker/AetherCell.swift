@@ -34,8 +34,7 @@ class AetherCell: UITableViewCell, UIContextMenuInteractionDelegate {
 		addSubview(deleteBox)
 		addSubview(deleteLabel)
 
-		nameLabel.addAction { [weak self] in
-			guard let self = self else { return }
+		nameLabel.addAction { [unowned self] in
 			switch self.state {
 				case .normal:
                     break

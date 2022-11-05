@@ -44,22 +44,20 @@ class TextEditor: Orbit {
 
 		inputsButton.uiColor = UIColor.white
 		addSubview(inputsButton)
-		inputsButton.addAction(for: .touchUpInside) { [weak self] in
-			guard let me = self, !me.inward else { return }
-			me.inward = true
+		inputsButton.addAction(for: .touchUpInside) { [unowned self] in
+			self.inward = true
 		}
 		
 		outputsButton.uiColor = UIColor.white
 		addSubview(outputsButton)
-		outputsButton.addAction(for: .touchUpInside) { [weak self] in
-			guard let me = self, me.inward else { return }
-			me.inward = false
+		outputsButton.addAction(for: .touchUpInside) { [unowned self] in
+			self.inward = false
 		}
 		
 		okButton.uiColor = UIColor.white
 		addSubview(okButton)
-		okButton.addAction(for: .touchUpInside) { [weak self] in
-			self?.textLeaf.releaseFocus()
+		okButton.addAction(for: .touchUpInside) { [unowned self] in
+			self.textLeaf.releaseFocus()
 		}
 	}
 	required init?(coder aDecoder: NSCoder) { fatalError() }

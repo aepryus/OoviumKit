@@ -127,7 +127,7 @@ class AlsoBub: Bubble {
 	}
 	func onOK() {
 		if also.aetherPath == "" {
-			aetherView.aether.removeAexel(also)
+            aetherView.aether.remove(aexel: also)
 			aetherView.remove(bubble: self)
 			aetherView.stretch()
 		}
