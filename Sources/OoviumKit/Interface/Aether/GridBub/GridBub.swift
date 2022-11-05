@@ -160,8 +160,7 @@ class GridBub: Bubble, ChainLeafDelegate {
 	}
 	func cellLostFocus() {
 		cellHasFocus = false
-//        determineLeaves()
-//        gridLeaf.resignFirstResponder()
+        determineLeaves()
 	}
 	
 	func attachChainLeaf(to headerCell: HeaderCell) {

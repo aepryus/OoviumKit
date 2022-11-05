@@ -99,16 +99,29 @@ class HeaderCell: UICollectionViewCell, Sizable, Editable, Citable, DoubleTappab
 		path.addLine(to: CGPoint(x: width-(leftMost ? p : 0), y: height-p))
 		
 		Skin.gridDraw(path: path, uiColor: gridLeaf.uiColor)
-		
+        
+        if column.colNo == 1 {
+            print("QQ: \(Screen.snapToPixel(8*Oo.aS))")
+            print("QQ-a: \(Screen.snapToPixel(8*Oo.aS)/2)")
+            print("QQ-b: \(Screen.snapToPixel(7*Oo.aS)/2)")
+            print("QQ-C(\(column.name)): \(rect.offsetBy(dx: -0.5, dy: 0).insetBy(dx: Screen.snapToPixel(8*Oo.aS)/2-0.5, dy: 5).width)")
+        }
+
 		if !editingName {
-			if isFocus { Skin.text("\(column.name)", rect: rect.insetBy(dx: 6, dy: 5), uiColor: UIColor.cyan.shade(0.5), font: pen.font, align: column.alignment) }
-            else {       Skin.text("\(column.name)", rect: rect.insetBy(dx: 6, dy: 5), uiColor: gridLeaf.uiColor,        font: pen.font, align: column.alignment) }
+            if isFocus { Skin.text("\(column.name)", rect: rect.insetBy(dx: Screen.snapToPixel(Oo.aS*4), dy: 5), uiColor: UIColor.cyan.shade(0.5), font: pen.font, align: column.alignment) }
+            else {       Skin.text("\(column.name)", rect: rect.insetBy(dx: Screen.snapToPixel(Oo.aS*4), dy: 5), uiColor: gridLeaf.uiColor,        font: pen.font, align: column.alignment) }
 		}
 	}
 
 // Sizable =========================================================================================
     var widthNeeded: CGFloat = 0
-    func resize() { widthNeeded = column.name.size(pen: pen).width+8*Oo.aS }
+    
+    func resize() {
+        let needed: CGFloat = Screen.snapToPixel(column.name.size(pen: pen.clone(alignment: column.alignment)).width)
+        let padding: CGFloat = Screen.snapToPixel(Oo.aS*4)*2
+        widthNeeded = needed+padding
+        
+    }
     func setNeedsResize() { controller.needsResizing.append(self) }
     
 // Tappable ========================================================================================

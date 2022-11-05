@@ -118,13 +118,8 @@ class GridCell: UICollectionViewCell, Sizable, Editable, Citable, ChainViewDeleg
 	func onReleaseFocus() {
         gridLeaf.focusCell = nil
 		chainView.ok()
-//        controller.architect()
-		if !tapped {
-            gridLeaf.released(cell: self)
-        }
-		else {
-//            gridLeaf.gridBub.cellLostFocus()
-        }
+        if !tapped { gridLeaf.released(cell: self) }
+        else { chainView.okDelegate() }
 		tapped = false
         setNeedsDisplay()
 	}
