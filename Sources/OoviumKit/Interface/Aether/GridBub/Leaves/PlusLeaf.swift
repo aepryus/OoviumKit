@@ -9,22 +9,20 @@
 import UIKit
 
 class PlusLeaf: Leaf, FocusTappable {
+    let controller: GridController
 	
-	var onTapped: (AetherView)->() = {AetherView in}
+	var onTapped: (AetherView)->() = { AetherView in }
 	
-	init(bubble: Bubble) {
-		super.init(bubble: bubble, hitch: .top, anchor: CGPoint.zero, size: CGSize(width: 36, height: 36))
+    init(controller: GridController) {
+        self.controller = controller
+        super.init(bubble: controller.gridBub, hitch: .top, anchor: CGPoint.zero, size: CGSize(width: 36, height: 36))
 	}
 	required init?(coder aDecoder: NSCoder) { fatalError() }
 	
-	var gridBub: GridBub {
-		return bubble as! GridBub
-	}
+	var gridBub: GridBub { bubble as! GridBub }
 		
 // Events ==========================================================================================
-	func onFocusTap(aetherView: AetherView) {
-		onTapped(aetherView)
-	}
+	func onFocusTap(aetherView: AetherView) { onTapped(aetherView) }
 		
 // UIView ==========================================================================================
 	override func draw(_ rect: CGRect) {
@@ -32,7 +30,6 @@ class PlusLeaf: Leaf, FocusTappable {
         let circlePath: CGPath = CGPath(roundedRect: rect.insetBy(dx: d, dy: d), cornerWidth: (width-d)/2, cornerHeight: (height-d)/2, transform: nil)
         Skin.gridFill(path: circlePath, uiColor: bubble.uiColor)
         Skin.gridDraw(path: circlePath, uiColor: bubble.uiColor)
-//		Skin.bubble(path: CGPath(roundedRect: rect.insetBy(dx: d, dy: d), cornerWidth: (width-d)/2, cornerHeight: (height-d)/2, transform: nil), uiColor: bubble.uiColor, width: Oo.s)
 			
 		let p: CGFloat = 13
 		let ir: CGFloat = width/2

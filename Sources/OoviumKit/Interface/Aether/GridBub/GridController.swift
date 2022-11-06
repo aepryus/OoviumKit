@@ -45,6 +45,7 @@ class GridController: ChainViewKeyDelegate {
         resizeEverything()
     }
     
+// Sizing ==========================================================================================
     func resize() {
         guard needsResizing.count > 0 else { return }
         needsResizing.forEach { $0.resize() }
@@ -71,6 +72,9 @@ class GridController: ChainViewKeyDelegate {
         resize()
         gridBub.render()
     }
+    
+// Events ==========================================================================================
+    func onAnchorCellTapped() { gridBub.morph() }
     
 // ChainViewKeyDegate ==============================================================================
     func onArrowUp() { gridBub.gridLeaf.handle(arrow: .up) }

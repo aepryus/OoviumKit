@@ -11,6 +11,8 @@ import OoviumEngine
 import UIKit
 
 class GridCell: UICollectionViewCell, Sizable, Editable, Citable, ChainViewDelegate {
+    enum Release { case returnOrEqual, arrowKey, cellTap }
+    
     unowned let controller: GridController
     unowned let column: GridColumn
     var cell: Cell
@@ -113,7 +115,6 @@ class GridCell: UICollectionViewCell, Sizable, Editable, Citable, ChainViewDeleg
         gridLeaf.focusCell = self
 		chainView.edit()
 		gridLeaf.gridBub.cellGainedFocus()
-//        controller.architect()
 	}
 	func onReleaseFocus() {
         gridLeaf.focusCell = nil

@@ -9,10 +9,11 @@
 import UIKit
 
 class BottomLeftCell: UICollectionViewCell {
-	unowned var gridLeaf: GridLeaf!
+    unowned let controller: GridController
 
-	override init(frame: CGRect) {
-		super.init(frame: frame)
+    init(controller: GridController) {
+        self.controller = controller
+        super.init(frame: .zero)
 		backgroundColor = .clear
 	}
 	required init?(coder: NSCoder) { fatalError() }
@@ -29,7 +30,8 @@ class BottomLeftCell: UICollectionViewCell {
 		path.move(to: CGPoint(x: width-p, y: 0))
 		path.addLine(to: CGPoint(x: width-p, y: height-p))
 		
-		Skin.gridCalc(path: CGPath(rect: CGRect(x: 0, y: 0, width: width-p, height: height-p), transform: nil), uiColor: gridLeaf.uiColor.tint(0.25))
-		Skin.gridDraw(path: path, uiColor: gridLeaf.uiColor)
+        let color: UIColor = controller.gridBub.gridLeaf.uiColor
+        Skin.gridCalc(path: CGPath(rect: CGRect(x: 0, y: 0, width: width-p, height: height-p), transform: nil), uiColor: color.tint(0.25))
+        Skin.gridDraw(path: path, uiColor: color)
 	}
 }

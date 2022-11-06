@@ -74,13 +74,13 @@ class GridMaker: Maker {
 class GridBub: Bubble, ChainLeafDelegate {
 	let grid: Grid
     
-    lazy var controller: GridController = { GridController(self) }()
+    lazy var controller: GridController = GridController(self)
 	
-	lazy var gridLeaf: GridLeaf = { GridLeaf(controller: controller) }()
-	lazy var addRowLeaf: PlusLeaf = { PlusLeaf(bubble: self) }()
-	lazy var addColumnLeaf: PlusLeaf = { PlusLeaf(bubble: self) }()
-	lazy var equalLeaf: EqualLeaf = { EqualLeaf(bubble: self) }()
-	lazy var chainLeaf: ChainLeaf = { ChainLeaf(bubble: self, delegate: self) }()
+	lazy var gridLeaf: GridLeaf = GridLeaf(controller: controller)
+    lazy var addRowLeaf: PlusLeaf = PlusLeaf(controller: controller)
+    lazy var addColumnLeaf: PlusLeaf = PlusLeaf(controller: controller)
+	lazy var equalLeaf: EqualLeaf = EqualLeaf(bubble: self)
+	lazy var chainLeaf: ChainLeaf = ChainLeaf(bubble: self, delegate: self)
 	
 	var editingColNo: Int? = nil
 	var suppressChainLeafRemoval: Bool = false
@@ -155,7 +155,6 @@ class GridBub: Bubble, ChainLeafDelegate {
 	
 	func cellGainedFocus() {
 		cellHasFocus = true
-//        determineLeaves()
         if !gridLeaf.isFirstResponder && ChainResponder.hasExternalKeyboard { gridLeaf.becomeFirstResponder() }
 	}
 	func cellLostFocus() {
@@ -247,12 +246,8 @@ class GridBub: Bubble, ChainLeafDelegate {
 	}
 	
 // Events ==========================================================================================
-	override func onSelect() {
-		gridLeaf.gridView.subviews.forEach { $0.setNeedsDisplay() }
-	}
-	override func onUnselect() {
-		gridLeaf.gridView.subviews.forEach { $0.setNeedsDisplay() }
-	}
+	override func onSelect() { gridLeaf.gridView.subviews.forEach { $0.setNeedsDisplay() } }
+	override func onUnselect() { gridLeaf.gridView.subviews.forEach { $0.setNeedsDisplay() } }
 
 // Bubble ==========================================================================================
     override var uiColor: UIColor { !selected ? UIColor.purple : UIColor.yellow }
@@ -272,15 +267,9 @@ class GridBub: Bubble, ChainLeafDelegate {
 	
 // ChainLeafDelegate ===============================================================================
     var usesMooring: Bool { false }
-	func onChange() {
-		layoutLeavesIfNeeded()
-	}
-	func onWillEdit() {
-		suppressChainLeafRemoval = true
-	}
-	func onEdit() {
-		layoutLeavesIfNeeded()
-	}
+	func onChange() { layoutLeavesIfNeeded() }
+	func onWillEdit() { suppressChainLeafRemoval = true }
+	func onEdit() { layoutLeavesIfNeeded() }
 	func onOK(leaf: ChainLeaf) {
 		guard let editingColNo = editingColNo, let column: Column = grid.column(colNo: editingColNo) else { fatalError() }
 		column.disseminate()

@@ -346,7 +346,7 @@ public class TronSkin: Skin {
 	override func tool(path: CGPath) {
 		let c = UIGraphicsGetCurrentContext()!
 		c.setFillColor(UIColor.black.alpha(0.7).cgColor)
-		c.setStrokeColor(UIColor.white.cgColor)
+        c.setStrokeColor(UIColor.white.shade(0.7).cgColor)
 		c.setLineWidth(4.0/3.0*Oo.s)
 		c.addPath(path)
 		c.drawPath(using: .fillStroke)

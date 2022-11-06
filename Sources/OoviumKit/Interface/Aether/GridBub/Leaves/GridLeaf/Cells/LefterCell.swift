@@ -9,17 +9,21 @@
 import UIKit
 
 class LefterCell: UICollectionViewCell, Editable, AnchorPannable {
+    unowned let controller: GridController
+    
 	var rowNo: Int = -1 {
 		didSet {setNeedsDisplay()}
 	}
 	var bottomMost: Bool = false
-	unowned var gridLeaf: GridLeaf!
 
-	init() {
+    init(controller: GridController) {
+        self.controller = controller
         super.init(frame: .zero)
 		backgroundColor = UIColor.clear
 	}
 	required init?(coder: NSCoder) { fatalError() }
+    
+    var gridLeaf: GridLeaf { controller.gridBub.gridLeaf }
 	
 // UIView ==========================================================================================
 	override func draw(_ rect: CGRect) {
@@ -42,33 +46,24 @@ class LefterCell: UICollectionViewCell, Editable, AnchorPannable {
 			Skin.gridCalc(path: CGPath(rect: CGRect(x: 0, y: 0, width: width-p, height: height-p), transform: nil), uiColor: UIColor.cyan.shade(0.5))
 			Skin.text("\(rowNo)", rect: CGRect(x: 0, y: 1, width: width, height: height), uiColor: UIColor.cyan.shade(0.5), font: UIFont(name: "Verdana", size: 15)!, align: .center)
 		}
-		Skin.gridDraw(path: path, uiColor: gridLeaf.uiColor)
+        Skin.gridDraw(path: path, uiColor: gridLeaf.uiColor)
 	}
 
 // Tappable ========================================================================================
 	func onFocusTap(aetherView: AetherView) {
-		if aetherView.focus !== self {
-			makeFocus()
-		} else {
-			releaseFocus()
-		}
+		if aetherView.focus !== self { makeFocus() }
+        else { releaseFocus() }
 	}
 
 // Editable ========================================================================================
 	var aetherView: AetherView { gridLeaf.aetherView }
-	var editor: Orbit {
-		return orb.lefterEditor.edit(editable: self)
-	}
+	var editor: Orbit { orb.lefterEditor.edit(editable: self) }
 	func cedeFocusTo(other: FocusTappable) -> Bool {
 		guard let lefterCell = other as? LefterCell else {return false}
 		return gridLeaf === lefterCell.gridLeaf
 	}
-	func onMakeFocus() {
-		setNeedsDisplay()
-	}
-	func onReleaseFocus() {
-		setNeedsDisplay()
-	}
+	func onMakeFocus() { setNeedsDisplay() }
+	func onReleaseFocus() { setNeedsDisplay() }
 	func cite(_ citable: Citable, at: CGPoint) {}
 	
 // AnchorPannable ==================================================================================

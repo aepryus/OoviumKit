@@ -19,18 +19,13 @@ class FooterCell: UICollectionViewCell, Sizable, Citable, FocusTappable, TowerLi
     var gridBub: GridBub { controller.gridBub }
     var gridLeaf: GridLeaf { gridBub.gridLeaf }
 
-    let pen: Pen
+    lazy var pen: Pen = Pen(color: controller.gridBub.gridLeaf.uiColor, alignment: column.alignment)
 	
     init(controller: GridController, column: Column) {
         self.controller = controller
         self.column = column
-        
-        pen = Pen(color: controller.gridBub.gridLeaf.uiColor, alignment: column.alignment)
-        
         super.init(frame: .zero)
-        
 		backgroundColor = .clear
-        
         self.column.footerTower.listener = self
 	}
 	required init?(coder: NSCoder) { fatalError() }
@@ -69,7 +64,5 @@ class FooterCell: UICollectionViewCell, Sizable, Citable, FocusTappable, TowerLi
 	func token(at: CGPoint) -> Token? { column.footerTower.variableToken }
 	
 // TowerListener ===================================================================================
-	func onTriggered() {
-        setNeedsResize()
-    }
+	func onTriggered() { setNeedsResize() }
 }

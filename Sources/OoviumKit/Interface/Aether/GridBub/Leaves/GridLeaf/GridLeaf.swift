@@ -25,8 +25,8 @@ class GridLeaf: Leaf, GridViewDelegate, UITextInput, UITextInputTraits {
 	
 	let gridView: GridView = GridView()
 
-	let anchorCell: AnchorCell = AnchorCell()
-	let bottomLeftCell: BottomLeftCell = BottomLeftCell()
+	lazy var anchorCell: AnchorCell = AnchorCell(controller: controller)
+    lazy var bottomLeftCell: BottomLeftCell = BottomLeftCell(controller: controller)
     var lefterCells: [LefterCell] = []
     var columns: [GridColumn] = []
     
@@ -45,10 +45,7 @@ class GridLeaf: Leaf, GridViewDelegate, UITextInput, UITextInputTraits {
 		
         super.init(bubble: controller.gridBub)
 		
-		anchorCell.gridLeaf = self
-		bottomLeftCell.gridLeaf = self
-		
-		for _ in 0..<grid.rows { lefterCells.append(LefterCell()) }
+        for _ in 0..<grid.rows { lefterCells.append(LefterCell(controller: controller)) }
         
         grid.columns.forEach { (column: Column) in
             let gridColumn: GridColumn = GridColumn(controller: controller, column: column, headerCell: HeaderCell(controller: controller, column: column))
@@ -78,7 +75,7 @@ class GridLeaf: Leaf, GridViewDelegate, UITextInput, UITextInputTraits {
     }
     	
     func addRow(with cells: [Cell]) {
-		lefterCells.append(LefterCell())
+        lefterCells.append(LefterCell(controller: controller))
         columns.enumerated().forEach { $0.1.addGridCell(controller: controller, column: $0.1, cell: cells[$0.0]) }
         controller.resize()
 	}
@@ -248,7 +245,6 @@ class GridLeaf: Leaf, GridViewDelegate, UITextInput, UITextInputTraits {
 			if cell.rowNo != row {
 				cell.rowNo = row
 				cell.bottomMost = bottomMost
-				cell.gridLeaf = self
 				cell.setNeedsDisplay()
 			}
 			return cell

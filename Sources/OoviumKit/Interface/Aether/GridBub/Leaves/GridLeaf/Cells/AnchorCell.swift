@@ -9,10 +9,11 @@
 import UIKit
 
 class AnchorCell: UICollectionViewCell, Tappable {
-	unowned var gridLeaf: GridLeaf!
+    unowned let controller: GridController
 
-	override init(frame: CGRect) {
-		super.init(frame: frame)
+    init(controller: GridController) {
+        self.controller = controller
+        super.init(frame: .zero)
 		backgroundColor = UIColor.black.alpha(0.7)
 	}
 	required init?(coder: NSCoder) { fatalError() }
@@ -35,11 +36,9 @@ class AnchorCell: UICollectionViewCell, Tappable {
 		path.move(to: CGPoint(x: width-p, y: p))
 		path.addLine(to: CGPoint(x: width-p, y: height))
 
-		Skin.gridDraw(path: path, uiColor: gridLeaf.uiColor)
+        Skin.gridDraw(path: path, uiColor: controller.gridBub.gridLeaf.uiColor)
 	}
 
 // Tappable ========================================================================================
-	func onTap() {
-		gridLeaf.gridBub.morph()
-	}
+    func onTap() { controller.onAnchorCellTapped() }
 }

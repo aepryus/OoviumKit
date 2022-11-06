@@ -95,7 +95,7 @@ public class ChainResponder {
             } else if chainView.chain.inString {
                 token = Token.characterToken(tag: "\(c)")
             }
-            _ = chainView.attemptToPost(token: token!)
+            if let token { _ = chainView.attemptToPost(token: token) }
         }
     }
     func unmarkText() { markedText = nil }
