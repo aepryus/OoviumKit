@@ -71,7 +71,7 @@ class HeaderCell: UICollectionViewCell, Sizable, Editable, Citable, DoubleTappab
 // Events ==========================================================================================
 	@objc func onDoubleTap() {
 		guard !aetherView.readOnly else { return }
-        if focused { releaseFocus(.focusTap) }
+        if focused { releaseFocus(.administrative) }
 		openLabel()
 	}
 

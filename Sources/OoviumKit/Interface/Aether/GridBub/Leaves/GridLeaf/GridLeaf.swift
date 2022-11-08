@@ -29,8 +29,6 @@ class GridLeaf: Leaf, GridViewDelegate, UITextInput, UITextInputTraits {
 	var gridBub: GridBub { bubble as! GridBub }
 	var uiColor: UIColor { gridBub.uiColor }
     
-//    var release: Release? = nil
-    
     init(controller: GridController) {
         self.controller = controller
         self.grid = controller.grid
