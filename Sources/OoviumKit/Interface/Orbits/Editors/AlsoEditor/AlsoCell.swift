@@ -26,8 +26,8 @@ class AlsoCell: UITableViewCell {
 	
 // Events ==========================================================================================
 	@objc func onTap() {
-		alsoEditor.alsoLeaf.aetherName = aetherName
-		alsoEditor.alsoLeaf.releaseFocus()
+//		alsoEditor.alsoLeaf.aetherName = aetherName
+//		alsoEditor.alsoLeaf.releaseFocus()
 	}
 	
 // UIView ==========================================================================================

@@ -20,7 +20,6 @@ class AlsoEditor: Orbit, UITableViewDataSource {
 
     init(orb: Orb) {
         super.init(orb: orb, size: CGSize(width: 180, height: 220))
-//		super.init(anchor: .bottomRight,offset: UIOffset.zero, size: CGSize(width: 180, height: 220), fixedOffset: UIOffset(horizontal: 0, vertical: 0))
 
 		tableView.backgroundColor = .clear
 		tableView.dataSource = self
@@ -37,7 +36,7 @@ class AlsoEditor: Orbit, UITableViewDataSource {
 			self.alsoLeaf.aetherView.swapToAether(facade: facade as? AetherFacade, aether: aether)
 		}))
 		schematic.add(row: 0, col: 1, w: 2, h: 1, key: Key(text: "OK".localized, uiColor: UIColor(red: 0.8, green: 1, blue: 0.8, alpha: 1), { [unowned self] in
-			self.alsoLeaf.releaseFocus()
+            self.alsoLeaf.releaseFocus(.okEqualReturn)
 		}))
 		
 		schematic.render(rect: CGRect(x: 0, y: 0, width: width, height: 53*Oo.s))

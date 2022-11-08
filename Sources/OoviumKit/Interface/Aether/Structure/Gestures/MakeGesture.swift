@@ -23,8 +23,8 @@ class MakeGesture: UITapGestureRecognizer {
 	@objc func onDoubleTap() {
 		let origin = location(in: aetherView.scrollView)
 		let at = V2(Double(origin.x),Double(origin.y))
-        
-#if os(macOS)
+
+#if targetEnvironment(macCatalyst)
         let commandKeyPressed: Bool = CGEventSource.keyState(.combinedSessionState, key: 0x37)
         if !commandKeyPressed {
             aetherView.triggerMaker(at: at)

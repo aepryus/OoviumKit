@@ -12,7 +12,7 @@ import UIKit
 protocol ChainLeafDelegate: AnyObject {
     var usesMooring: Bool { get }
 	func onChange()
-	func onWillEdit()
+	func onWillFocusTap()
 	func onEdit()
 	func onOK(leaf: ChainLeaf)
 	func onCalculate()
@@ -20,12 +20,12 @@ protocol ChainLeafDelegate: AnyObject {
 }
 extension ChainLeafDelegate {
     var usesMooring: Bool { true }
-	func onWillEdit() {}
+	func onWillFocusTap() {}
 	func accept(citable: Citable) -> Bool {return true}
 }
 
 class ChainLeaf: Leaf, ChainViewDelegate, Editable {
-    lazy var chainView: ChainView = { ChainView(responder: aetherView.responder) }()
+    lazy var chainView: ChainView = ChainView(editable: self, responder: aetherView.responder)
 	weak var delegate: ChainLeafDelegate?
 	var placeholder: String = "" {
 		didSet { setNeedsDisplay() }
@@ -102,12 +102,10 @@ class ChainLeaf: Leaf, ChainViewDelegate, Editable {
 	
 // FocusTappable ===================================================================================
 	func onFocusTap(aetherView: AetherView) {
-        if chainView.chain.editing { releaseFocus() }
-        else {
-            delegate?.onWillEdit()
-			makeFocus()
-		}
+        if chainView.chain.editing { releaseFocus(.focusTap) }
+        else { makeFocus() }
 	}
+    func onWillFocusTap() { delegate?.onWillFocusTap() }
 	
 // Leaf ============================================================================================
 	override func wireMoorings() {
@@ -171,14 +169,11 @@ class ChainLeaf: Leaf, ChainViewDelegate, Editable {
 	}
 	
 	func onEdit() {}
-	func onOK() { releaseFocus() }
+    func onOK() { releaseFocus(.okEqualReturn) }
 
 // ChainViewDelegate ===============================================================================
     var color: UIColor { bubble.selected ? UIColor.yellow : uiColor }
 
-    func onEditStart() {}
-    func onEditStop() { releaseFocus() }
-    
     func becomeFirstResponder() { chainView.becomeFirstResponder() }
     func resignFirstResponder() { chainView.resignFirstResponder() }
 

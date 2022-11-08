@@ -11,16 +11,19 @@ import UIKit
 protocol FocusTappable: UIView {
 	func onFocusTap(aetherView: AetherView)
 	func cedeFocusTo(other: FocusTappable) -> Bool
+    func onWillFocusTap()
 }
 extension FocusTappable {
 	func cedeFocusTo(other: FocusTappable) -> Bool { false }
+    func onWillFocusTap() {}
 }
 
 protocol NotTappable {}
 
 class FocusTapGesture: UITapGestureRecognizer {
 	unowned let aetherView: AetherView
-	weak var tapped: FocusTappable? = nil
+	weak var tapped: FocusTappable?
+    weak var release: Editable?
 	
 	init(aetherView: AetherView) {
 		self.aetherView = aetherView
@@ -30,7 +33,12 @@ class FocusTapGesture: UITapGestureRecognizer {
 	
 // Events ==========================================================================================
 	@objc func onTap() {
+        tapped!.onWillFocusTap()
 		aetherView.unselectAll()
+        if let release {
+            release.releaseFocus(.administrative)
+            self.release = nil
+        }
         tapped!.onFocusTap(aetherView: aetherView)
 	}
 	
@@ -53,9 +61,13 @@ class FocusTapGesture: UITapGestureRecognizer {
         guard let tapped: FocusTappable = view as? FocusTappable
             else { state = .failed; return }
 		
-        if let focused: Editable = aetherView.focus, focused !== tapped && !focused.cedeFocusTo(other: tapped) {
-            state = .failed; return
-		}
+        if let focused: Editable = aetherView.focus, focused !== tapped {
+            if !focused.cedeFocusTo(other: tapped) {
+                state = .failed; return
+            } else {
+                release = focused
+            }
+        }
 
 		self.tapped = tapped
 		super.touchesBegan(touches, with: event)

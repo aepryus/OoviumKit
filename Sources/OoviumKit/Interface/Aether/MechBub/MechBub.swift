@@ -128,9 +128,7 @@ class MechBub: Bubble, SignatureLeafDelegate, ChainLeafDelegate {
 	}
 	
 // Events ==========================================================================================
-	override func onCreate() {
-		signatureLeaf.makeFocus()
-	}
+	override func onCreate() { signatureLeaf.makeFocus() }
 
 // Bubble ==========================================================================================
 	override var uiColor: UIColor { !selected ? UIColor.blue : UIColor.yellow }
@@ -143,16 +141,8 @@ class MechBub: Bubble, SignatureLeafDelegate, ChainLeafDelegate {
     }
 
 // SignatureLeafDelegate ===========================================================================
-	var name: String {
-		return mech.name
-	}
-	var params: [String] {
-		var params: [String] = []
-		for input in mech.inputs {
-			params.append(input.name)
-		}
-		return params
-	}
+	var name: String { mech.name }
+	var params: [String] { mech.inputs.map { $0.name } }
 	func onNoOfParamsChanged(signatureLeaf: SignatureLeaf) {
 		while signatureLeaf.noOfParams > mech.inputs.count {
 			mech.addInput()
@@ -175,23 +165,11 @@ class MechBub: Bubble, SignatureLeafDelegate, ChainLeafDelegate {
 	}
 	var token: Token { mech.mechlikeToken }
 	var recipeToken: Token { mech.variableToken }
-	var paramTokens: [Token] {
-		var tokens: [Token] = []
-		for input in mech.inputs {
-			tokens.append(input.tower.variableToken)
-		}
-		return tokens
-	}
+	var paramTokens: [Token] { mech.inputs.map { $0.tower.variableToken } }
 
 // ChainLeafDelegate ===============================================================================
-	func onChange() {
-		render()
-	}
-	func onEdit() {
-		render()
-	}
-	func onOK(leaf: ChainLeaf) {
-		render()
-	}
+	func onChange() { render() }
+	func onEdit() { render() }
+	func onOK(leaf: ChainLeaf) { render() }
 	func onCalculate() {}
 }

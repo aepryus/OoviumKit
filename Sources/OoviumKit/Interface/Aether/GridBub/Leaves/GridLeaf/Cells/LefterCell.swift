@@ -52,7 +52,7 @@ class LefterCell: UICollectionViewCell, Editable, AnchorPannable {
 // Tappable ========================================================================================
 	func onFocusTap(aetherView: AetherView) {
 		if aetherView.focus !== self { makeFocus() }
-        else { releaseFocus() }
+        else { releaseFocus(.focusTap) }
 	}
 
 // Editable ========================================================================================

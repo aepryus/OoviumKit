@@ -158,7 +158,7 @@ public class ChainResponder {
         } else if ChainResponder.isSeparator(c: text[0]) {                    // External Keyboard
             token = Token.separatorToken(tag: text)
         } else if text == "\n" || text == "\t" {                        // External Keyboard
-            chainView.okDelegate()
+            chainView.editable.releaseFocus(.okEqualReturn)
             return
         } else if chainView.chain.inString {
             token = Token.characterToken(tag: text)
