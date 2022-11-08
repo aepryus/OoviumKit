@@ -159,7 +159,6 @@ class GridLeaf: Leaf, GridViewDelegate, UITextInput, UITextInputTraits {
         return newNo ?? colNo
     }
     
-    func hardRelease() { gridBub.cellLostFocus() }
     func equalRelease(gridCell: GridCell) -> Editable? {
         let colNo: Int
         let rowNo: Int

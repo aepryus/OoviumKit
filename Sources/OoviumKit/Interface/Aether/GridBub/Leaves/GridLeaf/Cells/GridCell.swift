@@ -17,7 +17,6 @@ class GridCell: UICollectionViewCell, Sizable, Editable, Citable, ChainViewDeleg
     
 	var leftMost: Bool = false
 	var bottomMost: Bool = false
-	var tapped: Bool = false
 	
     lazy var chainView: ChainView = ChainView(editable: self, responder: nil)
     
@@ -97,10 +96,8 @@ class GridCell: UICollectionViewCell, Sizable, Editable, Citable, ChainViewDeleg
 // Tappable ========================================================================================
 	func onFocusTap(aetherView: AetherView) {
 		guard !cell.column.calculated else { return }
-		if chainView.chain.editing {
-			tapped = true
-            releaseFocus(.focusTap)
-		} else { makeFocus() }
+        if chainView.chain.editing { releaseFocus(.focusTap) }
+        else { makeFocus() }
 	}
 
 // Editable ========================================================================================
@@ -118,7 +115,6 @@ class GridCell: UICollectionViewCell, Sizable, Editable, Citable, ChainViewDeleg
 	func onReleaseFocus() {
         gridLeaf.focusCell = nil
 		chainView.ok()
-		tapped = false
         gridLeaf.beingEdited = false
         controller.gridBub.determineLeaves()
         setNeedsDisplay()
