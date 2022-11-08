@@ -9,32 +9,6 @@
 import Acheron
 import UIKit
 
-protocol Editable: FocusTappable {
-	var aetherView: AetherView { get }
-	var orb: Orb { get }
-	var editor: Orbit { get }
-	func onMakeFocus()
-	func onReleaseFocus()
-	func cite(_ citable: Citable, at: CGPoint)
-	
-}
-extension Editable {
-	var orb: Orb { aetherView.orb }
-    
-	var focused: Bool { aetherView.focus === self }
-	func makeFocus(dismissEditor: Bool = true) {
-		aetherView.makeFocus(editable: self, dismissEditor: dismissEditor)
-	}
-	func releaseFocus(dismissEditor: Bool = true) {
-		aetherView.clearFocus(dismissEditor: dismissEditor)
-	}
-	func onWillMakeFocus() {}
-	func onFocusTap(aetherView: AetherView) {
-		if aetherView.focus == nil { makeFocus() }
-        else if aetherView.focus === self { releaseFocus() }
-	}
-}
-
 class Leaf: UIView {
 	unowned var bubble: Bubble
 	var hitch: Position {

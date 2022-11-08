@@ -17,8 +17,6 @@ protocol ChainViewDelegate: AnyObject {
     func becomeFirstResponder()
     func resignFirstResponder()
     
-    func onEditStart()
-    func onEditStop()
     func onTokenAdded(_ token: Token)
     func onTokenRemoved(_ token: Token)
 
@@ -50,6 +48,9 @@ extension ChainViewKeyDelegate {
 }
 
 class ChainView: UIView, UITextInput, UITextInputTraits, AnchorTappable, TowerListener {
+    unowned let editable: Editable
+    unowned let responder: ChainResponder?
+
     var chain: Chain = Chain() {
         didSet {
             chain.tower.listener = self
@@ -58,13 +59,13 @@ class ChainView: UIView, UITextInput, UITextInputTraits, AnchorTappable, TowerLi
     }
     weak var delegate: ChainViewDelegate?
     weak var keyDelegate: ChainViewKeyDelegate?
-    unowned let responder: ChainResponder?
     
     var oldWidth: CGFloat?
     
     static let pen: Pen = Pen(font: .ooAether(size: 16))
     
-    init(responder: ChainResponder?) {
+    init(editable: Editable, responder: ChainResponder?) {
+        self.editable = editable
         self.responder = responder
         super.init(frame: .zero)
         
@@ -183,9 +184,6 @@ class ChainView: UIView, UITextInput, UITextInputTraits, AnchorTappable, TowerLi
         chain.ok()
         resize()
         delegate?.onChanged()
-    }
-    public func okDelegate() {
-        delegate?.onEditStop()
     }
     
 // UIResponder =====================================================================================

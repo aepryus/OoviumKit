@@ -11,8 +11,6 @@ import OoviumEngine
 import UIKit
 
 class GridCell: UICollectionViewCell, Sizable, Editable, Citable, ChainViewDelegate {
-    enum Release { case returnOrEqual, arrowKey, cellTap }
-    
     unowned let controller: GridController
     unowned let column: GridColumn
     var cell: Cell
@@ -21,7 +19,7 @@ class GridCell: UICollectionViewCell, Sizable, Editable, Citable, ChainViewDeleg
 	var bottomMost: Bool = false
 	var tapped: Bool = false
 	
-	let chainView: ChainView = ChainView(responder: nil)
+    lazy var chainView: ChainView = ChainView(editable: self, responder: nil)
     
     var gridLeaf: GridLeaf { controller.gridBub.gridLeaf }
 	
@@ -101,33 +99,36 @@ class GridCell: UICollectionViewCell, Sizable, Editable, Citable, ChainViewDeleg
 		guard !cell.column.calculated else { return }
 		if chainView.chain.editing {
 			tapped = true
-			releaseFocus()
+            releaseFocus(.focusTap)
 		} else { makeFocus() }
 	}
 
 // Editable ========================================================================================
 	var aetherView: AetherView { gridLeaf.aetherView }
-	var editor: Orbit {
-		orb.chainEditor.chainView = chainView
-		return orb.chainEditor
-	}
+    var editor: Orbit { orb.chainEditor }
 	func onMakeFocus() {
         gridLeaf.focusCell = self
 		chainView.edit()
+        orb.chainEditor.chainView = chainView
+        gridLeaf.beingEdited = true
 		gridLeaf.gridBub.cellGainedFocus()
+        setNeedsDisplay()
+        controller.gridBub.determineLeaves()
 	}
 	func onReleaseFocus() {
         gridLeaf.focusCell = nil
 		chainView.ok()
-        if !tapped { gridLeaf.released(cell: self) }
-        else { chainView.okDelegate() }
 		tapped = false
+        gridLeaf.beingEdited = false
+        controller.gridBub.determineLeaves()
         setNeedsDisplay()
 	}
 	func cite(_ citable: Citable, at: CGPoint) {
 		guard let token = citable.token(at: at) else { return }
 		_ = chainView.attemptToPost(token: token)
 	}
+    func nextFocus(release: Release) -> Editable? { controller.nextGridCell(from: self, release: release) }
+
 	
 // Citable =========================================================================================
 	func token(at: CGPoint) -> Token? { cell.token }
@@ -137,23 +138,6 @@ class GridCell: UICollectionViewCell, Sizable, Editable, Citable, ChainViewDeleg
     
     func becomeFirstResponder() { gridLeaf.becomeFirstResponder() }
     func resignFirstResponder() { gridLeaf.resignFirstResponder() }
-
-    func onEditStart() {
-        if !gridLeaf.beingEdited {
-            gridLeaf.beingEdited = true
-            controller.gridBub.determineLeaves()
-        }
-        setNeedsDisplay()
-    }
-    func onEditStop() {
-        let dismissEditor: Bool = tapped || controller.grid.equalMode == .close
-        releaseFocus(dismissEditor: dismissEditor)
-        if dismissEditor {
-            gridLeaf.beingEdited = false
-            controller.gridBub.determineLeaves()
-        }
-        setNeedsDisplay()
-    }
 
     func onTokenAdded(_ token: Token) {}
     func onTokenRemoved(_ token: Token) {}

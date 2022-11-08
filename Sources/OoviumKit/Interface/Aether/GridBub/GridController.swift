@@ -76,10 +76,22 @@ class GridController: ChainViewKeyDelegate {
 // Events ==========================================================================================
     func onAnchorCellTapped() { gridBub.morph() }
     
-// ChainViewKeyDegate ==============================================================================
-    func onArrowUp() { gridBub.gridLeaf.handle(arrow: .up) }
-    func onArrowDown() { gridBub.gridLeaf.handle(arrow: .down) }
-    func onArrowLeft() { gridBub.gridLeaf.handle(arrow: .left) }
-    func onArrowRight() { gridBub.gridLeaf.handle(arrow: .right) }
-    func onTab() { gridBub.gridLeaf.gridBub.rotateEndMode() }
+    func nextGridCell(from gridCell: GridCell, release: Release) -> Editable? {
+        switch release {
+            case .focusTap, .administrative:
+                return nil
+            case .okEqualReturn:
+                if gridBub.grid.equalMode == .close { return nil }
+                return gridBub.gridLeaf.equalRelease(gridCell: gridCell)
+            case .arrow(let arrow):
+                return gridBub.gridLeaf.arrowRelease(gridCell: gridCell, arrow: arrow)
+        }
+    }
+    
+// ChainViewKeyDelegate ============================================================================
+    func onArrowUp() { gridBub.gridLeaf.focusCell?.releaseFocus(.arrow(.up)) }
+    func onArrowDown() { gridBub.gridLeaf.focusCell?.releaseFocus(.arrow(.down)) }
+    func onArrowLeft() { gridBub.gridLeaf.focusCell?.releaseFocus(.arrow(.left)) }
+    func onArrowRight() { gridBub.gridLeaf.focusCell?.releaseFocus(.arrow(.right)) }
+    func onTab() { gridBub.rotateEndMode() }
 }

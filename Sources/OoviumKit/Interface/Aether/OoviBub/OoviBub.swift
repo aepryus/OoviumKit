@@ -274,7 +274,7 @@ public class OoviBub: Bubble, ChainLeafDelegate {
 	public required init?(coder aDecoder: NSCoder) { fatalError() }
 
 	func ok() {
-		ooviLeaf.releaseFocus()
+        ooviLeaf.releaseFocus(.okEqualReturn)
 		if let onOKEV = onOKEV {
 			onOKEV(oovi)
 		}

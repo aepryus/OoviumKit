@@ -162,12 +162,7 @@ class SignatureLeaf: Leaf, Editable, Citable, UITextFieldDelegate {
 		return orb.signatureEditor.edit(editable: self)
 	}
 	var overrides: [FocusTappable] = []
-	func cedeFocusTo(other: FocusTappable) -> Bool {
-		for o in overrides {
-			if o === other {return true}
-		}
-		return false
-	}
+    func cedeFocusTo(other: FocusTappable) -> Bool { overrides.contains(where: { $0 === other}) }
 	func onMakeFocus() {
 		open = true
 		let p: CGFloat = 3						// padding

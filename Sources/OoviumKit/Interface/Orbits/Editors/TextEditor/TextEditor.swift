@@ -57,7 +57,7 @@ class TextEditor: Orbit {
 		okButton.uiColor = UIColor.white
 		addSubview(okButton)
 		okButton.addAction(for: .touchUpInside) { [unowned self] in
-			self.textLeaf.releaseFocus()
+            self.textLeaf.releaseFocus(.okEqualReturn)
 		}
 	}
 	required init?(coder aDecoder: NSCoder) { fatalError() }

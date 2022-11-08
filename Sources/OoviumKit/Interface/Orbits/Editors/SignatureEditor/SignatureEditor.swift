@@ -23,7 +23,7 @@ class SignatureEditor: KeyOrbit {
 			self.signatureLeaf.removeInput()
 		}))
 		schematic.add(row: 2, col: 0, w: 1, h: 2, key: Key(text: NSLocalizedString("OK", tableName: nil, bundle: Bundle(for: type(of: self)), value: "", comment: ""), uiColor: UIColor(red: 0.95, green: 0.85, blue: 0.55, alpha: 1), {
-			self.signatureLeaf.releaseFocus()
+            self.signatureLeaf.releaseFocus(.okEqualReturn)
 		}))
 		
 		renderSchematic()

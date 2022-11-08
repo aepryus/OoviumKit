@@ -14,13 +14,6 @@ class GridLeaf: Leaf, GridViewDelegate, UITextInput, UITextInputTraits {
     unowned let controller: GridController
     unowned let responder: ChainResponder
     
-	enum Arrow {
-		case left, right, up, down
-	}
-    enum Release {
-        case keypad, tap, keyboard, arrow
-    }
-	
 	let grid: Grid
 	
 	let gridView: GridView = GridView()
@@ -36,7 +29,7 @@ class GridLeaf: Leaf, GridViewDelegate, UITextInput, UITextInputTraits {
 	var gridBub: GridBub { bubble as! GridBub }
 	var uiColor: UIColor { gridBub.uiColor }
     
-    var release: Release? = nil
+//    var release: Release? = nil
     
     init(controller: GridController) {
         self.controller = controller
@@ -106,10 +99,6 @@ class GridLeaf: Leaf, GridViewDelegate, UITextInput, UITextInputTraits {
         controller.resizeEverything()
 	}
     
-    func handle(arrow: GridLeaf.Arrow) {
-        focus(arrow: arrow)
-    }
-	
     func addColumn(with column: Column) {
         let gridColumn: GridColumn = GridColumn(controller: controller, column: column, headerCell: HeaderCell(controller: controller, column: column))
         columns.append(gridColumn)
@@ -171,39 +160,34 @@ class GridLeaf: Leaf, GridViewDelegate, UITextInput, UITextInputTraits {
         }
         return newNo ?? colNo
     }
-	func released(cell: GridCell) {
-        guard grid.equalMode != .close && release != .arrow else {
-			gridBub.cellLostFocus()
-            release = nil
-			return
-		}
-		let colNo: Int
-		let rowNo: Int
-		if grid.equalMode == .down {
-			colNo = cell.cell.colNo
-			rowNo = cell.cell.rowNo + 1
-		} else /*if grid.equalMode == .right*/ {
-			colNo = nextColumnWrapping(colNo: cell.cell.colNo)
-			rowNo = cell.cell.rowNo + (colNo == 0 ? 1 : 0)
-		}
+    
+    func hardRelease() { gridBub.cellLostFocus() }
+    func equalRelease(gridCell: GridCell) -> Editable? {
+        let colNo: Int
+        let rowNo: Int
+        if grid.equalMode == .down {
+            colNo = gridCell.cell.colNo
+            rowNo = gridCell.cell.rowNo + 1
+        } else /*if grid.equalMode == .right*/ {
+            colNo = nextColumnWrapping(colNo: gridCell.cell.colNo)
+            rowNo = gridCell.cell.rowNo + (colNo == 0 ? 1 : 0)
+        }
         if rowNo == grid.rows { controller.addRow() }
-        columns[colNo].gridCells[rowNo].makeFocus()
-	}
-	func focus(arrow: GridLeaf.Arrow, from gridCell: GridCell? = nil) {
-        guard let cell: Cell = (gridCell ?? focusCell)?.cell else { return }
-		var colNo: Int = cell.colNo
-		var rowNo: Int = cell.rowNo
-		switch arrow {
-			case .left: colNo = prevCol(colNo: colNo)
-			case .right: colNo = nextColumn(colNo: colNo)
-			case .up: rowNo -= 1
-			case .down: rowNo += 1
-		}
-		guard 0..<grid.columns.count ~= colNo && 0..<grid.rows ~= rowNo else { return }
-        release = .arrow
-        columns[colNo].gridCells[rowNo].makeFocus(dismissEditor: false)
-	}
-	
+        return columns[colNo].gridCells[rowNo]
+    }
+    func arrowRelease(gridCell: GridCell, arrow: Release.Arrow) -> Editable? {
+        var colNo: Int = gridCell.cell.colNo
+        var rowNo: Int = gridCell.cell.rowNo
+        switch arrow {
+            case .left: colNo = prevCol(colNo: colNo)
+            case .right: colNo = nextColumn(colNo: colNo)
+            case .up: rowNo -= 1
+            case .down: rowNo += 1
+        }
+        guard 0..<grid.columns.count ~= colNo && 0..<grid.rows ~= rowNo else { return gridCell }
+        return columns[colNo].gridCells[rowNo]
+    }
+    
 // UIView ==========================================================================================
 	override func layoutSubviews() {
 		gridView.frame = self.bounds

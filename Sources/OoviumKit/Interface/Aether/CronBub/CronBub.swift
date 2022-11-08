@@ -143,42 +143,26 @@ class CronBub: Bubble, ChainLeafDelegate {
 		cron.tower.listener = faceLeaf
 		add(leaf: faceLeaf)
 		
-		playLeaf.playButton.onPlay = { [weak self] in
-			guard let me = self else { return }
-			me.timer.configure(interval: 1/cron.rateTower.value, {
-				DispatchQueue.main.async { [weak self] in
-					guard let me = self else { return }
-					let stop = me.cron.increment()
-					if stop {
-						me.playLeaf.playButton.stop()
-					}
+		playLeaf.playButton.onPlay = { [unowned self] in
+            self.timer.configure(interval: 1/cron.rateTower.value, {
+				DispatchQueue.main.async { [unowned self] in
+					let stop = self.cron.increment()
+					if stop { self.playLeaf.playButton.stop() }
 				}
 			})
-			me.timer.start()
+            self.timer.start()
 		}
-//		playLeaf.playButton.onPlay = { [unowned self] in
-//			self.timer.configure(interval: 1/cron.rateTower.value) {
-//				DispatchQueue.main.async { [weak self] in
-//					guard let self = self else { return }
-//					let stop = self.cron.increment()
-//					if stop { self.playLeaf.playButton.stop() }
-//				}
-//			}
-//		}
-		playLeaf.playButton.onStop = { [weak self] in
-			guard let me = self else { return }
-			me.timer.stop()
+		playLeaf.playButton.onStop = { [unowned self] in
+            self.timer.stop()
 		}
-		playLeaf.resetButton.onReset = { [weak self] in
-			guard let me = self else { return }
-			me.playLeaf.playButton.stop()
-			me.cron.reset()
-			me.cron.tower.trigger()
+		playLeaf.resetButton.onReset = { [unowned self] in
+            self.playLeaf.playButton.stop()
+            self.cron.reset()
+            self.cron.tower.trigger()
 		}
-		playLeaf.stepButton.onStep =  { [weak self] in
-			guard let me = self else { return }
-			me.cron.sealed = false
-			_ = me.cron.increment()
+		playLeaf.stepButton.onStep =  { [unowned self] in
+            self.cron.sealed = false
+			_ = self.cron.increment()
 		}
 		add(leaf: playLeaf)
 		

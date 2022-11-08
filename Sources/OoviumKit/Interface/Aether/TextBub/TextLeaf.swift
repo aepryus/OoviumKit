@@ -148,11 +148,11 @@ class TextLeaf: Leaf, Editable, DoubleTappable, Citable, Colorable, UITextFieldD
 	func onFocusTap(aetherView: AetherView) {
         guard textField == nil else { return }
 		if !focused { makeFocus() }
-		else { releaseFocus() }
+        else { releaseFocus(.focusTap) }
 	}
 	@objc func onDoubleTap() {
 		guard (focused || textBub.aetherView.focus == nil) && !aetherView.readOnly else { return }
-		if focused {releaseFocus()}
+        if focused { releaseFocus(.administrative) }
 		editMode()
 	}
 	

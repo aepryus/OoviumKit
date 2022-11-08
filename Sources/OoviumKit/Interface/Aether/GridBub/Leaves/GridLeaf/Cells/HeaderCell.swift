@@ -71,7 +71,7 @@ class HeaderCell: UICollectionViewCell, Sizable, Editable, Citable, DoubleTappab
 // Events ==========================================================================================
 	@objc func onDoubleTap() {
 		guard !aetherView.readOnly else { return }
-		if focused { releaseFocus() }
+        if focused { releaseFocus(.focusTap) }
 		openLabel()
 	}
 
@@ -120,7 +120,7 @@ class HeaderCell: UICollectionViewCell, Sizable, Editable, Citable, DoubleTappab
 // Tappable ========================================================================================
 	func onFocusTap(aetherView: AetherView) {
 		if aetherView.focus !== self { makeFocus() }
-        else { releaseFocus() }
+        else { releaseFocus(.focusTap) }
 	}
 
 // Editable ========================================================================================

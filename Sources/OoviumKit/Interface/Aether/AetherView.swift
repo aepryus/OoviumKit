@@ -282,7 +282,7 @@ public class AetherView: UIView, UIScrollViewDelegate, UIGestureRecognizerDelega
 		lockedHovers = hovers
 		scrollView.isUserInteractionEnabled = false
 		lockedHovers.forEach { $0.isUserInteractionEnabled = false }
-		focus?.releaseFocus()
+        focus?.releaseFocus(.administrative)
 		retract()
 		tripWire = UITapGestureRecognizer(target: self, action: #selector(onTrip))
 		addGestureRecognizer(tripWire)
@@ -395,7 +395,6 @@ public class AetherView: UIView, UIScrollViewDelegate, UIGestureRecognizerDelega
 	
 // =================================================================================================
 	func makeFocus(editable: Editable, dismissEditor: Bool = true) {
-		clearFocus(dismissEditor: dismissEditor)
 		focus = editable
 		editable.onMakeFocus()
         
@@ -405,20 +404,19 @@ public class AetherView: UIView, UIScrollViewDelegate, UIGestureRecognizerDelega
 
         if !orb.hasOrbits { orb.launch(orbit: editable.editor) }
 	}
-	func clearFocus(dismissEditor: Bool = true) {
+    func clearFocus(release: Release) {
 		guard let focus else { return }
 		self.focus = nil
 		focus.onReleaseFocus()
-		if dismissEditor {
-            orb.deorbit()
-//            if focus is ChainViewDelegate { DispatchQueue.main.async { self.responder.resignFirstResponder() } }
-        }
+        let next: Editable? = focus.nextFocus(release: release)
+        if let next { next.makeFocus() }
+        else { orb.deorbit() }
 	}
 	
 // Aethers =========================================================================================
 	public func closeCurrentAether() {
 		saveAether()
-		clearFocus()
+        focus?.releaseFocus(.administrative)
 		aetherViewDelegate?.onClose(aetherView: self, aether: aether)
 		removeAllBubbles()
 		removeAllDoodles()
@@ -675,6 +673,7 @@ public class AetherView: UIView, UIScrollViewDelegate, UIGestureRecognizerDelega
 			let pos = bubble.frame.origin
 			copy.frame = CGRect(origin: at+pos-anchor, size: copy.frame.size)
 			add(bubble: copy)
+            aether.addAexel(copy.aexel)
 		}
 	}
 	

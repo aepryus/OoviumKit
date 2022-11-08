@@ -13,7 +13,7 @@ import UIKit
 class ObjectLeaf: Leaf, Editable, ChainViewDelegate, DoubleTappable, Colorable, UITextFieldDelegate {
 	let object: Object
 	
-    lazy var chainView: ChainView = { ChainView(responder: aetherView.responder) }()
+    lazy var chainView: ChainView = ChainView(editable: self, responder: aetherView.responder)
 	var textField: OOTextField? = nil
 
 	var mooring: Mooring = Mooring()
@@ -92,15 +92,15 @@ class ObjectLeaf: Leaf, Editable, ChainViewDelegate, DoubleTappable, Colorable, 
 
 // Events ==========================================================================================
 	func onFocusTap(aetherView: AetherView) {
-        if chainView.chain.editing { releaseFocus() }
+        if chainView.chain.editing { releaseFocus(.focusTap) }
         else { makeFocus() }
 	}
 	@objc func onDoubleTap() {
 		guard !bubble.aetherView.readOnly else { return }
-		if chainView.chain.editing { releaseFocus() }
+        if chainView.chain.editing { releaseFocus(.administrative) }
 		openLabel()
 	}
-	@objc func onKeyboardWillHide() { releaseFocus() }
+    @objc func onKeyboardWillHide() { releaseFocus(.okEqualReturn) }
 
 // UIView ==========================================================================================
     override func setNeedsDisplay() {
@@ -160,9 +160,6 @@ class ObjectLeaf: Leaf, Editable, ChainViewDelegate, DoubleTappable, Colorable, 
     
     func becomeFirstResponder() { chainView.becomeFirstResponder() }
     func resignFirstResponder() { chainView.resignFirstResponder() }
-
-    func onEditStart() {}
-    func onEditStop() { releaseFocus() }
 
     func onTokenAdded(_ token: Token) {
         guard let mooring = bubble.aetherView.mooring(token: token) else { return }

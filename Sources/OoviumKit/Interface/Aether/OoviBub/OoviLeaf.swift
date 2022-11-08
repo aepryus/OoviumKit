@@ -45,11 +45,8 @@ class OoviLeaf: Leaf, UITextFieldDelegate, Editable {
 //		_ = textFieldShouldReturn(textField)
 //	}
 	func onFocusTap(aetherView: AetherView) {
-		if !focus {
-			makeFocus()
-		} else {
-			releaseFocus()
-		}
+		if !focus { makeFocus() }
+        else { releaseFocus(.focusTap) }
 	}
 	func onColorChange() {
 		textField.foreColor = ooviBub.oovi.color.uiColor
@@ -96,7 +93,7 @@ class OoviLeaf: Leaf, UITextFieldDelegate, Editable {
 	func textFieldShouldReturn(_ textField: UITextField) -> Bool {
 		oovi.name = textField.text ?? ""
 		textField.resignFirstResponder()
-		releaseFocus()
+        releaseFocus(.okEqualReturn)
 		return true
 	}
 //	func textFieldShouldReturn(_ textField: UITextField) -> Bool {
