@@ -9,8 +9,8 @@
 import UIKit
 
 class LinkDoodle: Doodle, CAAnimationDelegate {
-	let from: Mooring
-	let to: Mooring
+	unowned let from: Mooring
+	unowned let to: Mooring
 	
 	var asleep: Bool = true
 	let pulse = Pulse()

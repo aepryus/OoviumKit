@@ -25,21 +25,11 @@ class Mooring {
 		return colorable?.uiColor ?? UIColor.red
 	}
 	
-	func refreshDoodles() {
-		doodles.forEach{ $0.render() }
-	}
-	func wakeDoodles() {
-		doodles.forEach{ $0.wake() }
-	}
-	func sleepDoodles() {
-		doodles.forEach{ $0.sleep() }
-	}
-	func hideDoodles() {
-		doodles.forEach{$0.isHidden = true}
-	}
-	func unhideDoodles() {
-		doodles.forEach{$0.isHidden = false}
-	}
+	func refreshDoodles() { doodles.forEach{ $0.render() } }
+	func wakeDoodles() { doodles.forEach{ $0.wake() } }
+	func sleepDoodles() { doodles.forEach{ $0.sleep() } }
+	func hideDoodles() { doodles.forEach{ $0.isHidden = true } }
+	func unhideDoodles() { doodles.forEach{ $0.isHidden = false } }
 	
 	private func clear(doodle: LinkDoodle) {
 		doodle.from.doodles.remove(object: doodle)
@@ -56,9 +46,7 @@ class Mooring {
 		}
 		return doodle
 	}
-	func link(mooring: Mooring) -> LinkDoodle {
-		return link(mooring: mooring, wake: true)
-	}
+	func link(mooring: Mooring) -> LinkDoodle { link(mooring: mooring, wake: true) }
 	func unlink(mooring: Mooring) {
 		for doodle in doodles {
 			if doodle.from === self && doodle.to === mooring {
@@ -67,9 +55,7 @@ class Mooring {
 			}
 		}
 	}
-	func clearLinks() {
-		doodles.forEach{clear(doodle: $0)}
-	}
+	func clearLinks() { doodles.forEach{clear(doodle: $0)} }
 	func clearFrom() {
 		doodles.forEach{
 			if $0.from === self {
