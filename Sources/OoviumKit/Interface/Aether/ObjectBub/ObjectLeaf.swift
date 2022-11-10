@@ -11,12 +11,12 @@ import OoviumEngine
 import UIKit
 
 class ObjectLeaf: Leaf, Editable, ChainViewDelegate, DoubleTappable, Colorable, UITextFieldDelegate {
-	let object: Object
+	private let object: Object
 	
     lazy var chainView: ChainView = ChainView(editable: self, responder: aetherView.responder)
-	var textField: OOTextField? = nil
+	private var textField: OOTextField? = nil
 
-	var mooring: Mooring = Mooring()
+	private var mooring: Mooring = Mooring()
 
 	init(bubble: Bubble) {
 		object = (bubble as! ObjectBub).object
@@ -30,11 +30,10 @@ class ObjectLeaf: Leaf, Editable, ChainViewDelegate, DoubleTappable, Colorable, 
         initMoorings()
 	}
 	required init?(coder aDecoder: NSCoder) { fatalError() }
-
 	deinit { NotificationCenter.default.removeObserver(self) }
 	
-    var objectBub: ObjectBub { bubble as! ObjectBub }
-    var beingEdited: Bool { self === bubble.aetherView.focus }
+    private var objectBub: ObjectBub { bubble as! ObjectBub }
+    private var beingEdited: Bool { self === bubble.aetherView.focus }
     
 	func openLabel() {
 		bubble.aetherView.locked = true

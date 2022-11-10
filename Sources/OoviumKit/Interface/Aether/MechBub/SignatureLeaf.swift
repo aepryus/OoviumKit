@@ -158,9 +158,7 @@ class SignatureLeaf: Leaf, Editable, Citable, UITextFieldDelegate {
 	}
 
 // Editable ========================================================================================
-	var editor: Orbit {
-		return orb.signatureEditor.edit(editable: self)
-	}
+	var editor: Orbit { orb.signatureEditor.edit(editable: self) }
 	var overrides: [FocusTappable] = []
     func cedeFocusTo(other: FocusTappable) -> Bool { overrides.contains(where: { $0 === other}) }
 	func onMakeFocus() {
@@ -170,16 +168,11 @@ class SignatureLeaf: Leaf, Editable, Citable, UITextFieldDelegate {
 		let nh: CGFloat = 30					// name height
 		let pw: CGFloat = 73					// param width
 		let ph: CGFloat = 24					// param height
-//		let r: CGFloat = 15
-//		let cr: CGFloat = 5						// cap radius
 		
 		let x1 = p
 		let x2 = p+(nw-pw)/2
-//		let x3 = nw/2
-//		let x4 = x2+pw
-//		let x5 = p+nw
-		
-		let y1 = p
+
+        let y1 = p
 		let y2 = y1+nh
 
 		nameEdit = SignatureField(frame: CGRect(x: x1, y: y1+0.5, width: nw, height: 28))
@@ -241,9 +234,7 @@ class SignatureLeaf: Leaf, Editable, Citable, UITextFieldDelegate {
 	}
 	
 // UITextFieldDelegate =============================================================================
-	func textFieldShouldBeginEditing(_ textField: UITextField) -> Bool {
-		return true
-	}
+	func textFieldShouldBeginEditing(_ textField: UITextField) -> Bool { true }
 	func textFieldShouldReturn(_ textField: UITextField) -> Bool {
 		textField.resignFirstResponder()
 		return true
@@ -262,11 +253,8 @@ class SignatureLeaf: Leaf, Editable, Citable, UITextFieldDelegate {
 	func token(at: CGPoint) -> Token? {
 		guard let delegate = delegate else { fatalError() }
 		if at.y < 33 {
-			if bubble.aetherView.anchored {
-				return delegate.recipeToken
-			} else {
-				return delegate.token
-			}
+			if bubble.aetherView.anchored { return delegate.recipeToken }
+            else { return delegate.token }
 		} else {
 			let i: Int = min(Int((at.y-33) / 24), delegate.paramTokens.count-1)
 			return delegate.paramTokens[i]
