@@ -512,32 +512,21 @@ public class AetherView: UIView, UIScrollViewDelegate, UIGestureRecognizerDelega
 	
 // Links ===========================================================================================
 	var moorings: [Token:Mooring] = [:]
-	func mooring(token: Token) -> Mooring? {
-		return moorings[token]
-	}
-	func link(from: Mooring, to: Mooring, wake: Bool) {
-		let linkDoodle = from.link(mooring: to, wake: wake)
-		add(doodle: linkDoodle)
-	}
-	func link(from: Mooring, to: Mooring) {
-		self.link(from: from, to: to, wake: true)
-	}
+	func mooring(token: Token) -> Mooring? { moorings[token] }
+	func link(from: Mooring, to: Mooring, wake: Bool = true) { add(doodle: from.link(mooring: to, wake: wake)) }
 	func unlink(from: Mooring, to: Mooring) {
 		from.unlink(mooring: to)
-		for doodle in from.doodles {
-			if doodle.to === to {
-				doodles.remove(object: doodle)
-			}
-		}
+        from.doodles.filter({ $0.to === to }).forEach { doodles.remove(object: $0) }
 	}
+//    func delete(moorings: [Mooring]) {
+//        moorings.forEach { (mooring: Mooring) in
+//            mooring.doodles.forEach(<#T##body: (LinkDoodle) throws -> Void##(LinkDoodle) throws -> Void#>)
+//        }
+//    }
 	
 // Stretch =========================================================================================
-	func snapBack() {
-		scrollView.setContentOffset(CGPoint(x: aether.xOffset, y: aether.yOffset), animated: false)
-	}
-	func homing(current: CGFloat, extent: CGFloat) -> CGFloat {
-		return min(max(current, 0), extent)
-	}
+	func snapBack() { scrollView.setContentOffset(CGPoint(x: aether.xOffset, y: aether.yOffset), animated: false) }
+	func homing(current: CGFloat, extent: CGFloat) -> CGFloat { min(max(current, 0), extent) }
 	
 	private func findOrbit() -> (CGFloat, CGFloat, CGFloat, CGFloat) {
 		var maxLeft: CGFloat = 0
@@ -554,7 +543,7 @@ public class AetherView: UIView, UIScrollViewDelegate, UIGestureRecognizerDelega
 	
 		return (minRight, minBottom, maxLeft-minRight, maxTop-minBottom)
 	}
-	public func stretch(animated: Bool) {
+	public func stretch(animated: Bool = true) {
 		let wx = width != 0 ? width : CGFloat(aether.width)
 		let wy = height != 0 ? height : CGFloat(aether.height)
 		
@@ -588,9 +577,6 @@ public class AetherView: UIView, UIScrollViewDelegate, UIGestureRecognizerDelega
 //			print("      \(bubble.aexel.name), anchor: (\(bubble.anchor.x),\(bubble.anchor.y)), aexel.pos: (\(bubble.aexel.x),\(bubble.aexel.y)), size: \(bubble.frame)")
 //		}
 //		print("====================================\n\n")
-	}
-	public func stretch() {
-		stretch(animated: true)
 	}
 	func spread() {
 		guard bubbles.count > 0 else { return }
