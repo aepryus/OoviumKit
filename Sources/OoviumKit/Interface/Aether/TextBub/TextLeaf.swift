@@ -13,16 +13,13 @@ import UIKit
 class TextLeaf: Leaf, Editable, DoubleTappable, Citable, UITextFieldDelegate {
 	let text: Text
 	
-    lazy var mooring: Mooring = bubble.createMooring()
-	
 	var textField: OOTextField? = nil
 	
 	init(bubble: Bubble) {
 		self.text = (bubble as! TextBub).text
-		
 		super.init(bubble: bubble, hitch: .center, anchor: CGPoint.zero, size: CGSize.zero)
-		
 		self.backgroundColor = UIColor.clear
+        mooring = bubble.createMooring()
 	}
 	required init?(coder aDecoder: NSCoder) { fatalError() }
 	
@@ -110,9 +107,6 @@ class TextLeaf: Leaf, Editable, DoubleTappable, Citable, UITextFieldDelegate {
 			let textBub: TextBub = bubble.aetherView.bubble(aexel: edge.other) as! TextBub
             mooring.attach(textBub.textLeaf.mooring, wake: false)
 		}
-	}
-	override func positionMoorings() {
-		mooring.point = self.bubble.aetherView.scrollView.convert(self.bubble.center, from: self.bubble.superview)
 	}
 	
 // Editable ========================================================================================

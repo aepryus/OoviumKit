@@ -9,20 +9,6 @@
 import OoviumEngine
 import UIKit
 
-class TextMaker: Maker {
-	
-// Maker ===========================================================================================
-	func make(aetherView: AetherView, at: V2) -> Bubble {
-        let text: Text = aetherView.aether.create(at: at)
-		text.shape = aetherView.shape
-		text.color = aetherView.color
-		return TextBub(text, aetherView: aetherView)
-	}
-	func drawIcon() {
-		OOShape.ellipse.shape.drawIcon(color: UIColor.orange)
-	}
-}
-
 class TextBub: Bubble, NSCopying {
 	let text: Text
 	var textLeaf: TextLeaf!

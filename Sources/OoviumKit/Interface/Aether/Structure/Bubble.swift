@@ -98,6 +98,7 @@ public class Bubble: UIView, AnchorTappable, Colorable, UIGestureRecognizerDeleg
 		}
         leaves.forEach { $0.frame = CGRect(origin: CGPoint(x: $0.xL-rect.origin.x, y: $0.yT-rect.origin.y), size: $0.size) }
 		setNeedsDisplay()
+        positionMoorings()
 	}
 
     private var leavesNeedLayout: Bool = false

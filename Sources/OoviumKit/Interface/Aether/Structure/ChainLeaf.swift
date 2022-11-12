@@ -41,6 +41,7 @@ class ChainLeaf: Leaf, ChainViewDelegate, Editable {
 	var chain: Chain {
 		set {
 			chainView.chain = newValue
+            mooring = bubble.createMooring(token: chain.tower.variableToken)
 //			chainView.chain.tower.listener = self
 		}
 		get { chainView.chain }
@@ -51,32 +52,14 @@ class ChainLeaf: Leaf, ChainViewDelegate, Editable {
 		else { return bubble.uiColor }
 	}
 	
-    lazy private var mooring: Mooring = bubble.createMooring(token: chain.tower.variableToken)
-	
-	override init(bubble: Bubble, hitch: Position, anchor: CGPoint, size: CGSize) {
-		super.init(bubble: bubble, hitch: hitch, anchor: anchor, size: size)
-		
-		self.backgroundColor = UIColor.clear
-		chainView.delegate = self
-		addSubview(chainView)
-	}
-	init(bubble: Bubble, hitch: Position, anchor: CGPoint, size: CGSize, delegate: ChainLeafDelegate) {
+    init(bubble: Bubble, hitch: Position = .center, anchor: CGPoint = .zero, size: CGSize = .zero, delegate: ChainLeafDelegate? = nil) {
 		self.delegate = delegate
 		
 		super.init(bubble: bubble, hitch: hitch, anchor: anchor, size: size)
 		
 		self.backgroundColor = UIColor.clear
 		chainView.delegate = self
-		addSubview(chainView)
-	}
-	init(bubble: Bubble, delegate: ChainLeafDelegate) {
-		self.delegate = delegate
-		
-		super.init(bubble: bubble, hitch: .center, anchor: CGPoint.zero, size: CGSize.zero)
-		
-		self.backgroundColor = UIColor.clear
-		chainView.delegate = self
-		addSubview(chainView)
+		addSubview(chainView)        
 	}
 	required init?(coder aDecoder: NSCoder) { fatalError() }
 	
@@ -93,11 +76,11 @@ class ChainLeaf: Leaf, ChainViewDelegate, Editable {
 	
 	func hideLinks() {
         guard delegate?.usesMooring ?? true else { return }
-		mooring.doodles.forEach {$0.removeFromSuperlayer()}
+		mooring!.doodles.forEach {$0.removeFromSuperlayer()}
 	}
 	func showLinks() {
         guard delegate?.usesMooring ?? true else { return }
-		mooring.doodles.forEach {bubble.aetherView.layer.addSublayer($0)}
+		mooring!.doodles.forEach {bubble.aetherView.layer.addSublayer($0)}
 	}
 	
 // FocusTappable ===================================================================================
@@ -114,10 +97,6 @@ class ChainLeaf: Leaf, ChainViewDelegate, Editable {
             guard let mooring = bubble.aetherView.moorings[$0] else { return }
             mooring.attach(self.mooring, wake: false)
         }
-	}
-	override func positionMoorings() {
-        guard delegate?.usesMooring ?? true else { return }
-        mooring.point = self.bubble.aetherView.scrollView.convert(self.center, from: self.superview)
 	}
 
 // UIView ==========================================================================================

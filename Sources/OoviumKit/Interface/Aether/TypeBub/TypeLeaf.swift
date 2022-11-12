@@ -13,7 +13,6 @@ import UIKit
 class TypeLeaf: Leaf, Colorable {
 	var type: Type
 	
-    lazy var mooring: Mooring = { bubble.createMooring() }()
 	var fieldMoorings: [Mooring] = []
 
 	var x1: CGFloat = 0, x2: CGFloat = 0, x3: CGFloat = 0, x4: CGFloat = 0, x6: CGFloat = 0, x7: CGFloat = 0
@@ -25,7 +24,8 @@ class TypeLeaf: Leaf, Colorable {
 	
 		super.init(bubble: bubble, hitch: hitch, anchor: anchor, size: size)
 		
-		self.backgroundColor = UIColor.clear
+		backgroundColor = UIColor.clear
+        mooring = bubble.createMooring()
 		
         type.fields.forEach { _ in fieldMoorings.append(bubble.createMooring()) }
 		

@@ -16,12 +16,12 @@ class ObjectLeaf: Leaf, Editable, ChainViewDelegate, DoubleTappable, UITextField
     lazy var chainView: ChainView = ChainView(editable: self, responder: aetherView.responder)
 	private var textField: OOTextField? = nil
 
-    lazy private var mooring: Mooring = bubble.createMooring(token: object.token)
-
 	init(bubble: Bubble) {
 		object = (bubble as! ObjectBub).object
 		
 		super.init(bubble: bubble)
+        
+        mooring = bubble.createMooring(token: object.token)
 
 		chainView.chain = object.chain
 		chainView.delegate = self
@@ -110,9 +110,6 @@ class ObjectLeaf: Leaf, Editable, ChainViewDelegate, DoubleTappable, UITextField
             guard let mooring = bubble.aetherView.moorings[$0] else { return }
             mooring.attach(self.mooring, wake: false)
         }
-    }
-    override func positionMoorings() {
-        mooring.point = self.bubble.aetherView.scrollView.convert(self.bubble.center, from: self.bubble.superview)
     }
         
 // Editable ========================================================================================
