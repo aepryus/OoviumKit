@@ -30,6 +30,7 @@ public class Bubble: UIView, AnchorTappable, Colorable, UIGestureRecognizerDeleg
 
     private var leaves: [Leaf] = []
     var plasma: CGMutablePath? = nil
+    var moorings: [Mooring] = []
 
     var selected: Bool = false
     
@@ -57,9 +58,6 @@ public class Bubble: UIView, AnchorTappable, Colorable, UIGestureRecognizerDeleg
 	var context: Context { orb.multiContext }
 	var multiContext: Context { orb.multiContext }
 	
-    func wireMoorings() { leaves.forEach { $0.wireMoorings() } }
-    func positionMoorings() { leaves.forEach { $0.positionMoorings() } }
-
     func add(leaf: Leaf) {
         guard !leaves.contains(leaf) else { return }
         leaves.append(leaf)
@@ -86,7 +84,6 @@ public class Bubble: UIView, AnchorTappable, Colorable, UIGestureRecognizerDeleg
         let y: CGFloat = hitch.isTop ? 0 : hitch.isBottom ? size.height : size.height/2
 		return CGPoint(x: x, y: y)
 	}
-//    public var anchorPoint: CGPoint { frame.origin + hitchPoint }
 
     private var oldHitchPoint: CGPoint? = nil
     func layoutLeaves() {
@@ -122,6 +119,18 @@ public class Bubble: UIView, AnchorTappable, Colorable, UIGestureRecognizerDeleg
 		center = startPoint + by
 	}
     
+// Moorings ========================================================================================
+    func createMooring(token: Token? = nil) -> Mooring {
+        let mooring: Mooring = Mooring(bubble: self, token: token)
+        moorings.append(mooring)
+        if let token { aetherView.moorings[token] = mooring }
+        return mooring
+    }
+    func destroy(token: Token) { aetherView.moorings[token] = nil }
+
+    func wireMoorings() { leaves.forEach { $0.wireMoorings() } }
+    func positionMoorings() { leaves.forEach { $0.positionMoorings() } }
+
 // Events ==========================================================================================
 	func onCreate() {}
 	func onRemove() {}

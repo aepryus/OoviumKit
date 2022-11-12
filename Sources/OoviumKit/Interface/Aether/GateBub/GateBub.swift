@@ -92,7 +92,7 @@ class GateBub: Bubble, ChainLeafDelegate, Citable {
 	lazy var thenLeaf: ChainLeaf = {ChainLeaf(bubble: self, hitch: .topLeft, anchor: CGPoint.zero, size: CGSize(width: 70, height: 36), delegate: self)}()
 	lazy var elseLeaf: ChainLeaf = {ChainLeaf(bubble: self, hitch: .topLeft, anchor: CGPoint.zero, size: CGSize(width: 70, height: 36), delegate: self)}()
 	
-	let mooring: Mooring = Mooring()
+    lazy var mooring: Mooring = { createMooring(token: gate.token) }()
 	
 	var overrideHitchPoint: CGPoint = CGPoint.zero
 	
@@ -120,8 +120,6 @@ class GateBub: Bubble, ChainLeafDelegate, Citable {
 		add(leaf: elseLeaf)
 		
 		self.aetherView.moorings[gate.token] = mooring
-		
-		mooring.colorable = self
 		
 		render()
 	}
@@ -172,24 +170,20 @@ class GateBub: Bubble, ChainLeafDelegate, Citable {
 		plasma.closeSubpath()
 		
 		layoutLeaves()
+        positionMoorings()
 		
 		mooring.point = aetherView.scrollView.convert(CGPoint(x: x3, y: y2), from: self)
-		mooring.positionDoodles()
 	}
 	
 // Bubble ==========================================================================================
-	override var uiColor: UIColor {
-		return !selected ? OOColor.marine.uiColor : UIColor.yellow
-	}
+    override var uiColor: UIColor { !selected ? OOColor.marine.uiColor : UIColor.yellow }
 	override func positionMoorings() {
 		let w: CGFloat = ifLeaf.size.width
 		let p: CGFloat = 3
 		mooring.point = aetherView.scrollView.convert(CGPoint(x: w - p, y: 59 - 2*p), from: self)
 		super.positionMoorings()
 	}
-	override var hitchPoint: CGPoint {
-		return overrideHitchPoint
-	}
+	override var hitchPoint: CGPoint { overrideHitchPoint }
 	
 // UIView ==========================================================================================
     override func draw(_ rect: CGRect) {
@@ -198,19 +192,11 @@ class GateBub: Bubble, ChainLeafDelegate, Citable {
     }
 
 // ChainLeafDelegate ===============================================================================
-	func onChange() {
-		render()
-	}
-	func onEdit() {
-		render()
-	}
-	func onOK(leaf: ChainLeaf) {
-		render()
-	}
+	func onChange() { render() }
+	func onEdit() { render() }
+	func onOK(leaf: ChainLeaf) { render() }
 	func onCalculate() {}
 	
 // Citable =========================================================================================
-	func token(at: CGPoint) -> Token? {
-		return gate.token
-	}
+	func token(at: CGPoint) -> Token? { gate.token }
 }

@@ -13,7 +13,7 @@ import UIKit
 class TypeLeaf: Leaf, Colorable {
 	var type: Type
 	
-	let mooring: Mooring = Mooring()
+    lazy var mooring: Mooring = { bubble.createMooring() }()
 	var fieldMoorings: [Mooring] = []
 
 	var x1: CGFloat = 0, x2: CGFloat = 0, x3: CGFloat = 0, x4: CGFloat = 0, x6: CGFloat = 0, x7: CGFloat = 0
@@ -26,9 +26,8 @@ class TypeLeaf: Leaf, Colorable {
 		super.init(bubble: bubble, hitch: hitch, anchor: anchor, size: size)
 		
 		self.backgroundColor = UIColor.clear
-		mooring.colorable = self
 		
-		type.fields.forEach { _ in fieldMoorings.append(Mooring()) }
+        type.fields.forEach { _ in fieldMoorings.append(bubble.createMooring()) }
 		
 		render()
 	}
@@ -86,15 +85,15 @@ class TypeLeaf: Leaf, Colorable {
 	
 // Leaf ============================================================================================
 	override func wireMoorings() {
-		type.fields.enumerated().forEach { (i: Int, field: Field) in
-			guard let typeBub: TypeBub = bubble.aetherView.typeBub(name: field.typeName) else { return }
-			bubble.aetherView.link(from: fieldMoorings[i], to: typeBub.typeLeaf.mooring, wake: false)
-		}
+//		type.fields.enumerated().forEach { (i: Int, field: Field) in
+//			guard let typeBub: TypeBub = bubble.aetherView.typeBub(name: field.typeName) else { return }
+//			bubble.aetherView.link(from: fieldMoorings[i], to: typeBub.typeLeaf.mooring, wake: false)
+//		}
 	}
 	override func positionMoorings() {
-		reMoor()
-		mooring.positionDoodles()
-		fieldMoorings.forEach {$0.positionDoodles()}
+//		reMoor()
+//		mooring.positionDoodles()
+//		fieldMoorings.forEach {$0.positionDoodles()}
 	}
 	
 // UIView ==========================================================================================

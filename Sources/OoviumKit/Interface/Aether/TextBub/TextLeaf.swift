@@ -10,10 +10,10 @@ import Acheron
 import OoviumEngine
 import UIKit
 
-class TextLeaf: Leaf, Editable, DoubleTappable, Citable, Colorable, UITextFieldDelegate {
+class TextLeaf: Leaf, Editable, DoubleTappable, Citable, UITextFieldDelegate {
 	let text: Text
 	
-	let mooring: Mooring = Mooring()
+    lazy var mooring: Mooring = bubble.createMooring()
 	
 	var textField: OOTextField? = nil
 	
@@ -22,7 +22,6 @@ class TextLeaf: Leaf, Editable, DoubleTappable, Citable, Colorable, UITextFieldD
 		
 		super.init(bubble: bubble, hitch: .center, anchor: CGPoint.zero, size: CGSize.zero)
 		
-		mooring.colorable = self
 		self.backgroundColor = UIColor.clear
 	}
 	required init?(coder aDecoder: NSCoder) { fatalError() }
@@ -65,13 +64,11 @@ class TextLeaf: Leaf, Editable, DoubleTappable, Citable, Colorable, UITextFieldD
 	
 	func linkTo(other: TextLeaf) {
 		text.linkTo(other.text)
-		textBub.aetherView.link(from: mooring, to: other.mooring)
-		(editor as! TextEditor).refresh()
+        mooring.attach(other.mooring)
 	}
 	func unlinkTo(other: TextLeaf) {
 		text.unlinkTo(other.text)
-		textBub.aetherView.unlink(from: mooring, to: other.mooring)
-		(editor as! TextEditor).refresh()
+        mooring.detach(other.mooring)
 	}
 	
 	func readMode() {
@@ -111,12 +108,11 @@ class TextLeaf: Leaf, Editable, DoubleTappable, Citable, Colorable, UITextFieldD
 	override func wireMoorings() {
 		for edge in text.edges {
 			let textBub: TextBub = bubble.aetherView.bubble(aexel: edge.other) as! TextBub
-			bubble.aetherView.link(from: mooring, to: textBub.textLeaf.mooring, wake: false)
+            mooring.attach(textBub.textLeaf.mooring, wake: false)
 		}
 	}
 	override func positionMoorings() {
 		mooring.point = self.bubble.aetherView.scrollView.convert(self.bubble.center, from: self.bubble.superview)
-		mooring.positionDoodles()
 	}
 	
 // Editable ========================================================================================

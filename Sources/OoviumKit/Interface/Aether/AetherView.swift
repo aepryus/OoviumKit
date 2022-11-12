@@ -144,10 +144,6 @@ public class AetherView: UIView, UIScrollViewDelegate, UIGestureRecognizerDelega
 			scrollView.showsHorizontalScrollIndicator = false
 		}
 		
-//		if Screen.mac {
-//			orb = AetherViewOrb(aetherView: self)
-//		}
-		
 		anchoring.start()
 		
 		makeGesture.delegate = self
@@ -181,12 +177,6 @@ public class AetherView: UIView, UIScrollViewDelegate, UIGestureRecognizerDelega
 
 		NotificationCenter.default.addObserver(self, selector: #selector(onKeyboardWillChangeFrame(_:)), name: UIResponder.keyboardWillChangeFrameNotification, object: nil)
 		NotificationCenter.default.addObserver(self, selector: #selector(onKeyboardWillHide(_:)), name: UIResponder.keyboardWillHideNotification, object: nil)
-//		[[NSNotificationCenter defaultCenter] addObserver:self selector:@selector(keyboardWillShow:) name:UIKeyboardWillShowNotification object:nil];
-//		[[NSNotificationCenter defaultCenter] addObserver:self selector:@selector(keyboardDidShow:) name:UIKeyboardDidShowNotification object:nil];
-//		[[NSNotificationCenter defaultCenter] addObserver:self selector:@selector(keyboardWillHide:) name:UIKeyboardWillHideNotification object:nil];
-        
-        safeZone.isUserInteractionEnabled = false
-//        addSubview(safeZone)
 	}
 	
     public convenience init(aether: Aether, toolsOn: Bool = true, burn: Bool = true, oldPicker: Bool = false) {
@@ -210,8 +200,6 @@ public class AetherView: UIView, UIScrollViewDelegate, UIGestureRecognizerDelega
 	public required init?(coder aDecoder: NSCoder) { fatalError() }
     
 // GadgetDelegate ==================================================================================
-    let safeZone: UIView = ColorView(.red.alpha(0.5))
-    
     private var isFullScreen: Bool { max(Screen.width, Screen.height) == max(width, height) && min(Screen.width, Screen.height) == min(width, height) }
     private let macPadding: CGFloat = 6*Screen.s
     private let iOSPadding: CGFloat = 3*Screen.s
@@ -292,9 +280,7 @@ public class AetherView: UIView, UIScrollViewDelegate, UIGestureRecognizerDelega
 		lockedHovers.forEach { $0.isUserInteractionEnabled = true }
 		removeGestureRecognizer(tripWire)
 	}
-	@objc func onTrip() {
-		slideBack()
-	}
+	@objc func onTrip() { slideBack() }
 	
 // Hovers ==========================================================================================
 	func add(hover: Hover) {
@@ -307,12 +293,8 @@ public class AetherView: UIView, UIScrollViewDelegate, UIGestureRecognizerDelega
 		hovers.remove(object: hover)
 		hover.removeFromSuperview()
 	}
-	func invoked(hover: Hover) -> Bool {
-		return hovers.contains(hover)
-	}
-	func retract() {
-		hovers.forEach { $0.retract() }
-	}
+	func invoked(hover: Hover) -> Bool { hovers.contains(hover) }
+	func retract() { hovers.forEach { $0.retract() } }
 	
 // Orb =============================================================================================
 	private func render(orbit: Orbit) {
@@ -334,8 +316,6 @@ public class AetherView: UIView, UIScrollViewDelegate, UIGestureRecognizerDelega
 		orbit.alpha = 0
 		UIView.animate(withDuration: 0.2) {
 			orbit.alpha = 1
-//		} completion: { (completed: Bool) in
-//			orbit.onFadeIn()
 		}
 	}
 	func deorb(it orbit: Orbit) {
@@ -344,7 +324,6 @@ public class AetherView: UIView, UIScrollViewDelegate, UIGestureRecognizerDelega
 		} completion: { (completed: Bool) in
 			guard completed else { return }
 			orbit.removeFromSuperview()
-//			self.onFadeOut()
 		}
 	}
 	
@@ -354,30 +333,36 @@ public class AetherView: UIView, UIScrollViewDelegate, UIGestureRecognizerDelega
 		scrollView.addSubview(bubble)
 	}
 	private func remove(bubbles: Set<Bubble>) {
-		for bubble in bubbles {
-			for tower in bubble.aexel.towers {
-				moorings[tower.variableToken] = nil
-			}
-			bubble.onRemove()
-			bubble.removeFromSuperview()
-			self.bubbles.remove(object: bubble)
-		}
+        // Remove Doodles
+        let moorings: [Mooring] = bubbles.flatMap { $0.moorings }
+        var doodles: Set<LinkDoodle> = Set()
+        moorings.forEach { doodles.formUnion($0.doodles) }
+        doodles.forEach {
+            $0.detangle()
+            remove(doodle: $0)
+        }
+        
+        // Remove Moorings
+        moorings.compactMap({ $0.token }).forEach { self.moorings[$0] = nil }
+        
+        // Remove Bubbles
+        bubbles.forEach {
+            $0.onRemove()
+            $0.removeFromSuperview()
+            self.bubbles.remove(object: $0)
+        }
+        
+        mooringReport()
 	}
-	func remove(bubble: Bubble) {
-		remove(bubbles: Set<Bubble>([bubble]))
-	}
-	func removeAllBubbles() {
-		remove(bubbles: Set<Bubble>(bubbles))
-	}
+	func remove(bubble: Bubble) { remove(bubbles: Set<Bubble>([bubble])) }
+	func removeAllBubbles() { remove(bubbles: Set<Bubble>(bubbles)) }
 	func bubble(aexel: Aexel) -> Bubble {
 		for bubble in bubbles {
 			if aexel === bubble.aexel {return bubble}
 		}
 		fatalError()
 	}
-	func typeBub(name: String) -> TypeBub? {
-		return bubbles.first(where: {$0 is TypeBub && ($0 as! TypeBub).type.name == name}) as! TypeBub?
-	}
+	func typeBub(name: String) -> TypeBub? { bubbles.first(where: {$0 is TypeBub && ($0 as! TypeBub).type.name == name}) as! TypeBub? }
 	
 // Doodles =========================================================================================
 	func add(doodle: Doodle) {
@@ -479,8 +464,8 @@ public class AetherView: UIView, UIScrollViewDelegate, UIGestureRecognizerDelega
 	public func clearAether() {
 		self.aether.removeAllAexels()
 		UIView.animate(withDuration: 0.2, animations: {
-			self.bubbles.forEach {$0.alpha = 0}
-			self.doodles.forEach {$0.opacity = 0}
+			self.bubbles.forEach { $0.alpha = 0 }
+			self.doodles.forEach { $0.opacity = 0 }
 		}) { (finsihed: Bool) in
 			self.removeAllBubbles()
             self.removeAllDoodles()
@@ -512,17 +497,28 @@ public class AetherView: UIView, UIScrollViewDelegate, UIGestureRecognizerDelega
 	
 // Links ===========================================================================================
 	var moorings: [Token:Mooring] = [:]
-	func mooring(token: Token) -> Mooring? { moorings[token] }
-	func link(from: Mooring, to: Mooring, wake: Bool = true) { add(doodle: from.link(mooring: to, wake: wake)) }
-	func unlink(from: Mooring, to: Mooring) {
-		from.unlink(mooring: to)
-        from.doodles.filter({ $0.to === to }).forEach { doodles.remove(object: $0) }
-	}
+//	func mooring(token: Token) -> Mooring? { moorings[token] }
+//	func link(from: Mooring, to: Mooring, wake: Bool = true) { add(doodle: from.link(mooring: to, wake: wake)) }
+//	func unlink(from: Mooring, to: Mooring) {
+//		from.unlink(mooring: to)
+//        from.doodles.filter({ $0.to === to }).forEach { doodles.remove(object: $0) }
+//	}
 //    func delete(moorings: [Mooring]) {
 //        moorings.forEach { (mooring: Mooring) in
 //            mooring.doodles.forEach(<#T##body: (LinkDoodle) throws -> Void##(LinkDoodle) throws -> Void#>)
 //        }
 //    }
+    func mooringReport() {
+        print("\n\n=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=")
+        print("[ Moorings ] ============================")
+        moorings.keys.forEach { (token: Token) in
+            print("  - [\(token.key)][\(moorings[token]!)]")
+        }
+        print("[ Doodles ] ============================")
+        doodles.forEach {
+            print("  - \($0)")
+        }
+    }
 	
 // Stretch =========================================================================================
 	func snapBack() { scrollView.setContentOffset(CGPoint(x: aether.xOffset, y: aether.yOffset), animated: false) }
@@ -665,6 +661,8 @@ public class AetherView: UIView, UIScrollViewDelegate, UIGestureRecognizerDelega
 	
 // Events ==========================================================================================
 	@objc func onTap() {
+        mooringReport()
+        print(aether.unload().toJSON())
 		retract()
 		unselectAll()
 	}
@@ -781,12 +779,8 @@ public class AetherView: UIView, UIScrollViewDelegate, UIGestureRecognizerDelega
 		shapeToolBar?.fixed = fixedOffset
 		colorToolBar?.fixed = fixedOffset
 	}
-	public func invokeBubbleToolBar() {
-		bubbleToolBar?.invoke()
-	}
-	public func dismissBubbleToolBar() {
-		bubbleToolBar?.dismiss()
-	}
+	public func invokeBubbleToolBar() { bubbleToolBar?.invoke() }
+	public func dismissBubbleToolBar() { bubbleToolBar?.dismiss() }
 	
 	public func layoutAetherPicker() {
 		let fullScreen: Bool = (width == Screen.width && height == Screen.height) || (width == Screen.height && height == Screen.width)
@@ -805,32 +799,17 @@ public class AetherView: UIView, UIScrollViewDelegate, UIGestureRecognizerDelega
 		layoutAetherPicker()
 		aetherPicker?.invoke()
 	}
-	public func snapAetherPicker() {
-		aetherPicker?.invoke(animated: false)
-	}
-	public func dismissAetherPicker() {
-		aetherPicker?.dismiss()
-	}
+	public func snapAetherPicker() { aetherPicker?.invoke(animated: false) }
+	public func dismissAetherPicker() { aetherPicker?.dismiss() }
 
-	func invokeShapeToolBar() {
-		shapeToolBar?.invoke()
-	}
-	func dismissShapeToolBar() {
-		shapeToolBar?.dismiss()
-	}
-	func contractShapeToolBar() {
-		shapeToolBar?.contract()
-	}
+	func invokeShapeToolBar() { shapeToolBar?.invoke() }
+    func dismissShapeToolBar() { shapeToolBar?.dismiss() }
+	func contractShapeToolBar() { shapeToolBar?.contract() }
 	
-	func invokeColorToolBar() {
-		colorToolBar?.invoke()
-	}
-	func dismissColorToolBar() {
-		colorToolBar?.dismiss()
-	}
-	func contractColorToolBar() {
-		colorToolBar?.contract()
-	}
+	func invokeColorToolBar() { colorToolBar?.invoke() }
+	func dismissColorToolBar() { colorToolBar?.dismiss() }
+	func contractColorToolBar() { colorToolBar?.contract() }
+    
 	public func invokeMessageHover(_ message: String) {
 		let messageHover: MessageHover = MessageHover(aetherView: self)
 		messageHover.message = message
@@ -845,18 +824,14 @@ public class AetherView: UIView, UIScrollViewDelegate, UIGestureRecognizerDelega
 
 // UIView ==========================================================================================
     public override var frame: CGRect {
-        didSet {
-            stretch()
-        }
+        didSet { stretch() }
     }
 	public override func layoutSubviews() {
 		backView?.frame = bounds
 		scrollView.frame = bounds
 		hovers.forEach { $0.render() }
         aetherHover.frame = CGRect(x: safeLeft, y: safeTop, width: Screen.mac ? 300*gS : 270*gS, height: 32*Oo.s)
-        safeZone.frame = CGRect(x: safeLeft, y: safeTop, width: width-safeLeft-safeRight, height: height-safeTop-safeBottom)
         orb.layout()
-//		if orb is AetherViewOrb { orb.orbits.forEach { render(orbit: $0) } }
 	}
 	
 // Static ==========================================================================================

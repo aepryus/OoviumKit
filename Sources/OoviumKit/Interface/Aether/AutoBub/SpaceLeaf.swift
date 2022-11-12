@@ -12,22 +12,20 @@ import UIKit
 class SpaceLeaf: Leaf, Citable {
 	let token: Token
 	var name: String
-	let mooring: Mooring = Mooring()
+    lazy var mooring: Mooring = { bubble.createMooring(token: token) }()
 
 	init(bubble: Bubble, name: String, token: Token) {
 		self.name = name
 		self.token = token
 		super.init(bubble: bubble)
 		backgroundColor = UIColor.clear
-		mooring.colorable = self.bubble
-		self.bubble.aetherView.moorings[self.token] = self.mooring
 	}
 	required init?(coder aDecoder: NSCoder) { fatalError() }
 	
 // Leaf ============================================================================================
 	override func positionMoorings() {
-		mooring.point = self.bubble.aetherView.scrollView.convert(self.center, from: self.superview)
-		mooring.positionDoodles()
+//		mooring.point = self.bubble.aetherView.scrollView.convert(self.center, from: self.superview)
+//		mooring.positionDoodles()
 	}
 
 

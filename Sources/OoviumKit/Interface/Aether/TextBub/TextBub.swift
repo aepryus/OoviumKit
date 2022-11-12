@@ -77,9 +77,7 @@ class TextBub: Bubble, NSCopying {
 	func onOK() {}
 
 // Bubble ==========================================================================================
-	override var uiColor: UIColor {
-		return !selected ? text.color.uiColor : UIColor.yellow
-	}
+    override var uiColor: UIColor { !selected ? text.color.uiColor : UIColor.yellow }
 	override var context: Context { orb.textContext }
 	override var multiContext: Context { orb.textMultiContext }
 	

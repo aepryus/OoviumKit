@@ -21,12 +21,8 @@ struct Range {
 		bottom = round(point.y)
 	}
 	
-	var width: CGFloat {
-		return right-left
-	}
-	var height: CGFloat {
-		return bottom-top
-	}
+    var width: CGFloat { right-left }
+	var height: CGFloat { bottom-top }
 	
 	mutating func add(point: CGPoint) {
 		left = min(left, round(point.x))
@@ -95,7 +91,6 @@ class LassoDoodle: Doodle, CAAnimationDelegate {
 	
 // CALayer =========================================================================================
 	override func draw(in ctx: CGContext) {
-
 		UIGraphicsBeginImageContextWithOptions(CGSize(width: range.width+2*p, height: range.height+2*p), false, 0)
 		
 		let box = CGRect(x: current.left-(range.left-p), y: current.top-(range.top-p), width: current.width, height: current.height)

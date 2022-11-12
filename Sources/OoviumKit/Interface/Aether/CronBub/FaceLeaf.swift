@@ -12,7 +12,7 @@ import UIKit
 
 class FaceLeaf: Leaf, FocusTappable, TowerListener, Citable {
 	
-	var mooring: Mooring = Mooring()
+    lazy var mooring: Mooring = Mooring(bubble: bubble, token: cronBub.cron.token)
 
 	init(bubble: Bubble) {
 		super.init(bubble: bubble, hitch: .top, anchor: CGPoint.zero, size: CGSize(width: 80, height: 36))
@@ -20,9 +20,7 @@ class FaceLeaf: Leaf, FocusTappable, TowerListener, Citable {
 	}
 	required init?(coder aDecoder: NSCoder) { fatalError() }
 	
-	var cronBub: CronBub {
-		return bubble as! CronBub
-	}
+	var cronBub: CronBub { bubble as! CronBub }
 	
 	func render() {
 		let text = cronBub.cron.tower.obje.display
@@ -36,11 +34,10 @@ class FaceLeaf: Leaf, FocusTappable, TowerListener, Citable {
 
 // Moorings ========================================================================================
 	func initMoorings() {
-		mooring.colorable = cronBub
 		bubble.aetherView.moorings[cronBub.cron.token] = self.mooring
 	}
 	func deinitMoorings() {
-		mooring.clearLinks()
+//		mooring.clearLinks()
 		bubble.aetherView.moorings[cronBub.cron.token] = nil
 	}
 	
@@ -51,8 +48,8 @@ class FaceLeaf: Leaf, FocusTappable, TowerListener, Citable {
 	
 // Leaf ============================================================================================
 	override func positionMoorings() {
-		mooring.point = bubble.frame.origin + center
-		mooring.positionDoodles()
+//		mooring.point = bubble.frame.origin + center
+//		mooring.positionDoodles()
 	}
 	
 // UIView ==========================================================================================

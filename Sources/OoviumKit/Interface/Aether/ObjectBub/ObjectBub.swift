@@ -61,7 +61,7 @@ class ObjectBub: Bubble, Citable {
 	
 // Events ==========================================================================================
 	override func onCreate() { objectLeaf.makeFocus() }
-    override func onRemove() { objectLeaf.deinitMoorings() }
+    override func onRemove() { /*objectLeaf.deinitMoorings()*/ }
 	override func onSelect() {}
 	override func onUnselect() {}
 
@@ -75,7 +75,8 @@ class ObjectBub: Bubble, Citable {
 
 // Bubble ==========================================================================================
 	override var context: Context { orb.objectContext }
-	
+    override var uiColor: UIColor { selected ? .yellow : (objectLeaf.focused ? .black.tint(0.8) : object.chain.tower.obje.uiColor) }
+
 // Citable =========================================================================================
 	func token(at: CGPoint) -> Token? { object.token }
 }

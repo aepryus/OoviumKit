@@ -34,7 +34,7 @@ class ChainLeaf: Leaf, ChainViewDelegate, Editable {
 		didSet {self.size = CGSize(width: calcWidth(), height: 36)}
 	}
 	var radius: CGFloat = 10 {
-		didSet {setNeedsDisplay()}
+		didSet { setNeedsDisplay() }
 	}
 	var colorable: Colorable? = nil
 	
@@ -51,7 +51,7 @@ class ChainLeaf: Leaf, ChainViewDelegate, Editable {
 		else { return bubble.uiColor }
 	}
 	
-	let mooring: Mooring = Mooring()
+    lazy private var mooring: Mooring = bubble.createMooring(token: chain.tower.variableToken)
 	
 	override init(bubble: Bubble, hitch: Position, anchor: CGPoint, size: CGSize) {
 		super.init(bubble: bubble, hitch: hitch, anchor: anchor, size: size)
@@ -112,13 +112,12 @@ class ChainLeaf: Leaf, ChainViewDelegate, Editable {
         guard delegate?.usesMooring ?? true else { return }
         chain.tokens.forEach {
             guard let mooring = bubble.aetherView.moorings[$0] else { return }
-            bubble.aetherView.link(from: self.mooring, to: mooring, wake: false)
+            mooring.attach(self.mooring, wake: false)
         }
 	}
 	override func positionMoorings() {
         guard delegate?.usesMooring ?? true else { return }
-		mooring.point = self.bubble.aetherView.scrollView.convert(self.center, from: self.superview)
-		mooring.positionDoodles()
+        mooring.point = self.bubble.aetherView.scrollView.convert(self.center, from: self.superview)
 	}
 
 // UIView ==========================================================================================
@@ -159,15 +158,12 @@ class ChainLeaf: Leaf, ChainViewDelegate, Editable {
 		mooring.sleepDoodles()
 		delegate?.onOK(leaf: self)
 	}
-	func cite(_ citable: Citable, at: CGPoint) {
-		guard let token = citable.token(at: at) else { return }
-		guard delegate?.accept(citable: citable) ?? false else { return }
-		guard chainView.attemptToPost(token: token) else { return }
-        guard delegate?.usesMooring ?? true else { return }
-		guard let mooring = bubble.aetherView.mooring(token: token) else { return }
-		bubble.aetherView.link(from: self.mooring, to: mooring)
-	}
-	
+    func cite(_ citable: Citable, at: CGPoint) {
+        guard let token = citable.token(at: at) else { return }
+        guard delegate?.accept(citable: citable) ?? false else { return }
+        guard chainView.attemptToPost(token: token) else { return }
+    }
+
 	func onEdit() {}
     func onOK() { releaseFocus(.okEqualReturn) }
 
@@ -179,13 +175,13 @@ class ChainLeaf: Leaf, ChainViewDelegate, Editable {
 
     func onTokenAdded(_ token: Token) {
         guard delegate?.usesMooring ?? true else { return }
-        guard let mooring = bubble.aetherView.mooring(token: token) else { return }
-        bubble.aetherView.link(from: self.mooring, to: mooring)
+        guard let mooring = bubble.aetherView.moorings[token] else { return }
+        mooring.attach(self.mooring)
     }
     func onTokenRemoved(_ token: Token) {
         guard delegate?.usesMooring ?? true else { return }
-        guard let mooring = bubble.aetherView.mooring(token: token) else { return }
-        bubble.aetherView.unlink(from: self.mooring, to: mooring)
+        guard let mooring = bubble.aetherView.moorings[token] else { return }
+        mooring.detach(self.mooring)
     }
 
     func onWidthChanged(oldWidth: CGFloat?, newWidth: CGFloat) { render() }

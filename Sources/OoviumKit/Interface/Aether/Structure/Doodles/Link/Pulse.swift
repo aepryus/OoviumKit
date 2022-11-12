@@ -10,9 +10,7 @@ import UIKit
 
 class Pulse: CALayer {
 	var color: UIColor {
-		didSet {
-			setNeedsDisplay()
-		}
+		didSet { setNeedsDisplay() }
 	}
 	
 	override init() {
