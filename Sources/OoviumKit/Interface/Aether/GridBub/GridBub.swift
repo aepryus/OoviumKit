@@ -108,11 +108,14 @@ class GridBub: Bubble, ChainLeafDelegate {
 		add(leaf: chainLeaf)
 		chainLeaf.render()
 		render()
+        chainLeaf.wireMoorings()
 	}
 	func removeChainLeaf() {
 		editingColNo = nil
 		remove(leaf: chainLeaf)
 		render()
+        chainLeaf.unwireMoorings()
+        aetherView.moorings[chainLeaf.chain.tower.variableToken] = nil
 	}
     func addColumn(with column: Column) { gridLeaf.addColumn(with: column) }
     func addRow(with cells: [Cell]) { gridLeaf.addRow(with: cells) }
@@ -205,7 +208,6 @@ class GridBub: Bubble, ChainLeafDelegate {
 	}
 	
 // ChainLeafDelegate ===============================================================================
-    var usesMooring: Bool { false }
 	func onChange() { layoutLeavesIfNeeded() }
 	func onWillFocusTap() { suppressChainLeafRemoval = true }
 	func onEdit() { layoutLeavesIfNeeded() }

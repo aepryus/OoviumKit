@@ -205,14 +205,12 @@ class SignatureLeaf: Leaf, Editable, Citable, UITextFieldDelegate {
 	
 // Leaf ============================================================================================
 	override func positionMoorings() {
-//		let x: CGFloat = frame.origin.x + frame.width/2
-//		
-//		recipeMooring.point = self.bubble.aetherView.scrollView.convert(CGPoint(x: x, y: 18), from: self.superview)
-//		recipeMooring.positionDoodles()
-//		for (i, mooring) in paramMoorings.enumerated() {
-//			mooring.point = self.bubble.aetherView.scrollView.convert(CGPoint(x: x, y: 45+24*CGFloat(i)), from: self.superview)
-//			mooring.positionDoodles()
-//		}
+		let x: CGFloat = frame.origin.x + frame.width/2
+		
+		recipeMooring.point = self.bubble.aetherView.scrollView.convert(CGPoint(x: x, y: 18), from: self.superview)
+		for (i, mooring) in paramMoorings.enumerated() {
+			mooring.point = self.bubble.aetherView.scrollView.convert(CGPoint(x: x, y: 45+24*CGFloat(i)), from: self.superview)
+		}
 	}
 	
 // UIView ==========================================================================================

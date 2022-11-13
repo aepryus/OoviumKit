@@ -351,8 +351,6 @@ public class AetherView: UIView, UIScrollViewDelegate, UIGestureRecognizerDelega
             $0.removeFromSuperview()
             self.bubbles.remove(object: $0)
         }
-        
-        mooringReport()
 	}
 	func remove(bubble: Bubble) { remove(bubbles: Set<Bubble>([bubble])) }
 	func removeAllBubbles() { remove(bubbles: Set<Bubble>(bubbles)) }
@@ -497,28 +495,6 @@ public class AetherView: UIView, UIScrollViewDelegate, UIGestureRecognizerDelega
 	
 // Links ===========================================================================================
 	var moorings: [Token:Mooring] = [:]
-//	func mooring(token: Token) -> Mooring? { moorings[token] }
-//	func link(from: Mooring, to: Mooring, wake: Bool = true) { add(doodle: from.link(mooring: to, wake: wake)) }
-//	func unlink(from: Mooring, to: Mooring) {
-//		from.unlink(mooring: to)
-//        from.doodles.filter({ $0.to === to }).forEach { doodles.remove(object: $0) }
-//	}
-//    func delete(moorings: [Mooring]) {
-//        moorings.forEach { (mooring: Mooring) in
-//            mooring.doodles.forEach(<#T##body: (LinkDoodle) throws -> Void##(LinkDoodle) throws -> Void#>)
-//        }
-//    }
-    func mooringReport() {
-        print("\n\n=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=")
-        print("[ Moorings ] ============================")
-        moorings.keys.forEach { (token: Token) in
-            print("  - [\(token.key)][\(moorings[token]!)]")
-        }
-        print("[ Doodles ] ============================")
-        doodles.forEach {
-            print("  - \($0)")
-        }
-    }
 	
 // Stretch =========================================================================================
 	func snapBack() { scrollView.setContentOffset(CGPoint(x: aether.xOffset, y: aether.yOffset), animated: false) }
@@ -661,8 +637,6 @@ public class AetherView: UIView, UIScrollViewDelegate, UIGestureRecognizerDelega
 	
 // Events ==========================================================================================
 	@objc func onTap() {
-        mooringReport()
-        print(aether.unload().toJSON())
 		retract()
 		unselectAll()
 	}

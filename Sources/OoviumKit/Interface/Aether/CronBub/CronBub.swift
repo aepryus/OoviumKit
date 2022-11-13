@@ -17,34 +17,16 @@ class CronBub: Bubble, ChainLeafDelegate {
 	
 	var overrideHitchPoint: CGPoint = CGPoint.zero
 	
-	lazy var faceLeaf: FaceLeaf =  {
-		FaceLeaf(bubble: self)
-	}()
-	lazy var playLeaf: PlayLeaf = {
-		PlayLeaf(bubble: self)
-	}()
-	lazy var endLeaf: EndLeaf =  {
-		EndLeaf(bubble: self)
-	}()
-
-	lazy var startLeaf: ChainLeaf = {
-		ChainLeaf(bubble: self, hitch: .topRight, anchor: CGPoint(x: 60, y: 70), size: CGSize(width: 100, height: 30))
-	}()
-	lazy var stopLeaf: ChainLeaf = {
-		ChainLeaf(bubble: self, hitch: .topLeft, anchor: CGPoint(x: 120, y: 70), size: CGSize(width: 100, height: 30))
-	}()
-	lazy var stepsLeaf: ChainLeaf = {
-		ChainLeaf(bubble: self, hitch: .topRight, anchor: CGPoint(x: 60, y: 120), size: CGSize(width: 100, height: 30))
-	}()
-	lazy var rateLeaf: ChainLeaf = {
-		ChainLeaf(bubble: self, hitch: .topLeft, anchor: CGPoint(x: 120, y: 120), size: CGSize(width: 100, height: 30))
-	}()
-	lazy var deltaLeaf: ChainLeaf = {
-		ChainLeaf(bubble: self, hitch: .topRight, anchor: CGPoint(x: 60, y: 120), size: CGSize(width: 100, height: 30))
-	}()
-	lazy var whileLeaf: ChainLeaf = {
-		ChainLeaf(bubble: self, hitch: .topLeft, anchor: CGPoint(x: 120, y: 70), size: CGSize(width: 100, height: 30))
-	}()
+	lazy var faceLeaf: FaceLeaf = FaceLeaf(bubble: self)
+    lazy var playLeaf: PlayLeaf = PlayLeaf(bubble: self)
+    lazy var endLeaf: EndLeaf = EndLeaf(bubble: self)
+    
+	lazy var startLeaf: ChainLeaf = ChainLeaf(bubble: self, hitch: .topRight, anchor: CGPoint(x: 60, y: 70), size: CGSize(width: 100, height: 30))
+	lazy var stopLeaf: ChainLeaf = ChainLeaf(bubble: self, hitch: .topLeft, anchor: CGPoint(x: 120, y: 70), size: CGSize(width: 100, height: 30))
+	lazy var stepsLeaf: ChainLeaf = ChainLeaf(bubble: self, hitch: .topRight, anchor: CGPoint(x: 60, y: 120), size: CGSize(width: 100, height: 30))
+	lazy var rateLeaf: ChainLeaf = ChainLeaf(bubble: self, hitch: .topLeft, anchor: CGPoint(x: 120, y: 120), size: CGSize(width: 100, height: 30))
+	lazy var deltaLeaf: ChainLeaf = ChainLeaf(bubble: self, hitch: .topRight, anchor: CGPoint(x: 60, y: 120), size: CGSize(width: 100, height: 30))
+	lazy var whileLeaf: ChainLeaf = ChainLeaf(bubble: self, hitch: .topLeft, anchor: CGPoint(x: 120, y: 70), size: CGSize(width: 100, height: 30))
 
 	init(_ cron: Cron, aetherView: AetherView) {
 		self.cron = cron

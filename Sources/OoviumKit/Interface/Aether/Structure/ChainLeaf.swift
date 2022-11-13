@@ -76,11 +76,11 @@ class ChainLeaf: Leaf, ChainViewDelegate, Editable {
 	
 	func hideLinks() {
         guard delegate?.usesMooring ?? true else { return }
-		mooring!.doodles.forEach {$0.removeFromSuperlayer()}
+        mooring!.doodles.forEach { bubble.aetherView.remove(doodle: $0) }
 	}
 	func showLinks() {
         guard delegate?.usesMooring ?? true else { return }
-		mooring!.doodles.forEach {bubble.aetherView.layer.addSublayer($0)}
+		mooring!.doodles.forEach { bubble.aetherView.add(doodle: $0) }
 	}
 	
 // FocusTappable ===================================================================================
@@ -98,6 +98,12 @@ class ChainLeaf: Leaf, ChainViewDelegate, Editable {
             mooring.attach(self.mooring, wake: false)
         }
 	}
+    func unwireMoorings() {
+        mooring.doodles.forEach {
+            $0.detangle()
+            aetherView.remove(doodle: $0)
+        }
+    }
 
 // UIView ==========================================================================================
 	override var frame: CGRect {
