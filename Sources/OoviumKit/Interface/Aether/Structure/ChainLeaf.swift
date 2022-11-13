@@ -34,13 +34,14 @@ class ChainLeaf: Leaf, ChainViewDelegate, Editable {
 		didSet {self.size = CGSize(width: calcWidth(), height: 36)}
 	}
 	var radius: CGFloat = 10 {
-		didSet {setNeedsDisplay()}
+		didSet { setNeedsDisplay() }
 	}
 	var colorable: Colorable? = nil
 	
 	var chain: Chain {
 		set {
 			chainView.chain = newValue
+            mooring = bubble.createMooring(token: chain.tower.variableToken)
 //			chainView.chain.tower.listener = self
 		}
 		get { chainView.chain }
@@ -51,32 +52,14 @@ class ChainLeaf: Leaf, ChainViewDelegate, Editable {
 		else { return bubble.uiColor }
 	}
 	
-	let mooring: Mooring = Mooring()
-	
-	override init(bubble: Bubble, hitch: Position, anchor: CGPoint, size: CGSize) {
-		super.init(bubble: bubble, hitch: hitch, anchor: anchor, size: size)
-		
-		self.backgroundColor = UIColor.clear
-		chainView.delegate = self
-		addSubview(chainView)
-	}
-	init(bubble: Bubble, hitch: Position, anchor: CGPoint, size: CGSize, delegate: ChainLeafDelegate) {
+    init(bubble: Bubble, hitch: Position = .center, anchor: CGPoint = .zero, size: CGSize = .zero, delegate: ChainLeafDelegate? = nil) {
 		self.delegate = delegate
 		
 		super.init(bubble: bubble, hitch: hitch, anchor: anchor, size: size)
 		
 		self.backgroundColor = UIColor.clear
 		chainView.delegate = self
-		addSubview(chainView)
-	}
-	init(bubble: Bubble, delegate: ChainLeafDelegate) {
-		self.delegate = delegate
-		
-		super.init(bubble: bubble, hitch: .center, anchor: CGPoint.zero, size: CGSize.zero)
-		
-		self.backgroundColor = UIColor.clear
-		chainView.delegate = self
-		addSubview(chainView)
+		addSubview(chainView)        
 	}
 	required init?(coder aDecoder: NSCoder) { fatalError() }
 	
@@ -93,11 +76,11 @@ class ChainLeaf: Leaf, ChainViewDelegate, Editable {
 	
 	func hideLinks() {
         guard delegate?.usesMooring ?? true else { return }
-		mooring.doodles.forEach {$0.removeFromSuperlayer()}
+        mooring!.doodles.forEach { bubble.aetherView.remove(doodle: $0) }
 	}
 	func showLinks() {
         guard delegate?.usesMooring ?? true else { return }
-		mooring.doodles.forEach {bubble.aetherView.layer.addSublayer($0)}
+		mooring!.doodles.forEach { bubble.aetherView.add(doodle: $0) }
 	}
 	
 // FocusTappable ===================================================================================
@@ -112,14 +95,15 @@ class ChainLeaf: Leaf, ChainViewDelegate, Editable {
         guard delegate?.usesMooring ?? true else { return }
         chain.tokens.forEach {
             guard let mooring = bubble.aetherView.moorings[$0] else { return }
-            bubble.aetherView.link(from: self.mooring, to: mooring, wake: false)
+            mooring.attach(self.mooring, wake: false)
         }
 	}
-	override func positionMoorings() {
-        guard delegate?.usesMooring ?? true else { return }
-		mooring.point = self.bubble.aetherView.scrollView.convert(self.center, from: self.superview)
-		mooring.positionDoodles()
-	}
+    func unwireMoorings() {
+        mooring.doodles.forEach {
+            $0.detangle()
+            aetherView.remove(doodle: $0)
+        }
+    }
 
 // UIView ==========================================================================================
 	override var frame: CGRect {
@@ -159,15 +143,12 @@ class ChainLeaf: Leaf, ChainViewDelegate, Editable {
 		mooring.sleepDoodles()
 		delegate?.onOK(leaf: self)
 	}
-	func cite(_ citable: Citable, at: CGPoint) {
-		guard let token = citable.token(at: at) else { return }
-		guard delegate?.accept(citable: citable) ?? false else { return }
-		guard chainView.attemptToPost(token: token) else { return }
-        guard delegate?.usesMooring ?? true else { return }
-		guard let mooring = bubble.aetherView.mooring(token: token) else { return }
-		bubble.aetherView.link(from: self.mooring, to: mooring)
-	}
-	
+    func cite(_ citable: Citable, at: CGPoint) {
+        guard let token = citable.token(at: at) else { return }
+        guard delegate?.accept(citable: citable) ?? false else { return }
+        guard chainView.attemptToPost(token: token) else { return }
+    }
+
 	func onEdit() {}
     func onOK() { releaseFocus(.okEqualReturn) }
 
@@ -179,13 +160,13 @@ class ChainLeaf: Leaf, ChainViewDelegate, Editable {
 
     func onTokenAdded(_ token: Token) {
         guard delegate?.usesMooring ?? true else { return }
-        guard let mooring = bubble.aetherView.mooring(token: token) else { return }
-        bubble.aetherView.link(from: self.mooring, to: mooring)
+        guard let mooring = bubble.aetherView.moorings[token] else { return }
+        mooring.attach(self.mooring)
     }
     func onTokenRemoved(_ token: Token) {
         guard delegate?.usesMooring ?? true else { return }
-        guard let mooring = bubble.aetherView.mooring(token: token) else { return }
-        bubble.aetherView.unlink(from: self.mooring, to: mooring)
+        guard let mooring = bubble.aetherView.moorings[token] else { return }
+        mooring.detach(self.mooring)
     }
 
     func onWidthChanged(oldWidth: CGFloat?, newWidth: CGFloat) { render() }

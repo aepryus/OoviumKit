@@ -13,7 +13,5 @@ class Doodle: CALayer {
 	func render() {}
 	
 // CALayer =========================================================================================
-	override func action(forKey event: String) -> CAAction? {
-		return nil
-	}
+	override func action(forKey event: String) -> CAAction? { nil }
 }

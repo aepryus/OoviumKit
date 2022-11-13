@@ -20,7 +20,8 @@ class Leaf: UIView {
 	var size: CGSize {
 		didSet{ bubble.setLeavesNeedLayout() }
 	}
-	var hitPath: CGPath? = nil
+	var hitPath: CGPath?
+    var mooring: Mooring!
 	
 	init(bubble: Bubble, hitch: Position = .topLeft, anchor: CGPoint = CGPoint.zero, size: CGSize = CGSize.zero) {
 		self.bubble = bubble
@@ -40,7 +41,7 @@ class Leaf: UIView {
 	var yB: CGFloat { yT+size.height }
     
 	func wireMoorings() {}
-	func positionMoorings() {}
+	func positionMoorings() { mooring?.point = self.bubble.aetherView.scrollView.convert(self.center, from: self.superview) }
 	
     func removeFromBubble() { bubble.remove(leaf: self) }
 	

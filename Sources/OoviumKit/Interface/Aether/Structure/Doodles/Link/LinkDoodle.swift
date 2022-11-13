@@ -12,13 +12,14 @@ class LinkDoodle: Doodle, CAAnimationDelegate {
 	unowned let from: Mooring
 	unowned let to: Mooring
 	
-	var asleep: Bool = true
-	let pulse = Pulse()
+	private var asleep: Bool = true
+    private let pulse: Pulse = Pulse()
+    private let flow: CAKeyframeAnimation = CAKeyframeAnimation(keyPath: "position")
 	
-	var path = CGMutablePath()
-	var period: Double = 0
+    private var path: CGMutablePath = CGMutablePath()
+	private var period: Double = 0
 	
-	let LW: CGFloat = 2
+	private let LW: CGFloat = 2
 	
 	init(from: Mooring, to: Mooring) {
 		self.from = from
@@ -26,16 +27,15 @@ class LinkDoodle: Doodle, CAAnimationDelegate {
 		super.init()
 		
 		pulse.position = to.point
+        flow.delegate = self
 		render()
 	}
 	required init?(coder aDecoder: NSCoder) { fatalError() }
 	
 	private func startPulse() {
 		pulse.color = to.color
-		let flow = CAKeyframeAnimation(keyPath: "position")
 		flow.path = path
 		flow.duration = period
-		flow.delegate = self
 		addSublayer(pulse)
 		pulse.add(flow, forKey: "flowPulse")
 	}
@@ -52,6 +52,11 @@ class LinkDoodle: Doodle, CAAnimationDelegate {
         pulse.isHidden = false
 		startPulse()
 	}
+    
+    func detangle() {
+        from.doodles.remove(object: self)
+        to.doodles.remove(object: self)
+    }
 	
 // Doodle ==========================================================================================
 	override func render() {
@@ -119,8 +124,6 @@ class LinkDoodle: Doodle, CAAnimationDelegate {
 // CAAnimationDelegate =============================================================================
 	func animationDidStop(_ anim: CAAnimation, finished flag: Bool) {
 		pulse.removeFromSuperlayer()
-		if flag {
-			startPulse()
-		}
+		if flag { startPulse() }
 	}
 }

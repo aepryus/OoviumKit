@@ -10,24 +10,22 @@ import Acheron
 import OoviumEngine
 import UIKit
 
-class ObjectLeaf: Leaf, Editable, ChainViewDelegate, DoubleTappable, Colorable, UITextFieldDelegate {
+class ObjectLeaf: Leaf, Editable, ChainViewDelegate, DoubleTappable, UITextFieldDelegate {
 	private let object: Object
 	
     lazy var chainView: ChainView = ChainView(editable: self, responder: aetherView.responder)
 	private var textField: OOTextField? = nil
 
-	private var mooring: Mooring = Mooring()
-
 	init(bubble: Bubble) {
 		object = (bubble as! ObjectBub).object
 		
 		super.init(bubble: bubble)
+        
+        mooring = bubble.createMooring(token: object.token)
 
 		chainView.chain = object.chain
 		chainView.delegate = self
 		addSubview(chainView)
-
-        initMoorings()
 	}
 	required init?(coder aDecoder: NSCoder) { fatalError() }
 	deinit { NotificationCenter.default.removeObserver(self) }
@@ -79,16 +77,6 @@ class ObjectLeaf: Leaf, Editable, ChainViewDelegate, DoubleTappable, Colorable, 
         textField?.setNeedsDisplay()
 	}
 	
-// Moorings ========================================================================================
-	func initMoorings() {
-		mooring.colorable = self
-		bubble.aetherView.moorings[object.token] = self.mooring
-	}
-	func deinitMoorings() {
-		mooring.clearLinks()
-		bubble.aetherView.moorings[object.token] = nil
-	}
-
 // Events ==========================================================================================
 	func onFocusTap(aetherView: AetherView) {
         if chainView.chain.editing { releaseFocus(.focusTap) }
@@ -120,12 +108,8 @@ class ObjectLeaf: Leaf, Editable, ChainViewDelegate, DoubleTappable, Colorable, 
     override func wireMoorings() {
         object.chain.tokens.forEach {
             guard let mooring = bubble.aetherView.moorings[$0] else { return }
-            bubble.aetherView.link(from: self.mooring, to: mooring, wake: false)
+            mooring.attach(self.mooring, wake: false)
         }
-    }
-    override func positionMoorings() {
-        mooring.point = self.bubble.aetherView.scrollView.convert(self.bubble.center, from: self.bubble.superview)
-        mooring.positionDoodles()
     }
         
 // Editable ========================================================================================
@@ -155,26 +139,23 @@ class ObjectLeaf: Leaf, Editable, ChainViewDelegate, DoubleTappable, Colorable, 
 	}
     
 // ChainViewDelegate ===============================================================================
-    var color: UIColor { focused || object.token.status == .ok ? uiColor : UIColor.red }
+    var color: UIColor { focused || object.token.status == .ok ? bubble.uiColor : UIColor.red }
     
     func becomeFirstResponder() { chainView.becomeFirstResponder() }
     func resignFirstResponder() { chainView.resignFirstResponder() }
 
     func onTokenAdded(_ token: Token) {
-        guard let mooring = bubble.aetherView.mooring(token: token) else { return }
-        bubble.aetherView.link(from: self.mooring, to: mooring)
+        guard let upstream: Mooring = bubble.aetherView.moorings[token] else { return }
+        upstream.attach(mooring)
     }
     func onTokenRemoved(_ token: Token) {
-        guard let mooring = bubble.aetherView.mooring(token: token) else { return }
-        bubble.aetherView.unlink(from: self.mooring, to: mooring)
+        guard let upstream: Mooring = bubble.aetherView.moorings[token] else { return }
+        upstream.detach(mooring)
     }
 
     func onWidthChanged(oldWidth: CGFloat?, newWidth: CGFloat) { render() }
     func onChanged() { objectBub.layoutLeavesIfNeeded() }
     
-// Colorable =======================================================================================
-    var uiColor: UIColor { bubble.selected ? .yellow : (focused ? .black.tint(0.8) : chainView.chain.tower.obje.uiColor) }
-
 // UITextFieldDelegate =============================================================================
     func textFieldShouldReturn(_ textField: UITextField) -> Bool {
         closeLabel()

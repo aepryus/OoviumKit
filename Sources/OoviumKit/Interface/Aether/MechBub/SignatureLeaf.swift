@@ -34,7 +34,7 @@ class SignatureLeaf: Leaf, Editable, Citable, UITextFieldDelegate {
 	var nameEdit: SignatureField? = nil
 	var paramEdits: [SignatureField] = []
 	
-	var recipeMooring: Mooring = Mooring()
+    lazy var recipeMooring: Mooring = Mooring(bubble: bubble, token: delegate!.recipeToken)
 	var paramMoorings: [Mooring] = []
 	
 	init(bubble: Bubble & SignatureLeafDelegate, anchor: CGPoint, hitch: Position, size: CGSize) {
@@ -42,10 +42,8 @@ class SignatureLeaf: Leaf, Editable, Citable, UITextFieldDelegate {
 		
 		noOfParams = delegate!.params.count
 		
-		recipeMooring.colorable = bubble
-		for _  in 0..<noOfParams {
-			let mooring = Mooring()
-			mooring.colorable = bubble
+		for i in 0..<noOfParams {
+            let mooring = bubble.createMooring(token: delegate?.paramTokens[i])
 			paramMoorings.append(mooring)
 		}
 
@@ -129,10 +127,8 @@ class SignatureLeaf: Leaf, Editable, Citable, UITextFieldDelegate {
 		paramEdit.text = delegate?.params[noOfParams-1]
 		paramEdit.textColor = Skin.color(.signatureText)
 
-		let mooring = Mooring()
-		mooring.colorable = bubble
+        let mooring = bubble.createMooring(token: delegate!.paramTokens[noOfParams-1])
 		paramMoorings.append(mooring)
-		bubble.aetherView.moorings[delegate!.paramTokens[noOfParams-1]] = mooring
 
 		setNeedsDisplay()
 	}
@@ -212,10 +208,8 @@ class SignatureLeaf: Leaf, Editable, Citable, UITextFieldDelegate {
 		let x: CGFloat = frame.origin.x + frame.width/2
 		
 		recipeMooring.point = self.bubble.aetherView.scrollView.convert(CGPoint(x: x, y: 18), from: self.superview)
-		recipeMooring.positionDoodles()
 		for (i, mooring) in paramMoorings.enumerated() {
 			mooring.point = self.bubble.aetherView.scrollView.convert(CGPoint(x: x, y: 45+24*CGFloat(i)), from: self.superview)
-			mooring.positionDoodles()
 		}
 	}
 	

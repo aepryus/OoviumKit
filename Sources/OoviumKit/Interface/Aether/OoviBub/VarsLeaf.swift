@@ -37,10 +37,10 @@ class VarsLeaf: Leaf {
 	
 // Leaf ============================================================================================
 	override func positionMoorings() {
-		for varView in varViews {
-			varView.mooring.point = self.bubble.aetherView.scrollView.convert(self.center, from: self.superview)
-			varView.mooring.positionDoodles()
-		}
+//		for varView in varViews {
+//			varView.mooring.point = self.bubble.aetherView.scrollView.convert(self.center, from: self.superview)
+//			varView.mooring.positionDoodles()
+//		}
 	}
 	
 // UIView ==========================================================================================

@@ -6,6 +6,7 @@
 //  Copyright © 2017 Aepryus Software. All rights reserved.
 //
 
+import OoviumEngine
 import UIKit
 
 protocol Colorable: AnyObject {
@@ -13,67 +14,35 @@ protocol Colorable: AnyObject {
 }
 
 class Mooring {
-	weak var colorable: Colorable? = nil
+    private unowned var bubble: Bubble
+    weak var token: Token?
+    
 	var point: CGPoint = CGPoint.zero {
-		didSet {
-			positionDoodles()
-		}
+        didSet { doodles.forEach { $0.render() } }
 	}
-	var doodles = [LinkDoodle]()
+    var doodles: [LinkDoodle] = []
+    
+    init(bubble: Bubble, token: Token? = nil) {
+        self.bubble = bubble
+        self.token = token
+    }
 	
-	var color: UIColor {
-		return colorable?.uiColor ?? UIColor.red
-	}
+	var color: UIColor { bubble.uiColor }
 	
-	func refreshDoodles() { doodles.forEach{ $0.render() } }
 	func wakeDoodles() { doodles.forEach{ $0.wake() } }
 	func sleepDoodles() { doodles.forEach{ $0.sleep() } }
-	func hideDoodles() { doodles.forEach{ $0.isHidden = true } }
-	func unhideDoodles() { doodles.forEach{ $0.isHidden = false } }
-	
-	private func clear(doodle: LinkDoodle) {
-		doodle.from.doodles.remove(object: doodle)
-		doodle.to.doodles.remove(object: doodle)
-		doodle.removeFromSuperlayer()
-	}
-	
-	func link(mooring: Mooring, wake: Bool) -> LinkDoodle {
-		let doodle = LinkDoodle(from: self, to: mooring)
-		doodles.append(doodle)
-		mooring.doodles.append(doodle)
-		if wake {
-			doodle.wake()
-		}
-		return doodle
-	}
-	func link(mooring: Mooring) -> LinkDoodle { link(mooring: mooring, wake: true) }
-	func unlink(mooring: Mooring) {
-		for doodle in doodles {
-			if doodle.from === self && doodle.to === mooring {
-				clear(doodle: doodle)
-				break;
-			}
-		}
-	}
-	func clearLinks() { doodles.forEach{clear(doodle: $0)} }
-	func clearFrom() {
-		doodles.forEach{
-			if $0.from === self {
-				clear(doodle: $0)
-			}
-		}
-	}
-	func clearTo() {
-		doodles.forEach{
-			if $0.to === self {
-				clear(doodle: $0)
-			}
-		}
-	}
-	
-	func positionDoodles() {
-		for doodle in doodles {
-			doodle.render()
-		}
-	}
+    
+    func attach(_ mooring: Mooring, wake: Bool = true) {
+        let doodle: LinkDoodle = LinkDoodle(from: mooring, to: self)
+        doodles.append(doodle)
+        mooring.doodles.append(doodle)
+        if wake { doodle.wake() }
+        bubble.aetherView.add(doodle: doodle)
+    }
+    func detach(_ mooring: Mooring) {
+        let doodle: LinkDoodle = doodles.first(where: { $0.from === mooring && $0.to === self })!
+        doodles.remove(object: doodle)
+        mooring.doodles.remove(object: doodle)
+        bubble.aetherView.remove(doodle: doodle)
+    }
 }

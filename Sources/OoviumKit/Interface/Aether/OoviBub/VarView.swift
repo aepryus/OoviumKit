@@ -11,14 +11,13 @@ import UIKit
 
 class VarView: UIView, Citable {
 	let token: Token
-	let mooring: Mooring = Mooring()
+    lazy var mooring: Mooring = Mooring(bubble: bubble, token: token)
 	
 	unowned let bubble: Bubble
 	
 	init(bubble: Bubble, token: Token) {
 		self.bubble = bubble
 		self.token = token
-		mooring.colorable = self.bubble
 		super.init(frame: CGRect.zero)
 		self.backgroundColor = UIColor.clear
 		self.bubble.aetherView.moorings[self.token] = self.mooring

@@ -12,17 +12,13 @@ import UIKit
 
 class FaceLeaf: Leaf, FocusTappable, TowerListener, Citable {
 	
-	var mooring: Mooring = Mooring()
-
 	init(bubble: Bubble) {
 		super.init(bubble: bubble, hitch: .top, anchor: CGPoint.zero, size: CGSize(width: 80, height: 36))
-		initMoorings()
+        self.mooring = bubble.createMooring(token: cronBub.cron.token)
 	}
 	required init?(coder aDecoder: NSCoder) { fatalError() }
 	
-	var cronBub: CronBub {
-		return bubble as! CronBub
-	}
+	var cronBub: CronBub { bubble as! CronBub }
 	
 	func render() {
 		let text = cronBub.cron.tower.obje.display
@@ -34,26 +30,8 @@ class FaceLeaf: Leaf, FocusTappable, TowerListener, Citable {
 		}
 	}
 
-// Moorings ========================================================================================
-	func initMoorings() {
-		mooring.colorable = cronBub
-		bubble.aetherView.moorings[cronBub.cron.token] = self.mooring
-	}
-	func deinitMoorings() {
-		mooring.clearLinks()
-		bubble.aetherView.moorings[cronBub.cron.token] = nil
-	}
-	
 // Events ==========================================================================================
-	func onFocusTap(aetherView: AetherView) {
-		cronBub.morph()
-	}
-	
-// Leaf ============================================================================================
-	override func positionMoorings() {
-		mooring.point = bubble.frame.origin + center
-		mooring.positionDoodles()
-	}
+	func onFocusTap(aetherView: AetherView) { cronBub.morph() }
 	
 // UIView ==========================================================================================
 	override func draw(_ rect: CGRect) {
@@ -64,9 +42,7 @@ class FaceLeaf: Leaf, FocusTappable, TowerListener, Citable {
 	}
 	
 // Citable =========================================================================================
-	func token(at: CGPoint) -> Token? {
-		return cronBub.cron.token
-	}
+	func token(at: CGPoint) -> Token? { cronBub.cron.token }
 	
 // TowerListener ===================================================================================
 	func onTriggered() {
