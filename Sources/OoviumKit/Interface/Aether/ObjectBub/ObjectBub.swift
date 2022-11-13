@@ -30,7 +30,7 @@ class ObjectBub: Bubble, Citable {
 	
 // Events ==========================================================================================
 	override func onCreate() { objectLeaf.makeFocus() }
-    override func onRemove() { /*objectLeaf.deinitMoorings()*/ }
+    override func onRemove() {}
 	override func onSelect() {}
 	override func onUnselect() {}
 

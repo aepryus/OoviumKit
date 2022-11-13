@@ -29,11 +29,8 @@ class Mooring {
 	
 	var color: UIColor { bubble.uiColor }
 	
-//	func refreshDoodles() { doodles.forEach{ $0.render() } }
 	func wakeDoodles() { doodles.forEach{ $0.wake() } }
 	func sleepDoodles() { doodles.forEach{ $0.sleep() } }
-//	func hideDoodles() { doodles.forEach{ $0.isHidden = true } }
-//	func unhideDoodles() { doodles.forEach{ $0.isHidden = false } }
     
     func attach(_ mooring: Mooring, wake: Bool = true) {
         let doodle: LinkDoodle = LinkDoodle(from: mooring, to: self)
