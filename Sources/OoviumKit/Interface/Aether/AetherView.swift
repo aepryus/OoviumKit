@@ -445,7 +445,8 @@ public class AetherView: UIView, UIScrollViewDelegate, UIGestureRecognizerDelega
 	}
 	public func saveAether(complete: @escaping (Bool)->() = {Bool in}) {
 		markPositions()
-        facade?.store(aether: aether, { (success: Bool) in
+        guard let facade else { complete(false); return }
+        facade.store(aether: aether, { (success: Bool) in
             complete(success)
             self.aetherViewDelegate?.onSave(aetherView: self, aether: self.aether)
         })
