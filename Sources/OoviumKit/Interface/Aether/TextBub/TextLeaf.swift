@@ -86,19 +86,20 @@ class TextLeaf: Leaf, Editable, DoubleTappable, Citable, UITextFieldDelegate {
 		bubble.aetherView.currentTextLeaf = self
 		let w: CGFloat = max(80, size.width+24)
 		let h: CGFloat = 28
-		textField = OOTextField(
+        self.textField = OOTextField(
 			frame: CGRect(x: (bounds.size.width-w)/2, y: (bounds.size.height-h)/2, width: w, height: h),
 			backColor: Skin.color(.ovalBack),
 			foreColor: Skin.color(.ovalFore),
 			textColor: Skin.color(.ovalText)
 		)
-		textField?.delegate = self
-		textField?.text = text.name
-		addSubview(textField!)
-		textField!.becomeFirstResponder()
+        guard let textField else { return }
+		textField.delegate = self
+		textField.text = text.name
+		addSubview(textField)
+		textField.becomeFirstResponder()
 		render()
-		textField!.frame = CGRect(x: (bounds.size.width-w)/2, y: (bounds.size.height-h)/2, width: w, height: h)
-		textField!.setNeedsDisplay()
+		textField.frame = CGRect(x: (bounds.size.width-w)/2, y: (bounds.size.height-h)/2, width: w, height: h)
+		textField.setNeedsDisplay()
 	}
 	
 // Leaf ============================================================================================

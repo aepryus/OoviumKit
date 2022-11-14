@@ -637,6 +637,7 @@ public class AetherView: UIView, UIScrollViewDelegate, UIGestureRecognizerDelega
 	
 // Events ==========================================================================================
 	@objc func onTap() {
+//        print(aether.unload().toJSON())
 		retract()
 		unselectAll()
 	}

@@ -35,9 +35,11 @@ class CronBub: Bubble, ChainLeafDelegate {
 		cron.tower.listener = faceLeaf
 		add(leaf: faceLeaf)
 		
-		playLeaf.playButton.onPlay = { [unowned self] in
-            self.timer.configure(interval: 1/cron.rateTower.value, {
-				DispatchQueue.main.async { [unowned self] in
+		playLeaf.playButton.onPlay = { [weak self] in
+            guard let self else { return }
+            self.timer.configure(interval: 1/cron.rateTower.value, { [weak self] in
+				DispatchQueue.main.async { [weak self] in
+                    guard let self else { return }
 					let stop = self.cron.increment()
 					if stop { self.playLeaf.playButton.stop() }
 				}

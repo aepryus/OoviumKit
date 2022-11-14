@@ -189,6 +189,7 @@ public class Bubble: UIView, AnchorTappable, Colorable, UIGestureRecognizerDeleg
 
 // UIContextMenuInteractionDelegate ================================================================
 	public func contextMenuInteraction(_ interaction: UIContextMenuInteraction, configurationForMenuAtLocation location: CGPoint) -> UIContextMenuConfiguration? {
+        guard !aetherView.readOnly else { return nil }
 		if !selected { aetherView.select(bubble: self) }
 		else { aetherView.unselect(bubble: self) }
 		return nil
