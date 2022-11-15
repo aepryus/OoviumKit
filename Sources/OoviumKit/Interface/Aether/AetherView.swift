@@ -354,12 +354,7 @@ public class AetherView: UIView, UIScrollViewDelegate, UIGestureRecognizerDelega
 	}
 	func remove(bubble: Bubble) { remove(bubbles: Set<Bubble>([bubble])) }
 	func removeAllBubbles() { remove(bubbles: Set<Bubble>(bubbles)) }
-	func bubble(aexel: Aexel) -> Bubble {
-		for bubble in bubbles {
-			if aexel === bubble.aexel {return bubble}
-		}
-		fatalError()
-	}
+    func bubble(aexel: Aexel) -> Bubble { bubbles.first(where: { aexel === $0.aexel })! }
 	func typeBub(name: String) -> TypeBub? { bubbles.first(where: {$0 is TypeBub && ($0 as! TypeBub).type.name == name}) as! TypeBub? }
 	
 // Doodles =========================================================================================
