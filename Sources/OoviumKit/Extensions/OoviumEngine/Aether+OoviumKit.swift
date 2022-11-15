@@ -13,21 +13,19 @@ extension Aether {
 	public var aethers: [Aether] { [self] + aexels.compactMap { ($0 as? Also)?.alsoAether } }
 
 // Functions =======================================================================================
-	public func functions(not: [Aether]) -> [String] {
+	public func functions(not: [Aether]) -> [Mechlike] {
 		guard !not.contains(self) else {return []}
-		var names: [String] = []
+		var mechlikes: [Mechlike] = []
 		aexels.forEach {
 			if $0 is Mechlike {
-                names.append($0.name)
+                mechlikes.append($0 as! Mechlike)
             } else if let also: Also = $0 as? Also, let alsoAether: Aether = also.alsoAether {
-				names += alsoAether.functions(not: not+[self])
+                mechlikes += alsoAether.functions(not: not+[self])
 			}
 		}
-		return names.sorted { (left: String, right: String) -> Bool in
-			return left.uppercased() < right.uppercased()
-		}
+		return mechlikes.sorted { (left: Mechlike, right: Mechlike) -> Bool in left.name.uppercased() < right.name.uppercased() }
 	}
-	public var functions: [String] { functions(not: []) }
+	public var functions: [Mechlike] { functions(not: []) }
 
 	public func function(name: String, not: [Aether]) -> Mechlike? {
 		guard !not.contains(self) else { return nil }

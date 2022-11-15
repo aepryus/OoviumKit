@@ -57,17 +57,18 @@ class FunctionsLeaf: Leaf, Citable {
 		
 		Skin.bubble(path: path, uiColor: color, width: 4.0/3.0*Oo.s)
 		
-		y1 = p
-		for i in 0..<also.functionCount {
-			Skin.bubble(text: also.alsoAether!.functions(not: [also.aether])[i], rect: CGRect(x: 0, y: y1, width: width, height: r*2), uiColor: color)
-			y1 += 2*r
-		}
+//		y1 = p
+//		for i in 0..<also.functionCount {
+//			Skin.bubble(text: also.alsoAether!.functions(not: [also.aether])[i], rect: CGRect(x: 0, y: y1, width: width, height: r*2), uiColor: color)
+//			y1 += 2*r
+//		}
 	}
 	
 // Citable =========================================================================================
 	func token(at: CGPoint) -> Token? {
-		let i: Int = Int(at.y / 27*s)
-		guard i < also.functionCount, let name: String = also.alsoAether?.functions(not: [also.aether])[i] else {return nil}
-		return also.alsoAether?.function(name: name, not: [also.aether])?.mechlikeToken ?? nil
+        nil
+//		let i: Int = Int(at.y / 27*s)
+//		guard i < also.functionCount, let name: String = also.alsoAether?.functions(not: [also.aether])[i] else {return nil}
+//		return also.alsoAether?.function(name: name, not: [also.aether])?.mechlikeToken ?? nil
 	}
 }

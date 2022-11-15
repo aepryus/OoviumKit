@@ -33,6 +33,7 @@ public class ChainEditor: Orbit {
 		keyView.frame = CGRect(x: (54+3)*Oo.s, y: 0, width: keyView.width, height: keyView.height)
 
 		schematics.forEach { $0.chainEditor = self }
+        self.customSchematic?.chainEditor = self
 		keyView.schematic = self.schematics[0]
 	}
     convenience init(orb: Orb) {

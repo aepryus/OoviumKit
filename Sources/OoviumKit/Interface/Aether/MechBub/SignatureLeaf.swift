@@ -6,6 +6,7 @@
 //  Copyright © 2017 Aepryus Software. All rights reserved.
 //
 
+import Acheron
 import OoviumEngine
 import UIKit
 
@@ -190,7 +191,7 @@ class SignatureLeaf: Leaf, Editable, Citable, UITextFieldDelegate {
 
 		setNeedsDisplay()
         
-        nameEdit?.becomeFirstResponder()
+        if Screen.mac { nameEdit?.becomeFirstResponder() }
 	}
 	func onReleaseFocus() {
 		open = false
@@ -233,7 +234,7 @@ class SignatureLeaf: Leaf, Editable, Citable, UITextFieldDelegate {
 	func textFieldShouldBeginEditing(_ textField: UITextField) -> Bool { true }
 	func textFieldShouldReturn(_ textField: UITextField) -> Bool {
 		textField.resignFirstResponder()
-        releaseFocus(.okEqualReturn)
+        if Screen.mac { releaseFocus(.okEqualReturn) }
 		return true
 	}
 	func textField(_ textField: UITextField, shouldChangeCharactersIn range: NSRange, replacementString string: String) -> Bool {
