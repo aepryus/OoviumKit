@@ -139,7 +139,7 @@ class ObjectLeaf: Leaf, Editable, ChainViewDelegate, DoubleTappable, UITextField
 	}
     
 // ChainViewDelegate ===============================================================================
-    var color: UIColor { focused || object.token.status == .ok ? bubble.uiColor : UIColor.red }
+    var color: UIColor { bubble.uiColor }
     
     func becomeFirstResponder() { chainView.becomeFirstResponder() }
     func resignFirstResponder() { chainView.resignFirstResponder() }
