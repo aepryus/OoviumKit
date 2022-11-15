@@ -45,7 +45,10 @@ class AetherHover: UIView {
             facade.renameAether(name: newName) { (success: Bool) in
                 guard success else { return }
                 self.aetherHover.aetherView.aether.name = newName
+                let oldKey: String = facade.ooviumKey
                 self.aetherHover.aetherView.facade?._name = newName
+                let newKey: String = facade.ooviumKey
+                Facade.reKey(oldKey: oldKey, newKey: newKey)
                 self.aetherHover.aetherNameView.setNeedsDisplay()
                 facade.store(aether: self.aetherHover.aetherView.aether) { (success: Bool) in }
             }

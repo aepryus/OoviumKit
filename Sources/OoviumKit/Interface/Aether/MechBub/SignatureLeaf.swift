@@ -189,6 +189,8 @@ class SignatureLeaf: Leaf, Editable, Citable, UITextFieldDelegate {
 		orb.signatureEditor.editable = self
 
 		setNeedsDisplay()
+        
+        nameEdit?.becomeFirstResponder()
 	}
 	func onReleaseFocus() {
 		open = false
@@ -231,6 +233,7 @@ class SignatureLeaf: Leaf, Editable, Citable, UITextFieldDelegate {
 	func textFieldShouldBeginEditing(_ textField: UITextField) -> Bool { true }
 	func textFieldShouldReturn(_ textField: UITextField) -> Bool {
 		textField.resignFirstResponder()
+        releaseFocus(.okEqualReturn)
 		return true
 	}
 	func textField(_ textField: UITextField, shouldChangeCharactersIn range: NSRange, replacementString string: String) -> Bool {

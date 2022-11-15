@@ -13,15 +13,9 @@ import UIKit
 class TailBub: Bubble, SignatureLeafDelegate, ChainLeafDelegate {
 	let tail: Tail
 
-	lazy var signatureLeaf: SignatureLeaf = {
-		SignatureLeaf(bubble: self, anchor: CGPoint(x: 60, y: 0), hitch: .top, size: CGSize(width: 100, height: 90))
-	}()
-	lazy var whileLeaf: ChainLeaf = {
-		ChainLeaf(bubble: self, hitch: .topRight, anchor: CGPoint(x: 60, y: 70), size: CGSize(width: 100, height: 30))
-	}()
-	lazy var resultLeaf: ChainLeaf = {
-		return ChainLeaf(bubble: self, hitch: .top, anchor: CGPoint(x: 60, y: 70), size: CGSize(width: 100, height: 30))
-	}()
+	lazy var signatureLeaf: SignatureLeaf = SignatureLeaf(bubble: self, anchor: CGPoint(x: 60, y: 0), hitch: .top, size: CGSize(width: 100, height: 90))
+	lazy var whileLeaf: ChainLeaf = ChainLeaf(bubble: self, hitch: .topRight, anchor: CGPoint(x: 60, y: 70), size: CGSize(width: 100, height: 30))
+	lazy var resultLeaf: ChainLeaf = ChainLeaf(bubble: self, hitch: .top, anchor: CGPoint(x: 60, y: 70), size: CGSize(width: 100, height: 30))
 	var vertebraLeaves: [ChainLeaf] = []
 	
 	var overrideHitchPoint: CGPoint = CGPoint.zero
@@ -63,10 +57,8 @@ class TailBub: Bubble, SignatureLeafDelegate, ChainLeafDelegate {
 			add(leaf: vertebraLeaf)
 			vertebraLeaves.append(vertebraLeaf)
 		}
-		
-		self.backgroundColor = UIColor.clear
-		
-		render()
+
+        render()
 	}
 	required init?(coder aDecoder: NSCoder) { fatalError() }
 	
@@ -129,9 +121,7 @@ class TailBub: Bubble, SignatureLeafDelegate, ChainLeafDelegate {
 	}
 
 // Events ==========================================================================================
-	override func onCreate() {
-		signatureLeaf.makeFocus()
-	}
+	override func onCreate() { signatureLeaf.makeFocus() }
 
 // Bubble ==========================================================================================
 	override var uiColor: UIColor { !selected ? UIColor.blue : UIColor.yellow }
@@ -145,13 +135,7 @@ class TailBub: Bubble, SignatureLeafDelegate, ChainLeafDelegate {
 
 // SignatureLeafDelegate ===========================================================================
 	var name: String { tail.name }
-	var params: [String] {
-		var params: [String] = []
-		for vertebra in tail.vertebras {
-			params.append(vertebra.name)
-		}
-		return params
-	}
+    var params: [String] { tail.vertebras.map { $0.name } }
 	func onNoOfParamsChanged(signatureLeaf: SignatureLeaf) {
 		while signatureLeaf.noOfParams > tail.vertebras.count {
 			let vertebra = tail.addVertebra()
@@ -177,35 +161,21 @@ class TailBub: Bubble, SignatureLeafDelegate, ChainLeafDelegate {
 	}
 	func onOK(signatureLeaf: SignatureLeaf) {
 		aetherView.stretch()
-		
 		tail.name = signatureLeaf.nameEdit?.text ?? ""
 		for (i, vertebra) in tail.vertebras.enumerated() {
 			vertebra.name = signatureLeaf.paramEdits[i].text ?? ""
 			vertebraLeaves[i].placeholder = "next \(vertebra.name)"
 		}
-		tail.aether.buildMemory()
-		tail.resultTower.buildTask()
-		tail.tower.buildTask()
+        tail.aether.buildMemory()
+        Tower.evaluate(towers: tail.towers)
 	}
 	var token: Token { tail.mechlikeToken }
 	var recipeToken: Token { tail.variableToken }
-	var paramTokens: [Token] {
-		var tokens: [Token] = []
-		for input in tail.vertebras {
-			tokens.append(input.tower.variableToken)
-		}
-		return tokens
-	}
+    var paramTokens: [Token] { tail.vertebras.map { $0.tower.variableToken } }
 	
 // ChainLeafDelegate ===============================================================================
-	func onChange() {
-		render()
-	}
-	func onEdit() {
-		render()
-	}
-	func onOK(leaf: ChainLeaf) {
-		render()
-	}
+	func onChange() { render() }
+	func onEdit() { render() }
+	func onOK(leaf: ChainLeaf) { render() }
 	func onCalculate() {}
 }

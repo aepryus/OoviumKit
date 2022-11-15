@@ -11,7 +11,7 @@ import OoviumEngine
 
 public class AetherFacade: Facade {
     var _name: String
-    var _parent: DirFacade
+    private var _parent: DirFacade
     
     var document: AnyObject?
     

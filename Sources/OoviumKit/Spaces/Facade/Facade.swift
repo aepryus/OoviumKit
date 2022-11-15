@@ -18,7 +18,7 @@ public class Facade {
     var url: URL { URL(string: "")! }
     
 // Static ==========================================================================================
-    static var facades: [String:Facade] = [:]
+    private static var facades: [String:Facade] = [:]
     public static func create(space: Space) -> Facade {
         var facade: Facade? = facades[space.name]
         if facade == nil {
@@ -40,6 +40,11 @@ public class Facade {
             facades[url.ooviumKey] = facade
         }
         return facade!
+    }
+    public static func reKey(oldKey: String, newKey: String) {
+        guard let facade: Facade = facades[oldKey] else { return }
+        facades[oldKey] = nil
+        facades[newKey] = facade
     }
     private static func sliceKey(ooviumKey: String) -> (String, String) {
         if let loc: Int = ooviumKey.lastLoc(of: "/") {

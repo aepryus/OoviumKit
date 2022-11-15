@@ -89,24 +89,16 @@ class MechBub: Bubble, SignatureLeafDelegate, ChainLeafDelegate {
 	var name: String { mech.name }
 	var params: [String] { mech.inputs.map { $0.name } }
 	func onNoOfParamsChanged(signatureLeaf: SignatureLeaf) {
-		while signatureLeaf.noOfParams > mech.inputs.count {
-			mech.addInput()
-		}
-		while mech.inputs.count > signatureLeaf.noOfParams {
-			mech.removeInput()
-		}
+		while signatureLeaf.noOfParams > mech.inputs.count { mech.addInput() }
+		while mech.inputs.count > signatureLeaf.noOfParams { mech.removeInput() }
 		render()
 	}
 	func onOK(signatureLeaf: SignatureLeaf) {
 		aetherView.stretch()
-
 		mech.name = signatureLeaf.nameEdit?.text ?? ""
-		for (i, input) in mech.inputs.enumerated() {
-			input.name = signatureLeaf.paramEdits[i].text ?? ""
-		}
-		mech.aether.buildMemory()
-		mech.resultTower.buildTask()
-		mech.tower.buildTask()
+		for (i, input) in mech.inputs.enumerated() { input.name = signatureLeaf.paramEdits[i].text ?? "" }
+        mech.aether.buildMemory()
+        Tower.evaluate(towers: mech.towers)
 	}
 	var token: Token { mech.mechlikeToken }
 	var recipeToken: Token { mech.variableToken }

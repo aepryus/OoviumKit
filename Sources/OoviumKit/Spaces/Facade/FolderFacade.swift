@@ -21,9 +21,10 @@ public class FolderFacade: DirFacade {
     override var name: String {
         set {
             let prefix: String = (parent is SpaceFacade) ? "::" : "/"
-            Facade.facades[parent.ooviumKey + prefix + _name] = nil
+            let oldKey: String = parent.ooviumKey + prefix + _name
             _name = newValue
-            Facade.facades[parent.ooviumKey + prefix + _name] = self
+            let newKey: String = parent.ooviumKey + prefix + _name
+            Facade.reKey(oldKey: oldKey, newKey: newKey)
         }
         get { _name }
     }
