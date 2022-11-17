@@ -6,25 +6,26 @@
 //  Copyright © 2017 Aepryus Software. All rights reserved.
 //
 
+import Acheron
 import OoviumEngine
 import UIKit
 
 class AutoBub: Bubble, ChainLeafDelegate {
 	let auto: Auto
     
-    lazy var aLeaf: SpaceLeaf = SpaceLeaf(bubble: self, name: "A", token: auto.spaceTowers.first!.variableToken)
-	lazy var bLeaf: SpaceLeaf = SpaceLeaf(bubble: self, name: "B", token: auto.spaceTowers.first!.variableToken)
-	lazy var cLeaf: SpaceLeaf = SpaceLeaf(bubble: self, name: "C", token: auto.spaceTowers.first!.variableToken)
-	lazy var dLeaf: SpaceLeaf = SpaceLeaf(bubble: self, name: "D", token: auto.spaceTowers.first!.variableToken)
-	lazy var eLeaf: SpaceLeaf = SpaceLeaf(bubble: self, name: "E", token: auto.spaceTowers.first!.variableToken)
-	lazy var fLeaf: SpaceLeaf = SpaceLeaf(bubble: self, name: "F", token: auto.spaceTowers.first!.variableToken)
-	lazy var gLeaf: SpaceLeaf = SpaceLeaf(bubble: self, name: "G", token: auto.spaceTowers.first!.variableToken)
-	lazy var hLeaf: SpaceLeaf = SpaceLeaf(bubble: self, name: "H", token: auto.spaceTowers.first!.variableToken)
-	lazy var selfLeaf: SpaceLeaf = SpaceLeaf(bubble: self, name: "Self", token: auto.spaceTowers.first!.variableToken)
+    lazy var aLeaf: SpaceLeaf = SpaceLeaf(bubble: self, name: "A", token: auto.spaceTowers[0].variableToken)
+	lazy var bLeaf: SpaceLeaf = SpaceLeaf(bubble: self, name: "B", token: auto.spaceTowers[1].variableToken)
+	lazy var cLeaf: SpaceLeaf = SpaceLeaf(bubble: self, name: "C", token: auto.spaceTowers[2].variableToken)
+	lazy var dLeaf: SpaceLeaf = SpaceLeaf(bubble: self, name: "D", token: auto.spaceTowers[3].variableToken)
+	lazy var eLeaf: SpaceLeaf = SpaceLeaf(bubble: self, name: "E", token: auto.spaceTowers[4].variableToken)
+	lazy var fLeaf: SpaceLeaf = SpaceLeaf(bubble: self, name: "F", token: auto.spaceTowers[5].variableToken)
+	lazy var gLeaf: SpaceLeaf = SpaceLeaf(bubble: self, name: "G", token: auto.spaceTowers[6].variableToken)
+	lazy var hLeaf: SpaceLeaf = SpaceLeaf(bubble: self, name: "H", token: auto.spaceTowers[7].variableToken)
+	lazy var selfLeaf: SpaceLeaf = SpaceLeaf(bubble: self, name: "Self", token: auto.spaceTowers[8].variableToken)
 	
-	lazy var nextLeaf: ChainLeaf = {return ChainLeaf(bubble: self, delegate: self)}()
+	lazy var nextLeaf: ChainLeaf = ChainLeaf(bubble: self, delegate: self)
 	
-	lazy var statesLeaf: StatesLeaf = {return StatesLeaf(bubble: self)}()
+	lazy var statesLeaf: StatesLeaf = StatesLeaf(bubble: self)
 	
 	var armPath: CGMutablePath = CGMutablePath()
 	
@@ -41,9 +42,6 @@ class AutoBub: Bubble, ChainLeafDelegate {
 		
 		super.init(aetherView: aetherView, aexel: auto, origin: CGPoint(x: self.auto.x, y: self.auto.y), size: CGSize(width: 36, height: 36))
 		
-		self.backgroundColor = UIColor.clear
-//		self.backgroundColor = UIColor.gray.alpha(0.5)
-
 		let cw: CGFloat = 50
 		let sw: CGFloat = 32
 		let sh: CGFloat = 32
@@ -107,26 +105,26 @@ class AutoBub: Bubble, ChainLeafDelegate {
 		add(leaf: hLeaf)
 		
 		let pp: CGFloat = 4
-		let tr: CGFloat = 18
-		let br: CGFloat = 6
+//		let tr: CGFloat = 18
+//		let br: CGFloat = 6
 
-		let px1 = pp;
-		let px2 = (x1+x2)/2;
+//		let px1 = pp;
+//		let px2 = (x1+x2)/2;
 		let px3 = (x2+x3)/2;
 		px4 = (x3+x4)/2;
 		let px5 = (x4+x5)/2;
-		let px6 = (x5+x6)/2;
+//		let px6 = (x5+x6)/2;
 		let px7 = x6+pp;
 		
-		let py1 = pp;
-		let py2 = (y1+y2)/2;
+//		let py1 = pp;
+//		let py2 = (y1+y2)/2;
 		let py3 = (y2+y3)/2;
-		let py4 = (y3+y4)/2;
+//		let py4 = (y3+y4)/2;
 		let py5 = (y4+y5)/2;
-		let py6 = (y5+y6)/2;
-		let py7 = y6+pp;
+//		let py6 = (y5+y6)/2;
+//		let py7 = y6+pp;
 		
-		let r = px2-px1
+//		let r = px2-px1
 
 		selfLeaf.anchor = CGPoint(x: px3-q, y: py3-q)
 		selfLeaf.hitch = .topLeft
@@ -140,41 +138,44 @@ class AutoBub: Bubble, ChainLeafDelegate {
 		nextLeaf.anchor = CGPoint(x: 36-3, y: y6+48-3)
 		nextLeaf.placeholder = "next Self"
 		nextLeaf.radius = 15
+        
+        statesLeaf.chainLeaf.chain = auto.statesChain
 		
 		setLeavesNeedLayout()
 		layoutLeaves()
 		
-		armPath.move(to: CGPoint(x: px3, y: py4))
-//		armPatg.addQuadCurve(to: CGPoint(x: x1-6-4, y: y6), control: CGPoint(x: 36+(nextLeaf.width-6)/2, y: y6+48+15))
-		armPath.addQuadCurve(to: CGPoint(x: 36+(96-6)/2, y: y6+48+15), control: CGPoint(x: x1-6-4, y: y6))
-		armPath.addQuadCurve(to: CGPoint(x: px5, y: py4), control: CGPoint(x: x1+6-4, y: y6))
+//		armPath.move(to: CGPoint(x: px3, y: py4))
+//		armPath.addQuadCurve(to: CGPoint(x: 36+(96-6)/2, y: y6+48+15), control: CGPoint(x: x1-6-4, y: y6))
+//		armPath.addQuadCurve(to: CGPoint(x: px5, y: py4), control: CGPoint(x: x1+6-4, y: y6))
 
+        let by: CGFloat = 0.4
+        
 		let plasma = CGMutablePath()
-		
-		plasma.move(to: CGPoint(x: px1, y: py2))
-		plasma.addArc(tangent1End: CGPoint(x: px1, y: py1), tangent2End: CGPoint(x: px2, y: py1), radius: r)
-		plasma.addCurve(to: CGPoint(x: px3, y: py2), control1: CGPoint(x: px2+tr, y: py1), control2: CGPoint(x: px3-br, y: py2))
-		plasma.addCurve(to: CGPoint(x: px4, y: py1), control1: CGPoint(x: px3+br, y: py2), control2: CGPoint(x: px4-tr, y: py1))
-		plasma.addCurve(to: CGPoint(x: px5, y: py2), control1: CGPoint(x: px4+tr, y: py1), control2: CGPoint(x: px5-br, y: py2))
-		plasma.addCurve(to: CGPoint(x: px6, y: py1), control1: CGPoint(x: px5+br, y: py2), control2: CGPoint(x: px6-tr, y: py1))
-		plasma.addArc(tangent1End: CGPoint(x: px7, y: py1), tangent2End: CGPoint(x: px7, y: py2), radius: r)
-		plasma.addCurve(to: CGPoint(x: px6, y: py3), control1: CGPoint(x: px7, y: py2+tr), control2: CGPoint(x: px6, y: py3-br))
-		plasma.addCurve(to: CGPoint(x: px7, y: py4), control1: CGPoint(x: px6, y: py3+br), control2: CGPoint(x: px7, y: py4-tr))
-		plasma.addCurve(to: CGPoint(x: px6, y: py5), control1: CGPoint(x: px7, y: py4+tr), control2: CGPoint(x: px6, y: py5-br))
-		plasma.addCurve(to: CGPoint(x: px7, y: py6), control1: CGPoint(x: px6, y: py5+br), control2: CGPoint(x: px7, y: py6-tr))
-		plasma.addArc(tangent1End: CGPoint(x: px7, y: py7), tangent2End: CGPoint(x: px6, y: py7), radius: r)
-		plasma.addCurve(to: CGPoint(x: px5, y: py6), control1: CGPoint(x: px6-tr, y: py7), control2: CGPoint(x: px5+br, y: py6))
-		plasma.addCurve(to: CGPoint(x: px4, y: py7), control1: CGPoint(x: px5-br, y: py6), control2: CGPoint(x: px4+tr, y: py7))
-		plasma.addCurve(to: CGPoint(x: px3, y: py6), control1: CGPoint(x: px4-tr, y: py7), control2: CGPoint(x: px3+br, y: py6))
-		plasma.addCurve(to: CGPoint(x: px2, y: py7), control1: CGPoint(x: px3-br, y: py6), control2: CGPoint(x: px2+tr, y: py7))
-		plasma.addArc(tangent1End: CGPoint(x: px1, y: py7), tangent2End: CGPoint(x: px1, y: py6), radius: r)
-		plasma.addCurve(to: CGPoint(x: px2, y: py5), control1: CGPoint(x: px1, y: py6-tr), control2: CGPoint(x: px2, y: py5+br))
-		plasma.addCurve(to: CGPoint(x: px1, y: py4), control1: CGPoint(x: px2, y: py5-br), control2: CGPoint(x: px1, y: py4+tr))
-		plasma.addCurve(to: CGPoint(x: px2, y: py3), control1: CGPoint(x: px1, y: py4-tr), control2: CGPoint(x: px2, y: py3+br))
-		plasma.addCurve(to: CGPoint(x: px1, y: py2), control1: CGPoint(x: px2, y: py3-br), control2: CGPoint(x: px1, y: py2+tr))
+        
+        let s: CGPoint = CGPoint(x: 9, y: 0)
+        let c: CGPoint = selfLeaf.center
+        let n: CGPoint = nextLeaf.center
+        let a: CGPoint = c - s
+        let b: CGPoint = c + s
+        let e: CGFloat = 4.5
+        
+        armPath.move(to: a)
+        armPath.addCurve(to: n, control1: (a+n)/2-s*e, control2: (a+n)/2-s*e)
+        armPath.addCurve(to: b, control1: (b+n)/2-s*e, control2: (b+n)/2-s*e)
+        armPath.closeSubpath()
+        
+        plasma.move(to: aLeaf.center)
+        plasma.addCurve(to: bLeaf.center, control1: pinch(aLeaf.center, by: by), control2: pinch(bLeaf.center, by: by))
+        plasma.addCurve(to: cLeaf.center, control1: pinch(bLeaf.center, by: by), control2: pinch(cLeaf.center, by: by))
+        plasma.addCurve(to: dLeaf.center, control1: pinch(cLeaf.center, by: by), control2: pinch(dLeaf.center, by: by))
+        plasma.addCurve(to: eLeaf.center, control1: pinch(dLeaf.center, by: by), control2: pinch(eLeaf.center, by: by))
+        plasma.addCurve(to: fLeaf.center, control1: pinch(eLeaf.center, by: by), control2: pinch(fLeaf.center, by: by))
+        plasma.addCurve(to: gLeaf.center, control1: pinch(fLeaf.center, by: by), control2: pinch(gLeaf.center, by: by))
+        plasma.addCurve(to: hLeaf.center, control1: pinch(gLeaf.center, by: by), control2: pinch(hLeaf.center, by: by))
+        plasma.addCurve(to: aLeaf.center, control1: pinch(hLeaf.center, by: by), control2: pinch(aLeaf.center, by: by))
+        
+        self.plasma = plasma
 
-		self.plasma = plasma
-		
 		// ColorLeafs
 		let qs: CGFloat = 32
 		let qp: CGFloat = 3
@@ -241,6 +242,11 @@ class AutoBub: Bubble, ChainLeafDelegate {
 		}
 //		minSize = CGSize(width: w, height: h)
 	}
+    
+    private func pinch(_ point: CGPoint, by: CGFloat) -> CGPoint {
+        let c: CGPoint = selfLeaf.center
+        return c + (point-c)*by
+    }
 	
 // Bubble ==========================================================================================
 	override var uiColor: UIColor { OOColor.cobolt.uiColor }

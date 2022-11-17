@@ -23,9 +23,6 @@ class SpaceLeaf: Leaf, Citable {
 	required init?(coder aDecoder: NSCoder) { fatalError() }
 	
 // UIView ==========================================================================================
-	override var frame: CGRect {
-		didSet {mooring.point = self.bubble.aetherView.scrollView.convert(self.center, from: self.superview)}
-	}
 	override func draw(_ rect: CGRect) {
 		let path = CGPath(ellipseIn: rect.insetBy(dx: 1, dy: 1), transform: nil)
 		hitPath = path
@@ -34,7 +31,5 @@ class SpaceLeaf: Leaf, Citable {
 	}
 	
 // Citable =========================================================================================
-	func token(at: CGPoint) -> Token? {
-		return token
-	}
+	func token(at: CGPoint) -> Token? { token }
 }

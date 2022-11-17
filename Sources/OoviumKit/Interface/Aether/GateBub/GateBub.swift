@@ -43,8 +43,6 @@ class GateBub: Bubble, ChainLeafDelegate, Citable {
 		elseLeaf.placeholder = "else"
 		add(leaf: elseLeaf)
 		
-		self.aetherView.moorings[gate.token] = mooring
-		
 		render()
 	}
 	required init?(coder aDecoder: NSCoder) { fatalError() }
@@ -94,8 +92,6 @@ class GateBub: Bubble, ChainLeafDelegate, Citable {
 		plasma.closeSubpath()
 		
 		layoutLeaves()
-		
-		mooring.point = aetherView.scrollView.convert(CGPoint(x: x3, y: y2), from: self)
 	}
 	
 // Bubble ==========================================================================================

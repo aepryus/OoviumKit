@@ -13,8 +13,8 @@ import UIKit
 public class Local {
 	public static func installAetherFromBundle(name: String) {
 		let atPath: String = Bundle.main.path(forResource: (Oo.iPhone ? "\(name) iP" : name), ofType: "oo")!
-		let path = NSSearchPathForDirectoriesInDomains(.documentDirectory, .userDomainMask, true)[0]
-		let toPath: String = (path as NSString).appendingPathComponent("\(name).oo")
+        let path = NSSearchPathForDirectoriesInDomains(.documentDirectory, .userDomainMask, true)[0]
+		let toPath: String = (path as NSString).appendingPathComponent("aethers/\(name).oo")
 		do {
 			try? FileManager.default.removeItem(atPath: toPath)
 			try FileManager.default.copyItem(atPath: atPath, toPath: toPath)
