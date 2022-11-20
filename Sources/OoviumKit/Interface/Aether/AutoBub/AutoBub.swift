@@ -135,7 +135,7 @@ class AutoBub: Bubble, ChainLeafDelegate {
 		nextLeaf.chain = auto.resultChain
 		nextLeaf.minWidth = 96
 		nextLeaf.hitch = .topLeft
-		nextLeaf.anchor = CGPoint(x: 36-3, y: y6+48-3)
+		nextLeaf.anchor = CGPoint(x: 18-3, y: y6+24-3)
 		nextLeaf.placeholder = "next Self"
 		nextLeaf.radius = 15
         
@@ -157,7 +157,7 @@ class AutoBub: Bubble, ChainLeafDelegate {
         let n: CGPoint = nextLeaf.center
         let a: CGPoint = c - s
         let b: CGPoint = c + s
-        let e: CGFloat = 4.5
+        let e: CGFloat = 3
         
         armPath.move(to: a)
         armPath.addCurve(to: n, control1: (a+n)/2-s*e, control2: (a+n)/2-s*e)
