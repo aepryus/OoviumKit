@@ -111,14 +111,13 @@ public class AetherPicker: Hover, UITableViewDelegate, UITableViewDataSource {
 		addSubview(aetherButton)
 		
 		newButton.aetherPicker = self
-		newButton.addAction(for: .touchUpInside) { [unowned self] in
-			if self.expanded {
-				DispatchQueue.main.async {
-					self.aetherList.reloadData()
-				}
-			}
-		}
-		if showNewButton {addSubview(newButton)}
+        newButton.addAction(for: .touchUpInside) { [unowned self] in
+            if self.expanded {
+                self.aetherView.swapToNewAether()
+                DispatchQueue.main.async { self.aetherList.reloadData() }
+            } else { /*self.aetherView.invokeAetherInfo()*/ }
+        }
+        if showNewButton { addSubview(newButton) }
 
 		aetherList.delegate = self
 		aetherList.dataSource = self
@@ -350,17 +349,16 @@ public class AetherPicker: Hover, UITableViewDelegate, UITableViewDataSource {
 	}
 	
 // UITableViewDataSource ===========================================================================
-	var aetherNames: [String] = []
+	private var aetherNames: [String] = []
 
 	func loadAetherNames() {
-//        Space.local.loadItems(for: "/") { (items: [Facade]) in
-//            self.aetherNames = items.map { $0.name }
-//        }
+        let spaceFacade: SpaceFacade = Facade.create(space: Space.local) as! SpaceFacade
+        spaceFacade.loadFacades { (facades: [Facade]) in
+            self.aetherNames = facades.map { $0.name }
+        }
 	}
 
-	public func tableView(_ tableView: UITableView, numberOfRowsInSection section: Int) -> Int {
-		return aetherNames.count
-	}
+	public func tableView(_ tableView: UITableView, numberOfRowsInSection section: Int) -> Int { aetherNames.count }
 	public func tableView(_ tableView: UITableView, cellForRowAt indexPath: IndexPath) -> UITableViewCell {
 		let cell: AetherCell = tableView.dequeueReusableCell(withIdentifier: "cell")! as! AetherCell
 		cell.aetherPicker = self
