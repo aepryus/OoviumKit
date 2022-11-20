@@ -82,17 +82,15 @@ public class AetherExplorer: UIView, UITableViewDataSource, SpaceDelegate {
 	}
 
 // UITableViewDataSource ===========================================================================
-	var facades: [Facade] = []
-	var aetherNames: [String] = []
+	private var facades: [Facade] = []
+	private var aetherNames: [String] = []
 	func loadSpace() {
         facade.loadFacades { (facades: [Facade]) in
-            self.facades = facades
+            DispatchQueue.main.async { self.facades = facades }
         }
 	}
 
-	public func tableView(_ tableView: UITableView, numberOfRowsInSection section: Int) -> Int {
-        facades.count
-	}
+	public func tableView(_ tableView: UITableView, numberOfRowsInSection section: Int) -> Int { facades.count }
 	public func tableView(_ tableView: UITableView, cellForRowAt indexPath: IndexPath) -> UITableViewCell {
 		let cell: AetherExplorerCell = tableView.dequeueReusableCell(withIdentifier: "cell") as! AetherExplorerCell
         cell.bind(explorer: self, facade: facades[indexPath.row])
