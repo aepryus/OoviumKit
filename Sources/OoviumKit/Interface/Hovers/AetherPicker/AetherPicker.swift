@@ -9,7 +9,7 @@
 import Acheron
 import UIKit
 
-public class AetherPicker: Hover, UITableViewDelegate, UITableViewDataSource {
+public class AetherPicker: Hover, UITableViewDelegate, UITableViewDataSource, UITextFieldDelegate {
 	let aetherButton: AetherButton
 	let newButton: NewButton
 	var listMask: MaskView!
@@ -22,6 +22,10 @@ public class AetherPicker: Hover, UITableViewDelegate, UITableViewDataSource {
 
 	var deletableCell: AetherCell? = nil
 	var readOnly: [String] = []
+    
+    private let textField: OOTextField = OOTextField(frame: .zero, backColor: Skin.color(.labelBack), foreColor: Skin.color(.labelFore), textColor: Skin.color(.labelText))
+    var editing: Bool = false
+
 	
 	init(aetherView: AetherView) {
 		let p: CGFloat = 2*Oo.s
@@ -114,8 +118,10 @@ public class AetherPicker: Hover, UITableViewDelegate, UITableViewDataSource {
         newButton.addAction(for: .touchUpInside) { [unowned self] in
             if self.expanded {
                 self.aetherView.swapToNewAether()
-                DispatchQueue.main.async { self.aetherList.reloadData() }
-            } else { /*self.aetherView.invokeAetherInfo()*/ }
+                DispatchQueue.main.async { self.loadAetherNames() }
+            } else {
+                self.takeEditForm()
+            }
         }
         if showNewButton { addSubview(newButton) }
 
@@ -140,6 +146,10 @@ public class AetherPicker: Hover, UITableViewDelegate, UITableViewDataSource {
 		path.closeSubpath()
 		
 		listMask = MaskView(frame: CGRect(x: 0, y: 0, width: x7+p, height: y5+p), content: aetherList, path: path)
+        
+        textField.font = UIFont.systemFont(ofSize: 14*Oo.s)
+        textField.textColor = .green.shade(0.5)
+        textField.delegate = self
 
 		if Screen.mac {
 			let gesture = UIPanGestureRecognizer(target: self, action: #selector(onPan(_:)))
@@ -199,6 +209,27 @@ public class AetherPicker: Hover, UITableViewDelegate, UITableViewDataSource {
 		deletableCell?.hideDeleteButton()
 		deletableCell = cell
 	}
+
+    func takeEditForm() {
+        textField.topLeft(dx: 36, dy: 3, size: CGSize(width: 164, height: 30))
+        textField.text = aetherView.aether.name
+        editing = true
+        addSubview(textField)
+        textField.becomeFirstResponder()
+        setNeedsDisplay()
+        aetherButton.setNeedsDisplay()
+    }
+    func takeDisplayForm() {
+        editing = false
+        textField.removeFromSuperview()
+        setNeedsDisplay()
+        aetherButton.setNeedsDisplay()
+    }
+    
+//    override func layoutSubviews() {
+//        textField.center(width: 120*gS, height: h-6*gS)
+//    }
+
 
 // Events ==========================================================================================
 	private var s0: CGPoint = .zero
@@ -354,7 +385,10 @@ public class AetherPicker: Hover, UITableViewDelegate, UITableViewDataSource {
 	func loadAetherNames() {
         let spaceFacade: SpaceFacade = Facade.create(space: Space.local) as! SpaceFacade
         spaceFacade.loadFacades { (facades: [Facade]) in
-            self.aetherNames = facades.map { $0.name }
+            DispatchQueue.main.async {
+                self.aetherNames = facades.map { $0.name }
+                self.aetherList.reloadData()
+            }
         }
 	}
 
@@ -365,4 +399,22 @@ public class AetherPicker: Hover, UITableViewDelegate, UITableViewDataSource {
 		cell.aetherName = aetherNames[indexPath.row]
 		return cell
 	}
+    
+// UITextFieldDelegate =====================================================================
+    public func textFieldShouldReturn(_ textField: UITextField) -> Bool {
+        self.takeDisplayForm()
+        guard let facade: AetherFacade = aetherView.facade, let newName: String = textField.text else { return true }
+        facade.renameAether(name: newName) { (success: Bool) in
+            guard success else { return }
+            self.aetherView.aether.name = newName
+            let oldKey: String = facade.ooviumKey
+            self.aetherView.facade?._name = newName
+            let newKey: String = facade.ooviumKey
+            Facade.reKey(oldKey: oldKey, newKey: newKey)
+            self.aetherButton.setNeedsDisplay()
+            facade.store(aether: self.aetherView.aether) { (success: Bool) in }
+            self.loadAetherNames()
+        }
+        return true
+    }
 }

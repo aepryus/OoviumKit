@@ -41,7 +41,7 @@ class AetherCell: UITableViewCell, UIContextMenuInteractionDelegate {
                     Space.local.loadAether(facade: facade) { (json: String?) in
                         guard let json else { return }
                         let aether: Aether = Aether(json: json)
-                        self.aetherPicker.aetherView.swapToAether(aether: aether)
+                        self.aetherPicker.aetherView.swapToAether(facade: facade, aether: aether)
                     }
 				case .deletable:
 					self.state = .normal

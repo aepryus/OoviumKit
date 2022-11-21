@@ -16,7 +16,7 @@ public class Orb {
     private let dy: CGFloat
     private var orbits: [Orbit] = []
     
-    init(aetherView: AetherView, view: UIView, dx: CGFloat, dy: CGFloat) {
+    public init(aetherView: AetherView, view: UIView, dx: CGFloat, dy: CGFloat) {
         self.aetherView = aetherView
         self.view = view
         self.dx = dx

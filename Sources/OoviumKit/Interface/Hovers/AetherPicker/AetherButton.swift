@@ -45,7 +45,9 @@ class AetherButton: UIButton {
 		let y6 = y1+r
 		let y7 = y6+r
 
-		let pen: Pen = Pen(font: UIFont.systemFont(ofSize: 14*Oo.s), color: UIColor.green, alignment: .center)
-		Skin.panel(text: aetherPicker.aetherView.aether.name, rect: CGRect(x: x9, y: y1+2*Oo.s, width: x13-x9, height: y7-y1), pen: pen)
+        if !aetherPicker.editing {
+            let pen: Pen = Pen(font: UIFont.systemFont(ofSize: 14*Oo.s), color: UIColor.green, alignment: .center)
+            Skin.panel(text: aetherPicker.aetherView.aether.name, rect: CGRect(x: x9, y: y1+2*Oo.s, width: x13-x9, height: y7-y1), pen: pen)
+        }
 	}
 }
