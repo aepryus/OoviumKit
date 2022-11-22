@@ -42,7 +42,6 @@ class ChainLeaf: Leaf, ChainViewDelegate, Editable {
 		set {
 			chainView.chain = newValue
             mooring = bubble.createMooring(token: chain.tower.variableToken)
-//			chainView.chain.tower.listener = self
 		}
 		get { chainView.chain }
 	}

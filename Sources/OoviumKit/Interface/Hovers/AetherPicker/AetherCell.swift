@@ -37,11 +37,12 @@ class AetherCell: UITableViewCell, UIContextMenuInteractionDelegate {
 		nameLabel.addAction { [unowned self] in
 			switch self.state {
 				case .normal:
-                    break
-//					Space.digest(space: .local, name: self.aetherName) { (aether: Aether?) in
-//						guard let aether = aether else { return }
-//						self.aetherPicker.aetherView.swapToAether(space: Space.local, aether: aether)
-//					}
+                    let facade: AetherFacade = Facade.create(ooviumKey: "Local::\(self.aetherName)") as! AetherFacade
+                    Space.local.loadAether(facade: facade) { (json: String?) in
+                        guard let json else { return }
+                        let aether: Aether = Aether(json: json)
+                        self.aetherPicker.aetherView.swapToAether(facade: facade, aether: aether)
+                    }
 				case .deletable:
 					self.state = .normal
 					self.animateTransitionIfNeeded(state: self.state, duration: 0.3)
@@ -61,31 +62,24 @@ class AetherCell: UITableViewCell, UIContextMenuInteractionDelegate {
 		deleteBox.addAction { [unowned self] in
 			self.aetherPicker.retract()
 
+            guard let removeFacade: AetherFacade = Facade.create(ooviumKey: "Local::\(self.aetherName)") as? AetherFacade else { return }
 			if self.aetherName == self.aetherPicker.aetherView.aether.name {
-//				Space.local.loadNames { (names: [String]) in
-//					if names.count == 0 {
-//						Space.local.newAether { (aether: Aether?) in
-//							guard let aether = aether else { return }
-//							self.aetherPicker.aetherView.swapToAether(space: Space.local, aether: aether)
-//							Space.local.removeAether(name: self.aetherName) { (success: Bool) in
-//								DispatchQueue.main.async { self.aetherPicker.loadAetherNames() }
-//							}
-//						}
-//					} else {
-//						Space.digest(space: .local, name: names[names[0] != self.aetherName ? 0 : 1]) { (aether: Aether?) in
-//							guard let aether = aether else { return }
-//							self.aetherPicker.aetherView.swapToAether(space: Space.local, aether: aether)
-//							Space.local.removeAether(name: self.aetherName) { (success: Bool) in
-//								DispatchQueue.main.async { self.aetherPicker.loadAetherNames() }
-//							}
-//						}
-//					}
-//				}
-			} else {
-//				Space.local.removeAether(name: self.aetherName) { (success: Bool) in
-//					DispatchQueue.main.async { self.aetherPicker.loadAetherNames() }
-//				}
+                guard let spaceFacade: SpaceFacade = Facade.create(space: Space.local) as? SpaceFacade else { return }
+                spaceFacade.loadFacades { (facades: [Facade]) in
+                    if facades.count == 0 { self.aetherPicker.aetherView.swapToNewAether() }
+                    else {
+                        guard let aetherFacade: AetherFacade = facades.first(where: { $0 is AetherFacade && $0 !== removeFacade }) as? AetherFacade else { return }
+                        aetherFacade.load { (json: String?) in
+                            guard let json else { return }
+                            let aether: Aether = Aether(json: json)
+                            self.aetherPicker.aetherView.swapToAether(facade: aetherFacade, aether: aether)
+                        }
+                    }
+                }
 			}
+            Space.local.removeAether(facade: removeFacade) { (success: Bool) in
+                DispatchQueue.main.async { self.aetherPicker.loadAetherNames() }
+            }
 		}
 
 		panGesture.delegate = self

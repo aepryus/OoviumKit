@@ -11,7 +11,7 @@ import UIKit
 
 class NewButton: UIButton {
 	var path: CGPath {
-		didSet {setNeedsDisplay()}
+		didSet { setNeedsDisplay() }
 	}
 	var aetherPicker: AetherPicker!
 	
@@ -22,9 +22,7 @@ class NewButton: UIButton {
 	required init?(coder aDecoder: NSCoder) { fatalError() }
 	
 // UIView ==========================================================================================
-	override func hitTest(_ point: CGPoint, with event: UIEvent?) -> UIView? {
-		return path.contains(point) ? super.hitTest(point, with: event) : nil
-	}
+	override func hitTest(_ point: CGPoint, with event: UIEvent?) -> UIView? { path.contains(point) ? super.hitTest(point, with: event) : nil }
 	override func draw(_ rect: CGRect) {
 		Skin.aetherPicker(path: path)
 		

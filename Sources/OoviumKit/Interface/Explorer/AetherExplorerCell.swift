@@ -12,10 +12,7 @@ import UIKit
 
 class AetherExplorerCell: UITableViewCell {
 	unowned var explorer: AetherExplorer!
-	var name: String = "" {
-		didSet { label.text = name }
-	}
-	var facade: Facade? = nil
+	private var facade: Facade? = nil
 
 	let label: UILabel = UILabel()
 	let line: UIView = UIView()
@@ -45,7 +42,7 @@ class AetherExplorerCell: UITableViewCell {
 	func bind(explorer: AetherExplorer, facade: Facade) {
 		self.explorer = explorer
         self.facade = facade
-        self.name = facade.description
+        label.text = facade.description
     }
 
 	func touch() {

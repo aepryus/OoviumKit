@@ -167,7 +167,6 @@ class TailBub: Bubble, SignatureLeafDelegate, ChainLeafDelegate {
 			vertebraLeaves[i].placeholder = "next \(vertebra.name)"
 		}
         tail.aether.buildMemory()
-        Tower.evaluate(towers: tail.towers)
 	}
 	var token: Token { tail.mechlikeToken }
 	var recipeToken: Token { tail.variableToken }

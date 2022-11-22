@@ -121,7 +121,7 @@ public class AetherView: UIView, UIScrollViewDelegate, UIGestureRecognizerDelega
                 if aetherHover.aetherNameView.editing { aetherHover.controller.onAetherViewReturn() }
 				self.slideToggle()
 			}
-		} else if toolsOn {
+		} else {
 			aetherPicker = AetherPicker(aetherView: self)
 			aetherPicker?.invoke()
 		}
@@ -455,6 +455,30 @@ public class AetherView: UIView, UIScrollViewDelegate, UIGestureRecognizerDelega
 	public func swapToAether(_ facadeAether: (facade: AetherFacade, aether: Aether)) {
 		swapToAether(facade: facadeAether.0, aether: facadeAether.1)
 	}
+    public func swapToNewAether() {
+        let dirFacade: DirFacade = Facade.create(space: Space.local) as! SpaceFacade
+        dirFacade.loadFacades { (facades: [Facade]) in
+            let aether: Aether = Aether()
+            var aetherNo: Int = 0
+            var name: String = ""
+            repeat {
+                aetherNo += 1
+                name = String(format: "%@%02d", "aether".localized, aetherNo)
+            } while facades.first { $0.name == name } != nil
+            aether.name = name
+            aether.width = Double(self.width)
+            aether.height = Double(self.height)
+            aether.xOffset = 400
+            aether.yOffset = 260
+            self.aetherViewDelegate?.onNew(aetherView: self, aether: aether)
+            let url: URL = dirFacade.url.appendingPathComponent(aether.name).appendingPathExtension("oo")
+            let aetherFacade: AetherFacade = Facade.create(url: url) as! AetherFacade
+            aetherFacade.store(aether: aether) { (success: Bool) in
+                guard success else { return }
+                self.swapToAether(facade: aetherFacade, aether: aether)
+            }
+        }
+    }
 	public func clearAether() {
 		self.aether.removeAllAexels()
 		UIView.animate(withDuration: 0.2, animations: {

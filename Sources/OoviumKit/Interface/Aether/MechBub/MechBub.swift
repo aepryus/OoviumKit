@@ -98,7 +98,6 @@ class MechBub: Bubble, SignatureLeafDelegate, ChainLeafDelegate {
 		mech.name = signatureLeaf.nameEdit?.text ?? ""
 		for (i, input) in mech.inputs.enumerated() { input.name = signatureLeaf.paramEdits[i].text ?? "" }
         mech.aether.buildMemory()
-        Tower.evaluate(towers: mech.towers)
 	}
 	var token: Token { mech.mechlikeToken }
 	var recipeToken: Token { mech.variableToken }

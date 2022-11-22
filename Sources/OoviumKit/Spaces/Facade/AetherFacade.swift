@@ -13,7 +13,7 @@ public class AetherFacade: Facade {
     var _name: String
     private var _parent: DirFacade
     
-    var document: AnyObject?
+//    var document: AnyObject?
     
     init(name: String, parent: DirFacade) {
         _name = name

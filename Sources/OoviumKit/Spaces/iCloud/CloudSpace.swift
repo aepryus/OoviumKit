@@ -140,23 +140,26 @@ public class CloudSpace: Space {
     }
     override public func loadAether(facade: AetherFacade, _ complete: @escaping (String?) -> ()) {
         let url: URL = facade.url
-        if facade.document == nil { facade.document = AetherDocument(fileURL: url) }
-        let document: AetherDocument = facade.document as! AetherDocument
+        let document: AetherDocument = AetherDocument(fileURL: url)
         opQueue.addOperation {
             document.open { (success: Bool) in
                 guard success else { complete(nil); return }
-                DispatchQueue.main.async { complete(document.json) }
+                let json: String = document.json
+                document.close { (success: Bool) in
+                    DispatchQueue.main.async { complete(json) }
+                }
             }
         }
     }
     override public func storeAether(facade: AetherFacade, aether: Aether, _ complete: @escaping (Bool) -> ()) {
         let url: URL = facade.url
-        if facade.document == nil { facade.document = AetherDocument(fileURL: url) }
-        let document: AetherDocument = facade.document as! AetherDocument
+        let document: AetherDocument = AetherDocument(fileURL: url)
         document.aether = aether
         opQueue.addOperation {
             document.save(to: url, for: .forOverwriting) { (success: Bool) in
-                DispatchQueue.main.async { complete(success) }
+                document.close { (success: Bool) in
+                    DispatchQueue.main.async { complete(success) }
+                }
             }
         }
     }
