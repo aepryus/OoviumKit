@@ -19,7 +19,6 @@ public class AetherExplorer: UIView, UITableViewDataSource, SpaceDelegate {
 			navigator.topLeft(width: 32*s, height: navigator.width)
             facade.space.delegate = self
 			loadSpace()
-			tableView.reloadData()
 		}
 	}
 
@@ -29,7 +28,7 @@ public class AetherExplorer: UIView, UITableViewDataSource, SpaceDelegate {
 	static let backColor: UIColor = UIColor(red: 32/255, green: 34/255, blue: 36/255, alpha: 1)
 
     lazy var navigator: AetherNavigator = { AetherNavigator(controller: controller, facade: facade) }()
-	let tableView: UITableView = AETableView()
+	private let tableView: UITableView = AETableView()
 
 	let lw: CGFloat = 2*Screen.s
 
@@ -84,9 +83,12 @@ public class AetherExplorer: UIView, UITableViewDataSource, SpaceDelegate {
 // UITableViewDataSource ===========================================================================
 	private var facades: [Facade] = []
 	private var aetherNames: [String] = []
-	func loadSpace() {
+	private func loadSpace() {
         facade.loadFacades { (facades: [Facade]) in
-            DispatchQueue.main.async { self.facades = facades }
+            DispatchQueue.main.async {
+                self.facades = facades
+                self.tableView.reloadData()
+            }
         }
 	}
 
@@ -99,10 +101,24 @@ public class AetherExplorer: UIView, UITableViewDataSource, SpaceDelegate {
 
 // SpaceDelegate ===================================================================================
 	func onChanged(space: Space) {
-		DispatchQueue.main.async {
+        /* onChanged is triggered anytime a file is opened or saved which made it was very chatty.  Reloading
+         the table each time it was called meant there was a good chance the table was being reloaded while the user was interacting
+         with it.  The reload table was reversing the order of the cells and if a user clicked on a cell, the facade
+         for that cell could be shifted in between mouse down and mouse up.
+         
+         The fingerprinting doesn't really fix that issue, but greatly reduces the number of table reloads, there by greatly
+         reducing the chance of it happening.  Needlessly reloading the table is something that needed to be fixed regardless,
+         but it still would be nice to fix the underlying problem, but at the moment no good solutions are apparent.
+         */
+        let current: String = Facade.fingerprint(facades: self.facades)
+        DispatchQueue.main.async {
             self.facade.loadFacades { (facades: [Facade]) in
-                self.facades = facades
-                self.tableView.reloadData()
+                let update: String = Facade.fingerprint(facades: facades)
+                guard update != current else { return }
+                DispatchQueue.main.async {
+                    self.facades = facades
+                    self.tableView.reloadData()
+                }
             }
         }
 	}

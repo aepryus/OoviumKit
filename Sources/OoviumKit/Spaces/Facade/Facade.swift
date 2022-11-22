@@ -71,4 +71,9 @@ public class Facade {
         }
         return facade!
     }
+    static func fingerprint(facades: [Facade]) -> String {
+        var sb: String = ""
+        facades.forEach { sb += "\($0.ooviumKey);" }
+        return sb
+    }
 }
