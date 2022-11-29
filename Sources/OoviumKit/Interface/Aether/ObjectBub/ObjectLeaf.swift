@@ -51,7 +51,7 @@ class ObjectLeaf: Leaf, Editable, ChainViewDelegate, DoubleTappable, UITextField
 		textField = nil
 		render()
 		bubble.aetherView.locked = false
-        Tower.evaluate(towers: object.towers)
+        Tower.evaluate(towers: Tower.allDownstream(towers: object.towers))
 	}
 	
 	func render() {

@@ -64,5 +64,8 @@ class FooterCell: UICollectionViewCell, Sizable, Citable, FocusTappable, TowerLi
 	func token(at: CGPoint) -> Token? { column.footerTower.variableToken }
 	
 // TowerListener ===================================================================================
-	func onTriggered() { setNeedsResize() }
+	func onTriggered() {
+        setNeedsResize()
+        setNeedsDisplay()
+    }
 }
