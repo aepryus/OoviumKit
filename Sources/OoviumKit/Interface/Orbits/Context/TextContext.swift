@@ -30,8 +30,11 @@ class TextContext: Context {
 				}
 				
 				for edge in edges {
-                    let parentLeaf: TextLeaf = (aetherView.bubble(aexel: edge.text) as! TextBub).textLeaf
-                    let childLeaf: TextLeaf = (aetherView.bubble(aexel: edge.other) as! TextBub).textLeaf
+                    guard let parentText: Text = edge.text,
+                          let childText: Text = edge.other
+                        else { continue }
+                    let parentLeaf: TextLeaf = (aetherView.bubble(aexel: parentText) as! TextBub).textLeaf
+                    let childLeaf: TextLeaf = (aetherView.bubble(aexel: childText) as! TextBub).textLeaf
 					parentLeaf.unlinkTo(other: childLeaf)
 				}
 				

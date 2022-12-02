@@ -16,7 +16,7 @@ class TextEditor: Orbit {
 			outputsButton.uiColor = inward ? UIColor.white : textLeaf.text.color.uiColor
 		}
 	}
-	override var editable: Editable? {
+	override weak var editable: Editable? {
 		didSet {
 			guard let textLeaf = editable as? TextLeaf, textLeaf !== oldValue else { return }
 			inputsButton.uiColor = inward ? textLeaf.text.color.uiColor : UIColor.white
@@ -25,9 +25,7 @@ class TextEditor: Orbit {
 			outputsView.textBub = textLeaf.textBub
 		}
 	}
-	var textLeaf: TextLeaf {
-		return editable as! TextLeaf
-	}
+	var textLeaf: TextLeaf { editable as! TextLeaf }
 
 	
 	let inputsView: EdgesView = EdgesView(input: true)

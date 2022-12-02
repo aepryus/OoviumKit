@@ -11,11 +11,8 @@ import UIKit
 
 
 class EdgesView: UITableView, UITableViewDelegate, UITableViewDataSource {
-	var textBub: TextBub? = nil {
-		didSet {
-			reloadData()
-			
-		}
+	weak var textBub: TextBub? = nil {
+		didSet { reloadData() }
 	}
 	let input: Bool
 	
@@ -38,11 +35,11 @@ class EdgesView: UITableView, UITableViewDelegate, UITableViewDataSource {
 	
 // UITableViewDataSource ===========================================================================
 	public func tableView(_ tableView: UITableView, numberOfRowsInSection section: Int) -> Int {
-		guard let textBub = textBub else {return 0}
+		guard let textBub = textBub else { return 0 }
 		return input ? textBub.text.edges.count : textBub.text.outputEdges.count
 	}
 	public func tableView(_ tableView: UITableView, cellForRowAt indexPath: IndexPath) -> UITableViewCell {
-		guard let textBub = textBub else { fatalError() }
+		guard let textBub = textBub else { return UITableViewCell() }
 		let cell: EdgeCell = tableView.dequeueReusableCell(withIdentifier: "cell")! as! EdgeCell
 		cell.edge = input ? textBub.text.edges[indexPath.row] : textBub.text.outputEdges[indexPath.row]
 		cell.input = input
