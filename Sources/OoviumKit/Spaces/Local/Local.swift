@@ -14,6 +14,16 @@ public class Local {
 	public static func installAetherFromBundle(name: String) {
 		let atPath: String = Bundle.main.path(forResource: (Oo.iPhone ? "\(name) iP" : name), ofType: "oo")!
         let path = NSSearchPathForDirectoriesInDomains(.documentDirectory, .userDomainMask, true)[0]
+        
+        let toURL: URL = FileManager.default.urls(for: .documentDirectory, in: .userDomainMask).first!.appendingPathComponent("aethers")
+        if !FileManager.default.fileExists(atPath: toURL.absoluteString) {
+            do  {
+                try FileManager.default.createDirectory(at: toURL, withIntermediateDirectories: true)
+            } catch {
+                print("LocalSpace.init ERROR [\(error)]")
+            }
+        }
+
 		let toPath: String = (path as NSString).appendingPathComponent("aethers/\(name).oo")
 		do {
 			try? FileManager.default.removeItem(atPath: toPath)
