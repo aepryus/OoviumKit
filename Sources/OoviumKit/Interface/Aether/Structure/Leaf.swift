@@ -23,7 +23,7 @@ class Leaf: UIView {
 	var hitPath: CGPath?
     var mooring: Mooring!
 	
-	init(bubble: Bubble, hitch: Position = .topLeft, anchor: CGPoint = CGPoint.zero, size: CGSize = CGSize.zero) {
+	init(bubble: Bubble, hitch: Position = .topLeft, anchor: CGPoint = CGPoint.zero, size: CGSize = CGSize(width: 36, height: 36)) {
 		self.bubble = bubble
 		self.hitch = hitch
 		self.anchor = anchor
@@ -55,4 +55,9 @@ class Leaf: UIView {
 		let area = self.bounds.insetBy(dx: -4*Oo.s, dy: -4*Oo.s)
 		return area.contains(point)
 	}
+    override func draw(_ rect: CGRect) {
+        let path = CGPath(roundedRect: rect.insetBy(dx: 3, dy: 3), cornerWidth: 15, cornerHeight: 15, transform: nil)
+        hitPath = path
+        Skin.bubble(path: path, uiColor: bubble.uiColor, width: 4.0/3.0*Oo.s)
+    }
 }

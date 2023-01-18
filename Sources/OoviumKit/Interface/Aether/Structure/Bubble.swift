@@ -34,9 +34,13 @@ public class Bubble: UIView, AnchorTappable, Colorable, UIGestureRecognizerDeleg
 
     var selected: Bool = false
     
+    private var oldOrigin: CGPoint
+    private var oldHitchPoint: CGPoint = .zero
+    
 	init(aetherView: AetherView, aexel: Aexel, origin: CGPoint, size: CGSize) {
 		self.aetherView = aetherView
 		self.aexel = aexel
+        oldOrigin = origin
 		
 		super.init(frame: CGRect(origin: origin, size: size))
 
@@ -85,20 +89,17 @@ public class Bubble: UIView, AnchorTappable, Colorable, UIGestureRecognizerDeleg
 		return CGPoint(x: x, y: y)
 	}
 
-    private var oldHitchPoint: CGPoint? = nil
     func layoutLeaves() {
 		let rect = calculateRect()
-		if let oldHitchPoint = oldHitchPoint {
-			let newHitchPoint = hitchPoint
-			self.frame = CGRect(origin: frame.origin+oldHitchPoint-newHitchPoint, size: rect.size)
-			self.oldHitchPoint = newHitchPoint
-		} else {
-			self.bounds = CGRect(origin: CGPoint.zero, size: rect.size)
-			oldHitchPoint = hitchPoint
-		}
         leaves.forEach { $0.frame = CGRect(origin: CGPoint(x: $0.xL-rect.origin.x, y: $0.yT-rect.origin.y), size: $0.size) }
-		setNeedsDisplay()
+        
+        frame = CGRect(origin: oldOrigin+oldHitchPoint-hitchPoint, size: rect.size)
+        
+        oldOrigin = frame.origin
+        oldHitchPoint = hitchPoint
+
         positionMoorings()
+		setNeedsDisplay()
 	}
 
     private var leavesNeedLayout: Bool = false
@@ -168,7 +169,10 @@ public class Bubble: UIView, AnchorTappable, Colorable, UIGestureRecognizerDeleg
 	
 // UIView ==========================================================================================
     public override var frame: CGRect {
-        didSet { positionMoorings() }
+        didSet {
+            oldOrigin = frame.origin
+            positionMoorings()
+        }
     }
     public override var center: CGPoint {
         didSet { positionMoorings() }
