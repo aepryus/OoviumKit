@@ -11,11 +11,8 @@ import OoviumEngine
 import UIKit
 
 extension GraphBub {
-    class HeaderLeaf: Leaf, Editable, Citable, UITextFieldDelegate {
+    class HeaderLeaf: Leaf, Editable, UITextFieldDelegate {
         var noOfParams: Int
-        
-        var name: String = ""
-        var params: [String] = []
         
         weak var delegate: GraphBub? = nil
         
@@ -26,7 +23,7 @@ extension GraphBub {
         var nameEdit: SignatureField? = nil
         var paramEdits: [SignatureField] = []
         
-        lazy var recipeMooring: Mooring = Mooring(bubble: bubble, token: delegate!.recipeToken)
+//        lazy var recipeMooring: Mooring = Mooring(bubble: bubble, token: delegate!.recipeToken)
         var paramMoorings: [Mooring] = []
         
         init(bubble: GraphBub, anchor: CGPoint, hitch: Position, size: CGSize) {
@@ -93,51 +90,6 @@ extension GraphBub {
 
             self.size = CGSize(width: x6, height: y5)
         }
-
-        func addInput() {
-            noOfParams += 1
-
-            let p: CGFloat = 3                      // padding
-            let nw: CGFloat = 94                    // name width
-            let nh: CGFloat = 30                    // name height
-            let pw: CGFloat = 73                    // param width
-            let ph: CGFloat = 24                    // param height
-            
-            let x2 = p+(nw-pw)/2
-            
-            let y1 = p
-            let y2 = y1+nh
-
-            let paramEdit = SignatureField(frame: CGRect(x: x2, y: y2+CGFloat(noOfParams-1)*ph+1, width: pw, height: 20))
-            paramEdit.delegate = self
-            addSubview(paramEdit)
-            paramEdits.append(paramEdit)
-            
-            render()
-
-//            delegate?.onNoOfParamsChanged(signatureLeaf: self)
-            paramEdit.text = delegate?.params[noOfParams-1]
-            paramEdit.textColor = Skin.color(.signatureText)
-
-            let mooring = bubble.createMooring(token: delegate!.paramTokens[noOfParams-1])
-            paramMoorings.append(mooring)
-
-            setNeedsDisplay()
-        }
-        func removeInput() {
-            guard noOfParams > 0 else { return }
-            noOfParams -= 1
-            
-            let paramEdit = paramEdits.removeLast()
-            paramEdit.removeFromSuperview()
-            
-            render()
-            setNeedsDisplay()
-            bubble.aetherView.moorings[delegate!.paramTokens[noOfParams]] = nil
-//            delegate?.onNoOfParamsChanged(signatureLeaf: self)
-
-            paramMoorings.removeLast()
-        }
         
     // Events ==========================================================================================
         func onFocusTap(aetherView: AetherView) {
@@ -146,39 +98,30 @@ extension GraphBub {
         }
 
     // Editable ========================================================================================
-        var editor: Orbit { orb.signatureEditor.edit(editable: self) }
+        var editor: Orbit { orb.graphEditor.edit(editable: self) }
         var overrides: [FocusTappable] = []
         func cedeFocusTo(other: FocusTappable) -> Bool { overrides.contains(where: { $0 === other}) }
         func onMakeFocus() {
             open = true
             let p: CGFloat = 3                        // padding
             let nw: CGFloat = 94                    // name width
-            let nh: CGFloat = 30                    // name height
-            let pw: CGFloat = 73                    // param width
-            let ph: CGFloat = 24                    // param height
+//            let nh: CGFloat = 30                    // name height
+//            let pw: CGFloat = 73                    // param width
+//            let ph: CGFloat = 24                    // param height
             
             let x1 = p
-            let x2 = p+(nw-pw)/2
+//            let x2 = p+(nw-pw)/2
 
             let y1 = p
-            let y2 = y1+nh
+//            let y2 = y1+nh
 
             nameEdit = SignatureField(frame: CGRect(x: x1, y: y1+0.5, width: nw, height: 28))
             nameEdit?.delegate = self
-            nameEdit?.text = delegate?.name
+            nameEdit?.text = delegate?.graph.name
             nameEdit?.textColor = Skin.color(.signatureText)
             addSubview(nameEdit!)
 
-            for i in 0..<noOfParams {
-                let paramEdit = SignatureField(frame: CGRect(x: x2, y: y2+CGFloat(i)*ph+1, width: pw, height: 20))
-                paramEdit.delegate = self
-                paramEdit.text = delegate?.params[i]
-                paramEdit.textColor = Skin.color(.signatureText)
-                addSubview(paramEdit)
-                paramEdits.append(paramEdit)
-            }
-
-            orb.signatureEditor.editable = self
+            orb.graphEditor.editable = self
 
             setNeedsDisplay()
             
@@ -187,8 +130,7 @@ extension GraphBub {
         func onReleaseFocus() {
             open = false
             nameEdit?.removeFromSuperview()
-            paramEdits.forEach { $0.removeFromSuperview() }
-//            delegate?.onOK(signatureLeaf: self)
+            delegate?.graph.name = nameEdit?.text ?? ""
             nameEdit = nil
             paramEdits.removeAll()
             orb.chainEditor.customSchematic?.render(aether: bubble.aetherView.aether)
@@ -201,7 +143,7 @@ extension GraphBub {
         override func positionMoorings() {
             let x: CGFloat = frame.origin.x + frame.width/2
             
-            recipeMooring.point = self.bubble.aetherView.scrollView.convert(CGPoint(x: x, y: top+18), from: self.superview)
+//            recipeMooring.point = self.bubble.aetherView.scrollView.convert(CGPoint(x: x, y: top+18), from: self.superview)
             for (i, mooring) in paramMoorings.enumerated() {
                 mooring.point = self.bubble.aetherView.scrollView.convert(CGPoint(x: x, y: top+45+24*CGFloat(i)), from: self.superview)
             }
@@ -211,8 +153,9 @@ extension GraphBub {
         override func draw(_ rect: CGRect) {
             Skin.bubble(path: path, uiColor: !open ? bubble.uiColor : UIColor.white, width: Oo.s)
 
-            if !open, let delegate = delegate {
-                Skin.bubble(text: delegate.name, rect: CGRect(x: 3, y: 3.5, width: rect.width-6, height: 30), uiColor: bubble.uiColor)
+            if let delegate {
+                if !open { Skin.bubble(text: delegate.graph.name, rect: CGRect(x: 3, y: 3.5, width: rect.width-6, height: 30), uiColor: bubble.uiColor) }
+                
                 var i = 0
                 for param in delegate.params {
                     Skin.bubble(text: param, rect: CGRect(x: 13, y: 33+CGFloat(i)*24, width: rect.width-26, height: 24), uiColor: bubble.uiColor)
@@ -236,18 +179,6 @@ extension GraphBub {
                 i += 1
             }
             return true
-        }
-        
-    // Citable =========================================================================================
-        func token(at: CGPoint) -> Token? {
-            guard let delegate = delegate else { fatalError() }
-            if at.y < 33 {
-                if bubble.aetherView.anchored { return delegate.recipeToken }
-                else { return delegate.token }
-            } else {
-                let i: Int = min(Int((at.y-33) / 24), delegate.paramTokens.count-1)
-                return delegate.paramTokens[i]
-            }
         }
     }
 }

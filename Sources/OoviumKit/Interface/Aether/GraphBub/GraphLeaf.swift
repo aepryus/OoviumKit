@@ -36,12 +36,14 @@ class GraphLeaf: Leaf {
 
         graph.lens = width*6/Double.pi;
 
-        graph.xAxis = graph.orient.cross(graph.look).unit();
-        graph.yAxis = graph.look.unit();
-        graph.zAxis = graph.orient.unit();
+        graph.xAxis = graph.orient.cross(graph.look).unit()
+        graph.yAxis = graph.look.unit()
+        graph.zAxis = graph.orient.unit()
 
-        graph.nU = Int((graph.eU-graph.sU)/graph.dU+1);
-        graph.nV = Int((graph.eV-graph.sV)/graph.dV+1);
+        if graph.dU.isNaN || graph.dU.isZero { graph.dU = 1 }
+        if graph.dV.isNaN || graph.dV.isZero { graph.dV = 1 }
+        graph.nU = Int((graph.eU-graph.sU)/graph.dU+1)
+        graph.nV = Int((graph.eV-graph.sV)/graph.dV+1)
         vertices = [Vertex].init(repeating: Vertex(.zero), count: graph.nU*graph.nV)
         var n: Int = 0
         var u: Double = graph.sU
@@ -53,11 +55,11 @@ class GraphLeaf: Leaf {
                 AEMemorySetValue(memory, tIndex, t)
                 
                 AERecipeExecute(graph.xRecipe, memory)
-                let x: Double = AEMemoryValue(memory, graph.fX.tower.index)
+                let x: Double = AEMemoryValue(memory, graph.fXChain.tower.index)
                 AERecipeExecute(graph.yRecipe, memory)
-                let y: Double = AEMemoryValue(memory, graph.fY.tower.index)
+                let y: Double = AEMemoryValue(memory, graph.fYChain.tower.index)
                 AERecipeExecute(graph.zRecipe, memory)
-                let z: Double = AEMemoryValue(memory, graph.fZ.tower.index)
+                let z: Double = AEMemoryValue(memory, graph.fZChain.tower.index)
                 vertices[n] = Vertex(V3(x, y, z))
                 vertices[n].calc(graph: graph)
                 v += graph.dV

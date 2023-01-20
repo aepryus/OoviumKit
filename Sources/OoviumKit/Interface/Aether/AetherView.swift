@@ -414,6 +414,8 @@ public class AetherView: UIView, UIScrollViewDelegate, UIGestureRecognizerDelega
 		readOnly = aether.readOnly
 		if readOnly { dismissToolBars() }
 		else { showToolBars() }
+        
+        print(aether.unload().toJSON())
 
 		aether.aexels.forEach { (aexel: Aexel) in
 			switch aexel.type {
@@ -453,6 +455,9 @@ public class AetherView: UIView, UIScrollViewDelegate, UIGestureRecognizerDelega
 		markPositions()
         guard let facade else { complete(false); return }
         facade.store(aether: aether, { (success: Bool) in
+            
+            print(self.aether.unload().toJSON())
+            
             complete(success)
             self.aetherViewDelegate?.onSave(aetherView: self, aether: self.aether)
         })

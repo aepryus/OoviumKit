@@ -21,9 +21,9 @@ class GraphBub: Bubble, ChainLeafDelegate {
     lazy var vStopChainLeaf: ChainLeaf = ChainLeaf(bubble: self, hitch: .topLeft)
     lazy var vStepsChainLeaf: ChainLeaf = ChainLeaf(bubble: self, hitch: .topLeft)
     lazy var tChainLeaf: ChainLeaf = ChainLeaf(bubble: self, hitch: .topLeft)
-    lazy var xChainLeaf: ChainLeaf = ChainLeaf(bubble: self, hitch: .topLeft)
-    lazy var yChainLeaf: ChainLeaf = ChainLeaf(bubble: self, hitch: .topLeft)
-    lazy var zChainLeaf: ChainLeaf = ChainLeaf(bubble: self, hitch: .topLeft)
+    lazy var xChainLeaf: ChainLeaf = ChainLeaf(bubble: self, hitch: .top)
+    lazy var yChainLeaf: ChainLeaf = ChainLeaf(bubble: self, hitch: .top)
+    lazy var zChainLeaf: ChainLeaf = ChainLeaf(bubble: self, hitch: .top)
     lazy var graphLeaf: GraphLeaf = GraphLeaf(bubble: self)
     
     lazy var plotLeaf: PlotLeaf = PlotLeaf(bubble: self)
@@ -40,42 +40,42 @@ class GraphBub: Bubble, ChainLeafDelegate {
         uStartChainLeaf.delegate = self
         uStartChainLeaf.chain = graph.sUChain
         uStartChainLeaf.placeholder = "start"
-        uStartChainLeaf.minWidth = 50
+        uStartChainLeaf.minWidth = 60
         uStartChainLeaf.radius = 15
         add(leaf: uStartChainLeaf)
 
         uStopChainLeaf.delegate = self
         uStopChainLeaf.chain = graph.eUChain
         uStopChainLeaf.placeholder = "stop"
-        uStopChainLeaf.minWidth = 50
+        uStopChainLeaf.minWidth = 60
         uStopChainLeaf.radius = 15
         add(leaf: uStopChainLeaf)
 
         uStepsChainLeaf.delegate = self
         uStepsChainLeaf.chain = graph.dUChain
         uStepsChainLeaf.placeholder = "steps"
-        uStepsChainLeaf.minWidth = 50
+        uStepsChainLeaf.minWidth = 60
         uStepsChainLeaf.radius = 15
         add(leaf: uStepsChainLeaf)
 
         vStartChainLeaf.delegate = self
         vStartChainLeaf.chain = graph.sVChain
         vStartChainLeaf.placeholder = "start"
-        vStartChainLeaf.minWidth = 50
+        vStartChainLeaf.minWidth = 60
         vStartChainLeaf.radius = 15
         add(leaf: vStartChainLeaf)
 
         vStopChainLeaf.delegate = self
         vStopChainLeaf.chain = graph.eVChain
         vStopChainLeaf.placeholder = "stop"
-        vStopChainLeaf.minWidth = 50
+        vStopChainLeaf.minWidth = 60
         vStopChainLeaf.radius = 15
         add(leaf: vStopChainLeaf)
 
         vStepsChainLeaf.delegate = self
         vStepsChainLeaf.chain = graph.dVChain
         vStepsChainLeaf.placeholder = "steps"
-        vStepsChainLeaf.minWidth = 50
+        vStepsChainLeaf.minWidth = 60
         vStepsChainLeaf.radius = 15
         add(leaf: vStepsChainLeaf)
         
@@ -87,30 +87,32 @@ class GraphBub: Bubble, ChainLeafDelegate {
         add(leaf: tChainLeaf)
         
         xChainLeaf.delegate = self
-        xChainLeaf.chain = graph.fX
+        xChainLeaf.chain = graph.fXChain
         xChainLeaf.placeholder = "x"
-        xChainLeaf.minWidth = 60
+        xChainLeaf.minWidth = 100
         xChainLeaf.radius = 15
         add(leaf: xChainLeaf)
 
         yChainLeaf.delegate = self
-        yChainLeaf.chain = graph.fY
+        yChainLeaf.chain = graph.fYChain
         yChainLeaf.placeholder = "y"
-        yChainLeaf.minWidth = 60
+        yChainLeaf.minWidth = 100
         yChainLeaf.radius = 15
         add(leaf: yChainLeaf)
 
         zChainLeaf.delegate = self
-        zChainLeaf.chain = graph.fZ
+        zChainLeaf.chain = graph.fZChain
         zChainLeaf.placeholder = "z"
-        zChainLeaf.minWidth = 60
+        zChainLeaf.minWidth = 100
         zChainLeaf.radius = 15
         add(leaf: zChainLeaf)
 
         add(leaf: graphLeaf)
         
-        add(leaf: plotLeaf)
-        
+//        add(leaf: plotLeaf)
+//        let gesture = UITapGestureRecognizer(target: self, action: #selector(onTap))
+//        plotLeaf.addGestureRecognizer(gesture)
+
         render()
     }
     required init?(coder aDecoder: NSCoder) { fatalError() }
@@ -125,29 +127,43 @@ class GraphBub: Bubble, ChainLeafDelegate {
         
         overrideHitchPoint = CGPoint(x: x1, y: 200*s)
         
-        headerLeaf.anchor = CGPoint(x: x1-150*s-8*s, y: 100*s)
+        let x2: CGFloat = x1-50*s-8*s
+        let y1: CGFloat = 100
+        headerLeaf.anchor = CGPoint(x: x2, y: y1)
         
-        uStartChainLeaf.anchor = CGPoint(x: x1-120*s, y: 110*s)
-        uStopChainLeaf.anchor = CGPoint(x: x1-86*s, y: 110*s)
-        uStepsChainLeaf.anchor = CGPoint(x: x1-52*s, y: 110*s)
+        let q: CGFloat = 220*s
+        let cw: CGFloat = 40*s
+        uStartChainLeaf.anchor = CGPoint(x: x1-q, y: 75*s)
+        uStopChainLeaf.anchor = CGPoint(x: x1-q+cw, y: 75*s)
+        uStepsChainLeaf.anchor = CGPoint(x: x1-q+2*cw, y: 75*s)
 
-        vStartChainLeaf.anchor = CGPoint(x: x1-120*s, y: 135*s)
-        vStopChainLeaf.anchor = CGPoint(x: x1-86*s, y: 135*s)
-        vStepsChainLeaf.anchor = CGPoint(x: x1-52*s, y: 135*s)
+        vStartChainLeaf.anchor = CGPoint(x: x1-q, y: 100*s)
+        vStopChainLeaf.anchor = CGPoint(x: x1-q+cw, y: 100*s)
+        vStepsChainLeaf.anchor = CGPoint(x: x1-q+2*cw, y: 100*s)
 
-        tChainLeaf.anchor = CGPoint(x: x1-tChainLeaf.size.width-8*s, y: 160*s)
+        tChainLeaf.anchor = CGPoint(x: x1-tChainLeaf.size.width-108*s, y: 130*s)
         
-        xChainLeaf.anchor = CGPoint(x: x1-xChainLeaf.size.width-8*s, y: 200*s)
-        yChainLeaf.anchor = CGPoint(x: x1-yChainLeaf.size.width-8*s, y: 224*s)
-        zChainLeaf.anchor = CGPoint(x: x1-zChainLeaf.size.width-8*s, y: 248*s)
+        xChainLeaf.anchor = CGPoint(x: x2, y: y1+118)
+        yChainLeaf.anchor = CGPoint(x: x2, y: y1+118+36)
+        zChainLeaf.anchor = CGPoint(x: x2, y: y1+118+36*2)
 
         graphLeaf.anchor = CGPoint(x: x1, y: p)
         
-        plotLeaf.anchor = CGPoint(x: x1-80*s, y: 300*s)
-        let gesture = UITapGestureRecognizer(target: self, action: #selector(onTap))
-        plotLeaf.addGestureRecognizer(gesture)
+//        plotLeaf.anchor = CGPoint(x: x1-80*s, y: 300*s)
         
         layoutLeaves()
+
+        plasma = CGMutablePath()
+        guard let plasma else { return }
+        let a: CGPoint = CGPoint(x: headerLeaf.center.x-20, y: headerLeaf.top+15)                        // PlayLeaf
+        let b: CGPoint = CGPoint(x: zChainLeaf.center.x-30, y: zChainLeaf.center.y)
+        let c: CGPoint = CGPoint(x: zChainLeaf.center.x+30, y: zChainLeaf.center.y)
+        let d: CGPoint = CGPoint(x: headerLeaf.center.x+20, y: headerLeaf.top+15)
+        plasma.move(to: a)
+        plasma.addQuadCurve(to: b, control: (a+b)/2+CGPoint(x: 30, y: 0))
+        plasma.addLine(to: c)
+        plasma.addQuadCurve(to: d, control: (c+d)/2+CGPoint(x: -30, y: 0))
+        plasma.closeSubpath()
     }
     
     @objc func onTap() {
@@ -163,32 +179,22 @@ class GraphBub: Bubble, ChainLeafDelegate {
         
         graph.t = graph.tChain.tower.value
         
-        print("sU: \(graph.sU)")
-        print("eU: \(graph.eU)")
-        print("dU: \(graph.dU)")
-
-        print("sV: \(graph.sV)")
-        print("eV: \(graph.eV)")
-        print("dV: \(graph.dV)")
-
         graphLeaf.setNeedsDisplay()
     }
     
 // SignatureLeafDelegate ===========================================================================
-    var name: String = "Waves"
     var params: [String] = ["u", "v", "t"]
-    var token: Token = .abs
-    var recipeToken: Token = .abs
     var paramTokens: [Token] { [graph.uTower.variableToken, graph.vTower.variableToken, graph.tTower.variableToken] }
-
-    func onNoOfParamsChanged(signatureLeaf: SignatureLeaf) {
-    }
-    func onOK(signatureLeaf: SignatureLeaf) {
-    }
 
 // Bubble ==========================================================================================
     override var uiColor: UIColor { !selected ? OOColor.cobolt.uiColor : .yellow }
     
+// UIView ==========================================================================================
+    override func draw(_ rect: CGRect) {
+        guard let plasma = plasma else { return }
+        Skin.plasma(path: plasma, uiColor: uiColor, stroke: 1)
+    }
+
 // ChainLeafDelegate ===============================================================================
     func onChange() { render() }
     func onEdit() { render() }
