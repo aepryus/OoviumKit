@@ -13,7 +13,7 @@ import UIKit
 class GraphBub: Bubble, ChainLeafDelegate {
     let graph: Graph
 
-    lazy var headerLeaf: HeaderLeaf = HeaderLeaf(bubble: self, anchor: .zero, hitch: .top, size: .zero)
+    lazy var headerLeaf: GraphBub.HeaderLeaf = GraphBub.HeaderLeaf(bubble: self, anchor: .zero, hitch: .top, size: .zero)
     lazy var uStartChainLeaf: ChainLeaf = ChainLeaf(bubble: self, hitch: .topLeft)
     lazy var uStopChainLeaf: ChainLeaf = ChainLeaf(bubble: self, hitch: .topLeft)
     lazy var uStepsChainLeaf: ChainLeaf = ChainLeaf(bubble: self, hitch: .topLeft)

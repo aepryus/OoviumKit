@@ -189,6 +189,7 @@ class GridLeaf: Leaf, GridViewDelegate, UITextInput, UITextInputTraits {
 	override func layoutSubviews() {
 		gridView.frame = self.bounds
 	}
+    override func draw(_ rect: CGRect) {}
 	
 // UIResponder =====================================================================================
     override var canBecomeFirstResponder: Bool { focusCell != nil }

@@ -57,6 +57,10 @@ class ChainView: UIView, UITextInput, UITextInputTraits, AnchorTappable, TowerLi
 
     var chain: Chain = Chain() {
         didSet {
+            if chain.tower == nil {
+                print("yo")
+                return
+            }
             chain.tower.listener = self
             resize()
         }

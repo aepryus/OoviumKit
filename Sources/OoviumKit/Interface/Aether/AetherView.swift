@@ -415,8 +415,6 @@ public class AetherView: UIView, UIScrollViewDelegate, UIGestureRecognizerDelega
 		if readOnly { dismissToolBars() }
 		else { showToolBars() }
         
-        print(aether.unload().toJSON())
-
 		aether.aexels.forEach { (aexel: Aexel) in
 			switch aexel.type {
                 case "also":        add(bubble: AlsoBub(aexel as! Also, aetherView: self))
@@ -455,9 +453,6 @@ public class AetherView: UIView, UIScrollViewDelegate, UIGestureRecognizerDelega
 		markPositions()
         guard let facade else { complete(false); return }
         facade.store(aether: aether, { (success: Bool) in
-            
-            print(self.aether.unload().toJSON())
-            
             complete(success)
             self.aetherViewDelegate?.onSave(aetherView: self, aether: self.aether)
         })
@@ -673,7 +668,6 @@ public class AetherView: UIView, UIScrollViewDelegate, UIGestureRecognizerDelega
 	
 // Events ==========================================================================================
 	@objc func onTap() {
-//        print(aether.unload().toJSON())
 		retract()
 		unselectAll()
 	}
