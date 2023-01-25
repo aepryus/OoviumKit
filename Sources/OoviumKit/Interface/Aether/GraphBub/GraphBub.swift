@@ -24,6 +24,11 @@ class GraphBub: Bubble, ChainLeafDelegate {
     lazy var xChainLeaf: ChainLeaf = ChainLeaf(bubble: self, hitch: .top)
     lazy var yChainLeaf: ChainLeaf = ChainLeaf(bubble: self, hitch: .top)
     lazy var zChainLeaf: ChainLeaf = ChainLeaf(bubble: self, hitch: .top)
+    
+    lazy var coordinateLeaf: CoordinateLeaf = CoordinateLeaf(bubble: self, hitch: .top)
+    
+    lazy var colorLeaf: ColorLeaf = ColorLeaf(bubble: self, hitch: .top)
+    
     lazy var graphLeaf: GraphLeaf = GraphLeaf(bubble: self)
     
     lazy var plotLeaf: PlotLeaf = PlotLeaf(bubble: self)
@@ -106,12 +111,11 @@ class GraphBub: Bubble, ChainLeafDelegate {
         zChainLeaf.minWidth = 100
         zChainLeaf.radius = 15
         add(leaf: zChainLeaf)
+        
+        add(leaf: coordinateLeaf)
+        add(leaf: colorLeaf)
 
         add(leaf: graphLeaf)
-        
-//        add(leaf: plotLeaf)
-//        let gesture = UITapGestureRecognizer(target: self, action: #selector(onTap))
-//        plotLeaf.addGestureRecognizer(gesture)
 
         render()
     }
@@ -146,10 +150,11 @@ class GraphBub: Bubble, ChainLeafDelegate {
         xChainLeaf.anchor = CGPoint(x: x2, y: y1+118)
         yChainLeaf.anchor = CGPoint(x: x2, y: y1+118+36)
         zChainLeaf.anchor = CGPoint(x: x2, y: y1+118+36*2)
+        
+        coordinateLeaf.anchor = CGPoint(x: x2, y: y1+300)
+        colorLeaf.anchor = CGPoint(x: x2, y: y1+360)
 
         graphLeaf.anchor = CGPoint(x: x1, y: p)
-        
-//        plotLeaf.anchor = CGPoint(x: x1-80*s, y: 300*s)
         
         layoutLeaves()
 

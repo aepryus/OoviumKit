@@ -121,7 +121,9 @@ class CoordinateBub: Bubble, HeaderLeafDelegate, ChainLeafDelegate {
         fatalError()
     }
     func headerLeaf(_ headerLeaf: HeaderLeaf, tokenForParamNo paramNo: Int) -> Token {
-        coordinate.toCart.dimensions[paramNo].tower.variableToken
+        if headerLeaf === signatureLeaf { return coordinate.toCart.dimensions[paramNo].tower.variableToken }
+        else if headerLeaf === cartesianLeaf { return coordinate.fromCart.dimensions[paramNo].tower.variableToken }
+        fatalError()
     }
     
 // ChainLeafDelegate ===============================================================================

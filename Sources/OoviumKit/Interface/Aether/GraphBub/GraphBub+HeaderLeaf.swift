@@ -11,7 +11,7 @@ import OoviumEngine
 import UIKit
 
 extension GraphBub {
-    class HeaderLeaf: Leaf, Editable, UITextFieldDelegate {
+    class HeaderLeaf: Leaf, Editable, Citable, UITextFieldDelegate {
         var noOfParams: Int
         
         weak var delegate: GraphBub? = nil
@@ -179,6 +179,19 @@ extension GraphBub {
                 i += 1
             }
             return true
+        }
+        
+    // Citable =========================================================================================
+        func token(at: CGPoint) -> Token? {
+            guard let delegate = delegate else { fatalError() }
+            if at.y < 33 {
+                return nil
+//                if bubble.aetherView.anchored { return delegate.recipeToken }
+//                else { return delegate.token }
+            } else {
+                let i: Int = min(Int((at.y-33) / 24), delegate.paramTokens.count-1)
+                return delegate.paramTokens[i]
+            }
         }
     }
 }
