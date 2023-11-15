@@ -17,7 +17,7 @@ public protocol AetherViewDelegate: AnyObject {
 	func onOpen(aetherView: AetherView, aether: Aether)
 	func onSave(aetherView: AetherView, aether: Aether)
 }
-extension AetherViewDelegate {
+public extension AetherViewDelegate {
 	func onNew(aetherView: AetherView, aether: Aether) {}
 	func onClose(aetherView: AetherView, aether: Aether) {}
 	func onOpen(aetherView: AetherView, aether: Aether) {}
