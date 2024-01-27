@@ -93,23 +93,25 @@ class TailBub: Bubble, SignatureLeafDelegate, ChainLeafDelegate {
 		plasma.addQuadCurve(to: c, control: (b+c)/2+CGPoint(x: -20, y: -20))
 		plasma.closeSubpath()
 		
-		var vertebraLeaf = vertebraLeaves.last!
-		a = CGPoint(x: whileLeaf.right-80, y: whileLeaf.center.y)
-		b = CGPoint(x: vertebraLeaf.left+50, y: vertebraLeaf.center.y)
-		c = CGPoint(x: whileLeaf.right-20, y: whileLeaf.center.y)
-		plasma.move(to: a)
-		plasma.addQuadCurve(to: b, control: (a+b)/2+CGPoint(x: -30, y: 60))
-		plasma.addQuadCurve(to: c, control: (b+c)/2+CGPoint(x: -40, y: 40))
-		plasma.closeSubpath()
+        if let vertebraLeaf = vertebraLeaves.last {
+            a = CGPoint(x: whileLeaf.right-80, y: whileLeaf.center.y)
+            b = CGPoint(x: vertebraLeaf.left+50, y: vertebraLeaf.center.y)
+            c = CGPoint(x: whileLeaf.right-20, y: whileLeaf.center.y)
+            plasma.move(to: a)
+            plasma.addQuadCurve(to: b, control: (a+b)/2+CGPoint(x: -30, y: 60))
+            plasma.addQuadCurve(to: c, control: (b+c)/2+CGPoint(x: -40, y: 40))
+            plasma.closeSubpath()
+        }
 
-		vertebraLeaf = vertebraLeaves.first!
-		a = CGPoint(x: vertebraLeaf.left+20, y: vertebraLeaf.center.y)
-		b = CGPoint(x: whileLeaf.right-50, y: whileLeaf.center.y)
-		c = CGPoint(x: vertebraLeaf.left+80, y: vertebraLeaf.center.y)
-		plasma.move(to: a)
-		plasma.addQuadCurve(to: b, control: (a+b)/2+CGPoint(x: 40, y: -40))
-		plasma.addQuadCurve(to: c, control: (b+c)/2+CGPoint(x: 30, y: -60))
-		plasma.closeSubpath()
+        if let vertebraLeaf = vertebraLeaves.first {
+            a = CGPoint(x: vertebraLeaf.left+20, y: vertebraLeaf.center.y)
+            b = CGPoint(x: whileLeaf.right-50, y: whileLeaf.center.y)
+            c = CGPoint(x: vertebraLeaf.left+80, y: vertebraLeaf.center.y)
+            plasma.move(to: a)
+            plasma.addQuadCurve(to: b, control: (a+b)/2+CGPoint(x: 40, y: -40))
+            plasma.addQuadCurve(to: c, control: (b+c)/2+CGPoint(x: 30, y: -60))
+            plasma.closeSubpath()
+        }
 		
 		a = CGPoint(x: whileLeaf.right-80, y: whileLeaf.center.y)
 		b = CGPoint(x: resultLeaf.center.x, y: resultLeaf.center.y)

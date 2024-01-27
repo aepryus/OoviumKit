@@ -29,7 +29,8 @@ public class AetherView: UIView, UIScrollViewDelegate, UIGestureRecognizerDelega
     public var facade: AetherFacade?
     
     lazy var responder: ChainResponder = { ChainResponder(aetherView: self) }()
-	
+    lazy var anResponder: AnainResponder = { AnainResponder(aetherView: self) }()
+
     let scrollView: UIScrollView = UIScrollView()
 	
 	public weak var aetherViewDelegate: AetherViewDelegate? = nil
@@ -180,7 +181,7 @@ public class AetherView: UIView, UIScrollViewDelegate, UIGestureRecognizerDelega
 	}
 	
     public convenience init(aether: Aether, toolsOn: Bool = true, burn: Bool = true, oldPicker: Bool = false) {
-		var tools: [[Tool?]] = Array(repeating: Array(repeating: nil, count: 5), count: 2)
+		var tools: [[Tool?]] = Array(repeating: Array(repeating: nil, count: 10), count: 2)
 		
 		tools[0][0] = AetherView.objectTool
 		tools[1][0] = AetherView.gateTool
@@ -190,6 +191,11 @@ public class AetherView: UIView, UIScrollViewDelegate, UIGestureRecognizerDelega
 //		tools[1][2] = AetherView.typeTool
 		tools[0][3] = AetherView.cronTool
 		tools[0][4] = AetherView.textTool
+//        tools[0][5] = AetherView.analyticTool
+//        tools[0][6] = AetherView.systemTool
+//        tools[0][7] = AetherView.coordinateTool
+//        tools[0][8] = AetherView.tensorTool
+//        tools[0][9] = AetherView.graphTool
 //		tools[0][5] = AetherView.alsoTool
 		
         self.init(aether: aether, toolBox: ToolBox(tools), toolsOn: toolsOn, burn: burn, oldPicker: oldPicker)
@@ -408,22 +414,27 @@ public class AetherView: UIView, UIScrollViewDelegate, UIGestureRecognizerDelega
 		readOnly = aether.readOnly
 		if readOnly { dismissToolBars() }
 		else { showToolBars() }
-
+        
 		aether.aexels.forEach { (aexel: Aexel) in
 			switch aexel.type {
-				case "object":	add(bubble: ObjectBub(aexel as! Object, aetherView: self))
-				case "gate":	add(bubble: GateBub(aexel as! Gate, aetherView: self))
-				case "mech":	add(bubble: MechBub(aexel as! Mech, aetherView: self))
-				case "tail":	add(bubble: TailBub(aexel as! Tail, aetherView: self))
-				case "auto":	add(bubble: AutoBub(aexel as! Auto, aetherView: self))
-				case "oovi":	add(bubble: OoviBub(aexel as! Oovi, aetherView: self))
-				case "grid":	add(bubble: GridBub(aexel as! Grid, aetherView: self))
-				case "type":	add(bubble: TypeBub(aexel as! Type, aetherView: self))
-				case "miru":	add(bubble: MiruBub(aexel as! Miru, aetherView: self))
-				case "cron":	add(bubble: CronBub(aexel as! Cron, aetherView: self))
-				case "text":	add(bubble: TextBub(aexel as! Text, aetherView: self))
-				case "also":	add(bubble: AlsoBub(aexel as! Also, aetherView: self))
-				default:		print("invalid type [\(aexel.type ?? "nil")]")
+                case "also":        add(bubble: AlsoBub(aexel as! Also, aetherView: self))
+                case "analytic":    add(bubble: AnalyticBub(aexel as! Analytic, aetherView: self))
+                case "auto":        add(bubble: AutoBub(aexel as! Auto, aetherView: self))
+                case "coordinate":  add(bubble: CoordinateBub(aexel as! Coordinate, aetherView: self))
+                case "cron":        add(bubble: CronBub(aexel as! Cron, aetherView: self))
+                case "gate":        add(bubble: GateBub(aexel as! Gate, aetherView: self))
+                case "graph":       add(bubble: GraphBub(aexel as! Graph, aetherView: self))
+                case "grid":        add(bubble: GridBub(aexel as! Grid, aetherView: self))
+                case "mech":        add(bubble: MechBub(aexel as! Mech, aetherView: self))
+                case "miru":        add(bubble: MiruBub(aexel as! Miru, aetherView: self))
+                case "object":      add(bubble: ObjectBub(aexel as! Object, aetherView: self))
+                case "oovi":        add(bubble: OoviBub(aexel as! Oovi, aetherView: self))
+                case "system":      add(bubble: SystemBub(aexel as! System, aetherView: self))
+                case "tail":        add(bubble: TailBub(aexel as! Tail, aetherView: self))
+                case "tensor":      add(bubble: TensorBub(aexel as! Tensor, aetherView: self))
+                case "text":        add(bubble: TextBub(aexel as! Text, aetherView: self))
+                case "type":        add(bubble: TypeBub(aexel as! Type, aetherView: self))
+				default:		    print("invalid type [\(aexel.type ?? "nil")]")
 			}
 		}
 
@@ -657,7 +668,6 @@ public class AetherView: UIView, UIScrollViewDelegate, UIGestureRecognizerDelega
 	
 // Events ==========================================================================================
 	@objc func onTap() {
-//        print(aether.unload().toJSON())
 		retract()
 		unselectAll()
 	}
@@ -830,15 +840,20 @@ public class AetherView: UIView, UIScrollViewDelegate, UIGestureRecognizerDelega
 	}
 	
 // Static ==========================================================================================
+    public static let alsoTool = BubbleTool(maker: AlsoMaker(), recoil: objectTool)
+    public static let analyticTool = BubbleTool(maker: AnalyticMaker())
+    public static let coordinateTool = BubbleTool(maker: CoordinateMaker())
+    public static let cronTool = BubbleTool(maker: CronMaker(), recoil: objectTool)
+    public static let gateTool = BubbleTool(maker: GateMaker(), recoil: objectTool)
+    public static let graphTool = BubbleTool(maker: GraphMaker())
+    public static let gridTool = BubbleTool(maker: GridMaker(), recoil: objectTool)
+    public static let mechTool = BubbleTool(maker: MechMaker(), recoil: objectTool)
 	public static let objectTool = BubbleTool(maker: ObjectMaker())
-	public static let gateTool = BubbleTool(maker: GateMaker(), recoil: objectTool)
-	public static let mechTool = BubbleTool(maker: MechMaker(), recoil: objectTool)
-	public static let tailTool = BubbleTool(maker: TailMaker(), recoil: objectTool)
-	public static let gridTool = BubbleTool(maker: GridMaker(), recoil: objectTool)
-	public static let typeTool = BubbleTool(maker: TypeMaker())
-	public static let cronTool = BubbleTool(maker: CronMaker(), recoil: objectTool)
-	public static let textTool = BubbleTool(maker: TextMaker())
-	public static let alsoTool = BubbleTool(maker: AlsoMaker(), recoil: objectTool)
-	
-	public static let ooviTool = BubbleTool(maker: OoviMaker(), recoil: objectTool)
+    public static let systemTool = BubbleTool(maker: SystemMaker(), recoil: objectTool)
+    public static let tailTool = BubbleTool(maker: TailMaker(), recoil: objectTool)
+    public static let tensorTool = BubbleTool(maker: TensorMaker())
+    public static let textTool = BubbleTool(maker: TextMaker())
+    public static let typeTool = BubbleTool(maker: TypeMaker())
+
+//	public static let ooviTool = BubbleTool(maker: OoviMaker(), recoil: objectTool)
 }

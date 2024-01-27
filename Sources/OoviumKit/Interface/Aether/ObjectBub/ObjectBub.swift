@@ -16,13 +16,12 @@ class ObjectBub: Bubble, Citable {
 	
 	required init(_ object: Object, aetherView: AetherView) {
 		self.object = object
-		
+        
 		super.init(aetherView: aetherView, aexel: object, origin: CGPoint(x: self.object.x, y: self.object.y), size: .zero)
         
 		add(leaf: objectLeaf)
-		objectLeaf.render()
-		
 		layoutLeaves()
+        objectLeaf.render()
 	}
 	required init?(coder aDecoder: NSCoder) { fatalError() }
     

@@ -73,9 +73,9 @@ class GateBub: Bubble, ChainLeafDelegate, Citable {
 		let y3 = y2+h
 		let y7 = y3+b
 		let y8 = y7+h
-//		let y9 = y8+h
+		let y9 = y8+h
 		
-		overrideHitchPoint = CGPoint(x: x3, y: 0)
+		overrideHitchPoint = CGPoint(x: x3, y: y9/2)
 
 		ifLeaf.anchor = CGPoint(x: x1-p, y: y1-p)
 		thenLeaf.anchor = CGPoint(x: x4-p, y: y4-p)

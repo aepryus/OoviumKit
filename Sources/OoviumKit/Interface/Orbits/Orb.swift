@@ -75,23 +75,27 @@ public class Orb {
     func layout() { orbits.forEach { layout(orbit: $0) } }
     
 // Orbits ==========================================================================================
-    lazy var alsoEditor: AlsoEditor = { AlsoEditor(orb: self) }()
-    public lazy var chainEditor: ChainEditor = { ChainEditor(orb: self) }()
-    lazy var colorEditor: ColorEditor = { ColorEditor(orb: self) }()
-    lazy var headerEditor: HeaderEditor = { HeaderEditor(orb: self) }()
-    lazy var lefterEditor: LefterEditor = { LefterEditor(orb: self) }()
-    lazy var ooviEditor: OoviEditor = { OoviEditor(orb: self) }()
-    lazy var signatureEditor: SignatureEditor = { SignatureEditor(orb: self) }()
-    lazy var textEditor: TextEditor = { TextEditor(orb: self) }()
+    lazy var alsoEditor: AlsoEditor = AlsoEditor(orb: self)
+    lazy var anainEditor: AnainEditor = AnainEditor(orb: self)
+    lazy var analyticEditor: AnalyticEditor = AnalyticEditor(orb: self)
+    public lazy var chainEditor: ChainEditor = ChainEditor(orb: self)
+    lazy var colorEditor: ColorEditor = ColorEditor(orb: self)
+    lazy var headerEditor: HeaderEditor = HeaderEditor(orb: self)
+    lazy var lefterEditor: LefterEditor = LefterEditor(orb: self)
+    lazy var ooviEditor: OoviEditor = OoviEditor(orb: self)
+    lazy var signatureEditor: SignatureEditor = SignatureEditor(orb: self)
+    lazy var systemEditor: SystemEditor = SystemEditor(orb: self)
+    lazy var textEditor: TextEditor = TextEditor(orb: self)
+    lazy var graphEditor: GraphEditor = GraphEditor(orb: self)
 
-    lazy var multiContext: MultiContext = { MultiContext(orb: self) }()
-    lazy var objectContext: ObjectContext = { ObjectContext(orb: self) }()
-    lazy var typeContext: TypeContext = { TypeContext(orb: self) }()
-    lazy var textContext: TextContext = { TextContext(orb: self) }()
-    lazy var textMultiContext: TextMultiContext = { TextMultiContext(orb: self) }()
-    lazy var colorContext: ColorContext = { ColorContext(orb: self) }()
-    lazy var shapeContext: ShapeContext = { ShapeContext(orb: self) }()
-    lazy var extendedColorContext: ExtendedColorContext = { ExtendedColorContext(orb: self) }()
+    lazy var multiContext: MultiContext = MultiContext(orb: self)
+    lazy var objectContext: ObjectContext = ObjectContext(orb: self)
+    lazy var typeContext: TypeContext = TypeContext(orb: self)
+    lazy var textContext: TextContext = TextContext(orb: self)
+    lazy var textMultiContext: TextMultiContext = TextMultiContext(orb: self)
+    lazy var colorContext: ColorContext = ColorContext(orb: self)
+    lazy var shapeContext: ShapeContext = ShapeContext(orb: self)
+    lazy var extendedColorContext: ExtendedColorContext = ExtendedColorContext(orb: self)
 }
 
 //public class Orb {

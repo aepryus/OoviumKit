@@ -9,9 +9,7 @@
 import UIKit
 
 class SignatureEditor: KeyOrbit {
-	var signatureLeaf: SignatureLeaf {
-		return editable as! SignatureLeaf
-	}
+	var signatureLeaf: SignatureLeaf { editable as! SignatureLeaf }
 	
     init(orb: Orb) {
         super.init(orb: orb, size: CGSize(width: 134, height: 174), uiColor: UIColor.orange, schematic: Schematic(rows: 4, cols: 1))

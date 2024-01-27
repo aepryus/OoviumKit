@@ -14,9 +14,7 @@ class AlsoEditor: Orbit, UITableViewDataSource {
 	let tableView: UITableView = AETableView()
 	let otherView: UIView = UIView()
 	
-	var alsoLeaf: AlsoLeaf {
-		return editable as! AlsoLeaf
-	}
+	var alsoLeaf: AlsoLeaf { editable as! AlsoLeaf }
 
     init(orb: Orb) {
         super.init(orb: orb, size: CGSize(width: 180, height: 220))

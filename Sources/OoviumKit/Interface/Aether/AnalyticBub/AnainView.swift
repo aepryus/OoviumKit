@@ -1,17 +1,17 @@
 //
-//  ChainView.swift
-//  Oovium
+//  AnainView.swift
+//  OoviumKit
 //
-//  Created by Joe Charlier on 4/10/17.
-//  Copyright © 2017 Aepryus Software. All rights reserved.
+//  Created by Joe Charlier on 1/12/23.
+//  Copyright © 2023 Aepryus Software. All rights reserved.
 //
 
 import Acheron
 import OoviumEngine
 import UIKit
 
-protocol ChainViewDelegate: AnyObject {
-    var chainView: ChainView { get }
+protocol AnainViewDelegate: AnyObject {
+    var anainView: AnainView { get }
     var color: UIColor { get }
     
     func becomeFirstResponder()
@@ -22,57 +22,49 @@ protocol ChainViewDelegate: AnyObject {
 
     func onChanged()
     func onWidthChanged(oldWidth: CGFloat?, newWidth: CGFloat)
-
-    func onCalculated()
 }
-extension ChainViewDelegate {
+extension AnainViewDelegate {
     func onEditStart() {}
     func onTokenAdded(_ token: Token) {}
     func onTokenRemoved(_ token: Token) {}
     func onEditStop() {}
-    
+
     func onChanged(oldWidth: CGFloat?, newWidth: CGFloat) {}
-    
-    func onCalculated() {}
 }
 
-protocol ChainViewKeyDelegate: AnyObject {
+protocol AnainViewKeyDelegate: AnyObject {
     func onArrowUp()
     func onArrowDown()
     func onArrowLeft()
     func onArrowRight()
     func onTab()
 }
-extension ChainViewKeyDelegate {
+extension AnainViewKeyDelegate {
     func onArrowUp() {}
     func onArrowDown() {}
-	func onArrowLeft() {}
-	func onArrowRight() {}
-	func onTab() {}
+    func onArrowLeft() {}
+    func onArrowRight() {}
+    func onTab() {}
 }
 
-class ChainView: UIView, UITextInput, UITextInputTraits, AnchorTappable, TowerListener {
+class AnainView: UIView, UITextInput, UITextInputTraits, AnchorTappable, TowerListener {
     unowned let editable: Editable
-    unowned let responder: ChainResponder?
+    unowned let responder: AnainResponder?
 
-    var chain: Chain = Chain() {
+    var anain: Anain = Anain() {
         didSet {
-            if chain.tower == nil {
-                print("yo")
-                return
-            }
-            chain.tower.listener = self
+            anain.tower.listener = self
             resize()
         }
     }
-    weak var delegate: ChainViewDelegate?
-    weak var keyDelegate: ChainViewKeyDelegate?
+    weak var delegate: AnainViewDelegate?
+    weak var keyDelegate: AnainViewKeyDelegate?
     
     var oldWidth: CGFloat?
     
     static let pen: Pen = Pen(font: .ooAether(size: 16))
     
-    init(editable: Editable, responder: ChainResponder?) {
+    init(editable: Editable, responder: AnainResponder?) {
         self.editable = editable
         self.responder = responder
         super.init(frame: .zero)
@@ -84,23 +76,23 @@ class ChainView: UIView, UITextInput, UITextInputTraits, AnchorTappable, TowerLi
     }
     public required init?(coder aDecoder: NSCoder) { fatalError() }
     
-    var blank: Bool { chain.tokens.count == 0 && !chain.editing }
+    var blank: Bool { anain.tokens.count == 0 && !anain.editing }
 
     private func resize() {
         var widthNeeded: CGFloat
-        if !chain.editing {
-            widthNeeded = "\(chain)".size(pen: ChainView.pen).width + 3
+        if !anain.editing {
+            widthNeeded = "\(anain)".size(pen: ChainView.pen).width + 3
         } else {
             widthNeeded = 3
             var sb: String = ""
             var token: Token
-            let to = chain.tokens.count
+            let to = anain.tokens.count
             
             var i: Int = 0
             while i < to {
                 repeat {
-                    token = chain.tokens[i]
-                    if ChainView.usesWafer(token: token) { break }
+                    token = anain.tokens[i]
+                    if AnainView.usesWafer(token: token) { break }
                     sb.append(token.display)
                     i += 1
                 } while (i < to)
@@ -108,7 +100,7 @@ class ChainView: UIView, UITextInput, UITextInputTraits, AnchorTappable, TowerLi
                     widthNeeded += sb.size(pen: ChainView.pen).width
                     sb = ""
                 }
-                if ChainView.usesWafer(token: token) {
+                if AnainView.usesWafer(token: token) {
                     widthNeeded += max(9, token.display.size(pen: ChainView.pen).width)+12
                     i += 1
                 }
@@ -129,22 +121,22 @@ class ChainView: UIView, UITextInput, UITextInputTraits, AnchorTappable, TowerLi
         var lx: CGFloat = 0
         var pos: Int = 0
         
-        for token in chain.tokens {
+        for token in anain.tokens {
             x += token.display.size(pen: ChainView.pen).width
-            if ChainView.usesWafer(token: token) {x += 9}
+            if AnainView.usesWafer(token: token) {x += 9}
             if nx < lx+(x-lx)/2 {break}
             lx = x
             pos += 1
         }
-        chain.cursor = pos
+        anain.cursor = pos
         resize()
     }
     
 // Chain ===========================================================================================
     func attemptToPost(token: Token) -> Bool {
-        guard chain.attemptToPost(token: token) else { return false }
-        if !ChainResponder.hasExternalKeyboard && chain.editing {
-            if chain.inString { delegate?.becomeFirstResponder() }
+        guard anain.attemptToPost(token: token) else { return false }
+        if !ChainResponder.hasExternalKeyboard && anain.editing {
+            if anain.inString { delegate?.becomeFirstResponder() }
             else { delegate?.resignFirstResponder() }
         }
         resize()
@@ -156,22 +148,22 @@ class ChainView: UIView, UITextInput, UITextInputTraits, AnchorTappable, TowerLi
         _ = attemptToPost(token: token)
     }
     func minusSign() {
-        chain.minusSign()
+        anain.minusSign()
         resize()
         delegate?.onChanged()
     }
     func parenthesis() {
-        chain.parenthesis()
+        anain.parenthesis()
         resize()
         delegate?.onChanged()
     }
     func braket() {
-        chain.braket()
+        anain.braket()
         resize()
         delegate?.onChanged()
     }
     func delete() {
-        guard let token = chain.delete() else { return }
+        guard let token = anain.delete() else { return }
         resize()
         delegate?.onChanged()
         delegate?.onTokenRemoved(token)
@@ -181,7 +173,7 @@ class ChainView: UIView, UITextInput, UITextInputTraits, AnchorTappable, TowerLi
         print("rightDelete")
     }
     func edit() {
-        chain.edit()
+        anain.edit()
         delegate?.onEditStart()
         isUserInteractionEnabled = true
         resize()
@@ -189,7 +181,7 @@ class ChainView: UIView, UITextInput, UITextInputTraits, AnchorTappable, TowerLi
     }
     func ok() {
         isUserInteractionEnabled = false
-        chain.ok()
+        anain.ok()
         resize()
         delegate?.onChanged()
     }
@@ -206,8 +198,8 @@ class ChainView: UIView, UITextInput, UITextInputTraits, AnchorTappable, TowerLi
         var token: Token
         while (pos < to) {
             repeat {
-                token = chain.tokens[pos]
-                if ChainView.usesWafer(token: token) {break}
+                token = anain.tokens[pos]
+                if AnainView.usesWafer(token: token) {break}
                 sb.append(token.display)
                 pos += 1
             } while (pos < to)
@@ -216,7 +208,7 @@ class ChainView: UIView, UITextInput, UITextInputTraits, AnchorTappable, TowerLi
                 x += sb.size(pen: ChainView.pen).width
                 sb = ""
             }
-            if ChainView.usesWafer(token: token) {
+            if AnainView.usesWafer(token: token) {
                 let uiColor: UIColor = {
                     if let token = token as? TowerToken, token.status != .ok  { return .red }
                     if let token = token as? Defable, let def: Def = token.def { return def.uiColor }
@@ -229,12 +221,12 @@ class ChainView: UIView, UITextInput, UITextInputTraits, AnchorTappable, TowerLi
         return x
     }
     override func draw(_ rect: CGRect) {
-        if !chain.editing {
-            Skin.bubble(text: "\(chain)", x: 1, y: Screen.mac ? 1 : 0, uiColor: delegate?.color ?? UIColor.green)
+        if !anain.editing {
+            Skin.bubble(text: "\(anain)", x: 1, y: Screen.mac ? 1 : 0, uiColor: delegate?.color ?? UIColor.green)
         } else {
-            let x: CGFloat = drawTokens(at: 1, from: 0, to: chain.cursor)
+            let x: CGFloat = drawTokens(at: 1, from: 0, to: anain.cursor)
             // Cursor
-            if chain.tokens.count > 0 {
+            if anain.tokens.count > 0 {
                 let path = CGMutablePath()
                 path.move(to: CGPoint(x: x+1, y: 1))
                 path.addLine(to: CGPoint(x: x+1, y: 20))
@@ -245,21 +237,18 @@ class ChainView: UIView, UITextInput, UITextInputTraits, AnchorTappable, TowerLi
                 c.drawPath(using: .stroke)
             }
             
-            _ = drawTokens(at: x, from: chain.cursor, to: chain.tokens.count)
+            _ = drawTokens(at: x, from: anain.cursor, to: anain.tokens.count)
         }
     }
     
 // AnchorTappable ==================================================================================
     func onAnchorTap(point: CGPoint) {
-        guard chain.editing else { return }
+        guard anain.editing else { return }
         moveCursor(to: point.x)
     }
     
 // TowerListener ===================================================================================
-    func onTriggered() {
-        resize()
-        delegate?.onCalculated()
-    }
+    func onTriggered() { resize() }
     
 // UITextInput =====================================================================================
     var autocapitalizationType: UITextAutocapitalizationType {
@@ -317,21 +306,21 @@ class ChainView: UIView, UITextInput, UITextInputTraits, AnchorTappable, TowerLi
     func deleteBackward() { responder!.deleteBackward() }
     
     @objc func leftArrow() {
-        if chain.leftArrow() { setNeedsDisplay() }
+        if anain.leftArrow() { setNeedsDisplay() }
         else { keyDelegate?.onArrowLeft() }
     }
     @objc func rightArrow() {
-        if chain.rightArrow() { setNeedsDisplay() }
+        if anain.rightArrow() { setNeedsDisplay() }
         else { keyDelegate?.onArrowRight() }
     }
     @objc func backspace() {
-        guard let token = chain.backspace() else { return }
+        guard let token = anain.backspace() else { return }
         resize()
         delegate?.onChanged()
         delegate?.onTokenRemoved(token)
     }
 //    func delete() {
-//        guard let token = chain.delete() else { return }
+//        guard let token = anain.delete() else { return }
 //        render()
 //        delegate?.onTokenRemoved(token)
 //    }
@@ -364,9 +353,9 @@ class ChainView: UIView, UITextInput, UITextInputTraits, AnchorTappable, TowerLi
     }
 
 // Static ==========================================================================================
-	private static func usesWafer(token: Token) -> Bool {
+    private static func usesWafer(token: Token) -> Bool {
         if token.code == .cn && ![Token.pi, Token.e, Token.i].contains(token) { return true }
         guard let token: TowerToken = token as? TowerToken else { return false }
         return token.code == .va || token.code == .cl || token.status == .deleted
-	}
+    }
 }

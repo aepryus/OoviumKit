@@ -170,4 +170,6 @@ class ChainLeaf: Leaf, ChainViewDelegate, Editable {
 
     func onWidthChanged(oldWidth: CGFloat?, newWidth: CGFloat) { render() }
     func onChanged() { delegate?.onChange() }
+    
+    func onCalculated() { delegate?.onCalculate() }
 }
