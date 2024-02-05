@@ -42,7 +42,7 @@ struct Tile: Comparable {
         c.setStrokeColor(graph.netColor.cgColor)
         c.setFillColor(color.cgColor)
         c.setLineWidth(1)
-        c.drawPath(using: .fillStroke)
+        c.drawPath(using: graph.surfaceOn ? .fillStroke : .stroke)
     }
     
 // Comparable ======================================================================================
