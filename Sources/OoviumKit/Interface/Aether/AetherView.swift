@@ -242,6 +242,10 @@ public class AetherView: UIView, UIScrollViewDelegate, UIGestureRecognizerDelega
 		let gesture = UIPanGestureRecognizer(target: self, action: #selector(onPan(_:)))
 		scrollView.addGestureRecognizer(gesture)
 	}
+    public func hideScrollIndicators() {
+        scrollView.showsVerticalScrollIndicator = false
+        scrollView.showsHorizontalScrollIndicator = false
+    }
     var dx: CGFloat { Screen.iPhone ? Screen.width - 20*Screen.s + Screen.safeLeft : 355*Screen.s }
 	func slideOff() {
 		guard left == 0 else { return }
