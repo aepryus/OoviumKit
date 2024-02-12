@@ -9,7 +9,7 @@
 import Acheron
 import UIKit
 
-class Snap: UIControl {
+public class Snap: UIControl {
     private let text: String
     private let anchor: Bool
 	private var path: CGPath = CGPath(rect: .zero, transform: nil)
@@ -17,7 +17,7 @@ class Snap: UIControl {
 	static let pen: Pen = Pen(font: UIFont(name: "ChicagoFLF", size: 19*Screen.s)!, color: UIColor.green.tint(0.7), alignment: .right)
 	static let highlightPen: Pen = pen.clone(color: UIColor.green.tint(0.97))
 
-    init(text: String, anchor: Bool = false) {
+    public init(text: String, anchor: Bool = false) {
         self.text = text
         self.anchor = anchor
 		super.init(frame: .zero)
@@ -41,9 +41,7 @@ class Snap: UIControl {
 		setNeedsDisplay()
 	}
 
-	func calcWidth() -> CGFloat {
-		return (text as NSString).boundingRect(with: .zero, options: [], attributes: pen.attributes, context: nil).width + (anchor ? 30*s : 64*s)
-	}
+	public func calcWidth() -> CGFloat { (text as NSString).boundingRect(with: .zero, options: [], attributes: pen.attributes, context: nil).width + (anchor ? 30*s : 64*s) }
 
 	let lw: CGFloat = 2*Screen.s
 	private func render() {
@@ -81,29 +79,29 @@ class Snap: UIControl {
 	}
 
 // UIControl =======================================================================================
-		override func touchesBegan(_ touches: Set<UITouch>, with event: UIEvent?) {
+		public override func touchesBegan(_ touches: Set<UITouch>, with event: UIEvent?) {
 			touch()
 			super.touchesBegan(touches, with: event)
 		}
-		override func touchesEnded(_ touches: Set<UITouch>, with event: UIEvent?) {
+		public override func touchesEnded(_ touches: Set<UITouch>, with event: UIEvent?) {
 			untouch()
 			super.touchesEnded(touches, with: event)
 		}
-		override func touchesCancelled(_ touches: Set<UITouch>, with event: UIEvent?) {
+		public override func touchesCancelled(_ touches: Set<UITouch>, with event: UIEvent?) {
 			untouch()
 			super.touchesCancelled(touches, with: event)
 		}
 
 // UIView ==========================================================================================
-	override var frame: CGRect {
+	public override var frame: CGRect {
 		didSet { render() }
 	}
-	override func hitTest(_ point: CGPoint, with event: UIEvent?) -> UIView? {
+	public override func hitTest(_ point: CGPoint, with event: UIEvent?) -> UIView? {
 		let view = super.hitTest(point, with: event)
 		guard view == self else { return view }
 		return path.contains(point) ? self : nil
 	}
-	override func draw(_ rect: CGRect) {
+	public override func draw(_ rect: CGRect) {
 		let c: CGContext = UIGraphicsGetCurrentContext()!
 		c.addPath(path)
 		c.setStrokeColor(UIColor.green.tint(touched ? 0.93 : 0.8).cgColor)
