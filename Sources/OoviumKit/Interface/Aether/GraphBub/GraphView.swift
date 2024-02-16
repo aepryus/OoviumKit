@@ -33,8 +33,8 @@ public class GraphView: UIView {
         super.init(frame: .zero)
         backgroundColor = .clear
         
-        let start: Date = .now
-        var n: Int = 0
+//        let start: Date = .now
+//        var n: Int = 0
         
 //        timer.onFire = { (link: CADisplayLink, complete: ()->()) in
 //            self.index = (self.index + 1) % Int(self.nT)
