@@ -191,11 +191,11 @@ public class AetherView: UIView, UIScrollViewDelegate, UIGestureRecognizerDelega
 //		tools[1][2] = AetherView.typeTool
 		tools[0][3] = AetherView.cronTool
 		tools[0][4] = AetherView.textTool
-        tools[0][5] = AetherView.analyticTool
-        tools[0][6] = AetherView.systemTool
-        tools[0][7] = AetherView.coordinateTool
-        tools[0][8] = AetherView.tensorTool
-        tools[0][9] = AetherView.graphTool
+//        tools[0][5] = AetherView.analyticTool
+//        tools[0][6] = AetherView.systemTool
+//        tools[0][7] = AetherView.coordinateTool
+//        tools[0][8] = AetherView.tensorTool
+//        tools[0][9] = AetherView.graphTool
 //		tools[0][5] = AetherView.alsoTool
 		
         self.init(aether: aether, toolBox: ToolBox(tools), toolsOn: toolsOn, burn: burn, oldPicker: oldPicker)
@@ -506,6 +506,7 @@ public class AetherView: UIView, UIScrollViewDelegate, UIGestureRecognizerDelega
 	}
 	
 	func triggerMaker(at: V2) {
+        if let focus { focus.releaseFocus(.administrative) }
 		let bubble = maker.make(aetherView: self, at: at)
 		add(bubble: bubble)
 		bubble.create()

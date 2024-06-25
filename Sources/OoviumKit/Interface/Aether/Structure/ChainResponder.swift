@@ -131,7 +131,7 @@ public class ChainResponder {
     func characterRange(at point: CGPoint) -> UITextRange? { nil }
 
 // UIKeyInput ======================================================================================
-    public static var hasExternalKeyboard: Bool { GCKeyboard.coalesced != nil }
+    public static var hasExternalKeyboard: Bool { GCKeyboard.coalesced != nil && UIDevice.current.orientation == .landscapeLeft }
     private static func isNumeric(c: Character) -> Bool {
         c >= "0" && c <= "9" || c == "."
     }
@@ -155,19 +155,19 @@ public class ChainResponder {
         
         if text == "\n" && chainView.chain.inString && chainView.chain.unmatchedQuote {
             token = Token.quote
-        } else if ChainResponder.isSeparator(c: text[0]) {                    // External Keyboard
+        } else if ChainResponder.isSeparator(c: text[0]) {              // External Keyboard
             token = Token.separatorToken(tag: text)
         } else if text == "\n" || text == "\t" {                        // External Keyboard
             chainView.editable.releaseFocus(.okEqualReturn)
             return
         } else if chainView.chain.inString {
             token = Token.characterToken(tag: text)
-        } else if ChainResponder.isNumeric(c: text[0]) {                        // External Keyboard
+        } else if ChainResponder.isNumeric(c: text[0]) {                // External Keyboard
             token = Token.digitToken(tag: text)
         } else if text == "-" {
             chainView.minusSign()
             return
-        } else if ChainResponder.isOperator(c: text[0]) {                    // External Keyboard
+        } else if ChainResponder.isOperator(c: text[0]) {               // External Keyboard
             token = Token.operatorToken(tag: ChainResponder.convert(s: text))
         } else if text == "|" {
             token = Token.or

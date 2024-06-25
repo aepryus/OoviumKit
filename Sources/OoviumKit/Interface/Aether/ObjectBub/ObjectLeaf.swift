@@ -120,10 +120,10 @@ class ObjectLeaf: Leaf, Editable, ChainViewDelegate, DoubleTappable, UITextField
     }
 
     func onMakeFocus() {
-		chainView.edit()
-		render()
+        chainView.edit()
+        render()
         objectBub.layoutLeavesIfNeeded()
-		mooring.wakeDoodles()
+        mooring.wakeDoodles()
         aetherView.responder.chainView = chainView
         if ChainResponder.hasExternalKeyboard { chainView.becomeFirstResponder() }
 	}

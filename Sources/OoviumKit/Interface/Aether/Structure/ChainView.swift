@@ -137,16 +137,26 @@ class ChainView: UIView, UITextInput, UITextInputTraits, AnchorTappable, TowerLi
             pos += 1
         }
         chain.cursor = pos
+        triggerKeyboardIfNeeded()
         resize()
+    }
+    
+    private func triggerKeyboardIfNeeded() {
+        guard !ChainResponder.hasExternalKeyboard && chain.editing else { return }
+        if chain.inString { delegate?.becomeFirstResponder() }
+        else { delegate?.resignFirstResponder() }
+    }
+    private func handleTokenRemoved(_ token: Token) {
+        triggerKeyboardIfNeeded()
+        resize()
+        delegate?.onChanged()
+        delegate?.onTokenRemoved(token)
     }
     
 // Chain ===========================================================================================
     func attemptToPost(token: Token) -> Bool {
         guard chain.attemptToPost(token: token) else { return false }
-        if !ChainResponder.hasExternalKeyboard && chain.editing {
-            if chain.inString { delegate?.becomeFirstResponder() }
-            else { delegate?.resignFirstResponder() }
-        }
+        triggerKeyboardIfNeeded()
         resize()
         delegate?.onChanged()
         delegate?.onTokenAdded(token)
@@ -172,9 +182,7 @@ class ChainView: UIView, UITextInput, UITextInputTraits, AnchorTappable, TowerLi
     }
     func delete() {
         guard let token = chain.delete() else { return }
-        resize()
-        delegate?.onChanged()
-        delegate?.onTokenRemoved(token)
+        handleTokenRemoved(token)
     }
        
     @objc func rightDelete() {
@@ -188,6 +196,7 @@ class ChainView: UIView, UITextInput, UITextInputTraits, AnchorTappable, TowerLi
         delegate?.onChanged()
     }
     func ok() {
+        resignFirstResponder()
         isUserInteractionEnabled = false
         chain.ok()
         resize()
@@ -324,17 +333,10 @@ class ChainView: UIView, UITextInput, UITextInputTraits, AnchorTappable, TowerLi
         if chain.rightArrow() { setNeedsDisplay() }
         else { keyDelegate?.onArrowRight() }
     }
-    @objc func backspace() {
+    @objc func backspace() {            // delete left
         guard let token = chain.backspace() else { return }
-        resize()
-        delegate?.onChanged()
-        delegate?.onTokenRemoved(token)
+        handleTokenRemoved(token)
     }
-//    func delete() {
-//        guard let token = chain.delete() else { return }
-//        render()
-//        delegate?.onTokenRemoved(token)
-//    }
 
     @objc func upArrow() { responder!.upArrow() }
     @objc func downArrow() { responder!.downArrow() }

@@ -58,7 +58,7 @@ class TextBub: Bubble, NSCopying {
 		UIView.animate(withDuration: 0.1) {
 			self.alpha = 1
 		}
-		textLeaf.editMode()
+        textLeaf.mode = .edit
 	}
 	func onOK() {}
 

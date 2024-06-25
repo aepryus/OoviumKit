@@ -11,9 +11,21 @@ import OoviumEngine
 import UIKit
 
 class TextLeaf: Leaf, Editable, DoubleTappable, Citable, UITextFieldDelegate {
+    enum Mode { case read, focus, edit }
+    
 	let text: Text
 	
 	var textField: OOTextField? = nil
+    var mode: Mode = .read {
+        didSet {
+            guard mode != oldValue else { return }
+            switch mode {
+                case .read:     readMode()
+                case .focus:    break
+                case .edit:     editMode()
+            }
+        }
+    }
 	
 	init(bubble: Bubble) {
 		self.text = (bubble as! TextBub).text
@@ -68,7 +80,7 @@ class TextLeaf: Leaf, Editable, DoubleTappable, Citable, UITextFieldDelegate {
         mooring.detach(other.mooring)
 	}
 	
-	func readMode() {
+	private func readMode() {
 		guard let name = textField?.text else { return }
 		if name.count > 0 {
 			text.name = textField!.text!
@@ -82,7 +94,7 @@ class TextLeaf: Leaf, Editable, DoubleTappable, Citable, UITextFieldDelegate {
 		}
 		bubble.aetherView.currentTextLeaf = nil
 	}
-	func editMode() {
+	private func editMode() {
 		bubble.aetherView.currentTextLeaf = self
 		let w: CGFloat = max(80, size.width+24)
 		let h: CGFloat = 28
@@ -146,7 +158,7 @@ class TextLeaf: Leaf, Editable, DoubleTappable, Citable, UITextFieldDelegate {
 	@objc func onDoubleTap() {
 		guard (focused || textBub.aetherView.focus == nil) && !aetherView.readOnly else { return }
         if focused { releaseFocus(.administrative) }
-		editMode()
+        mode = .edit
 	}
 	
 // UIView ==========================================================================================
@@ -159,11 +171,11 @@ class TextLeaf: Leaf, Editable, DoubleTappable, Citable, UITextFieldDelegate {
 	
 // UITextFieldDelegate =============================================================================
 	func textFieldShouldReturn(_ textField: UITextField) -> Bool {
-		readMode()
+        mode = .read
 		return true
 	}
 	func textFieldDidEndEditing(_ textField: UITextField) {
-		readMode()
+        mode = .read
 	}
 	
 // Citable =========================================================================================
