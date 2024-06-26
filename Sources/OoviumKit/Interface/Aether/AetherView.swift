@@ -47,7 +47,7 @@ public class AetherView: UIView, UIScrollViewDelegate, UIGestureRecognizerDelega
 	
 	var readOnly: Bool = false
 	private(set) var focus: Editable? = nil
-	var selected: Set<Bubble> = Set<Bubble>()
+	public var selected: Set<Bubble> = Set<Bubble>()
 	var copyBuffer: Set<Bubble> = Set<Bubble>()
 	var locked: Bool = false
 	var currentTextLeaf: TextLeaf? = nil
@@ -205,6 +205,59 @@ public class AetherView: UIView, UIScrollViewDelegate, UIGestureRecognizerDelega
 	}
 	public required init?(coder aDecoder: NSCoder) { fatalError() }
     
+// Events ==========================================================================================
+    public func onCut() {
+        onCopy()
+        deleteSelected()
+    }
+    public func onCopy() {
+        print("onCopy")
+        // General ======================
+        if selected.count == 1, let bubble: Bubble = selected.first {
+            if let objectBub: ObjectBub = bubble as? ObjectBub {
+                UIPasteboard.general.string = objectBub.object.token.value
+            } else if let gateBub: GateBub = bubble as? GateBub {
+                UIPasteboard.general.string = gateBub.gate.token.value
+            } else if let cronBub: CronBub = bubble as? CronBub {
+                UIPasteboard.general.string = cronBub.cron.token.value
+            } else if let textBub: TextBub = bubble as? TextBub {
+                UIPasteboard.general.string = textBub.text.name
+            } else if let gridBub: GridBub = bubble as? GridBub {
+                var string: String = ""
+                
+                gridBub.grid.columns.forEach({ string += "\($0.name)," })
+                string.removeLast()
+                string += "\n"
+
+                for i: Int in 0..<gridBub.grid.rows {
+                    for j: Int in 0..<gridBub.grid.columns.count {
+                        string += "\(gridBub.grid.cell(colNo: j, rowNo: i).tower.obje.display),"
+                    }
+                    string.removeLast()
+                    string += "\n"
+                }
+
+                UIPasteboard.general.string = string
+            }
+        } else {
+            UIPasteboard.general.string = nil
+        }
+
+        // Oovium =======================
+        let array: [[String:Any]] = selected.compactMap({ $0.aexel }).map({ $0.unload() })
+        UIPasteboard.oovium.string = array.toJSON()
+    }
+    public func onPaste() {
+        if responder.chainView == nil {
+            guard let json: String = UIPasteboard.oovium.string else { return }
+            let _: [[String:Any]] = json.toArray()
+        } else {
+            if let string: String = UIPasteboard.general.string {
+                responder.paste(text: string)
+            }
+        }
+    }
+
 // GadgetDelegate ==================================================================================
     private var isFullScreen: Bool { max(Screen.width, Screen.height) == max(width, height) && min(Screen.width, Screen.height) == min(width, height) }
     private let macPadding: CGFloat = 6*Screen.s
@@ -396,6 +449,7 @@ public class AetherView: UIView, UIScrollViewDelegate, UIGestureRecognizerDelega
 		guard let focus else { return }
 		self.focus = nil
 		focus.onReleaseFocus()
+        responder.chainView = nil
         let next: Editable? = focus.nextFocus(release: release)
         if let next { next.makeFocus() }
         else { orb.deorbit() }
@@ -654,6 +708,7 @@ public class AetherView: UIView, UIScrollViewDelegate, UIGestureRecognizerDelega
         aether.remove(aexels: selected.map({ $0.aexel }))
         stretch()
 		orb.chainEditor.customSchematic?.render(aether: aether)
+        unselectAll()
 	}
 	func copyBubbles() {
 		copyBuffer = selected

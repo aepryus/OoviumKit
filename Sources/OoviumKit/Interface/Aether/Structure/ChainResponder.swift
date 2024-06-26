@@ -57,6 +57,10 @@ public class ChainResponder {
     func tab() { chainView?.keyDelegate?.onTab() }
     func backspace() { chainView?.backspace() }
     
+    func paste(text: String) {
+        text.forEach { insertText("\($0)") }
+    }
+    
 // UITextInput =====================================================================================
     var autocapitalizationType: UITextAutocapitalizationType {
         get { .none }
@@ -131,7 +135,7 @@ public class ChainResponder {
     func characterRange(at point: CGPoint) -> UITextRange? { nil }
 
 // UIKeyInput ======================================================================================
-    public static var hasExternalKeyboard: Bool { GCKeyboard.coalesced != nil && UIDevice.current.orientation == .landscapeLeft }
+    public static var hasExternalKeyboard: Bool { GCKeyboard.coalesced != nil && (UIDevice.current.orientation == .landscapeLeft || Screen.mac) }
     private static func isNumeric(c: Character) -> Bool {
         c >= "0" && c <= "9" || c == "."
     }

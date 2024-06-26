@@ -133,6 +133,7 @@ class ObjectLeaf: Leaf, Editable, ChainViewDelegate, DoubleTappable, UITextField
 		render()
 		objectBub.onOK()
 		mooring.sleepDoodles()
+        aetherView.responder.chainView = nil
 	}
 	func cite(_ citable: Citable, at: CGPoint) {
 		guard let token = citable.token(at: at) else { return }
