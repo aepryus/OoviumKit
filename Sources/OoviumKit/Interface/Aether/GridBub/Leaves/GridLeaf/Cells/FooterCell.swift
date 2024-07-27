@@ -26,7 +26,7 @@ class FooterCell: UICollectionViewCell, Sizable, Citable, FocusTappable, TowerLi
         self.column = column
         super.init(frame: .zero)
 		backgroundColor = .clear
-        self.column.footerTower.listener = self
+        self.column.footerChain.tower.listener = self
 	}
 	required init?(coder: NSCoder) { fatalError() }
     
@@ -47,7 +47,7 @@ class FooterCell: UICollectionViewCell, Sizable, Citable, FocusTappable, TowerLi
 		Skin.gridCalc(path: CGPath(rect: CGRect(x: 0, y: 0, width: width-p, height: height-p), transform: nil), uiColor: gridLeaf.uiColor.tint(0.25))
 		Skin.gridDraw(path: path, uiColor: gridLeaf.uiColor)
         if column.aggregate != .none && column.aggregate != .running {
-			Skin.bubble(text: column.footerTower.obje.display, rect: CGRect(x: 3, y: 1, width: width-9, height: height-2), pen: pen)
+            Skin.bubble(text: column.footerChain.tower.obje.display, rect: CGRect(x: 3, y: 1, width: width-9, height: height-2), pen: pen)
 		}
 	}
 	
@@ -57,11 +57,11 @@ class FooterCell: UICollectionViewCell, Sizable, Citable, FocusTappable, TowerLi
     func setNeedsResize() { controller.needsResizing.append(self) }
     func resize() {
         if column.aggregate == .none || column.aggregate == .running { widthNeeded = 0 }
-        else { widthNeeded = column.footerTower.obje.display.size(pen: pen).width + 12 }
+        else { widthNeeded = column.footerChain.tower.obje.display.size(pen: pen).width + 12 }
     }
 
 // Citable =========================================================================================
-	func token(at: CGPoint) -> Token? { column.footerTower.variableToken }
+    func token(at: CGPoint) -> Token? { column.footerChain.tower.variableToken }
 	
 // TowerListener ===================================================================================
 	func onTriggered() {

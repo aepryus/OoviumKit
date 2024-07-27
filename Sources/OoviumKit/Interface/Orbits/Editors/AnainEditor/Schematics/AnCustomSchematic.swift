@@ -21,7 +21,7 @@ public class AnCustomSchematic: AnainSchematic {
 
         aether.functions.enumerated().forEach { (i: Int, mechlike: Mechlike) in
             add(row: CGFloat(i), col: 0, w: 1, h: 1, key: Key(text: mechlike.name, uiColor: cherry, font: UIFont.systemFont(ofSize: 16*Oo.s), { [unowned self] in
-                guard let token: MechlikeToken = aether.mechlikeToken(tag: mechlike.mechlikeToken.tag) else { return }
+                guard let token: MechlikeToken = aether.state.mechlikeToken(tag: mechlike.mechlikeToken.tag) else { return }
                 self.anainEditor.anainView.post(token: token)
                 self.anainEditor.presentFirstSchematic()
             }))

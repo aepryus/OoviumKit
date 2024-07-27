@@ -25,15 +25,15 @@ class CoordinateBub: Bubble, HeaderLeafDelegate, ChainLeafDelegate {
         if self.coordinate.name == "" {
             self.coordinate.name = "Spherical"
             
-            let dimA = Dimension(web: coordinate.toCart, name: "θ", no: 1)
-            let dimB = Dimension(web: coordinate.toCart, name: "ϕ", no: 2)
-            let dimC = Dimension(web: coordinate.toCart, name: "r", no: 3)
+            let dimA = Dimension(web: coordinate.toCart, name: "θ")
+            let dimB = Dimension(web: coordinate.toCart, name: "ϕ")
+            let dimC = Dimension(web: coordinate.toCart, name: "r")
             
             self.coordinate.toCart.dimensions = [dimA, dimB, dimC]
             
-            let dimD = Dimension(web: coordinate.fromCart, name: "x", no: 1)
-            let dimE = Dimension(web: coordinate.fromCart, name: "y", no: 2)
-            let dimF = Dimension(web: coordinate.fromCart, name: "z", no: 3)
+            let dimD = Dimension(web: coordinate.fromCart, name: "x")
+            let dimE = Dimension(web: coordinate.fromCart, name: "y")
+            let dimF = Dimension(web: coordinate.fromCart, name: "z")
             
             self.coordinate.fromCart.dimensions = [dimD, dimE, dimF]
         }

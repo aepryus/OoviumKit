@@ -60,7 +60,7 @@ public class GraphView: UIView {
     var tiles: [Tile] = []
 
     static func generateVertices(t: Double, graph: Graph) -> [Vertex] {
-        let memory: UnsafeMutablePointer<Memory> = graph.aether.memory
+        let memory: UnsafeMutablePointer<Memory> = graph.aether.state.memory
 
         let uIndex: mnimi = graph.uTower.index
         let vIndex: mnimi = graph.vTower.index

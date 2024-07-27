@@ -142,7 +142,7 @@ class StatesLeaf: Leaf, ChainLeafDelegate, Colorable {
 		var colorLeaves: [ColorLeaf] = []
 		for i in 0..<Int(states) {
 			let colorLeaf = ColorLeaf(bubble: self.bubble, hitch: .topLeft, anchor: CGPoint(x: ax+qx*35, y: ay+qy*35), size: CGSize(width: 30, height: 30))
-			colorLeaf.state = auto.states[i]
+			colorLeaf.load(state: auto.states[i])
 			colorLeaves += [colorLeaf]
 			
 			qx += 1

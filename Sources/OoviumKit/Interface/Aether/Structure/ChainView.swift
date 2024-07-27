@@ -54,17 +54,17 @@ extension ChainViewKeyDelegate {
 class ChainView: UIView, UITextInput, UITextInputTraits, AnchorTappable, TowerListener {
     unowned let editable: Editable
     unowned let responder: ChainResponder?
+    var alwaysShow: Bool = false
 
-    var chain: Chain = Chain() {
+    var chain: Chain! {
         didSet {
-            if chain.tower == nil {
-                print("yo")
-                return
-            }
             chain.tower.listener = self
             resize()
         }
     }
+    public private(set) var editing: Bool = false
+    public var cursor: Int = 0
+
     weak var delegate: ChainViewDelegate?
     weak var keyDelegate: ChainViewKeyDelegate?
     
@@ -84,12 +84,14 @@ class ChainView: UIView, UITextInput, UITextInputTraits, AnchorTappable, TowerLi
     }
     public required init?(coder aDecoder: NSCoder) { fatalError() }
     
-    var blank: Bool { chain.tokens.count == 0 && !chain.editing }
+    var blank: Bool { chain.tokens.count == 0 && !editing }
+    
+    var chainDisplay: String { alwaysShow ? chain.tokensDisplay : chain.valueDisplay }
 
     private func resize() {
         var widthNeeded: CGFloat
-        if !chain.editing {
-            widthNeeded = "\(chain)".size(pen: ChainView.pen).width + 3
+        if !editing {
+            widthNeeded = chainDisplay.size(pen: ChainView.pen).width + 3
         } else {
             widthNeeded = 3
             var sb: String = ""
@@ -136,14 +138,14 @@ class ChainView: UIView, UITextInput, UITextInputTraits, AnchorTappable, TowerLi
             lx = x
             pos += 1
         }
-        chain.cursor = pos
+        cursor = pos
         triggerKeyboardIfNeeded()
         resize()
     }
     
     private func triggerKeyboardIfNeeded() {
-        guard !ChainResponder.hasExternalKeyboard && chain.editing else { return }
-        if chain.inString { delegate?.becomeFirstResponder() }
+        guard !ChainResponder.hasExternalKeyboard && editing else { return }
+        if chain.isInString(at: cursor) { delegate?.becomeFirstResponder() }
         else { delegate?.resignFirstResponder() }
     }
     private func handleTokenRemoved(_ token: Token) {
@@ -154,8 +156,11 @@ class ChainView: UIView, UITextInput, UITextInputTraits, AnchorTappable, TowerLi
     }
     
 // Chain ===========================================================================================
+    var inString: Bool { chain.isInString(at: cursor) }
+    var unmatchedQuote: Bool { chain.unmatchedQuote }
     func attemptToPost(token: Token) -> Bool {
-        guard chain.attemptToPost(token: token) else { return false }
+        guard chain.attemptToPost(token: token, at: cursor) else { return false }
+        cursor += 1
         triggerKeyboardIfNeeded()
         resize()
         delegate?.onChanged()
@@ -166,22 +171,25 @@ class ChainView: UIView, UITextInput, UITextInputTraits, AnchorTappable, TowerLi
         _ = attemptToPost(token: token)
     }
     func minusSign() {
-        chain.minusSign()
+        chain.minusSign(at: cursor)
+        cursor += 1
         resize()
         delegate?.onChanged()
     }
     func parenthesis() {
-        chain.parenthesis()
+        chain.parenthesis(at: cursor)
+        cursor += 1
         resize()
         delegate?.onChanged()
     }
     func braket() {
-        chain.braket()
+        chain.braket(at: cursor)
+        cursor += 1
         resize()
         delegate?.onChanged()
     }
     func delete() {
-        guard let token = chain.delete() else { return }
+        guard let token = chain.delete(at: cursor) else { return }
         handleTokenRemoved(token)
     }
        
@@ -189,6 +197,8 @@ class ChainView: UIView, UITextInput, UITextInputTraits, AnchorTappable, TowerLi
         print("rightDelete")
     }
     func edit() {
+        editing = true
+        cursor = chain.tokens.count
         chain.edit()
         delegate?.onEditStart()
         isUserInteractionEnabled = true
@@ -198,6 +208,7 @@ class ChainView: UIView, UITextInput, UITextInputTraits, AnchorTappable, TowerLi
     func ok() {
         resignFirstResponder()
         isUserInteractionEnabled = false
+        editing = false
         chain.ok()
         resize()
         delegate?.onChanged()
@@ -238,10 +249,10 @@ class ChainView: UIView, UITextInput, UITextInputTraits, AnchorTappable, TowerLi
         return x
     }
     override func draw(_ rect: CGRect) {
-        if !chain.editing {
-            Skin.bubble(text: "\(chain)", x: 1, y: Screen.mac ? 1 : 0, uiColor: delegate?.color ?? UIColor.green)
+        if !editing {
+            Skin.bubble(text: chainDisplay, x: 1, y: Screen.mac ? 1 : 0, uiColor: delegate?.color ?? UIColor.green)
         } else {
-            let x: CGFloat = drawTokens(at: 1, from: 0, to: chain.cursor)
+            let x: CGFloat = drawTokens(at: 1, from: 0, to: cursor)
             // Cursor
             if chain.tokens.count > 0 {
                 let path = CGMutablePath()
@@ -254,13 +265,13 @@ class ChainView: UIView, UITextInput, UITextInputTraits, AnchorTappable, TowerLi
                 c.drawPath(using: .stroke)
             }
             
-            _ = drawTokens(at: x, from: chain.cursor, to: chain.tokens.count)
+            _ = drawTokens(at: x, from: cursor, to: chain.tokens.count)
         }
     }
     
 // AnchorTappable ==================================================================================
     func onAnchorTap(point: CGPoint) {
-        guard chain.editing else { return }
+        guard editing else { return }
         moveCursor(to: point.x)
     }
     
@@ -326,15 +337,20 @@ class ChainView: UIView, UITextInput, UITextInputTraits, AnchorTappable, TowerLi
     func deleteBackward() { responder!.deleteBackward() }
     
     @objc func leftArrow() {
-        if chain.leftArrow() { setNeedsDisplay() }
-        else { keyDelegate?.onArrowLeft() }
+        if cursor > 0 {
+            cursor -= 1
+            setNeedsDisplay()
+        } else { keyDelegate?.onArrowLeft() }
     }
     @objc func rightArrow() {
-        if chain.rightArrow() { setNeedsDisplay() }
-        else { keyDelegate?.onArrowRight() }
+        if cursor < chain.tokens.count {
+            cursor += 1
+            setNeedsDisplay()
+        } else { keyDelegate?.onArrowRight() }
     }
     @objc func backspace() {            // delete left
-        guard let token = chain.backspace() else { return }
+        guard let token = chain.backspace(at: cursor) else { return }
+        cursor -= 1
         handleTokenRemoved(token)
     }
 

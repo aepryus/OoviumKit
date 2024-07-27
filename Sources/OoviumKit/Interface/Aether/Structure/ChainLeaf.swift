@@ -46,7 +46,7 @@ class ChainLeaf: Leaf, ChainViewDelegate, Editable {
 		get { chainView.chain }
 	}
 	var uiColor: UIColor {
-		if chain.editing { return UIColor(red: 0.8, green: 0.8, blue: 0.8, alpha: 1) }
+        if chainView.editing { return UIColor(red: 0.8, green: 0.8, blue: 0.8, alpha: 1) }
 		else if let colorable = colorable { return colorable.uiColor }
 		else { return bubble.uiColor }
 	}
@@ -58,7 +58,8 @@ class ChainLeaf: Leaf, ChainViewDelegate, Editable {
 		
 		self.backgroundColor = UIColor.clear
 		chainView.delegate = self
-		addSubview(chainView)        
+        chainView.alwaysShow = true
+		addSubview(chainView)
 	}
 	required init?(coder aDecoder: NSCoder) { fatalError() }
 	
@@ -66,9 +67,9 @@ class ChainLeaf: Leaf, ChainViewDelegate, Editable {
 	func render() {
 		let cvw = chainView.width
 		let cvwp = cvw+36
-		let w = max(cvwp + (!chainView.chain.editing ? -6 : 0), minWidth)
+		let w = max(cvwp + (!chainView.editing ? -6 : 0), minWidth)
 		self.size = CGSize(width: w, height: 36)
-		let adj: CGFloat = (w != minWidth && !chain.editing) ? 1 : 0
+		let adj: CGFloat = (w != minWidth && !chainView.editing) ? 1 : 0
 		chainView.frame = CGRect(x: (w-cvw)/2 + 1 + adj, y: 7.5, width: cvw, height: 21)
 		setNeedsDisplay()
 	}
@@ -84,7 +85,7 @@ class ChainLeaf: Leaf, ChainViewDelegate, Editable {
 	
 // FocusTappable ===================================================================================
 	func onFocusTap(aetherView: AetherView) {
-        if chainView.chain.editing { releaseFocus(.focusTap) }
+        if chainView.editing { releaseFocus(.focusTap) }
         else { makeFocus() }
 	}
     func onWillFocusTap() { delegate?.onWillFocusTap() }

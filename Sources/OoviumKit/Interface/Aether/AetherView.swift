@@ -211,7 +211,7 @@ public class AetherView: UIView, UIScrollViewDelegate, UIGestureRecognizerDelega
         deleteSelected()
     }
     public func onCopy() {
-        print("onCopy")
+        markPositions()
         // General ======================
         if selected.count == 1, let bubble: Bubble = selected.first {
             if let objectBub: ObjectBub = bubble as? ObjectBub {
@@ -249,8 +249,18 @@ public class AetherView: UIView, UIScrollViewDelegate, UIGestureRecognizerDelega
     }
     public func onPaste() {
         if responder.chainView == nil {
-            guard let json: String = UIPasteboard.oovium.string else { return }
-            let _: [[String:Any]] = json.toArray()
+//            guard let json: String = UIPasteboard.oovium.string else { return }
+            let aexels: [Aexel] = []//aether.paste(array: json.toArray())
+            let bubbles: [Bubble] = aexels.map { createBubble(aexel: $0)! }
+            bubbles.forEach { add(bubble: $0) }
+
+            bubbles.forEach { $0.wireMoorings() }
+            bubbles.forEach { $0.frame = CGRect(origin: CGPoint(x: $0.aexel.x, y: $0.aexel.y), size: $0.bounds.size) }
+            stretch(animated:false)
+
+            unselectAll()
+            select(bubbles: bubbles)
+            
         } else {
             if let string: String = UIPasteboard.general.string {
                 responder.paste(text: string)
@@ -463,6 +473,30 @@ public class AetherView: UIView, UIScrollViewDelegate, UIGestureRecognizerDelega
 		removeAllBubbles()
 		removeAllDoodles()
 	}
+    private func createBubble(aexel: Aexel) -> Bubble? {
+        switch aexel.type {
+            case "also":        return AlsoBub(aexel as! Also, aetherView: self)
+            case "analytic":    return AnalyticBub(aexel as! Analytic, aetherView: self)
+            case "auto":        return AutoBub(aexel as! Automata, aetherView: self)
+            case "coordinate":  return CoordinateBub(aexel as! Coordinate, aetherView: self)
+            case "cron":        return CronBub(aexel as! Cron, aetherView: self)
+            case "gate":        return GateBub(aexel as! Gate, aetherView: self)
+            case "graph":       return GraphBub(aexel as! Graph, aetherView: self)
+            case "grid":        return GridBub(aexel as! Grid, aetherView: self)
+            case "mech":        return MechBub(aexel as! Mech, aetherView: self)
+            case "miru":        return MiruBub(aexel as! Miru, aetherView: self)
+            case "object":      return ObjectBub(aexel as! Object, aetherView: self)
+            case "oovi":        return OoviBub(aexel as! Oovi, aetherView: self)
+            case "system":      return SystemBub(aexel as! System, aetherView: self)
+            case "tail":        return TailBub(aexel as! Tail, aetherView: self)
+            case "tensor":      return TensorBub(aexel as! Tensor, aetherView: self)
+            case "text":        return TextBub(aexel as! Text, aetherView: self)
+            case "type":        return TypeBub(aexel as! Type, aetherView: self)
+            default:
+                print("invalid type [\(aexel.type ?? "nil")]")
+                return nil
+        }
+    }
 	public func openAether(_ aether: Aether) {
 		self.aether = aether
 		
@@ -473,28 +507,7 @@ public class AetherView: UIView, UIScrollViewDelegate, UIGestureRecognizerDelega
 		if readOnly { dismissToolBars() }
 		else { showToolBars() }
         
-		aether.aexels.forEach { (aexel: Aexel) in
-			switch aexel.type {
-                case "also":        add(bubble: AlsoBub(aexel as! Also, aetherView: self))
-                case "analytic":    add(bubble: AnalyticBub(aexel as! Analytic, aetherView: self))
-                case "auto":        add(bubble: AutoBub(aexel as! Auto, aetherView: self))
-                case "coordinate":  add(bubble: CoordinateBub(aexel as! Coordinate, aetherView: self))
-                case "cron":        add(bubble: CronBub(aexel as! Cron, aetherView: self))
-                case "gate":        add(bubble: GateBub(aexel as! Gate, aetherView: self))
-                case "graph":       add(bubble: GraphBub(aexel as! Graph, aetherView: self))
-                case "grid":        add(bubble: GridBub(aexel as! Grid, aetherView: self))
-                case "mech":        add(bubble: MechBub(aexel as! Mech, aetherView: self))
-                case "miru":        add(bubble: MiruBub(aexel as! Miru, aetherView: self))
-                case "object":      add(bubble: ObjectBub(aexel as! Object, aetherView: self))
-                case "oovi":        add(bubble: OoviBub(aexel as! Oovi, aetherView: self))
-                case "system":      add(bubble: SystemBub(aexel as! System, aetherView: self))
-                case "tail":        add(bubble: TailBub(aexel as! Tail, aetherView: self))
-                case "tensor":      add(bubble: TensorBub(aexel as! Tensor, aetherView: self))
-                case "text":        add(bubble: TextBub(aexel as! Text, aetherView: self))
-                case "type":        add(bubble: TypeBub(aexel as! Type, aetherView: self))
-				default:		    print("invalid type [\(aexel.type ?? "nil")]")
-			}
-		}
+        aether.aexels.forEach { add(bubble: createBubble(aexel: $0)!) }
 
 		bubbles.forEach { $0.wireMoorings() }
 		bubbles.forEach { $0.frame = CGRect(origin: CGPoint(x: $0.aexel.x, y: $0.aexel.y), size: $0.bounds.size) }

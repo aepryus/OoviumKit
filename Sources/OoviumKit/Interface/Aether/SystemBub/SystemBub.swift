@@ -45,7 +45,7 @@ class SystemBub: Bubble, Editable {
     override var hitchPoint: CGPoint { nameLeaf.center }
     
     func addConstant() {
-        let value: SystemValue = SystemValue()
+        let value: SystemValue = SystemValue(parent: system)
         system.constants.append(value)
         let leaf: ValueLeaf = ValueLeaf(bubble: self)
         leaf.value = value
@@ -63,7 +63,7 @@ class SystemBub: Bubble, Editable {
         render()
     }
     func addVariable() {
-        let value: SystemValue = SystemValue()
+        let value: SystemValue = SystemValue(parent: system)
         system.variables.append(value)
         let leaf: ValueLeaf = ValueLeaf(bubble: self)
         leaf.value = value

@@ -51,7 +51,6 @@ class ObjectLeaf: Leaf, Editable, ChainViewDelegate, DoubleTappable, UITextField
 		textField = nil
 		render()
 		bubble.aetherView.locked = false
-        Tower.evaluate(towers: Tower.allDownstream(towers: object.towers))
 	}
 	
 	func render() {
@@ -80,12 +79,12 @@ class ObjectLeaf: Leaf, Editable, ChainViewDelegate, DoubleTappable, UITextField
 	
 // Events ==========================================================================================
 	func onFocusTap(aetherView: AetherView) {
-        if chainView.chain.editing { releaseFocus(.focusTap) }
+        if chainView.editing { releaseFocus(.focusTap) }
         else { makeFocus() }
 	}
 	@objc func onDoubleTap() {
 		guard !bubble.aetherView.readOnly else { return }
-        if chainView.chain.editing { releaseFocus(.administrative) }
+        if chainView.editing { releaseFocus(.administrative) }
 		openLabel()
 	}
     @objc func onKeyboardWillHide() { releaseFocus(.okEqualReturn) }
@@ -130,6 +129,7 @@ class ObjectLeaf: Leaf, Editable, ChainViewDelegate, DoubleTappable, UITextField
 	func onReleaseFocus() {
         if ChainResponder.hasExternalKeyboard { chainView.resignFirstResponder() }
 		chainView.ok()
+        object.aether.state.evaluate()
 		render()
 		objectBub.onOK()
 		mooring.sleepDoodles()

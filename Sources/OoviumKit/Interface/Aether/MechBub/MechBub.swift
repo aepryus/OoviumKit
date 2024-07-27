@@ -97,7 +97,7 @@ class MechBub: Bubble, SignatureLeafDelegate, ChainLeafDelegate {
 		aetherView.stretch()
 		mech.name = signatureLeaf.nameEdit?.text ?? ""
 		for (i, input) in mech.inputs.enumerated() { input.name = signatureLeaf.paramEdits[i].text ?? "" }
-        mech.aether.buildMemory()
+        mech.aether.state.buildMemory()
 	}
 	var token: Token { mech.mechlikeToken }
 	var recipeToken: Token { mech.variableToken }

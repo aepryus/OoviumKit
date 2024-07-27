@@ -82,21 +82,21 @@ public class ChainResponder {
         defer {
             self.markedText = markedText
             let markedCount: Int = markedText?.count ?? 0
-            markedTextRange = ChainRange(NSRange(location: chainView.chain.cursor - markedCount, length: markedCount))
+            markedTextRange = ChainRange(NSRange(location: chainView.cursor - markedCount, length: markedCount))
         }
         guard markedText?.count != 0 || self.markedText?.count != 1 else {
             chainView.backspace()
             return
         }
         for _ in 0..<(self.markedText?.count ?? 0) {
-            _ = chainView.chain.backspace()
+            chainView.backspace()
         }
         guard let markedText = markedText else { return }
         for c in markedText {
             var token: Token? = nil
-            if c == "\n" && chainView.chain.inString && chainView.chain.unmatchedQuote {
+            if c == "\n" && chainView.inString && chainView.chain.unmatchedQuote {
                 token = Token.quote
-            } else if chainView.chain.inString {
+            } else if chainView.inString {
                 token = Token.characterToken(tag: "\(c)")
             }
             if let token { _ = chainView.attemptToPost(token: token) }
@@ -157,14 +157,14 @@ public class ChainResponder {
         guard let chainView else { return }
         var token: Token? = nil
         
-        if text == "\n" && chainView.chain.inString && chainView.chain.unmatchedQuote {
+        if text == "\n" && chainView.inString && chainView.unmatchedQuote {
             token = Token.quote
         } else if ChainResponder.isSeparator(c: text[0]) {              // External Keyboard
             token = Token.separatorToken(tag: text)
         } else if text == "\n" || text == "\t" {                        // External Keyboard
             chainView.editable.releaseFocus(.okEqualReturn)
             return
-        } else if chainView.chain.inString {
+        } else if chainView.inString {
             token = Token.characterToken(tag: text)
         } else if ChainResponder.isNumeric(c: text[0]) {                // External Keyboard
             token = Token.digitToken(tag: text)

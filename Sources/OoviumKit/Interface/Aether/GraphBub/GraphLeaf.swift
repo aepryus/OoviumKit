@@ -29,7 +29,7 @@ class GraphLeaf: Leaf {
         graph.compileRecipes()
         graph.coordinate?.compileRecipes()
         
-        let memory: UnsafeMutablePointer<Memory> = aetherView.aether.memory
+        let memory: UnsafeMutablePointer<Memory> = aetherView.aether.state.memory
         
         let uIndex: mnimi = graph.uTower.index
         let vIndex: mnimi = graph.vTower.index

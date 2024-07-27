@@ -11,7 +11,7 @@ import OoviumEngine
 import UIKit
 
 class AutoBub: Bubble, ChainLeafDelegate {
-	let auto: Auto
+	let auto: Automata
     
     lazy var aLeaf: SpaceLeaf = SpaceLeaf(bubble: self, name: "A", token: auto.spaceTowers[0].variableToken)
 	lazy var bLeaf: SpaceLeaf = SpaceLeaf(bubble: self, name: "B", token: auto.spaceTowers[1].variableToken)
@@ -37,7 +37,7 @@ class AutoBub: Bubble, ChainLeafDelegate {
 	var qy3: CGFloat = 0
 	var p: CGFloat = 8
 	
-	init(_ auto: Auto, aetherView: AetherView) {
+	init(_ auto: Automata, aetherView: AetherView) {
 		self.auto = auto
 		
 		super.init(aetherView: aetherView, aexel: auto, origin: CGPoint(x: self.auto.x, y: self.auto.y), size: CGSize(width: 36, height: 36))

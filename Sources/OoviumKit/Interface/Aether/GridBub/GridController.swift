@@ -34,8 +34,8 @@ class GridController: ChainViewKeyDelegate {
         let cells: [Cell] = grid.addRow()
         gridBub.addRow(with: cells)
         grid.columns.filter({ $0.aggregate != .none }).forEach {
-            $0.footerTower.buildStream()
-            $0.footerTower.buildTask()
+            $0.footerChain.tower.buildStream()
+            $0.footerChain.tower.buildTask()
         }
         resizeEverything()
     }
