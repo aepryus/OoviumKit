@@ -41,7 +41,7 @@ class ChainLeaf: Leaf, ChainViewDelegate, Editable {
 	var chain: Chain {
 		set {
 			chainView.chain = newValue
-            mooring = bubble.createMooring(token: chain.tower.variableToken)
+//            mooring = bubble.createMooring(token: chain.key!)
 		}
 		get { chainView.chain }
 	}
@@ -93,7 +93,7 @@ class ChainLeaf: Leaf, ChainViewDelegate, Editable {
 // Leaf ============================================================================================
 	override func wireMoorings() {
         guard delegate?.usesMooring ?? true else { return }
-        chain.tokens.forEach {
+        chain.tokenKeys.forEach {
             guard let mooring = bubble.aetherView.moorings[$0] else { return }
             mooring.attach(self.mooring, wake: false)
         }
@@ -144,9 +144,9 @@ class ChainLeaf: Leaf, ChainViewDelegate, Editable {
 		delegate?.onOK(leaf: self)
 	}
     func cite(_ citable: Citable, at: CGPoint) {
-        guard let token = citable.token(at: at) else { return }
+        guard let tokenKey = citable.tokenKey(at: at) else { return }
         guard delegate?.accept(citable: citable) ?? false else { return }
-        guard chainView.attemptToPost(token: token) else { return }
+        guard chainView.attemptToPost(key: tokenKey) else { return }
     }
 
 	func onEdit() {}
@@ -158,14 +158,14 @@ class ChainLeaf: Leaf, ChainViewDelegate, Editable {
     func becomeFirstResponder() { chainView.becomeFirstResponder() }
     func resignFirstResponder() { chainView.resignFirstResponder() }
 
-    func onTokenAdded(_ token: Token) {
+    func onTokenAdded(_ tokenKey: TokenKey) {
         guard delegate?.usesMooring ?? true else { return }
-        guard let mooring = bubble.aetherView.moorings[token] else { return }
+        guard let mooring = bubble.aetherView.moorings[tokenKey] else { return }
         mooring.attach(self.mooring)
     }
-    func onTokenRemoved(_ token: Token) {
+    func onTokenRemoved(_ tokenKey: TokenKey) {
         guard delegate?.usesMooring ?? true else { return }
-        guard let mooring = bubble.aetherView.moorings[token] else { return }
+        guard let mooring = bubble.aetherView.moorings[tokenKey] else { return }
         mooring.detach(self.mooring)
     }
 

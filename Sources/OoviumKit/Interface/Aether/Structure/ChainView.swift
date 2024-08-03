@@ -58,7 +58,7 @@ class ChainView: UIView, UITextInput, UITextInputTraits, AnchorTappable, TowerLi
 
     var chain: Chain! {
         didSet {
-            chain.tower.listener = self
+//            chain.tower.listener = self
             resize()
         }
     }
@@ -84,9 +84,14 @@ class ChainView: UIView, UITextInput, UITextInputTraits, AnchorTappable, TowerLi
     }
     public required init?(coder aDecoder: NSCoder) { fatalError() }
     
-    var blank: Bool { chain.tokens.count == 0 && !editing }
+// Computed ========================================================================================
+    var aetherView: AetherView { responder!.aetherView }
+    var aetherExe: AetherExe { aetherView.aetherExe }
+    var chainExe: ChainExe { aetherExe.chainExe(key: chain.key!) }
     
-    var chainDisplay: String { alwaysShow ? chain.tokensDisplay : chain.valueDisplay }
+    var blank: Bool { chain.isEmpty && !editing }
+    
+    var chainDisplay: String { alwaysShow ? aetherExe.tokenDisplay(key: chain.key!) : aetherExe.valueDisplay(key: chain.key!) }
 
     private func resize() {
         var widthNeeded: CGFloat
@@ -96,12 +101,12 @@ class ChainView: UIView, UITextInput, UITextInputTraits, AnchorTappable, TowerLi
             widthNeeded = 3
             var sb: String = ""
             var token: Token
-            let to = chain.tokens.count
+            let to = chainExe.tokens.count
             
             var i: Int = 0
             while i < to {
                 repeat {
-                    token = chain.tokens[i]
+                    token = chainExe.tokens[i]
                     if ChainView.usesWafer(token: token) { break }
                     sb.append(token.display)
                     i += 1
@@ -131,7 +136,7 @@ class ChainView: UIView, UITextInput, UITextInputTraits, AnchorTappable, TowerLi
         var lx: CGFloat = 0
         var pos: Int = 0
         
-        for token in chain.tokens {
+        for token in chainExe.tokens {
             x += token.display.size(pen: ChainView.pen).width
             if ChainView.usesWafer(token: token) {x += 9}
             if nx < lx+(x-lx)/2 {break}
@@ -145,7 +150,7 @@ class ChainView: UIView, UITextInput, UITextInputTraits, AnchorTappable, TowerLi
     
     private func triggerKeyboardIfNeeded() {
         guard !ChainResponder.hasExternalKeyboard && editing else { return }
-        if chain.isInString(at: cursor) { delegate?.becomeFirstResponder() }
+        if chainExe.isInString(at: cursor) { delegate?.becomeFirstResponder() }
         else { delegate?.resignFirstResponder() }
     }
     private func handleTokenRemoved(_ token: Token) {
@@ -156,10 +161,13 @@ class ChainView: UIView, UITextInput, UITextInputTraits, AnchorTappable, TowerLi
     }
     
 // Chain ===========================================================================================
-    var inString: Bool { chain.isInString(at: cursor) }
-    var unmatchedQuote: Bool { chain.unmatchedQuote }
-    func attemptToPost(token: Token) -> Bool {
-        guard chain.attemptToPost(token: token, at: cursor) else { return false }
+    var inString: Bool { chainExe.isInString(at: cursor)
+    }
+    var unmatchedQuote: Bool { chainExe.unmatchedQuote }
+    func attemptToPost(key: TokenKey) -> Bool {
+        let chainExe: ChainExe = aetherExe.chainExe(key: chain.key!)
+        let token: Token = aetherExe.token(key: chain.key!)
+        guard chainExe.attemptToPost(token: token, at: cursor) else { return false }
         cursor += 1
         triggerKeyboardIfNeeded()
         resize()
@@ -167,29 +175,29 @@ class ChainView: UIView, UITextInput, UITextInputTraits, AnchorTappable, TowerLi
         delegate?.onTokenAdded(token)
         return true
     }
-    func post(token: Token) {
-        _ = attemptToPost(token: token)
-    }
+    func attemptToPost(token: Token) -> Bool { attemptToPost(key: token.key) }
+    func post(key: TokenKey) { _ = attemptToPost(key: key) }
+    func post(token: Token) { post(key: token.key) }
     func minusSign() {
-        chain.minusSign(at: cursor)
+        chainExe.minusSign(at: cursor)
         cursor += 1
         resize()
         delegate?.onChanged()
     }
     func parenthesis() {
-        chain.parenthesis(at: cursor)
+        chainExe.parenthesis(at: cursor)
         cursor += 1
         resize()
         delegate?.onChanged()
     }
     func braket() {
-        chain.braket(at: cursor)
+        chainExe.braket(at: cursor)
         cursor += 1
         resize()
         delegate?.onChanged()
     }
     func delete() {
-        guard let token = chain.delete(at: cursor) else { return }
+        guard let token = chainExe.delete(at: cursor) else { return }
         handleTokenRemoved(token)
     }
        
@@ -198,8 +206,8 @@ class ChainView: UIView, UITextInput, UITextInputTraits, AnchorTappable, TowerLi
     }
     func edit() {
         editing = true
-        cursor = chain.tokens.count
-        chain.edit()
+        cursor = chain.tokenKeys.count
+//        chain.edit()
         delegate?.onEditStart()
         isUserInteractionEnabled = true
         resize()
@@ -209,7 +217,7 @@ class ChainView: UIView, UITextInput, UITextInputTraits, AnchorTappable, TowerLi
         resignFirstResponder()
         isUserInteractionEnabled = false
         editing = false
-        chain.ok()
+//        chain.ok()
         resize()
         delegate?.onChanged()
     }
@@ -226,7 +234,7 @@ class ChainView: UIView, UITextInput, UITextInputTraits, AnchorTappable, TowerLi
         var token: Token
         while (pos < to) {
             repeat {
-                token = chain.tokens[pos]
+                token = chainExe.tokens[pos]
                 if ChainView.usesWafer(token: token) {break}
                 sb.append(token.display)
                 pos += 1
@@ -254,7 +262,7 @@ class ChainView: UIView, UITextInput, UITextInputTraits, AnchorTappable, TowerLi
         } else {
             let x: CGFloat = drawTokens(at: 1, from: 0, to: cursor)
             // Cursor
-            if chain.tokens.count > 0 {
+            if chainExe.tokens.count > 0 {
                 let path = CGMutablePath()
                 path.move(to: CGPoint(x: x+1, y: 1))
                 path.addLine(to: CGPoint(x: x+1, y: 20))
@@ -265,7 +273,7 @@ class ChainView: UIView, UITextInput, UITextInputTraits, AnchorTappable, TowerLi
                 c.drawPath(using: .stroke)
             }
             
-            _ = drawTokens(at: x, from: cursor, to: chain.tokens.count)
+            _ = drawTokens(at: x, from: cursor, to: chainExe.tokens.count)
         }
     }
     
@@ -343,13 +351,13 @@ class ChainView: UIView, UITextInput, UITextInputTraits, AnchorTappable, TowerLi
         } else { keyDelegate?.onArrowLeft() }
     }
     @objc func rightArrow() {
-        if cursor < chain.tokens.count {
+        if cursor < chainExe.tokens.count {
             cursor += 1
             setNeedsDisplay()
         } else { keyDelegate?.onArrowRight() }
     }
     @objc func backspace() {            // delete left
-        guard let token = chain.backspace(at: cursor) else { return }
+        guard let token = chainExe.backspace(at: cursor) else { return }
         cursor -= 1
         handleTokenRemoved(token)
     }

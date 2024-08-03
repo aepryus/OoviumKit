@@ -133,19 +133,19 @@ class AnainView: UIView, UITextInput, UITextInputTraits, AnchorTappable, TowerLi
     }
     
 // Chain ===========================================================================================
-    func attemptToPost(token: Token) -> Bool {
-        guard anain.attemptToPost(token: token) else { return false }
+    func attemptToPost(key: TokenKey) -> Bool {
+        guard anain.attemptToPost(key: key) else { return false }
         if !ChainResponder.hasExternalKeyboard && anain.editing {
             if anain.inString { delegate?.becomeFirstResponder() }
             else { delegate?.resignFirstResponder() }
         }
         resize()
         delegate?.onChanged()
-        delegate?.onTokenAdded(token)
+//        delegate?.onTokenAdded(token)
         return true
     }
     func post(token: Token) {
-        _ = attemptToPost(token: token)
+        _ = attemptToPost(key: token.key)
     }
     func minusSign() {
         anain.minusSign()

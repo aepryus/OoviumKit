@@ -21,7 +21,7 @@ class ObjectLeaf: Leaf, Editable, ChainViewDelegate, DoubleTappable, UITextField
 		
 		super.init(bubble: bubble)
         
-        mooring = bubble.createMooring(token: object.token)
+        mooring = bubble.createMooring(key: object.token.key)
 
 		chainView.chain = object.chain
 		chainView.delegate = self
@@ -64,7 +64,7 @@ class ObjectLeaf: Leaf, Editable, ChainViewDelegate, DoubleTappable, UITextField
 		width += 26
 		
 		// Bounds Height
-		if object.label.count > 0 && object.chain.tokens.count > 0 || textField != nil { height = max(height, 60) }
+		if object.label.count > 0 && !object.chain.isEmpty || textField != nil { height = max(height, 60) }
 
         size = CGSize(width: width, height: height)
 		bubble.layoutLeaves()
@@ -106,10 +106,10 @@ class ObjectLeaf: Leaf, Editable, ChainViewDelegate, DoubleTappable, UITextField
 	
 // Leaf ============================================================================================
     override func wireMoorings() {
-        object.chain.tokens.forEach {
-            guard let mooring = bubble.aetherView.moorings[$0] else { return }
-            mooring.attach(self.mooring, wake: false)
-        }
+//        object.chain.tokens.forEach {
+//            guard let mooring = bubble.aetherView.moorings[$0] else { return }
+//            mooring.attach(self.mooring, wake: false)
+//        }
     }
         
 // Editable ========================================================================================
@@ -136,8 +136,8 @@ class ObjectLeaf: Leaf, Editable, ChainViewDelegate, DoubleTappable, UITextField
         aetherView.responder.chainView = nil
 	}
 	func cite(_ citable: Citable, at: CGPoint) {
-		guard let token = citable.token(at: at) else { return }
-		guard chainView.attemptToPost(token: token) else { return }
+		guard let tokenKey = citable.tokenKey(at: at) else { return }
+		guard chainView.attemptToPost(key: tokenKey) else { return }
 	}
     
 // ChainViewDelegate ===============================================================================
@@ -147,12 +147,12 @@ class ObjectLeaf: Leaf, Editable, ChainViewDelegate, DoubleTappable, UITextField
     func resignFirstResponder() { chainView.resignFirstResponder() }
 
     func onTokenAdded(_ token: Token) {
-        guard let upstream: Mooring = bubble.aetherView.moorings[token] else { return }
-        upstream.attach(mooring)
+//        guard let upstream: Mooring = bubble.aetherView.moorings[token] else { return }
+//        upstream.attach(mooring)
     }
     func onTokenRemoved(_ token: Token) {
-        guard let upstream: Mooring = bubble.aetherView.moorings[token] else { return }
-        upstream.detach(mooring)
+//        guard let upstream: Mooring = bubble.aetherView.moorings[token] else { return }
+//        upstream.detach(mooring)
     }
 
     func onWidthChanged(oldWidth: CGFloat?, newWidth: CGFloat) { render() }

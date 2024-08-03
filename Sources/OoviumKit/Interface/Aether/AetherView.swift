@@ -26,6 +26,7 @@ public extension AetherViewDelegate {
 
 public class AetherView: UIView, UIScrollViewDelegate, UIGestureRecognizerDelegate, AnchorDoubleTappable, GadgetDelegate {
 	public var aether: Aether
+    var aetherExe: AetherExe!
     public var facade: AetherFacade?
     
     lazy var responder: ChainResponder = { ChainResponder(aetherView: self) }()
@@ -211,41 +212,41 @@ public class AetherView: UIView, UIScrollViewDelegate, UIGestureRecognizerDelega
         deleteSelected()
     }
     public func onCopy() {
-        markPositions()
-        // General ======================
-        if selected.count == 1, let bubble: Bubble = selected.first {
-            if let objectBub: ObjectBub = bubble as? ObjectBub {
-                UIPasteboard.general.string = objectBub.object.token.value
-            } else if let gateBub: GateBub = bubble as? GateBub {
-                UIPasteboard.general.string = gateBub.gate.token.value
-            } else if let cronBub: CronBub = bubble as? CronBub {
-                UIPasteboard.general.string = cronBub.cron.token.value
-            } else if let textBub: TextBub = bubble as? TextBub {
-                UIPasteboard.general.string = textBub.text.name
-            } else if let gridBub: GridBub = bubble as? GridBub {
-                var string: String = ""
-                
-                gridBub.grid.columns.forEach({ string += "\($0.name)," })
-                string.removeLast()
-                string += "\n"
-
-                for i: Int in 0..<gridBub.grid.rows {
-                    for j: Int in 0..<gridBub.grid.columns.count {
-                        string += "\(gridBub.grid.cell(colNo: j, rowNo: i).tower.obje.display),"
-                    }
-                    string.removeLast()
-                    string += "\n"
-                }
-
-                UIPasteboard.general.string = string
-            }
-        } else {
-            UIPasteboard.general.string = nil
-        }
-
-        // Oovium =======================
-        let array: [[String:Any]] = selected.compactMap({ $0.aexel }).map({ $0.unload() })
-        UIPasteboard.oovium.string = array.toJSON()
+//        markPositions()
+//        // General ======================
+//        if selected.count == 1, let bubble: Bubble = selected.first {
+//            if let objectBub: ObjectBub = bubble as? ObjectBub {
+//                UIPasteboard.general.string = objectBub.object.token.value
+//            } else if let gateBub: GateBub = bubble as? GateBub {
+//                UIPasteboard.general.string = ""/*gateBub.gate.token.value*/
+//            } else if let cronBub: CronBub = bubble as? CronBub {
+//                UIPasteboard.general.string = cronBub.cron.token.value
+//            } else if let textBub: TextBub = bubble as? TextBub {
+//                UIPasteboard.general.string = textBub.text.name
+//            } else if let gridBub: GridBub = bubble as? GridBub {
+//                var string: String = ""
+//                
+//                gridBub.grid.columns.forEach({ string += "\($0.name)," })
+//                string.removeLast()
+//                string += "\n"
+//
+//                for i: Int in 0..<gridBub.grid.rows {
+//                    for j: Int in 0..<gridBub.grid.columns.count {
+//                        string += "\(gridBub.grid.cell(colNo: j, rowNo: i).tower.obje.display),"
+//                    }
+//                    string.removeLast()
+//                    string += "\n"
+//                }
+//
+//                UIPasteboard.general.string = string
+//            }
+//        } else {
+//            UIPasteboard.general.string = nil
+//        }
+//
+//        // Oovium =======================
+//        let array: [[String:Any]] = selected.compactMap({ $0.aexel }).map({ $0.unload() })
+//        UIPasteboard.oovium.string = array.toJSON()
     }
     public func onPaste() {
         if responder.chainView == nil {
@@ -416,7 +417,7 @@ public class AetherView: UIView, UIScrollViewDelegate, UIGestureRecognizerDelega
         }
         
         // Remove Moorings
-        moorings.compactMap({ $0.token }).forEach { self.moorings[$0] = nil }
+        moorings.compactMap({ $0.tokenKey }).forEach { self.moorings[$0] = nil }
         
         // Remove Bubbles
         bubbles.forEach {
@@ -597,7 +598,7 @@ public class AetherView: UIView, UIScrollViewDelegate, UIGestureRecognizerDelega
 	}
 	
 // Links ===========================================================================================
-	var moorings: [Token:Mooring] = [:]
+	var moorings: [TokenKey:Mooring] = [:]
 	
 // Stretch =========================================================================================
 	func snapBack() { scrollView.setContentOffset(CGPoint(x: aether.xOffset, y: aether.yOffset), animated: false) }

@@ -35,9 +35,9 @@ class GraphLeaf: Leaf {
         let vIndex: mnimi = graph.vTower.index
         let tIndex: mnimi = graph.tTower.index
 
-        let pIndex: mnimi = graph.coordinate?.toCart.dimensions[0].tower.index ?? 0
-        let qIndex: mnimi = graph.coordinate?.toCart.dimensions[1].tower.index ?? 0
-        let rIndex: mnimi = graph.coordinate?.toCart.dimensions[2].tower.index ?? 0
+//        let pIndex: mnimi = graph.coordinate?.toCart.dimensions[0].tower.index ?? 0
+//        let qIndex: mnimi = graph.coordinate?.toCart.dimensions[1].tower.index ?? 0
+//        let rIndex: mnimi = graph.coordinate?.toCart.dimensions[2].tower.index ?? 0
 
         graph.lens = width*6/Double.pi;
 
@@ -59,32 +59,32 @@ class GraphLeaf: Leaf {
                 AEMemorySetValue(memory, vIndex, v)
                 AEMemorySetValue(memory, tIndex, t)
                 
-                AERecipeExecute(graph.xRecipe, memory)
-                let p: Double = AEMemoryValue(memory, graph.fXChain.tower.index)
-                AERecipeExecute(graph.yRecipe, memory)
-                let q: Double = AEMemoryValue(memory, graph.fYChain.tower.index)
-                AERecipeExecute(graph.zRecipe, memory)
-                let r: Double = AEMemoryValue(memory, graph.fZChain.tower.index)
-                
-                AEMemorySetValue(memory, pIndex, p)
-                AEMemorySetValue(memory, qIndex, q)
-                AEMemorySetValue(memory, rIndex, r)
+//                AERecipeExecute(graph.xRecipe, memory)
+//                let p: Double = AEMemoryValue(memory, graph.fXChain.tower.index)
+//                AERecipeExecute(graph.yRecipe, memory)
+//                let q: Double = AEMemoryValue(memory, graph.fYChain.tower.index)
+//                AERecipeExecute(graph.zRecipe, memory)
+//                let r: Double = AEMemoryValue(memory, graph.fZChain.tower.index)
+//                
+//                AEMemorySetValue(memory, pIndex, p)
+//                AEMemorySetValue(memory, qIndex, q)
+//                AEMemorySetValue(memory, rIndex, r)
+//
+//                let x: Double, y: Double, z: Double
+//                if let coordinate = graph.coordinate {
+//                    AERecipeExecute(coordinate.toCart.recipes[0], memory)
+//                    x = AEMemoryValue(memory, graph.coordinate!.toCart.dimensions[0].chain.tower.index)
+//                    AERecipeExecute(coordinate.toCart.recipes[1], memory)
+//                    y = AEMemoryValue(memory, graph.coordinate!.toCart.dimensions[1].chain.tower.index)
+//                    AERecipeExecute(coordinate.toCart.recipes[2], memory)
+//                    z = AEMemoryValue(memory, graph.coordinate!.toCart.dimensions[2].chain.tower.index)
+//                } else {
+//                    x = p
+//                    y = q
+//                    z = r
+//                }
 
-                let x: Double, y: Double, z: Double
-                if let coordinate = graph.coordinate {
-                    AERecipeExecute(coordinate.toCart.recipes[0], memory)
-                    x = AEMemoryValue(memory, graph.coordinate!.toCart.dimensions[0].chain.tower.index)
-                    AERecipeExecute(coordinate.toCart.recipes[1], memory)
-                    y = AEMemoryValue(memory, graph.coordinate!.toCart.dimensions[1].chain.tower.index)
-                    AERecipeExecute(coordinate.toCart.recipes[2], memory)
-                    z = AEMemoryValue(memory, graph.coordinate!.toCart.dimensions[2].chain.tower.index)
-                } else {
-                    x = p
-                    y = q
-                    z = r
-                }
-
-                vertices[n] = Vertex(V3(x, y, z))
+//                vertices[n] = Vertex(V3(x, y, z))
                 vertices[n].calc(graph: graph)
                 v += graph.dV
                 n += 1

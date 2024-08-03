@@ -172,19 +172,19 @@ class GraphBub: Bubble, ChainLeafDelegate {
     }
     
     @objc func onTap() {
-        graph.sU = graph.sUChain.tower.value
-        graph.eU = graph.eUChain.tower.value
-        let stepsU: Double = graph.dUChain.tower.value
-        graph.dU = (graph.eU-graph.sU)/stepsU
-
-        graph.sV = graph.sVChain.tower.value
-        graph.eV = graph.eVChain.tower.value
-        let stepsV: Double = graph.dVChain.tower.value
-        graph.dV = (graph.eV-graph.sV)/stepsV
-        
-        graph.t = graph.tChain.tower.value
-        
-        graphLeaf.setNeedsDisplay()
+//        graph.sU = graph.sUChain.tower.value
+//        graph.eU = graph.eUChain.tower.value
+//        let stepsU: Double = graph.dUChain.tower.value
+//        graph.dU = (graph.eU-graph.sU)/stepsU
+//
+//        graph.sV = graph.sVChain.tower.value
+//        graph.eV = graph.eVChain.tower.value
+//        let stepsV: Double = graph.dVChain.tower.value
+//        graph.dV = (graph.eV-graph.sV)/stepsV
+//        
+//        graph.t = graph.tChain.tower.value
+//        
+//        graphLeaf.setNeedsDisplay()
     }
     
 // SignatureLeafDelegate ===========================================================================

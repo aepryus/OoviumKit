@@ -122,13 +122,13 @@ public class Bubble: UIView, AnchorTappable, Colorable, UIGestureRecognizerDeleg
 	}
     
 // Moorings ========================================================================================
-    func createMooring(token: Token? = nil) -> Mooring {
-        let mooring: Mooring = Mooring(bubble: self, token: token)
+    func createMooring(key: TokenKey? = nil) -> Mooring {
+        let mooring: Mooring = Mooring(bubble: self, key: key)
         moorings.append(mooring)
-        if let token { aetherView.moorings[token] = mooring }
+        if let key { aetherView.moorings[key] = mooring }
         return mooring
     }
-    func destroy(token: Token) { aetherView.moorings[token] = nil }
+    func destroy(key: TokenKey) { aetherView.moorings[key] = nil }
 
     func wireMoorings() { leaves.forEach { $0.wireMoorings() } }
     func positionMoorings() { leaves.forEach { $0.positionMoorings() } }

@@ -26,7 +26,7 @@ class ObjectBub: Bubble, Citable {
 	}
 	required init?(coder aDecoder: NSCoder) { fatalError() }
     
-    var isEmpty: Bool { object.chain.tokens.count == 0 && object.label.count == 0 }
+    var isEmpty: Bool { object.chain.isEmpty && object.label.count == 0 }
 	
 // Events ==========================================================================================
 	override func onCreate() { objectLeaf.makeFocus() }
@@ -44,8 +44,8 @@ class ObjectBub: Bubble, Citable {
 
 // Bubble ==========================================================================================
 	override var context: Context { orb.objectContext }
-    override var uiColor: UIColor { selected ? .yellow : (objectLeaf.focused ? .black.tint(0.8) : (object.token.status == .ok ? object.chain.tower.obje.uiColor : .red)) }
+    override var uiColor: UIColor { selected ? .yellow : (objectLeaf.focused ? .black.tint(0.8) : (object.token.status == .ok ? .green/*object.chain.tower.obje.uiColor*/ : .red)) }
 
 // Citable =========================================================================================
-	func token(at: CGPoint) -> Token? { object.token }
+    func tokenKey(at: CGPoint) -> TokenKey? { object.token.key }
 }

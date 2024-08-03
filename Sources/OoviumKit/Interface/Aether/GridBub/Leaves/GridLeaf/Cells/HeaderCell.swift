@@ -147,7 +147,7 @@ class HeaderCell: UICollectionViewCell, Sizable, Editable, Citable, DoubleTappab
 		guard let chainLeaf: ChainLeaf = editable as? ChainLeaf else {return false}
 		return chainLeaf.bubble === gridBub
 	}
-    func token(at: CGPoint) -> Token? { column.chain.tower.variableToken }
+    func tokenKey(at: CGPoint) -> TokenKey? { column.chain.key }
 
 // AnchorPannable ==================================================================================
 	func onPan(offset: CGPoint) {

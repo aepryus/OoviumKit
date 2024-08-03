@@ -73,7 +73,7 @@ public class ChainResponder {
     var beginningOfDocument: UITextPosition { ChainPosition.zero }
     var endOfDocument: UITextPosition {
         guard let chainView else { return ChainPosition.zero }
-        return ChainPosition(chainView.chain.tokens.count)
+        return ChainPosition(chainView.chain.tokenKeys.count)
     }
     
     private var markedText: String? = nil
@@ -94,7 +94,7 @@ public class ChainResponder {
         guard let markedText = markedText else { return }
         for c in markedText {
             var token: Token? = nil
-            if c == "\n" && chainView.inString && chainView.chain.unmatchedQuote {
+            if c == "\n" && chainView.inString && chainView.chainExe.unmatchedQuote {
                 token = Token.quote
             } else if chainView.inString {
                 token = Token.characterToken(tag: "\(c)")

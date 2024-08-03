@@ -234,14 +234,14 @@ class HeaderLeaf: Leaf, Editable, Citable, UITextFieldDelegate {
     }
     
 // Citable =========================================================================================
-    func token(at: CGPoint) -> Token? {
+    func tokenKey(at: CGPoint) -> TokenKey? {
         guard let delegate = delegate else { fatalError() }
         if at.y < 33 {
-            if bubble.aetherView.anchored { return delegate.recipeToken(for: self) }
-            else { return delegate.token(for: self) }
+            if bubble.aetherView.anchored { return delegate.recipeToken(for: self).key }
+            else { return delegate.token(for: self).key }
         } else {
             let i: Int = min(Int((at.y-33) / 24), delegate.numberOfParams(for: self)-1)
-            return delegate.headerLeaf(self, tokenForParamNo: i)
+            return delegate.headerLeaf(self, tokenForParamNo: i).key
         }
     }
 }

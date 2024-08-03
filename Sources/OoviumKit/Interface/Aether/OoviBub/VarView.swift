@@ -11,7 +11,7 @@ import UIKit
 
 class VarView: UIView, Citable {
 	let token: Token
-    lazy var mooring: Mooring = Mooring(bubble: bubble, token: token)
+    lazy var mooring: Mooring = Mooring(bubble: bubble, key: token.key)
 	
 	unowned let bubble: Bubble
 	
@@ -20,7 +20,7 @@ class VarView: UIView, Citable {
 		self.token = token
 		super.init(frame: CGRect.zero)
 		self.backgroundColor = UIColor.clear
-		self.bubble.aetherView.moorings[self.token] = self.mooring
+        self.bubble.aetherView.moorings[self.token.key] = self.mooring
 	}
 	required init?(coder aDecoder: NSCoder) { fatalError() }
 	
@@ -33,7 +33,5 @@ class VarView: UIView, Citable {
 	}
 	
 // Citable =========================================================================================
-	func token(at: CGPoint) -> Token? {
-		return token
-	}
+    func tokenKey(at: CGPoint) -> TokenKey? { token.key }
 }

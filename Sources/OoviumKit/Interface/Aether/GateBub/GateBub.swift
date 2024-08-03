@@ -16,7 +16,7 @@ class GateBub: Bubble, ChainLeafDelegate, Citable {
 	lazy var thenLeaf: ChainLeaf = {ChainLeaf(bubble: self, hitch: .topLeft, anchor: CGPoint.zero, size: CGSize(width: 70, height: 36), delegate: self)}()
 	lazy var elseLeaf: ChainLeaf = {ChainLeaf(bubble: self, hitch: .topLeft, anchor: CGPoint.zero, size: CGSize(width: 70, height: 36), delegate: self)}()
 	
-    lazy var mooring: Mooring = { createMooring(token: gate.token) }()
+    lazy var mooring: Mooring = { createMooring(key: gate.resultKey) }()
 	
 	var overrideHitchPoint: CGPoint = CGPoint.zero
 	
@@ -117,5 +117,5 @@ class GateBub: Bubble, ChainLeafDelegate, Citable {
 	func onCalculate() {}
 	
 // Citable =========================================================================================
-	func token(at: CGPoint) -> Token? { gate.token }
+	func tokenKey(at: CGPoint) -> TokenKey? { gate.resultKey }
 }

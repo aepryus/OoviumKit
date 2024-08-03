@@ -14,7 +14,7 @@ class FaceLeaf: Leaf, FocusTappable, TowerListener, Citable {
 	
 	init(bubble: Bubble) {
 		super.init(bubble: bubble, hitch: .top, anchor: CGPoint.zero, size: CGSize(width: 80, height: 36))
-        self.mooring = bubble.createMooring(token: cronBub.cron.token)
+        self.mooring = bubble.createMooring(key: cronBub.cron.token.key)
 	}
 	required init?(coder aDecoder: NSCoder) { fatalError() }
 	
@@ -42,7 +42,7 @@ class FaceLeaf: Leaf, FocusTappable, TowerListener, Citable {
 	}
 	
 // Citable =========================================================================================
-	func token(at: CGPoint) -> Token? { cronBub.cron.token }
+    func tokenKey(at: CGPoint) -> TokenKey? { cronBub.cron.token.key }
 	
 // TowerListener ===================================================================================
 	func onTriggered() {

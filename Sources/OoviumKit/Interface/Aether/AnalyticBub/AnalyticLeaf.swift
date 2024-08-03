@@ -21,7 +21,7 @@ class AnalyticLeaf: Leaf, Editable, AnainViewDelegate, DoubleTappable, UITextFie
         
         super.init(bubble: bubble)
         
-        mooring = bubble.createMooring(token: analytic.token)
+        mooring = bubble.createMooring(key: analytic.token.key)
 
         anainView.anain = analytic.anain
         anainView.delegate = self
@@ -108,7 +108,7 @@ class AnalyticLeaf: Leaf, Editable, AnainViewDelegate, DoubleTappable, UITextFie
 // Leaf ============================================================================================
     override func wireMoorings() {
         analytic.anain.tokens.forEach {
-            guard let mooring = bubble.aetherView.moorings[$0] else { return }
+            guard let mooring = bubble.aetherView.moorings[$0.key] else { return }
             mooring.attach(self.mooring, wake: false)
         }
     }
@@ -135,8 +135,8 @@ class AnalyticLeaf: Leaf, Editable, AnainViewDelegate, DoubleTappable, UITextFie
         mooring.sleepDoodles()
     }
     func cite(_ citable: Citable, at: CGPoint) {
-        guard let token = citable.token(at: at) else { return }
-        guard anainView.attemptToPost(token: token) else { return }
+        guard let tokenKey = citable.tokenKey(at: at) else { return }
+        guard anainView.attemptToPost(key: tokenKey) else { return }
     }
     
 // ChainViewDelegate ===============================================================================
@@ -146,11 +146,11 @@ class AnalyticLeaf: Leaf, Editable, AnainViewDelegate, DoubleTappable, UITextFie
     func resignFirstResponder() { anainView.resignFirstResponder() }
 
     func onTokenAdded(_ token: Token) {
-        guard let upstream: Mooring = bubble.aetherView.moorings[token] else { return }
+        guard let upstream: Mooring = bubble.aetherView.moorings[token.key] else { return }
         upstream.attach(mooring)
     }
     func onTokenRemoved(_ token: Token) {
-        guard let upstream: Mooring = bubble.aetherView.moorings[token] else { return }
+        guard let upstream: Mooring = bubble.aetherView.moorings[token.key] else { return }
         upstream.detach(mooring)
     }
 

@@ -18,7 +18,7 @@ class SpaceLeaf: Leaf, Citable {
 		self.token = token
 		super.init(bubble: bubble)
 		backgroundColor = UIColor.clear
-        mooring = bubble.createMooring(token: token)
+        mooring = bubble.createMooring(key: token.key)
 	}
 	required init?(coder aDecoder: NSCoder) { fatalError() }
 	
@@ -31,5 +31,5 @@ class SpaceLeaf: Leaf, Citable {
 	}
 	
 // Citable =========================================================================================
-	func token(at: CGPoint) -> Token? { token }
+    func tokenKey(at: CGPoint) -> TokenKey? { token.key }
 }

@@ -36,7 +36,7 @@ class GridCell: UICollectionViewCell, Sizable, Editable, Citable, ChainViewDeleg
         chainView.keyDelegate = controller
 		addSubview(chainView)
         
-        self.cell.tower.listener = chainView
+//        self.cell.tower.listener = chainView
 	}
 	required init?(coder: NSCoder) { fatalError() }
     
@@ -105,7 +105,7 @@ class GridCell: UICollectionViewCell, Sizable, Editable, Citable, ChainViewDeleg
     var editor: Orbit { orb.chainEditor }
 	func onMakeFocus() {
         gridLeaf.focusCell = self
-		chainView.edit()
+        chainView.edit()
         orb.chainEditor.chainView = chainView
         gridLeaf.beingEdited = true
 		gridLeaf.gridBub.cellGainedFocus()
@@ -120,14 +120,14 @@ class GridCell: UICollectionViewCell, Sizable, Editable, Citable, ChainViewDeleg
         setNeedsDisplay()
 	}
 	func cite(_ citable: Citable, at: CGPoint) {
-		guard let token = citable.token(at: at) else { return }
-		_ = chainView.attemptToPost(token: token)
+		guard let key = citable.tokenKey(at: at) else { return }
+        _ = chainView.attemptToPost(key: key)
 	}
     func nextFocus(release: Release) -> Editable? { controller.nextGridCell(from: self, release: release) }
 
 	
 // Citable =========================================================================================
-	func token(at: CGPoint) -> Token? { cell.token }
+    func tokenKey(at: CGPoint) -> TokenKey? { cell.chain.key }
 	
 // ChainViewDelegate ===============================================================================
     var color: UIColor { isFocus ? UIColor.cyan.shade(0.5) : gridLeaf.uiColor }

@@ -23,9 +23,9 @@ class MechBub: Bubble, SignatureLeafDelegate, ChainLeafDelegate {
 		signatureLeaf = SignatureLeaf(bubble: self, anchor: CGPoint(x: 60, y: 0), hitch: .top, size: CGSize(width: 100, height: 90))
 		add(leaf: signatureLeaf)
 		
-		aetherView.moorings[mech.variableToken] = signatureLeaf.recipeMooring
+        aetherView.moorings[mech.variableToken.key] = signatureLeaf.recipeMooring
 		for (i, input) in mech.inputs.enumerated() {
-			aetherView.moorings[input.tower.variableToken] = signatureLeaf.paramMoorings[i]
+            aetherView.moorings[input.tower.variableToken.key] = signatureLeaf.paramMoorings[i]
 		}
 		
 		resultLeaf = ChainLeaf(bubble: self, hitch: .top, anchor: CGPoint(x: 60, y: 70), size: CGSize(width: 100, height: 30))

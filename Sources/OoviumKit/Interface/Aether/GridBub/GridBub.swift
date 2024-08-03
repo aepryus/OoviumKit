@@ -115,7 +115,7 @@ class GridBub: Bubble, ChainLeafDelegate {
 		remove(leaf: chainLeaf)
 		render()
         chainLeaf.unwireMoorings()
-        aetherView.moorings[chainLeaf.chain.tower.variableToken] = nil
+//        aetherView.moorings[chainLeaf.chain.tower.variableToken] = nil
 	}
     func addColumn(with column: Column) { gridLeaf.addColumn(with: column) }
     func addRow(with cells: [Cell]) { gridLeaf.addRow(with: cells) }

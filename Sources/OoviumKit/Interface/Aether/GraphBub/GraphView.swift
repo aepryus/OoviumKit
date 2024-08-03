@@ -60,58 +60,58 @@ public class GraphView: UIView {
     var tiles: [Tile] = []
 
     static func generateVertices(t: Double, graph: Graph) -> [Vertex] {
-        let memory: UnsafeMutablePointer<Memory> = graph.aether.state.memory
-
-        let uIndex: mnimi = graph.uTower.index
-        let vIndex: mnimi = graph.vTower.index
-        let tIndex: mnimi = graph.tTower.index
-
-        let pIndex: mnimi = graph.coordinate?.toCart.dimensions[0].tower.index ?? 0
-        let qIndex: mnimi = graph.coordinate?.toCart.dimensions[1].tower.index ?? 0
-        let rIndex: mnimi = graph.coordinate?.toCart.dimensions[2].tower.index ?? 0
-
-        var vertices: [Vertex] = [Vertex].init(repeating: Vertex(.zero), count: graph.nU*graph.nV)
-        var n: Int = 0
-        var u: Double = graph.sU
-        for _ in 0..<graph.nU {
-            var v: Double = graph.sV
-            for _ in 0..<graph.nV {
-                AEMemorySetValue(memory, uIndex, u)
-                AEMemorySetValue(memory, vIndex, v)
-                AEMemorySetValue(memory, tIndex, t)
-
-                AERecipeExecute(graph.xRecipe, memory)
-                let p: Double = AEMemoryValue(memory, graph.fXChain.tower.index)
-                AERecipeExecute(graph.yRecipe, memory)
-                let q: Double = AEMemoryValue(memory, graph.fYChain.tower.index)
-                AERecipeExecute(graph.zRecipe, memory)
-                let r: Double = AEMemoryValue(memory, graph.fZChain.tower.index)
-
-                AEMemorySetValue(memory, pIndex, p)
-                AEMemorySetValue(memory, qIndex, q)
-                AEMemorySetValue(memory, rIndex, r)
-
-                let x: Double, y: Double, z: Double
-                if let coordinate = graph.coordinate {
-                    AERecipeExecute(coordinate.toCart.recipes[0], memory)
-                    x = AEMemoryValue(memory, graph.coordinate!.toCart.dimensions[0].chain.tower.index)
-                    AERecipeExecute(coordinate.toCart.recipes[1], memory)
-                    y = AEMemoryValue(memory, graph.coordinate!.toCart.dimensions[1].chain.tower.index)
-                    AERecipeExecute(coordinate.toCart.recipes[2], memory)
-                    z = AEMemoryValue(memory, graph.coordinate!.toCart.dimensions[2].chain.tower.index)
-                } else {
-                    x = p
-                    y = q
-                    z = r
-                }
-
-                vertices[n] = Vertex(V3(x, y, z))
-                vertices[n].calc(graph: graph)
-                v += graph.dV
-                n += 1
-            }
-            u += graph.dU
-        }
+//        let memory: UnsafeMutablePointer<Memory> = graph.aether.state.memory
+//
+//        let uIndex: mnimi = graph.uTower.index
+//        let vIndex: mnimi = graph.vTower.index
+//        let tIndex: mnimi = graph.tTower.index
+//
+//        let pIndex: mnimi = graph.coordinate?.toCart.dimensions[0].tower.index ?? 0
+//        let qIndex: mnimi = graph.coordinate?.toCart.dimensions[1].tower.index ?? 0
+//        let rIndex: mnimi = graph.coordinate?.toCart.dimensions[2].tower.index ?? 0
+//
+        let vertices: [Vertex] = [Vertex].init(repeating: Vertex(.zero), count: graph.nU*graph.nV)
+//        var n: Int = 0
+//        var u: Double = graph.sU
+//        for _ in 0..<graph.nU {
+//            var v: Double = graph.sV
+//            for _ in 0..<graph.nV {
+//                AEMemorySetValue(memory, uIndex, u)
+//                AEMemorySetValue(memory, vIndex, v)
+//                AEMemorySetValue(memory, tIndex, t)
+//
+//                AERecipeExecute(graph.xRecipe, memory)
+//                let p: Double = AEMemoryValue(memory, graph.fXChain.tower.index)
+//                AERecipeExecute(graph.yRecipe, memory)
+//                let q: Double = AEMemoryValue(memory, graph.fYChain.tower.index)
+//                AERecipeExecute(graph.zRecipe, memory)
+//                let r: Double = AEMemoryValue(memory, graph.fZChain.tower.index)
+//
+//                AEMemorySetValue(memory, pIndex, p)
+//                AEMemorySetValue(memory, qIndex, q)
+//                AEMemorySetValue(memory, rIndex, r)
+//
+//                let x: Double, y: Double, z: Double
+//                if let coordinate = graph.coordinate {
+//                    AERecipeExecute(coordinate.toCart.recipes[0], memory)
+//                    x = AEMemoryValue(memory, graph.coordinate!.toCart.dimensions[0].chain.tower.index)
+//                    AERecipeExecute(coordinate.toCart.recipes[1], memory)
+//                    y = AEMemoryValue(memory, graph.coordinate!.toCart.dimensions[1].chain.tower.index)
+//                    AERecipeExecute(coordinate.toCart.recipes[2], memory)
+//                    z = AEMemoryValue(memory, graph.coordinate!.toCart.dimensions[2].chain.tower.index)
+//                } else {
+//                    x = p
+//                    y = q
+//                    z = r
+//                }
+//
+//                vertices[n] = Vertex(V3(x, y, z))
+//                vertices[n].calc(graph: graph)
+//                v += graph.dV
+//                n += 1
+//            }
+//            u += graph.dU
+//        }
         return vertices
     }
     static func generateTiles(vertices: [Vertex], graph: Graph) -> [Tile] {
@@ -184,23 +184,23 @@ public class GraphView: UIView {
         graph.onLoad()
         aether.onLoad()
 
-        let net: CGFloat = 0.0
-        let light: CGFloat = 0.8
-        let surface: CGFloat = 0.2
-        graph.netColor = RGB(r: net, g: net, b: net)
-        graph.lightColor = RGB(r: light, g: light, b: light)
-        graph.surfaceColor = RGB(r: surface, g: surface, b: surface)
-        graph.surfaceOn = true
-        graph.sU = graph.sUChain.tower.value
-        graph.eU = graph.eUChain.tower.value
-        let stepsU: Double = graph.dUChain.tower.value
-        graph.dU = (graph.eU-graph.sU)/stepsU
-        graph.sV = graph.sVChain.tower.value
-        graph.eV = graph.eVChain.tower.value
-        let stepsV: Double = graph.dVChain.tower.value
-        graph.dV = (graph.eV-graph.sV)/stepsV
-        graph.t = graph.tChain.tower.value
-        graph.surfaceOn = true
+//        let net: CGFloat = 0.0
+//        let light: CGFloat = 0.8
+//        let surface: CGFloat = 0.2
+//        graph.netColor = RGB(r: net, g: net, b: net)
+//        graph.lightColor = RGB(r: light, g: light, b: light)
+//        graph.surfaceColor = RGB(r: surface, g: surface, b: surface)
+//        graph.surfaceOn = true
+//        graph.sU = graph.sUChain.tower.value
+//        graph.eU = graph.eUChain.tower.value
+//        let stepsU: Double = graph.dUChain.tower.value
+//        graph.dU = (graph.eU-graph.sU)/stepsU
+//        graph.sV = graph.sVChain.tower.value
+//        graph.eV = graph.eVChain.tower.value
+//        let stepsV: Double = graph.dVChain.tower.value
+//        graph.dV = (graph.eV-graph.sV)/stepsV
+//        graph.t = graph.tChain.tower.value
+//        graph.surfaceOn = true
         
         return graph
     }

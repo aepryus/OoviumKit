@@ -89,7 +89,7 @@ public class AnainResponder {
             } else if anainView.anain.inString {
                 token = Token.characterToken(tag: "\(c)")
             }
-            if let token { _ = anainView.attemptToPost(token: token) }
+            if let token { _ = anainView.attemptToPost(key: token.key) }
         }
     }
     func unmarkText() { markedText = nil }
@@ -168,11 +168,11 @@ public class AnainResponder {
         } else if text == "&" {
             token = Token.and
         } else {
-            _ = anainView.attemptToPost(token: Token.quote)
+            _ = anainView.attemptToPost(key: Token.quote.key)
             token = Token.characterToken(tag: text)
         }
         if let token = token {
-            _ = anainView.attemptToPost(token: token)
+            _ = anainView.attemptToPost(key: token.key)
         } else {
             print("[ \(text) ] has no token")
         }

@@ -37,13 +37,13 @@ class CronBub: Bubble, ChainLeafDelegate {
 		
 		playLeaf.playButton.onPlay = { [weak self] in
             guard let self else { return }
-            self.timer.configure(interval: 1/cron.rateTower.value, { [weak self] in
-				DispatchQueue.main.async { [weak self] in
-                    guard let self else { return }
-					let stop = self.cron.increment()
-					if stop { self.playLeaf.playButton.stop() }
-				}
-			})
+//            self.timer.configure(interval: 1/cron.rateTower.value, { [weak self] in
+//				DispatchQueue.main.async { [weak self] in
+//                    guard let self else { return }
+//					let stop = self.cron.increment()
+//					if stop { self.playLeaf.playButton.stop() }
+//				}
+//			})
             self.timer.start()
 		}
 		playLeaf.playButton.onStop = { [unowned self] in

@@ -44,9 +44,9 @@ class TailBub: Bubble, SignatureLeafDelegate, ChainLeafDelegate {
 		signatureLeaf.overrides.append(resultLeaf)
 		add(leaf: resultLeaf)
 		
-		aetherView.moorings[tail.variableToken] = signatureLeaf.recipeMooring
+        aetherView.moorings[tail.variableToken.key] = signatureLeaf.recipeMooring
 		for (i, vertebra) in tail.vertebras.enumerated() {
-			aetherView.moorings[vertebra.tower.variableToken] = signatureLeaf.paramMoorings[i]
+            aetherView.moorings[vertebra.tower.variableToken.key] = signatureLeaf.paramMoorings[i]
 			let vertebraLeaf = ChainLeaf(bubble: self, hitch: .topLeft, anchor: CGPoint.zero, size: CGSize(width: 100, height: 30))
 			vertebraLeaf.delegate = self
 			vertebraLeaf.chain = vertebra.chain

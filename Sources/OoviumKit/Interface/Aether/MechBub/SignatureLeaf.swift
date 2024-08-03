@@ -35,7 +35,7 @@ class SignatureLeaf: Leaf, Editable, Citable, UITextFieldDelegate {
 	var nameEdit: SignatureField? = nil
 	var paramEdits: [SignatureField] = []
 	
-    lazy var recipeMooring: Mooring = Mooring(bubble: bubble, token: delegate!.recipeToken)
+    lazy var recipeMooring: Mooring = Mooring(bubble: bubble, key: delegate!.recipeToken.key)
 	var paramMoorings: [Mooring] = []
 	
 	init(bubble: Bubble & SignatureLeafDelegate, anchor: CGPoint, hitch: Position, size: CGSize) {
@@ -44,7 +44,7 @@ class SignatureLeaf: Leaf, Editable, Citable, UITextFieldDelegate {
 		noOfParams = delegate!.params.count
 		
 		for i in 0..<noOfParams {
-            let mooring = bubble.createMooring(token: delegate?.paramTokens[i])
+            let mooring = bubble.createMooring(key: delegate?.paramTokens[i].key)
 			paramMoorings.append(mooring)
 		}
 
@@ -128,7 +128,7 @@ class SignatureLeaf: Leaf, Editable, Citable, UITextFieldDelegate {
 		paramEdit.text = delegate?.params[noOfParams-1]
 		paramEdit.textColor = Skin.color(.signatureText)
 
-        let mooring = bubble.createMooring(token: delegate!.paramTokens[noOfParams-1])
+        let mooring = bubble.createMooring(key: delegate!.paramTokens[noOfParams-1].key)
 		paramMoorings.append(mooring)
 
 		setNeedsDisplay()
@@ -142,7 +142,7 @@ class SignatureLeaf: Leaf, Editable, Citable, UITextFieldDelegate {
 		
 		render()
 		setNeedsDisplay()
-		bubble.aetherView.moorings[delegate!.paramTokens[noOfParams]] = nil
+        bubble.aetherView.moorings[delegate!.paramTokens[noOfParams].key] = nil
 		delegate?.onNoOfParamsChanged(signatureLeaf: self)
 
 		paramMoorings.removeLast()
@@ -248,14 +248,14 @@ class SignatureLeaf: Leaf, Editable, Citable, UITextFieldDelegate {
 	}
 	
 // Citable =========================================================================================
-	func token(at: CGPoint) -> Token? {
+	func tokenKey(at: CGPoint) -> TokenKey? {
 		guard let delegate = delegate else { fatalError() }
 		if at.y < 33 {
-			if bubble.aetherView.anchored { return delegate.recipeToken }
-            else { return delegate.token }
+            if bubble.aetherView.anchored { return delegate.recipeToken.key }
+            else { return delegate.token.key }
 		} else {
 			let i: Int = min(Int((at.y-33) / 24), delegate.paramTokens.count-1)
-			return delegate.paramTokens[i]
+            return delegate.paramTokens[i].key
 		}
 	}
 }

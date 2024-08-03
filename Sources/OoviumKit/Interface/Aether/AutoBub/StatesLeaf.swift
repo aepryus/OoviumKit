@@ -113,21 +113,21 @@ class StatesLeaf: Leaf, ChainLeafDelegate, Colorable {
 	required init?(coder aDecoder: NSCoder) { fatalError() }
 	
 	func loadStateNo() {
-		let tower = (bubble as! AutoBub).auto.statesTower
-		states = CGFloat(tower.value)
-		
-		if states < 2 {
-			states = 2
-			if chainLeaf.chain.tokens.count != 0 {
-				chainLeaf.chainView.chain.replaceWith(tokens: "0:2")
-				chainLeaf.chainView.ok()
-			}
-		}
-		else if states > 32 {
-			states = 32
-			chainLeaf.chainView.chain.replaceWith(tokens: "0:3;0:2")
-			chainLeaf.chainView.ok()
-		}
+//		let tower = (bubble as! AutoBub).auto.statesTower
+//		states = CGFloat(tower.value)
+//		
+//		if states < 2 {
+//			states = 2
+//			if chainLeaf.chain.tokens.count != 0 {
+//				chainLeaf.chainView.chain.replaceWith(tokens: "0:2")
+//				chainLeaf.chainView.ok()
+//			}
+//		}
+//		else if states > 32 {
+//			states = 32
+//			chainLeaf.chainView.chain.replaceWith(tokens: "0:3;0:2")
+//			chainLeaf.chainView.ok()
+//		}
 	}
 	func buildColorLeaves() -> [ColorLeaf] {
 		let qw: CGFloat = ceil(states.squareRoot())
