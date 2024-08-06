@@ -23,9 +23,9 @@ class MechBub: Bubble, SignatureLeafDelegate, ChainLeafDelegate {
 		signatureLeaf = SignatureLeaf(bubble: self, anchor: CGPoint(x: 60, y: 0), hitch: .top, size: CGSize(width: 100, height: 90))
 		add(leaf: signatureLeaf)
 		
-        aetherView.moorings[mech.variableToken.key] = signatureLeaf.recipeMooring
+        aetherView.moorings[mech.variableTokenKey] = signatureLeaf.recipeMooring
 		for (i, input) in mech.inputs.enumerated() {
-            aetherView.moorings[input.tower.variableToken.key] = signatureLeaf.paramMoorings[i]
+            aetherView.moorings[input.tokenKey] = signatureLeaf.paramMoorings[i]
 		}
 		
 		resultLeaf = ChainLeaf(bubble: self, hitch: .top, anchor: CGPoint(x: 60, y: 70), size: CGSize(width: 100, height: 30))
@@ -97,11 +97,11 @@ class MechBub: Bubble, SignatureLeafDelegate, ChainLeafDelegate {
 		aetherView.stretch()
 		mech.name = signatureLeaf.nameEdit?.text ?? ""
 		for (i, input) in mech.inputs.enumerated() { input.name = signatureLeaf.paramEdits[i].text ?? "" }
-        mech.aether.state.buildMemory()
+//        mech.aether.state.buildMemory()
 	}
-	var token: Token { mech.mechlikeToken }
-	var recipeToken: Token { mech.variableToken }
-	var paramTokens: [Token] { mech.inputs.map { $0.tower.variableToken } }
+	var token: TokenKey { mech.mechlikeTokenKey }
+	var recipeToken: TokenKey { mech.variableTokenKey }
+	var paramTokens: [TokenKey] { mech.inputs.map { $0.tokenKey } }
 
 // ChainLeafDelegate ===============================================================================
 	func onChange() { render() }

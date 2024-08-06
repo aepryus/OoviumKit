@@ -44,9 +44,9 @@ class TailBub: Bubble, SignatureLeafDelegate, ChainLeafDelegate {
 		signatureLeaf.overrides.append(resultLeaf)
 		add(leaf: resultLeaf)
 		
-        aetherView.moorings[tail.variableToken.key] = signatureLeaf.recipeMooring
+        aetherView.moorings[tail.variableTokenKey] = signatureLeaf.recipeMooring
 		for (i, vertebra) in tail.vertebras.enumerated() {
-            aetherView.moorings[vertebra.tower.variableToken.key] = signatureLeaf.paramMoorings[i]
+            aetherView.moorings[vertebra.tokenKey] = signatureLeaf.paramMoorings[i]
 			let vertebraLeaf = ChainLeaf(bubble: self, hitch: .topLeft, anchor: CGPoint.zero, size: CGSize(width: 100, height: 30))
 			vertebraLeaf.delegate = self
 			vertebraLeaf.chain = vertebra.chain
@@ -168,11 +168,11 @@ class TailBub: Bubble, SignatureLeafDelegate, ChainLeafDelegate {
 			vertebra.name = signatureLeaf.paramEdits[i].text ?? ""
 			vertebraLeaves[i].placeholder = "next \(vertebra.name)"
 		}
-        tail.aether.state.buildMemory()
+//        tail.aether.state.buildMemory()
 	}
-	var token: Token { tail.mechlikeToken }
-	var recipeToken: Token { tail.variableToken }
-    var paramTokens: [Token] { tail.vertebras.map { $0.tower.variableToken } }
+	var token: TokenKey { tail.mechlikeTokenKey }
+	var recipeToken: TokenKey { tail.variableTokenKey }
+    var paramTokens: [TokenKey] { tail.vertebras.map { $0.tokenKey } }
 	
 // ChainLeafDelegate ===============================================================================
 	func onChange() { render() }

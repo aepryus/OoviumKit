@@ -141,7 +141,7 @@ public class GraphView: UIView {
     }
     
 // UIView ==========================================================================================
-    override public func layoutSubviews() {
+    public override func layoutSubviews() {
         size = frame.size
         
         graph.compileRecipes()
@@ -160,7 +160,7 @@ public class GraphView: UIView {
 
         graph.center = CGPoint(x: width/2, y: height/2)
     }
-    override public func draw(_ rect: CGRect) {
+    public override func draw(_ rect: CGRect) {
         image?.draw(in: rect)
     }
     

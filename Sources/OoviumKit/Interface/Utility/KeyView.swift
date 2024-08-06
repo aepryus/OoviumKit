@@ -29,7 +29,7 @@ class KeyView: UIView {
 	}
 	
 // UIView ==========================================================================================
-	override public func draw(_ rect: CGRect) {
+	public override func draw(_ rect: CGRect) {
 		let path = CGMutablePath()
 		path.addRoundedRect(in: rect.insetBy(dx: 2*Oo.s, dy: 2*Oo.s), cornerWidth: 10*Oo.s, cornerHeight: 10*Oo.s)
 		Skin.panel(path: path, uiColor: uiColor)

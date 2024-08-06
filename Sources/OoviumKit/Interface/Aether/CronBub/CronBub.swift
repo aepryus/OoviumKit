@@ -32,7 +32,7 @@ class CronBub: Bubble, ChainLeafDelegate {
 		self.cron = cron
         super.init(aetherView: aetherView, aexel: cron, origin: CGPoint(x: self.cron.x, y: self.cron.y), size: CGSize.zero)
 		
-		cron.tower.listener = faceLeaf
+//		cron.tower.listener = faceLeaf
 		add(leaf: faceLeaf)
 		
 		playLeaf.playButton.onPlay = { [weak self] in
@@ -52,7 +52,7 @@ class CronBub: Bubble, ChainLeafDelegate {
 		playLeaf.resetButton.onReset = { [unowned self] in
             self.playLeaf.playButton.stop()
             self.cron.reset()
-            self.cron.tower.trigger()
+//            self.cron.tower.trigger()
 		}
 		playLeaf.stepButton.onStep =  { [unowned self] in
             self.cron.sealed = false
@@ -236,7 +236,7 @@ class CronBub: Bubble, ChainLeafDelegate {
 		deltaLeaf.wireMoorings()
 		whileLeaf.wireMoorings()
 		cron.reset()
-		cron.tower.trigger()
+//		cron.tower.trigger()
 	}
 	
 // UIView ==========================================================================================
@@ -260,7 +260,7 @@ class CronBub: Bubble, ChainLeafDelegate {
 		if leaf !== rateLeaf {
 			playLeaf.playButton.stop()
 			cron.reset()
-			cron.tower.trigger()
+//			cron.tower.trigger()
 		} else if playLeaf.playButton.playing {
 			playLeaf.playButton.stop()
 			playLeaf.playButton.play()

@@ -14,14 +14,14 @@ class FaceLeaf: Leaf, FocusTappable, TowerListener, Citable {
 	
 	init(bubble: Bubble) {
 		super.init(bubble: bubble, hitch: .top, anchor: CGPoint.zero, size: CGSize(width: 80, height: 36))
-        self.mooring = bubble.createMooring(key: cronBub.cron.token.key)
+        self.mooring = bubble.createMooring(key: cronBub.cron.tokenKey)
 	}
 	required init?(coder aDecoder: NSCoder) { fatalError() }
 	
 	var cronBub: CronBub { bubble as! CronBub }
 	
 	func render() {
-		let text = cronBub.cron.tower.obje.display
+		let text = ""//cronBub.cron.tower.obje.display
 		let pen = Pen(font: UIFont(name: "HelveticaNeue", size: 16)!)
 		let width = max((text as NSString).size(withAttributes: pen.attributes).width + 36, 80)
 		if width != size.width {
@@ -38,11 +38,11 @@ class FaceLeaf: Leaf, FocusTappable, TowerListener, Citable {
 		let path = CGPath(roundedRect: rect.insetBy(dx: 3, dy: 3), cornerWidth: 15, cornerHeight: 15, transform: nil)
 		hitPath = path
 		Skin.bubble(path: path, uiColor: bubble.uiColor, width: Oo.s)
-		Skin.bubble(text: "\(cronBub.cron.tower.obje.display)", rect: CGRect(x: 0, y: 7.5, width: rect.width, height: 20), uiColor: bubble.uiColor)
+//		Skin.bubble(text: "\(cronBub.cron.tower.obje.display)", rect: CGRect(x: 0, y: 7.5, width: rect.width, height: 20), uiColor: bubble.uiColor)
 	}
 	
 // Citable =========================================================================================
-    func tokenKey(at: CGPoint) -> TokenKey? { cronBub.cron.token.key }
+    func tokenKey(at: CGPoint) -> TokenKey? { cronBub.cron.tokenKey }
 	
 // TowerListener ===================================================================================
 	func onTriggered() {

@@ -21,7 +21,7 @@ class ObjectLeaf: Leaf, Editable, ChainViewDelegate, DoubleTappable, UITextField
 		
 		super.init(bubble: bubble)
         
-        mooring = bubble.createMooring(key: object.token.key)
+//        mooring = bubble.createMooring(key: object.token.key)
 
 		chainView.chain = object.chain
 		chainView.delegate = self
@@ -129,7 +129,7 @@ class ObjectLeaf: Leaf, Editable, ChainViewDelegate, DoubleTappable, UITextField
 	func onReleaseFocus() {
         if ChainResponder.hasExternalKeyboard { chainView.resignFirstResponder() }
 		chainView.ok()
-        object.aether.state.evaluate()
+//        object.aether.state.evaluate()
 		render()
 		objectBub.onOK()
 		mooring.sleepDoodles()

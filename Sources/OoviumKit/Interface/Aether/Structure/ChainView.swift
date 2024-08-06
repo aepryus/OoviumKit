@@ -87,7 +87,7 @@ class ChainView: UIView, UITextInput, UITextInputTraits, AnchorTappable, TowerLi
 // Computed ========================================================================================
     var aetherView: AetherView { responder!.aetherView }
     var aetherExe: AetherExe { aetherView.aetherExe }
-    var chainExe: ChainExe { aetherExe.chainExe(key: chain.key!) }
+    var chainExe: ChainCore { aetherExe.chainCore(key: chain.key!) }
     
     var blank: Bool { chain.isEmpty && !editing }
     
@@ -165,7 +165,7 @@ class ChainView: UIView, UITextInput, UITextInputTraits, AnchorTappable, TowerLi
     }
     var unmatchedQuote: Bool { chainExe.unmatchedQuote }
     func attemptToPost(key: TokenKey) -> Bool {
-        let chainExe: ChainExe = aetherExe.chainExe(key: chain.key!)
+        let chainExe: ChainCore = aetherExe.chainCore(key: chain.key!)
         let token: Token = aetherExe.token(key: chain.key!)
         guard chainExe.attemptToPost(token: token, at: cursor) else { return false }
         cursor += 1

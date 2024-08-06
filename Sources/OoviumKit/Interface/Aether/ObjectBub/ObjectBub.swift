@@ -44,8 +44,8 @@ class ObjectBub: Bubble, Citable {
 
 // Bubble ==========================================================================================
 	override var context: Context { orb.objectContext }
-    override var uiColor: UIColor { selected ? .yellow : (objectLeaf.focused ? .black.tint(0.8) : (object.token.status == .ok ? .green/*object.chain.tower.obje.uiColor*/ : .red)) }
+//    override var uiColor: UIColor { selected ? .yellow : (objectLeaf.focused ? .black.tint(0.8) : (object.token.status == .ok ? .green/*object.chain.tower.obje.uiColor*/ : .red)) }
 
 // Citable =========================================================================================
-    func tokenKey(at: CGPoint) -> TokenKey? { object.token.key }
+    func tokenKey(at: CGPoint) -> TokenKey? { object.chain.key }
 }

@@ -37,12 +37,12 @@ public class Key: UIControl {
 	required init?(coder aDecoder: NSCoder) { fatalError() }
 	
 // UIView ==========================================================================================
-	override public func draw(_ rect: CGRect) {
+	public override func draw(_ rect: CGRect) {
 		let path = CGPath(roundedRect: rect.insetBy(dx: floor(3*Oo.s), dy: floor(3*Oo.s)), cornerWidth: 7*Oo.s, cornerHeight: 7*Oo.s, transform: nil)
 		Skin.key(path: path, uiColor: current)
 		Skin.key(text: text, rect: rect.offsetBy(dx: 0, dy: -0.5), font: font)
 	}
-	override public var isHighlighted: Bool {
+	public override var isHighlighted: Bool {
 		didSet { setNeedsDisplay() }
 	}
 }

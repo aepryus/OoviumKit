@@ -31,10 +31,10 @@ extension GraphBub {
             
             noOfParams = delegate!.params.count
             
-            for i in 0..<noOfParams {
-                let mooring = bubble.createMooring(key: delegate?.paramTokens[i].key)
-                paramMoorings.append(mooring)
-            }
+//            for i in 0..<noOfParams {
+//                let mooring = bubble.createMooring(key: delegate?.paramTokens[i].key)
+//                paramMoorings.append(mooring)
+//            }
 
             super.init(bubble: bubble, hitch: hitch, anchor: anchor, size: size)
             
@@ -183,15 +183,16 @@ extension GraphBub {
         
     // Citable =========================================================================================
         func tokenKey(at: CGPoint) -> TokenKey? {
-            guard let delegate = delegate else { fatalError() }
-            if at.y < 33 {
-                return nil
-//                if bubble.aetherView.anchored { return delegate.recipeToken }
-//                else { return delegate.token }
-            } else {
-                let i: Int = min(Int((at.y-33) / 24), delegate.paramTokens.count-1)
-                return delegate.paramTokens[i].key
-            }
+//            guard let delegate = delegate else { fatalError() }
+//            if at.y < 33 {
+//                return nil
+////                if bubble.aetherView.anchored { return delegate.recipeToken }
+////                else { return delegate.token }
+//            } else {
+//                let i: Int = min(Int((at.y-33) / 24), delegate.paramTokens.count-1)
+//                return delegate.paramTokens[i].key
+//            }
+            nil
         }
     }
 }

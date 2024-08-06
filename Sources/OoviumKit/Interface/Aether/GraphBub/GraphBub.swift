@@ -189,7 +189,7 @@ class GraphBub: Bubble, ChainLeafDelegate {
     
 // SignatureLeafDelegate ===========================================================================
     var params: [String] = ["u", "v", "t"]
-    var paramTokens: [Token] { [graph.uTower.variableToken, graph.vTower.variableToken, graph.tTower.variableToken] }
+//    var paramTokens: [Token] { [graph.uTower.variableToken, graph.vTower.variableToken, graph.tTower.variableToken] }
 
 // Bubble ==========================================================================================
     override var uiColor: UIColor { !selected ? OOColor.cobolt.uiColor : .yellow }
