@@ -12,6 +12,7 @@ import UIKit
 
 class CronBub: Bubble, ChainLeafDelegate {
 	let cron: Cron
+    var cronCore: CronCore?
 	
 	let timer: AETimer = AETimer()
 	
@@ -51,12 +52,12 @@ class CronBub: Bubble, ChainLeafDelegate {
 		}
 		playLeaf.resetButton.onReset = { [unowned self] in
             self.playLeaf.playButton.stop()
-            self.cron.reset()
+            self.cronCore?.reset()
 //            self.cron.tower.trigger()
 		}
 		playLeaf.stepButton.onStep =  { [unowned self] in
-            self.cron.sealed = false
-			_ = self.cron.increment()
+            self.cronCore?.sealed = false
+			_ = self.cronCore?.increment()
 		}
 		add(leaf: playLeaf)
 		
@@ -235,7 +236,7 @@ class CronBub: Bubble, ChainLeafDelegate {
 		rateLeaf.wireMoorings()
 		deltaLeaf.wireMoorings()
 		whileLeaf.wireMoorings()
-		cron.reset()
+		cronCore?.reset()
 //		cron.tower.trigger()
 	}
 	
@@ -259,7 +260,7 @@ class CronBub: Bubble, ChainLeafDelegate {
 		aetherView.stretch()
 		if leaf !== rateLeaf {
 			playLeaf.playButton.stop()
-			cron.reset()
+			cronCore?.reset()
 //			cron.tower.trigger()
 		} else if playLeaf.playButton.playing {
 			playLeaf.playButton.stop()
