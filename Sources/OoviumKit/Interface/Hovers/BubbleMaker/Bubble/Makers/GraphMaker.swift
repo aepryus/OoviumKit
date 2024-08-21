@@ -12,7 +12,7 @@ import OoviumEngine
 class GraphMaker: Maker {
 // Maker ===========================================================================================
     func make(aetherView: AetherView, at: V2) -> Bubble {
-        let graph: Graph = aetherView.aether.create(at: at)
+        let graph: Graph = aetherView.create(at: at)
         return GraphBub(graph, aetherView: aetherView)
     }
     func drawIcon() {

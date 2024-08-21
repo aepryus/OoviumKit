@@ -12,7 +12,7 @@ import UIKit
 class MiruMaker: Maker {
 // Maker ===========================================================================================
     func make(aetherView: AetherView, at: V2) -> Bubble {
-        let miru: Miru = aetherView.aether.create(at: at)
+        let miru: Miru = aetherView.create(at: at)
         return MiruBub(miru, aetherView: aetherView)
     }
     func drawIcon() {}

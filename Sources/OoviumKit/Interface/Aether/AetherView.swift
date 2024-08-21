@@ -206,7 +206,17 @@ public class AetherView: UIView, UIScrollViewDelegate, UIGestureRecognizerDelega
 	}
 	public required init?(coder aDecoder: NSCoder) { fatalError() }
     
-    public func compileAether() { aetherExe = aether.compile() }
+    public func compileAether() {
+        aetherExe = aether.compile()
+        aetherExe.notifyListeners()
+    }
+    
+    public func create<T: Aexel>(at: V2) -> T {
+        let aexel: T = aether.create(at: at)
+        compileAether()
+        return aexel
+    }
+
     
 // Events ==========================================================================================
     public func onCut() {
@@ -579,6 +589,7 @@ public class AetherView: UIView, UIScrollViewDelegate, UIGestureRecognizerDelega
 	func triggerMaker(at: V2) {
         if let focus { focus.releaseFocus(.administrative) }
 		let bubble = maker.make(aetherView: self, at: at)
+        compileAether()
 		add(bubble: bubble)
 		bubble.create()
 		stretch()

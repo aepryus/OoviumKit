@@ -56,7 +56,9 @@ class ChainView: UIView, UITextInput, UITextInputTraits, AnchorTappable, TowerLi
 
     var chain: Chain! {
         didSet {
-//            chain.tower.listener = self
+            guard let key: TokenKey = chain.key
+            else { fatalError() }            
+            Tower.startListening(to: key, listener: self)
             resize()
         }
     }
@@ -81,6 +83,11 @@ class ChainView: UIView, UITextInput, UITextInputTraits, AnchorTappable, TowerLi
         inputAssistantItem.trailingBarButtonGroups.removeAll()
     }
     public required init?(coder aDecoder: NSCoder) { fatalError() }
+    deinit {
+        guard let key: TokenKey = chain.key
+        else { fatalError() }
+        Tower.stopListeneing(to: key)
+    }
     
 // Computed ========================================================================================
     var aetherView: AetherView { responder!.aetherView }
@@ -151,7 +158,7 @@ class ChainView: UIView, UITextInput, UITextInputTraits, AnchorTappable, TowerLi
     
     private func triggerKeyboardIfNeeded() {
         guard !ChainResponder.hasExternalKeyboard && editing else { return }
-        if chainCore.isInString(at: cursor) { delegate?.becomeFirstResponder() }
+        if chain.isInString(at: cursor) { delegate?.becomeFirstResponder() }
         else { delegate?.resignFirstResponder() }
     }
     private func handleKeyRemoved(_ key: TokenKey) {
@@ -162,8 +169,8 @@ class ChainView: UIView, UITextInput, UITextInputTraits, AnchorTappable, TowerLi
     }
     
 // Chain ===========================================================================================
-    var inString: Bool { chainCore.isInString(at: cursor) }
-    var unmatchedQuote: Bool { chainCore.unmatchedQuote }
+    var inString: Bool { chain.isInString(at: cursor) }
+    var unmatchedQuote: Bool { chain.unmatchedQuote }
     func attemptToPost(key: TokenKey) -> Bool {
         guard aetherExe.canBeAdded(thisKey: key, to: chain.key!) else { return false }
         
@@ -207,7 +214,6 @@ class ChainView: UIView, UITextInput, UITextInputTraits, AnchorTappable, TowerLi
     func edit() {
         editing = true
         cursor = chain.tokenKeys.count
-//        chain.edit()
         delegate?.onEditStart()
         isUserInteractionEnabled = true
         resize()
@@ -217,7 +223,6 @@ class ChainView: UIView, UITextInput, UITextInputTraits, AnchorTappable, TowerLi
         resignFirstResponder()
         isUserInteractionEnabled = false
         editing = false
-//        chain.ok()
         aetherView.compileAether()
         resize()
         delegate?.onChanged()

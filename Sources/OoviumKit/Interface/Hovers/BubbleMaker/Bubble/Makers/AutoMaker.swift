@@ -12,7 +12,7 @@ import UIKit
 class AutoMaker: Maker {
 // Maker ===========================================================================================
     func make(aetherView: AetherView, at: V2) -> Bubble {
-        let auto: Automata = aetherView.aether.create(at: at)
+        let auto: Automata = aetherView.create(at: at)
         return AutoBub(auto, aetherView: aetherView)
     }
     func drawIcon() {}

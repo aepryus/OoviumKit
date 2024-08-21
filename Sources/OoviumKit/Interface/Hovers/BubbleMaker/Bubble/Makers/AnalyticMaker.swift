@@ -13,7 +13,7 @@ import OoviumEngine
 class AnalyticMaker: Maker {
 // Maker ===========================================================================================
     func make(aetherView: AetherView, at: V2) -> Bubble {
-        let analytic: Analytic = aetherView.aether.create(at: at)
+        let analytic: Analytic = aetherView.create(at: at)
         return AnalyticBub(analytic, aetherView: aetherView)
     }
     func drawIcon() {

@@ -13,7 +13,7 @@ import OoviumEngine
 class SystemMaker: Maker {
 // Maker ===========================================================================================
     func make(aetherView: AetherView, at: V2) -> Bubble {
-        let system: System = aetherView.aether.create(at: at)
+        let system: System = aetherView.create(at: at)
         system.constants.append(SystemValue(parent: system))
         system.variables.append(SystemValue(parent: system))
         return SystemBub(system, aetherView: aetherView)

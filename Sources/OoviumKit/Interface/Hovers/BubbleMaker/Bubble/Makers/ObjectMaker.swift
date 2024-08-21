@@ -12,8 +12,7 @@ import UIKit
 class ObjectMaker: Maker {
 // Maker ===========================================================================================
     func make(aetherView: AetherView, at: V2) -> Bubble {
-        let object: Object = aetherView.aether.create(at: at)
-        aetherView.compileAether()
+        let object: Object = aetherView.create(at: at)
         return ObjectBub(object, aetherView: aetherView)
     }
     func drawIcon() {

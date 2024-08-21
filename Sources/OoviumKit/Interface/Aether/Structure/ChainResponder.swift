@@ -92,7 +92,7 @@ public class ChainResponder {
         guard let markedText = markedText else { return }
         for c in markedText {
             var token: Token? = nil
-            if c == "\n" && chainView.inString && chainView.chainCore.unmatchedQuote {
+            if c == "\n" && chainView.inString && chainView.chain.unmatchedQuote {
                 token = Token.quote
             } else if chainView.inString {
                 token = Token.characterToken(tag: "\(c)")
