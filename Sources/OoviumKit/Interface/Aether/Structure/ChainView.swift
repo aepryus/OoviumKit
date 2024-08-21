@@ -57,7 +57,7 @@ class ChainView: UIView, UITextInput, UITextInputTraits, AnchorTappable, TowerLi
     var chain: Chain! {
         didSet {
             guard let key: TokenKey = chain.key
-            else { fatalError() }            
+            else { fatalError() }
             Tower.startListening(to: key, listener: self)
             resize()
         }
@@ -83,11 +83,6 @@ class ChainView: UIView, UITextInput, UITextInputTraits, AnchorTappable, TowerLi
         inputAssistantItem.trailingBarButtonGroups.removeAll()
     }
     public required init?(coder aDecoder: NSCoder) { fatalError() }
-    deinit {
-        guard let key: TokenKey = chain.key
-        else { fatalError() }
-        Tower.stopListeneing(to: key)
-    }
     
 // Computed ========================================================================================
     var aetherView: AetherView { responder!.aetherView }
