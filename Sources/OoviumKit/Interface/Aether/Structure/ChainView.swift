@@ -17,8 +17,8 @@ protocol ChainViewDelegate: AnyObject {
     func becomeFirstResponder()
     func resignFirstResponder()
     
-    func onTokenAdded(_ token: Token)
-    func onTokenRemoved(_ token: Token)
+    func onTokenKeyAdded(_ key: TokenKey)
+    func onTokenKeyRemoved(_ key: TokenKey)
 
     func onChanged()
     func onWidthChanged(oldWidth: CGFloat?, newWidth: CGFloat)
@@ -27,8 +27,6 @@ protocol ChainViewDelegate: AnyObject {
 }
 extension ChainViewDelegate {
     func onEditStart() {}
-    func onTokenAdded(_ token: Token) {}
-    func onTokenRemoved(_ token: Token) {}
     func onEditStop() {}
     
     func onChanged(oldWidth: CGFloat?, newWidth: CGFloat) {}
@@ -87,7 +85,7 @@ class ChainView: UIView, UITextInput, UITextInputTraits, AnchorTappable, TowerLi
 // Computed ========================================================================================
     var aetherView: AetherView { responder!.aetherView }
     var aetherExe: AetherExe { aetherView.aetherExe }
-    var chainExe: ChainCore { aetherExe.chainCore(key: chain.key!) }
+    var chainCore: ChainCore { aetherExe.chainCore(key: chain.key!) }
     
     var blank: Bool { chain.isEmpty && !editing }
     
@@ -101,12 +99,14 @@ class ChainView: UIView, UITextInput, UITextInputTraits, AnchorTappable, TowerLi
             widthNeeded = 3
             var sb: String = ""
             var token: Token
-            let to = chainExe.tokens.count
+            var key: TokenKey
+            let to = chain.tokenKeys.count
             
             var i: Int = 0
             while i < to {
                 repeat {
-                    token = chainExe.tokens[i]
+                    key = chain.tokenKeys[i]
+                    token = aetherExe.token(key: key)
                     if ChainView.usesWafer(token: token) { break }
                     sb.append(token.display)
                     i += 1
@@ -136,10 +136,11 @@ class ChainView: UIView, UITextInput, UITextInputTraits, AnchorTappable, TowerLi
         var lx: CGFloat = 0
         var pos: Int = 0
         
-        for token in chainExe.tokens {
+        chain.tokenKeys.forEach { (key: TokenKey) in
+            let token: Token = aetherExe.token(key: key)
             x += token.display.size(pen: ChainView.pen).width
             if ChainView.usesWafer(token: token) {x += 9}
-            if nx < lx+(x-lx)/2 {break}
+            if nx < lx+(x-lx)/2 { return }
             lx = x
             pos += 1
         }
@@ -150,60 +151,59 @@ class ChainView: UIView, UITextInput, UITextInputTraits, AnchorTappable, TowerLi
     
     private func triggerKeyboardIfNeeded() {
         guard !ChainResponder.hasExternalKeyboard && editing else { return }
-        if chainExe.isInString(at: cursor) { delegate?.becomeFirstResponder() }
+        if chainCore.isInString(at: cursor) { delegate?.becomeFirstResponder() }
         else { delegate?.resignFirstResponder() }
     }
-    private func handleTokenRemoved(_ token: Token) {
+    private func handleKeyRemoved(_ key: TokenKey) {
         triggerKeyboardIfNeeded()
         resize()
         delegate?.onChanged()
-        delegate?.onTokenRemoved(token)
+        delegate?.onTokenKeyRemoved(key)
     }
     
 // Chain ===========================================================================================
-    var inString: Bool { chainExe.isInString(at: cursor)
-    }
-    var unmatchedQuote: Bool { chainExe.unmatchedQuote }
+    var inString: Bool { chainCore.isInString(at: cursor) }
+    var unmatchedQuote: Bool { chainCore.unmatchedQuote }
     func attemptToPost(key: TokenKey) -> Bool {
-        let chainExe: ChainCore = aetherExe.chainCore(key: chain.key!)
-        let token: Token = aetherExe.token(key: chain.key!)
-        guard chainExe.attemptToPost(token: token, at: cursor) else { return false }
+        guard aetherExe.canBeAdded(thisKey: key, to: chain.key!) else { return false }
+        
+        chain.post(key: key, at: cursor)
+        
         cursor += 1
         triggerKeyboardIfNeeded()
         resize()
         delegate?.onChanged()
-        delegate?.onTokenAdded(token)
+        delegate?.onTokenKeyAdded(key)
+        
         return true
     }
     func attemptToPost(token: Token) -> Bool { attemptToPost(key: token.key) }
     func post(key: TokenKey) { _ = attemptToPost(key: key) }
     func post(token: Token) { post(key: token.key) }
     func minusSign() {
-        chainExe.minusSign(at: cursor)
+        chain.minusSign(at: cursor)
         cursor += 1
         resize()
         delegate?.onChanged()
     }
     func parenthesis() {
-        chainExe.parenthesis(at: cursor)
+        chain.parenthesis(at: cursor)
         cursor += 1
         resize()
         delegate?.onChanged()
     }
     func braket() {
-        chainExe.braket(at: cursor)
+        chain.braket(at: cursor)
         cursor += 1
         resize()
         delegate?.onChanged()
     }
     func delete() {
-        guard let token = chainExe.delete(at: cursor) else { return }
-        handleTokenRemoved(token)
+        guard let key: TokenKey = chain.delete(at: cursor) else { return }
+        handleKeyRemoved(key)
     }
        
-    @objc func rightDelete() {
-        print("rightDelete")
-    }
+    @objc func rightDelete() { print("rightDelete") }
     func edit() {
         editing = true
         cursor = chain.tokenKeys.count
@@ -218,6 +218,7 @@ class ChainView: UIView, UITextInput, UITextInputTraits, AnchorTappable, TowerLi
         isUserInteractionEnabled = false
         editing = false
 //        chain.ok()
+        aetherView.compileAether()
         resize()
         delegate?.onChanged()
     }
@@ -231,11 +232,13 @@ class ChainView: UIView, UITextInput, UITextInputTraits, AnchorTappable, TowerLi
         var x: CGFloat = x
         var sb: String = ""
         var pos: Int = from
+        var key: TokenKey
         var token: Token
         while (pos < to) {
             repeat {
-                token = chainExe.tokens[pos]
-                if ChainView.usesWafer(token: token) {break}
+                key = chain.tokenKeys[pos]
+                token = aetherExe.token(key: key)
+                if ChainView.usesWafer(token: token) { break }
                 sb.append(token.display)
                 pos += 1
             } while (pos < to)
@@ -262,7 +265,7 @@ class ChainView: UIView, UITextInput, UITextInputTraits, AnchorTappable, TowerLi
         } else {
             let x: CGFloat = drawTokens(at: 1, from: 0, to: cursor)
             // Cursor
-            if chainExe.tokens.count > 0 {
+            if chain.tokenKeys.count > 0 {
                 let path = CGMutablePath()
                 path.move(to: CGPoint(x: x+1, y: 1))
                 path.addLine(to: CGPoint(x: x+1, y: 20))
@@ -273,7 +276,7 @@ class ChainView: UIView, UITextInput, UITextInputTraits, AnchorTappable, TowerLi
                 c.drawPath(using: .stroke)
             }
             
-            _ = drawTokens(at: x, from: cursor, to: chainExe.tokens.count)
+            _ = drawTokens(at: x, from: cursor, to: chain.tokenKeys.count)
         }
     }
     
@@ -351,15 +354,15 @@ class ChainView: UIView, UITextInput, UITextInputTraits, AnchorTappable, TowerLi
         } else { keyDelegate?.onArrowLeft() }
     }
     @objc func rightArrow() {
-        if cursor < chainExe.tokens.count {
+        if cursor < chain.tokenKeys.count {
             cursor += 1
             setNeedsDisplay()
         } else { keyDelegate?.onArrowRight() }
     }
     @objc func backspace() {            // delete left
-        guard let token = chainExe.backspace(at: cursor) else { return }
+        guard let token = chain.backspace(at: cursor) else { return }
         cursor -= 1
-        handleTokenRemoved(token)
+        handleKeyRemoved(token)
     }
 
     @objc func upArrow() { responder!.upArrow() }

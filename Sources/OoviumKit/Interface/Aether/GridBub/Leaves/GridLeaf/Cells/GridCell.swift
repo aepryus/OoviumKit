@@ -135,8 +135,8 @@ class GridCell: UICollectionViewCell, Sizable, Editable, Citable, ChainViewDeleg
     func becomeFirstResponder() { gridLeaf.becomeFirstResponder() }
     func resignFirstResponder() { gridLeaf.resignFirstResponder() }
 
-    func onTokenAdded(_ token: Token) {}
-    func onTokenRemoved(_ token: Token) {}
+    func onTokenKeyAdded(_ key: TokenKey) {}
+    func onTokenKeyRemoved(_ key: TokenKey) {}
 
     func onWidthChanged(oldWidth: CGFloat?, newWidth: CGFloat) {
         guard oldWidth != newWidth else { return }

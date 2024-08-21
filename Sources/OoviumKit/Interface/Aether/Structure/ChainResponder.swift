@@ -57,9 +57,7 @@ public class ChainResponder {
     func tab() { chainView?.keyDelegate?.onTab() }
     func backspace() { chainView?.backspace() }
     
-    func paste(text: String) {
-        text.forEach { insertText("\($0)") }
-    }
+    func paste(text: String) { text.forEach { insertText("\($0)") } }
     
 // UITextInput =====================================================================================
     var autocapitalizationType: UITextAutocapitalizationType {
@@ -94,7 +92,7 @@ public class ChainResponder {
         guard let markedText = markedText else { return }
         for c in markedText {
             var token: Token? = nil
-            if c == "\n" && chainView.inString && chainView.chainExe.unmatchedQuote {
+            if c == "\n" && chainView.inString && chainView.chainCore.unmatchedQuote {
                 token = Token.quote
             } else if chainView.inString {
                 token = Token.characterToken(tag: "\(c)")

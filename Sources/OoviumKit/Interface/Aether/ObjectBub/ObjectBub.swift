@@ -44,7 +44,16 @@ class ObjectBub: Bubble, Citable {
 
 // Bubble ==========================================================================================
 	override var context: Context { orb.objectContext }
-//    override var uiColor: UIColor { selected ? .yellow : (objectLeaf.focused ? .black.tint(0.8) : (object.token.status == .ok ? .green/*object.chain.tower.obje.uiColor*/ : .red)) }
+    override var uiColor: UIColor {
+        if selected { return .yellow }
+        if objectLeaf.focused { return .black.tint(0.8) }
+        
+        let token: VariableToken = aetherView.aetherExe.token(key: object.chain.key!) as! VariableToken
+        if token.status == .ok {
+            let tower = aetherView.aetherExe.tower(key: object.chain.key!)
+            return tower!.obje.uiColor
+        } else { return .red }
+    }
 
 // Citable =========================================================================================
     func tokenKey(at: CGPoint) -> TokenKey? { object.chain.key }

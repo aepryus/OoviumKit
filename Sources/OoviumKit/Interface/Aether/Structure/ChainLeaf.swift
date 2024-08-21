@@ -41,7 +41,7 @@ class ChainLeaf: Leaf, ChainViewDelegate, Editable {
 	var chain: Chain {
 		set {
 			chainView.chain = newValue
-//            mooring = bubble.createMooring(token: chain.key!)
+            mooring = bubble.createMooring(key: chain.key)
 		}
 		get { chainView.chain }
 	}
@@ -158,14 +158,14 @@ class ChainLeaf: Leaf, ChainViewDelegate, Editable {
     func becomeFirstResponder() { chainView.becomeFirstResponder() }
     func resignFirstResponder() { chainView.resignFirstResponder() }
 
-    func onTokenAdded(_ tokenKey: TokenKey) {
+    func onTokenKeyAdded(_ key: TokenKey) {
         guard delegate?.usesMooring ?? true else { return }
-        guard let mooring = bubble.aetherView.moorings[tokenKey] else { return }
+        guard let mooring = bubble.aetherView.moorings[key] else { return }
         mooring.attach(self.mooring)
     }
-    func onTokenRemoved(_ tokenKey: TokenKey) {
+    func onTokenKeyRemoved(_ key: TokenKey) {
         guard delegate?.usesMooring ?? true else { return }
-        guard let mooring = bubble.aetherView.moorings[tokenKey] else { return }
+        guard let mooring = bubble.aetherView.moorings[key] else { return }
         mooring.detach(self.mooring)
     }
 

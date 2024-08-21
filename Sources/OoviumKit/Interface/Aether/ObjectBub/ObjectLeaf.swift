@@ -21,7 +21,7 @@ class ObjectLeaf: Leaf, Editable, ChainViewDelegate, DoubleTappable, UITextField
 		
 		super.init(bubble: bubble)
         
-//        mooring = bubble.createMooring(key: object.token.key)
+        mooring = bubble.createMooring(key: object.chain.key)
 
 		chainView.chain = object.chain
 		chainView.delegate = self
@@ -106,10 +106,10 @@ class ObjectLeaf: Leaf, Editable, ChainViewDelegate, DoubleTappable, UITextField
 	
 // Leaf ============================================================================================
     override func wireMoorings() {
-//        object.chain.tokens.forEach {
-//            guard let mooring = bubble.aetherView.moorings[$0] else { return }
-//            mooring.attach(self.mooring, wake: false)
-//        }
+        object.chain.tokenKeys.forEach { (key: TokenKey) in
+            guard let mooring = bubble.aetherView.moorings[key] else { return }
+            mooring.attach(self.mooring, wake: false)
+        }
     }
         
 // Editable ========================================================================================
@@ -129,7 +129,6 @@ class ObjectLeaf: Leaf, Editable, ChainViewDelegate, DoubleTappable, UITextField
 	func onReleaseFocus() {
         if ChainResponder.hasExternalKeyboard { chainView.resignFirstResponder() }
 		chainView.ok()
-//        object.aether.state.evaluate()
 		render()
 		objectBub.onOK()
 		mooring.sleepDoodles()
@@ -146,13 +145,13 @@ class ObjectLeaf: Leaf, Editable, ChainViewDelegate, DoubleTappable, UITextField
     func becomeFirstResponder() { chainView.becomeFirstResponder() }
     func resignFirstResponder() { chainView.resignFirstResponder() }
 
-    func onTokenAdded(_ token: Token) {
-//        guard let upstream: Mooring = bubble.aetherView.moorings[token] else { return }
-//        upstream.attach(mooring)
+    func onTokenKeyAdded(_ key: TokenKey) {
+        guard let upstream: Mooring = bubble.aetherView.moorings[key] else { return }
+        upstream.attach(mooring)
     }
-    func onTokenRemoved(_ token: Token) {
-//        guard let upstream: Mooring = bubble.aetherView.moorings[token] else { return }
-//        upstream.detach(mooring)
+    func onTokenKeyRemoved(_ key: TokenKey) {
+        guard let upstream: Mooring = bubble.aetherView.moorings[key] else { return }
+        upstream.detach(mooring)
     }
 
     func onWidthChanged(oldWidth: CGFloat?, newWidth: CGFloat) { render() }

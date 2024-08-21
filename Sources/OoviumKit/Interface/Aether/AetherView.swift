@@ -206,6 +206,8 @@ public class AetherView: UIView, UIScrollViewDelegate, UIGestureRecognizerDelega
 	}
 	public required init?(coder aDecoder: NSCoder) { fatalError() }
     
+    public func compileAether() { aetherExe = aether.compile() }
+    
 // Events ==========================================================================================
     public func onCut() {
         onCopy()
@@ -500,6 +502,7 @@ public class AetherView: UIView, UIScrollViewDelegate, UIGestureRecognizerDelega
     }
 	public func openAether(_ aether: Aether) {
 		self.aether = aether
+        compileAether()
 		
 		aetherPicker?.aetherButton.setNeedsDisplay()
         aetherHover.aetherNameView.setNeedsDisplay()
