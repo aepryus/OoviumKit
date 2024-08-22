@@ -91,6 +91,7 @@ class MechBub: Bubble, SignatureLeafDelegate, ChainLeafDelegate {
 	func onNoOfParamsChanged(signatureLeaf: SignatureLeaf) {
 		while signatureLeaf.noOfParams > mech.inputs.count { mech.addInput() }
 		while mech.inputs.count > signatureLeaf.noOfParams { mech.removeInput() }
+        aetherView.compileAether()
 		render()
 	}
 	func onOK(signatureLeaf: SignatureLeaf) {

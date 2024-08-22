@@ -12,9 +12,9 @@ import UIKit
 class GateBub: Bubble, ChainLeafDelegate, Citable {
 	let gate: Gate
 	
-	lazy var ifLeaf: ChainLeaf = {ChainLeaf(bubble: self, hitch: .topLeft, anchor: CGPoint.zero, size: CGSize(width: 70, height: 36), delegate: self)}()
-	lazy var thenLeaf: ChainLeaf = {ChainLeaf(bubble: self, hitch: .topLeft, anchor: CGPoint.zero, size: CGSize(width: 70, height: 36), delegate: self)}()
-	lazy var elseLeaf: ChainLeaf = {ChainLeaf(bubble: self, hitch: .topLeft, anchor: CGPoint.zero, size: CGSize(width: 70, height: 36), delegate: self)}()
+	lazy var ifLeaf: ChainLeaf = { ChainLeaf(bubble: self, hitch: .topLeft, anchor: CGPoint.zero, size: CGSize(width: 70, height: 36), alwaysShow: false, delegate: self) }()
+	lazy var thenLeaf: ChainLeaf = { ChainLeaf(bubble: self, hitch: .topLeft, anchor: CGPoint.zero, size: CGSize(width: 70, height: 36), alwaysShow: false, delegate: self) }()
+	lazy var elseLeaf: ChainLeaf = { ChainLeaf(bubble: self, hitch: .topLeft, anchor: CGPoint.zero, size: CGSize(width: 70, height: 36), alwaysShow: false, delegate: self) }()
 	
     lazy var mooring: Mooring = { createMooring(key: gate.resultKey) }()
 	
@@ -114,7 +114,9 @@ class GateBub: Bubble, ChainLeafDelegate, Citable {
 	func onChange() { render() }
 	func onEdit() { render() }
 	func onOK(leaf: ChainLeaf) { render() }
-	func onCalculate() {}
+	func onCalculate() {
+        render()
+    }
 	
 // Citable =========================================================================================
 	func tokenKey(at: CGPoint) -> TokenKey? { gate.resultKey }

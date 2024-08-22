@@ -141,6 +141,7 @@ class TailBub: Bubble, SignatureLeafDelegate, ChainLeafDelegate {
 	func onNoOfParamsChanged(signatureLeaf: SignatureLeaf) {
 		while signatureLeaf.noOfParams > tail.vertebras.count {
 			let vertebra = tail.addVertebra()
+            aetherView.compileAether()
 			let vertebraLeaf = ChainLeaf(bubble: self, hitch: .topLeft, anchor: CGPoint.zero, size: CGSize(width: 100, height: 30))
 			vertebraLeaf.delegate = self
 			vertebraLeaf.chain = vertebra.chain
@@ -153,6 +154,7 @@ class TailBub: Bubble, SignatureLeafDelegate, ChainLeafDelegate {
 		}
 		while tail.vertebras.count > signatureLeaf.noOfParams {
 			tail.removeVertebra()
+            aetherView.compileAether()
 			let vertebraLeaf = vertebraLeaves.removeLast()
             if let i: Int = signatureLeaf.overrides.firstIndex(where: { $0 === vertebraLeaf }) {
                 signatureLeaf.overrides.remove(at: i)

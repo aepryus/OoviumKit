@@ -43,10 +43,10 @@ class SignatureLeaf: Leaf, Editable, Citable, UITextFieldDelegate {
 		
 		noOfParams = delegate!.params.count
 		
-//		for i in 0..<noOfParams {
-//            let mooring = bubble.createMooring(key: delegate?.paramTokens[i].key)
-//			paramMoorings.append(mooring)
-//		}
+		for i in 0..<noOfParams {
+            let mooring = bubble.createMooring(key: delegate?.paramTokens[i])
+			paramMoorings.append(mooring)
+		}
 
 		super.init(bubble: bubble, hitch: hitch, anchor: anchor, size: size)
 		

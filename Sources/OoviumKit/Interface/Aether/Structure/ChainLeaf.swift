@@ -31,7 +31,7 @@ class ChainLeaf: Leaf, ChainViewDelegate, Editable {
 		didSet { setNeedsDisplay() }
 	}
 	var minWidth: CGFloat = 36 {
-		didSet {self.size = CGSize(width: calcWidth(), height: 36)}
+		didSet { self.size = CGSize(width: calcWidth(), height: 36) }
 	}
 	var radius: CGFloat = 10 {
 		didSet { setNeedsDisplay() }
@@ -51,14 +51,14 @@ class ChainLeaf: Leaf, ChainViewDelegate, Editable {
 		else { return bubble.uiColor }
 	}
 	
-    init(bubble: Bubble, hitch: Position = .center, anchor: CGPoint = .zero, size: CGSize = .zero, delegate: ChainLeafDelegate? = nil) {
+    init(bubble: Bubble, hitch: Position = .center, anchor: CGPoint = .zero, size: CGSize = .zero, alwaysShow: Bool = true, delegate: ChainLeafDelegate? = nil) {
 		self.delegate = delegate
 		
 		super.init(bubble: bubble, hitch: hitch, anchor: anchor, size: size)
 		
 		self.backgroundColor = UIColor.clear
 		chainView.delegate = self
-        chainView.alwaysShow = true
+        chainView.alwaysShow = alwaysShow
 		addSubview(chainView)
 	}
 	required init?(coder aDecoder: NSCoder) { fatalError() }

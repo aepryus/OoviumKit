@@ -171,11 +171,8 @@ public class AnainResponder {
             _ = anainView.attemptToPost(key: Token.quote.key)
             token = Token.characterToken(tag: text)
         }
-        if let token = token {
-            _ = anainView.attemptToPost(key: token.key)
-        } else {
-            print("[ \(text) ] has no token")
-        }
+        if let token { _ = anainView.attemptToPost(key: token.key) }
+        else { print("[ \(text) ] has no token") }
     }
     func deleteBackward() {
         guard let anainView else { return }

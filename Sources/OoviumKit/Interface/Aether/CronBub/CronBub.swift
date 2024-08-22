@@ -12,7 +12,7 @@ import UIKit
 
 class CronBub: Bubble, ChainLeafDelegate {
 	let cron: Cron
-    var cronCore: CronCore?
+//    var cronCore: CronCore?
 	
 	let timer: AETimer = AETimer()
 	
@@ -33,18 +33,18 @@ class CronBub: Bubble, ChainLeafDelegate {
 		self.cron = cron
         super.init(aetherView: aetherView, aexel: cron, origin: CGPoint(x: self.cron.x, y: self.cron.y), size: CGSize.zero)
 		
-//		cron.tower.listener = faceLeaf
+        Tower.startListening(to: cron.tokenKey, listener: faceLeaf)
 		add(leaf: faceLeaf)
 		
 		playLeaf.playButton.onPlay = { [weak self] in
             guard let self else { return }
-//            self.timer.configure(interval: 1/cron.rateTower.value, { [weak self] in
-//				DispatchQueue.main.async { [weak self] in
-//                    guard let self else { return }
-//					let stop = self.cron.increment()
-//					if stop { self.playLeaf.playButton.stop() }
-//				}
-//			})
+            self.timer.configure(interval: 1/cronCore.rateTower.value, { [weak self] in
+				DispatchQueue.main.async { [weak self] in
+                    guard let self else { return }
+                    let stop = cronCore.increment()
+					if stop { self.playLeaf.playButton.stop() }
+				}
+			})
             self.timer.start()
 		}
 		playLeaf.playButton.onStop = { [unowned self] in
@@ -52,12 +52,15 @@ class CronBub: Bubble, ChainLeafDelegate {
 		}
 		playLeaf.resetButton.onReset = { [unowned self] in
             self.playLeaf.playButton.stop()
-            self.cronCore?.reset()
-//            self.cron.tower.trigger()
+            self.cronCore.reset()
+            
+            guard let tower: Tower = self.aetherView.aetherExe.tower(key: self.cron.tokenKey)
+            else { fatalError() }
+            tower.trigger()
 		}
 		playLeaf.stepButton.onStep =  { [unowned self] in
-            self.cronCore?.sealed = false
-			_ = self.cronCore?.increment()
+            self.cronCore.sealed = false
+			_ = self.cronCore.increment()
 		}
 		add(leaf: playLeaf)
 		
@@ -100,6 +103,14 @@ class CronBub: Bubble, ChainLeafDelegate {
 		selectLeaves()
 	}
 	required init?(coder aDecoder: NSCoder) { fatalError() }
+    
+    var cronCore: CronCore {
+        guard let aetherExe: AetherExe = aetherView.aetherExe,
+              let tower: Tower = aetherExe.tower(key: cron.tokenKey),
+              let cronCore: CronCore = tower.core as? CronCore
+        else { fatalError() }
+        return cronCore
+    }
 	
 	func morph() {
 		cron.exposed = !cron.exposed
@@ -236,7 +247,7 @@ class CronBub: Bubble, ChainLeafDelegate {
 		rateLeaf.wireMoorings()
 		deltaLeaf.wireMoorings()
 		whileLeaf.wireMoorings()
-		cronCore?.reset()
+		cronCore.reset()
 //		cron.tower.trigger()
 	}
 	
@@ -260,7 +271,7 @@ class CronBub: Bubble, ChainLeafDelegate {
 		aetherView.stretch()
 		if leaf !== rateLeaf {
 			playLeaf.playButton.stop()
-			cronCore?.reset()
+			cronCore.reset()
 //			cron.tower.trigger()
 		} else if playLeaf.playButton.playing {
 			playLeaf.playButton.stop()
