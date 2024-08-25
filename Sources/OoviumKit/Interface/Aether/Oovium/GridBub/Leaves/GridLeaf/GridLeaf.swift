@@ -186,9 +186,7 @@ class GridLeaf: Leaf, GridViewDelegate, UITextInput, UITextInputTraits {
     }
     
 // UIView ==========================================================================================
-	override func layoutSubviews() {
-		gridView.frame = self.bounds
-	}
+	override func layoutSubviews() { gridView.frame = self.bounds }
     override func draw(_ rect: CGRect) {}
 	
 // UIResponder =====================================================================================
@@ -196,12 +194,8 @@ class GridLeaf: Leaf, GridViewDelegate, UITextInput, UITextInputTraits {
     override var canResignFirstResponder: Bool { true }
         
 // GridViewDelegate ================================================================================
-	func numberOfRows(gridView: GridView) -> Int {
-		return grid.rows + 1 + (grid.hasFooter ? 1 : 0)
-	}
-	func numberOfColumns(gridView: GridView) -> Int {
-		return grid.columns.count + 1
-	}
+	func numberOfRows(gridView: GridView) -> Int { grid.rows + 1 + (grid.hasFooter ? 1 : 0) }
+	func numberOfColumns(gridView: GridView) -> Int { grid.columns.count + 1 }
 	func cell(gridView: GridView, column: Int, row: Int) -> UIView {
 		let rI: Int = row - 1
 		let cI: Int = column - 1

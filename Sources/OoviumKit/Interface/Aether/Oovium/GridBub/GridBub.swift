@@ -15,7 +15,7 @@ class GridBub: Bubble, ChainLeafDelegate {
     
     lazy var controller: GridController = GridController(self)
 	
-	lazy var gridLeaf: GridLeaf = GridLeaf(controller: controller)
+	var gridLeaf: GridLeaf!
     lazy var addRowLeaf: PlusLeaf = PlusLeaf(controller: controller)
     lazy var addColumnLeaf: PlusLeaf = PlusLeaf(controller: controller)
 	lazy var equalLeaf: EqualLeaf = EqualLeaf(bubble: self)
@@ -29,6 +29,9 @@ class GridBub: Bubble, ChainLeafDelegate {
 		self.grid = grid
 		
 		super.init(aetherView: aetherView, aexel: grid, origin: CGPoint(x: self.grid.x, y: self.grid.y), size: CGSize.zero)
+        
+        controller = GridController(self)
+        gridLeaf = GridLeaf(controller: controller)
 		
 		gridLeaf.size = CGSize(width: 360, height: 360)
 		gridLeaf.hitch = .topLeft
@@ -200,7 +203,7 @@ class GridBub: Bubble, ChainLeafDelegate {
 // UIView ==========================================================================================
 	override func setNeedsDisplay() {
 		super.setNeedsDisplay()
-		gridLeaf.setNeedsDisplay()
+		gridLeaf?.setNeedsDisplay()
 	}
 	override func draw(_ rect: CGRect) {
 		guard let plasma = plasma else { return }

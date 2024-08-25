@@ -59,7 +59,7 @@ class ChainView: UIView, UITextInput, UITextInputTraits, AnchorTappable, TowerLi
             guard let key: TokenKey = chain.key
             else { fatalError() }
             Tower.startListening(to: key, listener: self)
-            resize()
+//            resize()
         }
     }
     public private(set) var editing: Bool = false
@@ -85,7 +85,7 @@ class ChainView: UIView, UITextInput, UITextInputTraits, AnchorTappable, TowerLi
     public required init?(coder aDecoder: NSCoder) { fatalError() }
     
 // Computed ========================================================================================
-    var aetherView: AetherView { responder!.aetherView }
+    var aetherView: AetherView { editable.aetherView }
     var aetherExe: AetherExe { aetherView.aetherExe }
     var chainCore: ChainCore { aetherExe.chainCore(key: chain.key!) }
     
