@@ -26,7 +26,7 @@ public extension AetherViewDelegate {
 
 public class AetherView: UIView, UIScrollViewDelegate, UIGestureRecognizerDelegate, AnchorDoubleTappable, GadgetDelegate {
 	public var aether: Aether
-    var aetherExe: AetherExe!
+    var aetherExe: AetherExe
     public var facade: AetherFacade?
     
     lazy var responder: ChainResponder = { ChainResponder(aetherView: self) }()
@@ -104,9 +104,11 @@ public class AetherView: UIView, UIScrollViewDelegate, UIGestureRecognizerDelega
 
 	var slid: Bool = false
 	
-	public init(aether: Aether, toolBox: ToolBox, toolsOn: Bool = true, burn: Bool = true, oldPicker: Bool = false) {
-		self.aether = aether
-		self.burn = burn
+	public init(toolBox: ToolBox, toolsOn: Bool = true, burn: Bool = true, oldPicker: Bool = false) {
+		aether = Aether()
+        aetherExe = aether.compile()
+
+        self.burn = burn
 		self.oldPicker = oldPicker
 
 		super.init(frame: CGRect(x: 0, y: 0, width: self.aether.width, height: self.aether.height))
@@ -181,7 +183,7 @@ public class AetherView: UIView, UIScrollViewDelegate, UIGestureRecognizerDelega
 		NotificationCenter.default.addObserver(self, selector: #selector(onKeyboardWillHide(_:)), name: UIResponder.keyboardWillHideNotification, object: nil)
 	}
 	
-    public convenience init(aether: Aether, toolsOn: Bool = true, burn: Bool = true, oldPicker: Bool = false) {
+    public convenience init(toolsOn: Bool = true, burn: Bool = true, oldPicker: Bool = false) {
 		var tools: [[Tool?]] = Array(repeating: Array(repeating: nil, count: 10), count: 2)
 		
 		tools[0][0] = AetherView.objectTool
@@ -199,10 +201,7 @@ public class AetherView: UIView, UIScrollViewDelegate, UIGestureRecognizerDelega
 //        tools[0][9] = AetherView.graphTool
 //		tools[0][5] = AetherView.alsoTool
 		
-        self.init(aether: aether, toolBox: ToolBox(tools), toolsOn: toolsOn, burn: burn, oldPicker: oldPicker)
-	}
-	public convenience init() {
-		self.init(aether: Aether())
+        self.init(toolBox: ToolBox(tools), toolsOn: toolsOn, burn: burn, oldPicker: oldPicker)
 	}
 	public required init?(coder aDecoder: NSCoder) { fatalError() }
     
@@ -522,6 +521,8 @@ public class AetherView: UIView, UIScrollViewDelegate, UIGestureRecognizerDelega
 		else { showToolBars() }
         
         aether.aexels.forEach { add(bubble: createBubble(aexel: $0)!) }
+        
+        aetherExe.notifyListeners()
 
 		bubbles.forEach { $0.wireMoorings() }
 		bubbles.forEach { $0.frame = CGRect(origin: CGPoint(x: $0.aexel.x, y: $0.aexel.y), size: $0.bounds.size) }

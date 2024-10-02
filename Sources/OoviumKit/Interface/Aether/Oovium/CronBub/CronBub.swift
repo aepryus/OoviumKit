@@ -105,8 +105,7 @@ class CronBub: Bubble, ChainLeafDelegate {
 	required init?(coder aDecoder: NSCoder) { fatalError() }
     
     var cronCore: CronCore {
-        guard let aetherExe: AetherExe = aetherView.aetherExe,
-              let tower: Tower = aetherExe.tower(key: cron.tokenKey),
+        guard let tower: Tower = aetherView.aetherExe.tower(key: cron.tokenKey),
               let cronCore: CronCore = tower.core as? CronCore
         else { fatalError() }
         return cronCore
