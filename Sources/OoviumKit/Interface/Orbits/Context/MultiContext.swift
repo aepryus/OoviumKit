@@ -16,7 +16,6 @@ class MultiContext: Context {
 			self.aetherView.invokeConfirmModal(NSLocalizedString("deleteManyConfirm", tableName: nil, bundle: Bundle(for: type(of: self)), value: "", comment: "")) { [unowned self] in
 				self.dismiss()
 				self.aetherView.deleteSelected()
-				self.aetherView.unselectAll()
 			}
 		}))
 

@@ -12,7 +12,7 @@ import OoviumEngine
 class CoordinateMaker: Maker {
 // Maker ===========================================================================================
     func make(aetherView: AetherView, at: V2) -> Bubble {
-        let coordinate: Coordinate = aetherView.aether.create(at: at)
+        let coordinate: Coordinate = aetherView.create(at: at)
         return CoordinateBub(coordinate, aetherView: aetherView)
     }
     func drawIcon() {

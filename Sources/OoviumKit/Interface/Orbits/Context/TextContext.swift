@@ -40,7 +40,6 @@ class TextContext: Context {
 				
                 self.dismiss()
                 self.aetherView.deleteSelected()
-                self.aetherView.unselectAll()
 			}
 		}))
         

@@ -12,7 +12,7 @@ import OoviumEngine
 class TensorMaker: Maker {
 // Maker ===========================================================================================
     func make(aetherView: AetherView, at: V2) -> Bubble {
-        let tensor: Tensor = aetherView.aether.create(at: at)
+        let tensor: Tensor = aetherView.create(at: at)
         return TensorBub(tensor, aetherView: aetherView)
     }
     func drawIcon() {

@@ -15,16 +15,16 @@ protocol Colorable: AnyObject {
 
 class Mooring {
     private unowned var bubble: Bubble
-    weak var token: Token?
+    var tokenKey: TokenKey?
     
 	var point: CGPoint = CGPoint.zero {
         didSet { doodles.forEach { $0.render() } }
 	}
     var doodles: [LinkDoodle] = []
     
-    init(bubble: Bubble, token: Token? = nil) {
+    init(bubble: Bubble, key: TokenKey? = nil) {
         self.bubble = bubble
-        self.token = token
+        self.tokenKey = key
     }
 	
 	var color: UIColor { bubble.uiColor }

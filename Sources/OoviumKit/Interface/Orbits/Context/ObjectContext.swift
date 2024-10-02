@@ -21,7 +21,6 @@ class ObjectContext: Context {
 			self.aetherView.invokeConfirmModal(NSLocalizedString("deleteOneConfirm", tableName: nil, bundle: Bundle(for: type(of: self)), value: "", comment: ""), {
 				me.dismiss()
 				me.aetherView.deleteSelected()
-				me.aetherView.unselectAll()
 			})
 		}))
 		

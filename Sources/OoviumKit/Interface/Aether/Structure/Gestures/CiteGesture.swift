@@ -11,10 +11,10 @@ import UIKit
 
 protocol Citable: AnyObject {
 	func relevant(editable: Editable) -> Bool
-	func token(at: CGPoint) -> Token?
+	func tokenKey(at: CGPoint) -> TokenKey?
 }
 extension Citable {
-	func relevant(editable: Editable) -> Bool {return true}
+	func relevant(editable: Editable) -> Bool { true }
 }
 
 class CiteGesture: UITapGestureRecognizer {

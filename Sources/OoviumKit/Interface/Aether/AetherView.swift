@@ -26,6 +26,7 @@ public extension AetherViewDelegate {
 
 public class AetherView: UIView, UIScrollViewDelegate, UIGestureRecognizerDelegate, AnchorDoubleTappable, GadgetDelegate {
 	public var aether: Aether
+    var aetherExe: AetherExe!
     public var facade: AetherFacade?
     
     lazy var responder: ChainResponder = { ChainResponder(aetherView: self) }()
@@ -47,7 +48,7 @@ public class AetherView: UIView, UIScrollViewDelegate, UIGestureRecognizerDelega
 	
 	var readOnly: Bool = false
 	private(set) var focus: Editable? = nil
-	var selected: Set<Bubble> = Set<Bubble>()
+	public var selected: Set<Bubble> = Set<Bubble>()
 	var copyBuffer: Set<Bubble> = Set<Bubble>()
 	var locked: Bool = false
 	var currentTextLeaf: TextLeaf? = nil
@@ -191,11 +192,11 @@ public class AetherView: UIView, UIScrollViewDelegate, UIGestureRecognizerDelega
 //		tools[1][2] = AetherView.typeTool
 		tools[0][3] = AetherView.cronTool
 		tools[0][4] = AetherView.textTool
-        tools[0][5] = AetherView.analyticTool
-        tools[0][6] = AetherView.systemTool
-        tools[0][7] = AetherView.coordinateTool
-        tools[0][8] = AetherView.tensorTool
-        tools[0][9] = AetherView.graphTool
+//        tools[0][5] = AetherView.analyticTool
+//        tools[0][6] = AetherView.systemTool
+//        tools[0][7] = AetherView.coordinateTool
+//        tools[0][8] = AetherView.tensorTool
+//        tools[0][9] = AetherView.graphTool
 //		tools[0][5] = AetherView.alsoTool
 		
         self.init(aether: aether, toolBox: ToolBox(tools), toolsOn: toolsOn, burn: burn, oldPicker: oldPicker)
@@ -205,6 +206,81 @@ public class AetherView: UIView, UIScrollViewDelegate, UIGestureRecognizerDelega
 	}
 	public required init?(coder aDecoder: NSCoder) { fatalError() }
     
+    public func compileAether() {
+        aetherExe = aether.compile()
+        aetherExe.notifyListeners()
+    }
+    
+    public func create<T: Aexel>(at: V2) -> T {
+        let aexel: T = aether.create(at: at)
+        compileAether()
+        return aexel
+    }
+
+    
+// Events ==========================================================================================
+    public func onCut() {
+        onCopy()
+        deleteSelected()
+    }
+    public func onCopy() {
+//        markPositions()
+//        // General ======================
+//        if selected.count == 1, let bubble: Bubble = selected.first {
+//            if let objectBub: ObjectBub = bubble as? ObjectBub {
+//                UIPasteboard.general.string = objectBub.object.token.value
+//            } else if let gateBub: GateBub = bubble as? GateBub {
+//                UIPasteboard.general.string = ""/*gateBub.gate.token.value*/
+//            } else if let cronBub: CronBub = bubble as? CronBub {
+//                UIPasteboard.general.string = cronBub.cron.token.value
+//            } else if let textBub: TextBub = bubble as? TextBub {
+//                UIPasteboard.general.string = textBub.text.name
+//            } else if let gridBub: GridBub = bubble as? GridBub {
+//                var string: String = ""
+//                
+//                gridBub.grid.columns.forEach({ string += "\($0.name)," })
+//                string.removeLast()
+//                string += "\n"
+//
+//                for i: Int in 0..<gridBub.grid.rows {
+//                    for j: Int in 0..<gridBub.grid.columns.count {
+//                        string += "\(gridBub.grid.cell(colNo: j, rowNo: i).tower.obje.display),"
+//                    }
+//                    string.removeLast()
+//                    string += "\n"
+//                }
+//
+//                UIPasteboard.general.string = string
+//            }
+//        } else {
+//            UIPasteboard.general.string = nil
+//        }
+//
+//        // Oovium =======================
+//        let array: [[String:Any]] = selected.compactMap({ $0.aexel }).map({ $0.unload() })
+//        UIPasteboard.oovium.string = array.toJSON()
+    }
+    public func onPaste() {
+        if responder.chainView == nil {
+//            guard let json: String = UIPasteboard.oovium.string else { return }
+            let aexels: [Aexel] = []//aether.paste(array: json.toArray())
+            let bubbles: [Bubble] = aexels.map { createBubble(aexel: $0)! }
+            bubbles.forEach { add(bubble: $0) }
+
+            bubbles.forEach { $0.wireMoorings() }
+            bubbles.forEach { $0.frame = CGRect(origin: CGPoint(x: $0.aexel.x, y: $0.aexel.y), size: $0.bounds.size) }
+            stretch(animated:false)
+
+            unselectAll()
+            select(bubbles: bubbles)
+            
+        } else {
+            if let string: String = UIPasteboard.general.string {
+                responder.paste(text: string)
+            }
+        }
+    }
+
 // GadgetDelegate ==================================================================================
     private var isFullScreen: Bool { max(Screen.width, Screen.height) == max(width, height) && min(Screen.width, Screen.height) == min(width, height) }
     private let macPadding: CGFloat = 6*Screen.s
@@ -353,7 +429,7 @@ public class AetherView: UIView, UIScrollViewDelegate, UIGestureRecognizerDelega
         }
         
         // Remove Moorings
-        moorings.compactMap({ $0.token }).forEach { self.moorings[$0] = nil }
+        moorings.compactMap({ $0.tokenKey }).forEach { self.moorings[$0] = nil }
         
         // Remove Bubbles
         bubbles.forEach {
@@ -396,6 +472,7 @@ public class AetherView: UIView, UIScrollViewDelegate, UIGestureRecognizerDelega
 		guard let focus else { return }
 		self.focus = nil
 		focus.onReleaseFocus()
+        responder.chainView = nil
         let next: Editable? = focus.nextFocus(release: release)
         if let next { next.makeFocus() }
         else { orb.deorbit() }
@@ -409,8 +486,33 @@ public class AetherView: UIView, UIScrollViewDelegate, UIGestureRecognizerDelega
 		removeAllBubbles()
 		removeAllDoodles()
 	}
+    private func createBubble(aexel: Aexel) -> Bubble? {
+        switch aexel.type {
+            case "also":        return AlsoBub(aexel as! Also, aetherView: self)
+            case "analytic":    return AnalyticBub(aexel as! Analytic, aetherView: self)
+            case "auto":        return AutoBub(aexel as! Automata, aetherView: self)
+            case "coordinate":  return CoordinateBub(aexel as! Coordinate, aetherView: self)
+            case "cron":        return CronBub(aexel as! Cron, aetherView: self)
+            case "gate":        return GateBub(aexel as! Gate, aetherView: self)
+            case "graph":       return GraphBub(aexel as! Graph, aetherView: self)
+            case "grid":        return GridBub(aexel as! Grid, aetherView: self)
+            case "mech":        return MechBub(aexel as! Mech, aetherView: self)
+            case "miru":        return MiruBub(aexel as! Miru, aetherView: self)
+            case "object":      return ObjectBub(aexel as! Object, aetherView: self)
+            case "oovi":        return OoviBub(aexel as! Oovi, aetherView: self)
+            case "system":      return SystemBub(aexel as! System, aetherView: self)
+            case "tail":        return TailBub(aexel as! Tail, aetherView: self)
+            case "tensor":      return TensorBub(aexel as! Tensor, aetherView: self)
+            case "text":        return TextBub(aexel as! Text, aetherView: self)
+            case "type":        return TypeBub(aexel as! Type, aetherView: self)
+            default:
+                print("invalid type [\(aexel.type ?? "nil")]")
+                return nil
+        }
+    }
 	public func openAether(_ aether: Aether) {
 		self.aether = aether
+        compileAether()
 		
 		aetherPicker?.aetherButton.setNeedsDisplay()
         aetherHover.aetherNameView.setNeedsDisplay()
@@ -419,28 +521,7 @@ public class AetherView: UIView, UIScrollViewDelegate, UIGestureRecognizerDelega
 		if readOnly { dismissToolBars() }
 		else { showToolBars() }
         
-		aether.aexels.forEach { (aexel: Aexel) in
-			switch aexel.type {
-                case "also":        add(bubble: AlsoBub(aexel as! Also, aetherView: self))
-                case "analytic":    add(bubble: AnalyticBub(aexel as! Analytic, aetherView: self))
-                case "auto":        add(bubble: AutoBub(aexel as! Auto, aetherView: self))
-                case "coordinate":  add(bubble: CoordinateBub(aexel as! Coordinate, aetherView: self))
-                case "cron":        add(bubble: CronBub(aexel as! Cron, aetherView: self))
-                case "gate":        add(bubble: GateBub(aexel as! Gate, aetherView: self))
-                case "graph":       add(bubble: GraphBub(aexel as! Graph, aetherView: self))
-                case "grid":        add(bubble: GridBub(aexel as! Grid, aetherView: self))
-                case "mech":        add(bubble: MechBub(aexel as! Mech, aetherView: self))
-                case "miru":        add(bubble: MiruBub(aexel as! Miru, aetherView: self))
-                case "object":      add(bubble: ObjectBub(aexel as! Object, aetherView: self))
-                case "oovi":        add(bubble: OoviBub(aexel as! Oovi, aetherView: self))
-                case "system":      add(bubble: SystemBub(aexel as! System, aetherView: self))
-                case "tail":        add(bubble: TailBub(aexel as! Tail, aetherView: self))
-                case "tensor":      add(bubble: TensorBub(aexel as! Tensor, aetherView: self))
-                case "text":        add(bubble: TextBub(aexel as! Text, aetherView: self))
-                case "type":        add(bubble: TypeBub(aexel as! Type, aetherView: self))
-				default:		    print("invalid type [\(aexel.type ?? "nil")]")
-			}
-		}
+        aether.aexels.forEach { add(bubble: createBubble(aexel: $0)!) }
 
 		bubbles.forEach { $0.wireMoorings() }
 		bubbles.forEach { $0.frame = CGRect(origin: CGPoint(x: $0.aexel.x, y: $0.aexel.y), size: $0.bounds.size) }
@@ -506,7 +587,9 @@ public class AetherView: UIView, UIScrollViewDelegate, UIGestureRecognizerDelega
 	}
 	
 	func triggerMaker(at: V2) {
+        if let focus { focus.releaseFocus(.administrative) }
 		let bubble = maker.make(aetherView: self, at: at)
+        compileAether()
 		add(bubble: bubble)
 		bubble.create()
 		stretch()
@@ -529,7 +612,7 @@ public class AetherView: UIView, UIScrollViewDelegate, UIGestureRecognizerDelega
 	}
 	
 // Links ===========================================================================================
-	var moorings: [Token:Mooring] = [:]
+	var moorings: [TokenKey:Mooring] = [:]
 	
 // Stretch =========================================================================================
 	func snapBack() { scrollView.setContentOffset(CGPoint(x: aether.xOffset, y: aether.yOffset), animated: false) }
@@ -653,6 +736,7 @@ public class AetherView: UIView, UIScrollViewDelegate, UIGestureRecognizerDelega
         aether.remove(aexels: selected.map({ $0.aexel }))
         stretch()
 		orb.chainEditor.customSchematic?.render(aether: aether)
+        unselectAll()
 	}
 	func copyBubbles() {
 		copyBuffer = selected

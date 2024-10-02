@@ -34,10 +34,10 @@ public class BehindView: UIView {
 	required init?(coder: NSCoder) { fatalError() }
     
 // UIView ==========================================================================================
-    override public var frame: CGRect {
+    public override var frame: CGRect {
         didSet { setNeedsLayout() }
     }
-	override public func layoutSubviews() {
+	public override func layoutSubviews() {
         let h: CGFloat = 36*s
         let p: CGFloat = 4*s
 

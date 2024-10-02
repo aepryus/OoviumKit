@@ -245,17 +245,17 @@ public class AetherPicker: Hover, UITableViewDelegate, UITableViewDataSource, UI
 	}
 	
 // Hover ===========================================================================================
-	override public func retract() {
+	public override func retract() {
 		if expanded {
 			makeDeletable(cell: nil)
 			toggleExpanded()
 		}
 	}
-	override public func render() {
+	public override func render() {
 		super.render()
 		rescale()
 	}
-	override public func rescale() {
+	public override func rescale() {
 		super.rescale()
 
 		let p: CGFloat = 2*Oo.s
@@ -333,7 +333,7 @@ public class AetherPicker: Hover, UITableViewDelegate, UITableViewDataSource, UI
 	}
 	
 // UIView ==========================================================================================
-	override public func draw(_ rect: CGRect) {
+	public override func draw(_ rect: CGRect) {
 		let p: CGFloat = 2*Oo.s
 		let q: CGFloat = 13*Oo.s
 		let sp: CGFloat = 4*Oo.s
