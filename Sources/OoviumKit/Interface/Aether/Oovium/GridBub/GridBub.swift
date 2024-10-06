@@ -215,8 +215,8 @@ class GridBub: Bubble, ChainLeafDelegate {
 	func onWillFocusTap() { suppressChainLeafRemoval = true }
 	func onEdit() { layoutLeavesIfNeeded() }
 	func onOK(leaf: ChainLeaf) {
-//		guard let editingColNo = editingColNo, let column: Column = grid.column(colNo: editingColNo) else { fatalError() }
-//		column.disseminate()
+		guard let editingColNo = editingColNo, let column: Column = grid.column(colNo: editingColNo) else { fatalError() }
+		column.disseminate()
 //		column.calculate()
 		removeChainLeaf()
         controller.resize()
