@@ -171,6 +171,8 @@ class ChainView: UIView, UITextInput, UITextInputTraits, AnchorTappable, TowerLi
         
         chain.post(key: key, at: cursor)
         
+        if key.hasTower { aetherExe.increment(key: chain.key!, dependenceOn: key) }
+        
         cursor += 1
         triggerKeyboardIfNeeded()
         resize()
@@ -202,6 +204,7 @@ class ChainView: UIView, UITextInput, UITextInputTraits, AnchorTappable, TowerLi
     }
     func delete() {
         guard let key: TokenKey = chain.delete(at: cursor) else { return }
+        if key.hasTower { aetherExe.decrement(key: chain.key!, dependenceOn:  key)}
         handleKeyRemoved(key)
     }
        
@@ -218,7 +221,9 @@ class ChainView: UIView, UITextInput, UITextInputTraits, AnchorTappable, TowerLi
         resignFirstResponder()
         isUserInteractionEnabled = false
         editing = false
-        aetherView.compileAether()
+        let tower: Tower = aetherView.aetherExe.tower(key: chain.key!)!
+        tower.trigger()
+//        aetherView.compileAether()
         resize()
         delegate?.onChanged()
     }
@@ -360,9 +365,10 @@ class ChainView: UIView, UITextInput, UITextInputTraits, AnchorTappable, TowerLi
         } else { keyDelegate?.onArrowRight() }
     }
     @objc func backspace() {            // delete left
-        guard let token = chain.backspace(at: cursor) else { return }
+        guard let key = chain.backspace(at: cursor) else { return }
+        if key.hasTower { aetherExe.decrement(key: chain.key!, dependenceOn:  key)}
         cursor -= 1
-        handleKeyRemoved(token)
+        handleKeyRemoved(key)
     }
 
     @objc func upArrow() { responder!.upArrow() }

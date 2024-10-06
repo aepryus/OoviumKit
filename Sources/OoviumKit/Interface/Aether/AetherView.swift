@@ -212,7 +212,8 @@ public class AetherView: UIView, UIScrollViewDelegate, UIGestureRecognizerDelega
     
     public func create<T: Aexel>(at: V2) -> T {
         let aexel: T = aether.create(at: at)
-        compileAether()
+        aetherExe.add(aexon: aexel)
+        aetherExe.buildMemory()
         return aexel
     }
 
@@ -590,7 +591,6 @@ public class AetherView: UIView, UIScrollViewDelegate, UIGestureRecognizerDelega
 	func triggerMaker(at: V2) {
         if let focus { focus.releaseFocus(.administrative) }
 		let bubble = maker.make(aetherView: self, at: at)
-        compileAether()
 		add(bubble: bubble)
 		bubble.create()
 		stretch()
@@ -735,6 +735,7 @@ public class AetherView: UIView, UIScrollViewDelegate, UIGestureRecognizerDelega
 	func deleteSelected() {
         remove(bubbles: selected)
         aether.remove(aexels: selected.map({ $0.aexel }))
+        aetherExe.nuke(keys: selected.flatMap({ $0.aexel.tokenKeys }))
         stretch()
 		orb.chainEditor.customSchematic?.render(aether: aether)
         unselectAll()

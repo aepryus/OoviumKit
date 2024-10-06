@@ -61,7 +61,7 @@ class FooterCell: UICollectionViewCell, Sizable, Citable, FocusTappable, TowerLi
     }
 
 // Citable =========================================================================================
-    func tokenKey(at: CGPoint) -> TokenKey? { column.footerChain.key }
+    func tokenKey(at: CGPoint) -> TokenKey? { column.footerTokenKey }
 	
 // TowerListener ===================================================================================
 	func onTriggered() {

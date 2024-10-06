@@ -34,7 +34,7 @@ class GridController: ChainViewKeyDelegate {
         let cells: [Cell] = grid.addRow()
         gridBub.addRow(with: cells)
         grid.columns.filter({ $0.aggregate != .none }).forEach {
-            let footerTower: Tower = gridBub.aetherView.aetherExe.tower(key: $0.footerChain.key!)!
+            let footerTower: Tower = gridBub.aetherView.aetherExe.tower(key: $0.footerTokenKey)!
             footerTower.buildStream()
             footerTower.buildTask()
         }
@@ -42,6 +42,7 @@ class GridController: ChainViewKeyDelegate {
     }
     func addColumn() {
         let column: Column = grid.addColumn()
+        gridBub.aetherView.aetherExe.add(aexon: column)
         gridBub.addColumn(with: column)
         resizeEverything()
     }
@@ -75,7 +76,7 @@ class GridController: ChainViewKeyDelegate {
     }
     
 // Events ==========================================================================================
-    func onAnchorCellTapped() { /*gridBub.morph()*/ }
+    func onAnchorCellTapped() { gridBub.morph() }
     
     func nextGridCell(from gridCell: GridCell, release: Release) -> Editable? {
         switch release {

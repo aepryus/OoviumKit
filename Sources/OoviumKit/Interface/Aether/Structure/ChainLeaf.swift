@@ -21,7 +21,7 @@ protocol ChainLeafDelegate: AnyObject {
 extension ChainLeafDelegate {
     var usesMooring: Bool { true }
 	func onWillFocusTap() {}
-	func accept(citable: Citable) -> Bool {return true}
+	func accept(citable: Citable) -> Bool { return true }
 }
 
 class ChainLeaf: Leaf, ChainViewDelegate, Editable {

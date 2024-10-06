@@ -40,7 +40,9 @@ class GridLeaf: Leaf, GridViewDelegate, UITextInput, UITextInputTraits {
         
         grid.columns.forEach { (column: Column) in
             let gridColumn: GridColumn = GridColumn(controller: controller, column: column, headerCell: HeaderCell(controller: controller, column: column))
-            let cells: [Cell] = grid.cellsForColumn(i: column.colNo)
+            let n: Int = column.colNo
+            let cells: [Cell] = grid.cellsForColumn(i: n)
+//            let cells: [Cell] = grid.cellsForColumn(i: column.colNo)
             cells.forEach { gridColumn.addGridCell(controller: controller, column: gridColumn, cell: $0) }
             columns.append(gridColumn)
         }
