@@ -217,7 +217,14 @@ class GridBub: Bubble, ChainLeafDelegate {
 	func onOK(leaf: ChainLeaf) {
 		guard let editingColNo = editingColNo, let column: Column = grid.column(colNo: editingColNo) else { fatalError() }
 		column.disseminate()
-//		column.calculate()
+
+        let aetherExe: AetherExe = aetherView.aetherExe
+
+        aetherView.aetherExe.trigger(keys: column.cellKeys())
+        
+        let cellTowers: [Tower] = column.cellKeys().map({ aetherExe.tower(key: $0)! })
+        cellTowers.forEach({ $0.buildStream() })
+
 		removeChainLeaf()
         controller.resize()
 	}

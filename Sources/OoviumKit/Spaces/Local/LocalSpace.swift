@@ -43,7 +43,13 @@ public class LocalSpace: Space {
         let url: URL = facade.url
         if  let data = FileManager.default.contents(atPath: url.path),
             let json: String = String(data: data, encoding: .utf8) {
-            complete(json)
+//            do {
+//                json = try Migrate.migrateAether(json: json)
+                complete(json)
+//            } catch {
+//                print("ERROR: \(error)")
+//                complete(nil)
+//            }
         } else {
             print("no file at \(url.path)")
             complete(nil)

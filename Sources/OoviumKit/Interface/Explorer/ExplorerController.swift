@@ -69,8 +69,8 @@ public class ExplorerController: NSObject, UIDocumentPickerDelegate {
     }
     
 // UIDocumentPickerDelegate ========================================================================
-    private func importAethers(urls: [URL]) {
-        urls.forEach {
+    private func importAethers(urls: [URL]) throws {
+        try urls.forEach {
             guard let data: Data = FileManager.default.contents(atPath: $0.path),
                   let dataString = String(data: data, encoding: .utf8)
                 else { return }
@@ -78,7 +78,7 @@ public class ExplorerController: NSObject, UIDocumentPickerDelegate {
             let name: String = $0.itemName
             let xmlAtts: [String:Any] = dataString.xmlToAttributes()
             let jsonAtts: [String:Any] = xmlAtts.count == 0 ? dataString.toAttributes() : Migrate.migrateXMLtoJSON(xmlAtts)
-            let aether: Aether = Aether(json: Migrate.migrateAether(json: jsonAtts.toJSON()))
+            let aether: Aether = Aether(json: try Migrate.migrateAether(json: jsonAtts.toJSON()))
             let facade: AetherFacade = Facade.create(url: explorer.facade.url.appendingPathComponent(name).appendingPathExtension("oo")) as! AetherFacade
             facade.store(aether: aether) { (success: Bool) in
                 print("[\(name)] imported successfully")
@@ -86,10 +86,18 @@ public class ExplorerController: NSObject, UIDocumentPickerDelegate {
         }
     }
     public func documentPicker(_ controller: UIDocumentPickerViewController, didPickDocumentAt url: URL) {
-        importAethers(urls: [url])
+        do {
+            try importAethers(urls: [url])
+        } catch {
+            print("\(error)")
+        }
     }
     public func documentPicker(_ controller: UIDocumentPickerViewController, didPickDocumentsAt urls: [URL]) {
-        importAethers(urls: urls)
+        do {
+            try importAethers(urls: urls)
+        } catch {
+            print("\(error)")
+        }
     }
     public func documentPickerWasCancelled(_ controller: UIDocumentPickerViewController) { }
 }

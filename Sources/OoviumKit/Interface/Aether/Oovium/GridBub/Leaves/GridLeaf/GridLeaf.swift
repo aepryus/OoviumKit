@@ -41,7 +41,7 @@ class GridLeaf: Leaf, GridViewDelegate, UITextInput, UITextInputTraits {
         grid.columns.forEach { (column: Column) in
             let gridColumn: GridColumn = GridColumn(controller: controller, column: column, headerCell: HeaderCell(controller: controller, column: column))
             let n: Int = column.colNo
-            let cells: [Cell] = grid.cellsForColumn(i: n)
+            let cells: [Cell] = grid.cellsForColumn(colNo: n)
 //            let cells: [Cell] = grid.cellsForColumn(i: column.colNo)
             cells.forEach { gridColumn.addGridCell(controller: controller, column: gridColumn, cell: $0) }
             columns.append(gridColumn)
@@ -103,7 +103,7 @@ class GridLeaf: Leaf, GridViewDelegate, UITextInput, UITextInputTraits {
         let gridColumn: GridColumn = GridColumn(controller: controller, column: column, headerCell: HeaderCell(controller: controller, column: column))
         columns.append(gridColumn)
         if grid.hasFooter { gridColumn.footerCell = FooterCell(controller: controller, column: column) }
-        let cells: [Cell] = column.grid.cellsForColumn(i: column.colNo)
+        let cells: [Cell] = column.grid.cellsForColumn(colNo: column.colNo)
         for i in 0..<grid.rows { gridColumn.gridCells.append(GridCell(controller: controller, column: gridColumn, cell: cells[i])) }
 	}
 	func delete(column: Column) {

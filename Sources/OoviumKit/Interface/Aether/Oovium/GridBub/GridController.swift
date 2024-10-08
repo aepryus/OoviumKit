@@ -33,16 +33,34 @@ class GridController: ChainViewKeyDelegate {
     func addRow() {
         let cells: [Cell] = grid.addRow()
         gridBub.addRow(with: cells)
+        let aetherExe: AetherExe = gridBub.aetherView.aetherExe
+
         grid.columns.filter({ $0.aggregate != .none }).forEach {
-            let footerTower: Tower = gridBub.aetherView.aetherExe.tower(key: $0.footerTokenKey)!
+            let footerTower: Tower = aetherExe.tower(key: $0.footerTokenKey)!
             footerTower.buildStream()
             footerTower.buildTask()
         }
+        
+        cells.forEach({ aetherExe.add(aexon: $0) })
+        
+        aetherExe.trigger(keys: cells.map({ $0.chain.key! }))
+                
+        let cellTowers: [Tower] = cells.map({ aetherExe.tower(key: $0.chain.key!)! })
+        cellTowers.forEach({ $0.buildStream() })
+
         resizeEverything()
     }
     func addColumn() {
+        let aetherExe: AetherExe = gridBub.aetherView.aetherExe
         let column: Column = grid.addColumn()
-        gridBub.aetherView.aetherExe.add(aexon: column)
+
+        aetherExe.add(aexon: column)
+
+        aetherExe.trigger(keys: column.cellKeys())
+
+        let cellTowers: [Tower] = column.cellKeys().map({ aetherExe.tower(key: $0)! })
+        cellTowers.forEach({ $0.buildStream() })
+
         gridBub.addColumn(with: column)
         resizeEverything()
     }
