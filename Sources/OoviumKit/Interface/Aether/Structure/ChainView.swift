@@ -91,7 +91,7 @@ class ChainView: UIView, UITextInput, UITextInputTraits, AnchorTappable, TowerLi
     
     var blank: Bool { chain.isEmpty && !editing }
     
-    var chainDisplay: String { alwaysShow ? aetherExe.tokenDisplay(key: chain.key!) : aetherExe.valueDisplay(key: chain.key!) }
+    var chainDisplay: String { alwaysShow || aetherExe.inAFog(key: chain.key!) ? aetherExe.tokenDisplay(key: chain.key!) : aetherExe.valueDisplay(key: chain.key!) }
 
     private func resize() {
         var widthNeeded: CGFloat

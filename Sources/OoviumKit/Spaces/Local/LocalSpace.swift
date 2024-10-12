@@ -42,14 +42,14 @@ public class LocalSpace: Space {
     public override func loadAether(facade: AetherFacade, _ complete: @escaping (String?) -> ()) {
         let url: URL = facade.url
         if  let data = FileManager.default.contents(atPath: url.path),
-            let json: String = String(data: data, encoding: .utf8) {
-//            do {
-//                json = try Migrate.migrateAether(json: json)
+            var json: String = String(data: data, encoding: .utf8) {
+            do {
+                json = try Migrate.migrateAether(json: json)
                 complete(json)
-//            } catch {
-//                print("ERROR: \(error)")
-//                complete(nil)
-//            }
+            } catch {
+                print("ERROR: \(error)")
+                complete(nil)
+            }
         } else {
             print("no file at \(url.path)")
             complete(nil)

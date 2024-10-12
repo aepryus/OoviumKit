@@ -105,8 +105,8 @@ class MechBub: Bubble, SignatureLeafDelegate, ChainLeafDelegate {
 	var paramTokens: [TokenKey] { mech.inputs.map { $0.tokenKey } }
 
 // ChainLeafDelegate ===============================================================================
-	func onChange() { render() }
-	func onEdit() { render() }
-	func onOK(leaf: ChainLeaf) { render() }
-	func onCalculate() {}
+    func onChange() { render() }
+    func onEdit() { render() }
+    func onOK(leaf: ChainLeaf) { render() }
+	func onCalculate() { render() }
 }

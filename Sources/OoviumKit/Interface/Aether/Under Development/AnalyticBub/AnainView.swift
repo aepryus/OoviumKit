@@ -53,7 +53,7 @@ class AnainView: UIView, UITextInput, UITextInputTraits, AnchorTappable, TowerLi
 
     var anain: Anain = Anain() {
         didSet {
-            anain.tower.listener = self
+//            anain.tower.listener = self
             resize()
         }
     }
