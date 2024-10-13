@@ -111,6 +111,7 @@ class GridBub: Bubble, ChainLeafDelegate {
 		add(leaf: chainLeaf)
 		chainLeaf.render()
 		render()
+        chainLeaf.chainView.resize()
         chainLeaf.wireMoorings()
 	}
 	func removeChainLeaf() {

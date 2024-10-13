@@ -59,7 +59,6 @@ class ChainView: UIView, UITextInput, UITextInputTraits, AnchorTappable, TowerLi
             guard let key: TokenKey = chain.key
             else { fatalError() }
             Tower.startListening(to: key, listener: self)
-//            resize()
         }
     }
     public private(set) var editing: Bool = false
@@ -91,9 +90,12 @@ class ChainView: UIView, UITextInput, UITextInputTraits, AnchorTappable, TowerLi
     
     var blank: Bool { chain.isEmpty && !editing }
     
-    var chainDisplay: String { alwaysShow || aetherExe.inAFog(key: chain.key!) ? aetherExe.tokenDisplay(key: chain.key!) : aetherExe.valueDisplay(key: chain.key!) }
+    var chainDisplay: String {
+        alwaysShow || aetherExe.inAFog(key: chain.key!)
+        ? aetherExe.tokenDisplay(key: chain.key!)
+        : aetherExe.valueDisplay(key: chain.key!) }
 
-    private func resize() {
+    func resize() {
         var widthNeeded: CGFloat
         if !editing {
             widthNeeded = chainDisplay.size(pen: ChainView.pen).width + 3
