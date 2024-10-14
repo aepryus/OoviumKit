@@ -47,6 +47,7 @@ class HeaderEditor: KeyOrbit {
 		
 		footerSchematic.add(row: 0, col: 0, w: 1, h: 1, key: Key(text: "sum", uiColor: UIColor.cyan, { [unowned self] in
 			self.headerCell.column.aggregate = .sum
+            self.headerCell.triggerFooterCalculation()
 			self.headerCell.column.render()
 			self.headerCell.renderColumn()
 			self.schematic = self.topSchematic

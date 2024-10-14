@@ -67,6 +67,9 @@ class HeaderCell: UICollectionViewCell, Sizable, Editable, Citable, DoubleTappab
 		gridLeaf.resize()
 		gridBub.render()
 	}
+    func triggerFooterCalculation() {
+        aetherView.aetherExe.tower(key: column.footerTokenKey)?.trigger()
+    }
 
 // Events ==========================================================================================
 	@objc func onDoubleTap() {

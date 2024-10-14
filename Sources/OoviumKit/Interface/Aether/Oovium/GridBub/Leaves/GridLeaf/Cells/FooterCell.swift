@@ -26,7 +26,7 @@ class FooterCell: UICollectionViewCell, Sizable, Citable, FocusTappable, TowerLi
         self.column = column
         super.init(frame: .zero)
 		backgroundColor = .clear
-//        self.column.footerChain.tower.listener = self
+        Tower.startListening(to: column.footerTokenKey, listener: self)
 	}
 	required init?(coder: NSCoder) { fatalError() }
     
@@ -47,7 +47,7 @@ class FooterCell: UICollectionViewCell, Sizable, Citable, FocusTappable, TowerLi
 		Skin.gridCalc(path: CGPath(rect: CGRect(x: 0, y: 0, width: width-p, height: height-p), transform: nil), uiColor: gridLeaf.uiColor.tint(0.25))
 		Skin.gridDraw(path: path, uiColor: gridLeaf.uiColor)
         if column.aggregate != .none && column.aggregate != .running {
-//            Skin.bubble(text: column.footerChain.tower.obje.display, rect: CGRect(x: 3, y: 1, width: width-9, height: height-2), pen: pen)
+            Skin.bubble(text: aetherView.aetherExe.valueDisplay(key: column.footerTokenKey), rect: CGRect(x: 3, y: 1, width: width-9, height: height-2), pen: pen)
 		}
 	}
 	
