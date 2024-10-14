@@ -215,13 +215,13 @@ class GridBub: Bubble, ChainLeafDelegate {
 	func onChange() { layoutLeavesIfNeeded() }
 	func onWillFocusTap() { suppressChainLeafRemoval = true }
 	func onEdit() { layoutLeavesIfNeeded() }
-	func onOK(leaf: ChainLeaf) {
-		guard let editingColNo = editingColNo, let column: Column = grid.column(colNo: editingColNo) else { fatalError() }
-		column.disseminate()
+    func onOK(leaf: ChainLeaf) {
+        guard let editingColNo = editingColNo, let column: Column = grid.column(colNo: editingColNo) else { fatalError() }
+        column.disseminate()
 
         let aetherExe: AetherExe = aetherView.aetherExe
 
-        aetherView.aetherExe.trigger(keys: column.cellKeys())
+        aetherExe.trigger(keys: column.cellKeys() + [column.headerTokenKey])
         
         let cellTowers: [Tower] = column.cellKeys().map({ aetherExe.tower(key: $0)! })
         cellTowers.forEach({ $0.buildStream() })

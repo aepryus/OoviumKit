@@ -53,7 +53,7 @@ class HeaderEditor: KeyOrbit {
 		}))
 		footerSchematic.add(row: 1, col: 0, w: 1, h: 1, key: Key(text: "match", uiColor: UIColor.cyan, { [unowned self] in
 			self.headerCell.column.aggregate = .match
-//			self.headerCell.column.disseminate()
+			self.headerCell.column.disseminate()
 			self.headerCell.column.render()
 			self.headerCell.renderColumn()
 			self.schematic = self.topSchematic
@@ -66,7 +66,7 @@ class HeaderEditor: KeyOrbit {
 		}))
 		footerSchematic.add(row: 1, col: 1, w: 1, h: 1, key: Key(text: "running", uiColor: UIColor.cyan, { [unowned self] in
 			self.headerCell.column.aggregate = .running
-//			self.headerCell.column.disseminate()
+			self.headerCell.column.disseminate()
 			self.headerCell.column.render()
 			self.headerCell.renderColumn()
 			self.schematic = self.topSchematic
