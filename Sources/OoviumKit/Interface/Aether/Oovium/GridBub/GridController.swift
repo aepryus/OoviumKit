@@ -86,7 +86,7 @@ class GridController: ChainViewKeyDelegate {
         gridBub.gridLeaf.gridView.reloadData()
         gridBub.gridLeaf.columns.forEach {
             $0.headerCell.setNeedsResize()
-            $0.footerCell?.setNeedsResize()
+            if grid.hasFooter { $0.footerCell?.setNeedsResize() }
             $0.gridCells.forEach { $0.setNeedsResize() }
         }
         resize()

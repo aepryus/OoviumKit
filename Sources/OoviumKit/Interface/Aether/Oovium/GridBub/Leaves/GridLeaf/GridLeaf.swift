@@ -119,7 +119,7 @@ class GridLeaf: Leaf, GridViewDelegate, UITextInput, UITextInputTraits {
 		let slider: UIView = UIView(frame: bounds.offsetBy(dx: dx, dy: 0))
 		slider.isUserInteractionEnabled = false
 		slider.addSubview(headerCell)
-        if let footerCell: FooterCell = columns[colNo].footerCell { slider.addSubview(footerCell) }
+        if grid.hasFooter, let footerCell: FooterCell = columns[colNo].footerCell { slider.addSubview(footerCell) }
         columns[colNo].gridCells.forEach { slider.addSubview($0) }
 		gridView.hide(column: column, cx: headerCell.center.x+dx)
 		addSubview(slider)
