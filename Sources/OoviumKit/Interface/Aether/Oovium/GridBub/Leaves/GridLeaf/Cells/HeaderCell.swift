@@ -67,6 +67,13 @@ class HeaderCell: UICollectionViewCell, Sizable, Editable, Citable, DoubleTappab
 		gridLeaf.resize()
 		gridBub.render()
 	}
+    func triggerColumnCalculation() {
+        let aetherExe: AetherExe = aetherView.aetherExe
+        var towers: [Tower] = column.cells.map({ aetherExe.tower(key: $0.chain.key!)! })
+        if let footerTower: Tower = aetherExe.tower(key: column.footerTokenKey) { towers += [footerTower] }
+        towers.forEach { $0.buildStream() }
+        Tower.evaluate(towers: Set(towers))
+    }
     func triggerFooterCalculation() {
         guard let tower: Tower = aetherView.aetherExe.tower(key: column.footerTokenKey) else { return }
         tower.buildStream()
