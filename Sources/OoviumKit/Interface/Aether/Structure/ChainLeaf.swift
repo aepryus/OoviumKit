@@ -161,7 +161,7 @@ class ChainLeaf: Leaf, ChainViewDelegate, Editable {
     func resignFirstResponder() { chainView.resignFirstResponder() }
 
     func onTokenKeyAdded(_ key: TokenKey) {
-        guard delegate?.usesMooring ?? true else { return }
+        guard key.code != .cl && delegate?.usesMooring ?? true else { return }
         guard let mooring = bubble.aetherView.moorings[key] else { return }
         mooring.attach(self.mooring)
     }

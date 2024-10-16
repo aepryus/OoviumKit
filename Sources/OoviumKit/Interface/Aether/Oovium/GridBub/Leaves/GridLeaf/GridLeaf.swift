@@ -109,8 +109,6 @@ class GridLeaf: Leaf, GridViewDelegate, UITextInput, UITextInputTraits {
 	func delete(column: Column) {
         columns.remove(at: column.colNo)
         gridBub.chainLeaf.chain = columns[0].column.chain
-		grid.deleteColumn(column)
-        controller.resizeEverything()
 	}
 	func slide(column: Column, dx: CGFloat) {
 		let colNo: Int = column.colNo

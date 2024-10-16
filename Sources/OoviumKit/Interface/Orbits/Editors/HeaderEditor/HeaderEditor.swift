@@ -33,7 +33,7 @@ class HeaderEditor: KeyOrbit {
 			self.headerCell.gridLeaf.aetherView.invokeConfirmModal("delete selected column?".localized) { [unowned self] in
                 self.headerCell.releaseFocus(.administrative)
 				if self.headerCell.gridBub.grid.columns.count > 1 {
-					self.headerCell.gridLeaf.delete(column: self.headerCell.column)
+                    self.headerCell.gridBub.controller.delete(column: self.headerCell.column)
 				} else {
                     self.headerCell.gridBub.aetherView.aether.remove(aexel: self.headerCell.gridBub.grid)
 					self.headerCell.gridBub.aetherView.remove(bubble: self.headerCell.gridBub)
@@ -55,12 +55,14 @@ class HeaderEditor: KeyOrbit {
 		footerSchematic.add(row: 1, col: 0, w: 1, h: 1, key: Key(text: "match", uiColor: UIColor.cyan, { [unowned self] in
 			self.headerCell.column.aggregate = .match
 			self.headerCell.column.disseminate()
+            self.headerCell.triggerFooterCalculation()
 			self.headerCell.column.render()
 			self.headerCell.renderColumn()
 			self.schematic = self.topSchematic
 		}))
 		footerSchematic.add(row: 0, col: 1, w: 1, h: 1, key: Key(text: "average", uiColor: UIColor.cyan, { [unowned self] in
 			self.headerCell.column.aggregate = .average
+            self.headerCell.triggerFooterCalculation()
 			self.headerCell.column.render()
 			self.headerCell.renderColumn()
 			self.schematic = self.topSchematic
@@ -68,18 +70,21 @@ class HeaderEditor: KeyOrbit {
 		footerSchematic.add(row: 1, col: 1, w: 1, h: 1, key: Key(text: "running", uiColor: UIColor.cyan, { [unowned self] in
 			self.headerCell.column.aggregate = .running
 			self.headerCell.column.disseminate()
+            self.headerCell.triggerFooterCalculation()
 			self.headerCell.column.render()
 			self.headerCell.renderColumn()
 			self.schematic = self.topSchematic
 		}))
 		footerSchematic.add(row: 0, col: 2, w: 1, h: 1, key: Key(text: "none", uiColor: UIColor.cyan, { [unowned self] in
 			self.headerCell.column.aggregate = .none
+            self.headerCell.triggerFooterCalculation()
 			self.headerCell.column.render()
 			self.headerCell.renderColumn()
 			self.schematic = self.topSchematic
 		}))
 		footerSchematic.add(row: 1, col: 2, w: 1, h: 1, key: Key(text: "count", uiColor: UIColor.cyan, { [unowned self] in
 			self.headerCell.column.aggregate = .count
+            self.headerCell.triggerFooterCalculation()
 			self.headerCell.column.render()
 			self.headerCell.renderColumn()
 			self.schematic = self.topSchematic

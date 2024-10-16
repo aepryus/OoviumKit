@@ -212,11 +212,12 @@ public class AetherView: UIView, UIScrollViewDelegate, UIGestureRecognizerDelega
     
     public func create<T: Aexel>(at: V2) -> T {
         let aexel: T = aether.create(at: at)
-        aetherExe.add(aexon: aexel)
+        aetherExe.plugIn(aexon: aexel)
         aetherExe.buildMemory()
         return aexel
     }
-
+    
+    public func printTowers() { aetherExe.printTowers() }
     
 // Events ==========================================================================================
     public func onCut() {

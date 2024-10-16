@@ -68,7 +68,9 @@ class HeaderCell: UICollectionViewCell, Sizable, Editable, Citable, DoubleTappab
 		gridBub.render()
 	}
     func triggerFooterCalculation() {
-        aetherView.aetherExe.tower(key: column.footerTokenKey)?.trigger()
+        guard let tower: Tower = aetherView.aetherExe.tower(key: column.footerTokenKey) else { return }
+        tower.buildStream()
+        tower.trigger()
     }
 
 // Events ==========================================================================================

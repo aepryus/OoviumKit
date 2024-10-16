@@ -367,7 +367,7 @@ class ChainView: UIView, UITextInput, UITextInputTraits, AnchorTappable, TowerLi
         } else { keyDelegate?.onArrowRight() }
     }
     @objc func backspace() {            // delete left
-        guard let key = chain.backspace(at: cursor) else { return }
+        guard let key: TokenKey = chain.backspace(at: cursor) else { return }
         if key.hasTower { aetherExe.decrement(key: chain.key!, dependenceOn:  key)}
         cursor -= 1
         handleKeyRemoved(key)

@@ -79,11 +79,8 @@ class GridBub: Bubble, ChainLeafDelegate {
 			remove(leaf: addRowLeaf)
 			remove(leaf: addColumnLeaf)
 		}
-        if gridLeaf.beingEdited {
-			add(leaf: equalLeaf)
-		} else {
-			remove(leaf: equalLeaf)
-		}
+        if gridLeaf.beingEdited { add(leaf: equalLeaf) }
+        else { remove(leaf: equalLeaf) }
 		render()
 	}
 	func morph() {
