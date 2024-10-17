@@ -13,8 +13,8 @@ import UIKit
 protocol GridViewDelegate: AnyObject {
 	func numberOfRows(gridView: GridView) -> Int
 	func numberOfColumns(gridView: GridView) -> Int
-	func cell(gridView: GridView, column: Int, row: Int) -> UIView
-	func size(gridView: GridView, column: Int, row: Int) -> CGSize
+	func cell(gridView: GridView, colNo: Int, rowNo: Int) -> UIView
+	func size(gridView: GridView, colNo: Int, rowNo: Int) -> CGSize
 }
 
 class GridView: UIScrollView {
@@ -26,7 +26,7 @@ class GridView: UIScrollView {
         // Force calculate column widths before laying anything out
         for j in 0..<delegate.numberOfRows(gridView: self) {
             for i in 0..<delegate.numberOfColumns(gridView: self) {
-                _ = delegate.cell(gridView: self, column: i, row: j)
+                _ = delegate.cell(gridView: self, colNo: i, rowNo: j)
             }
         }
 
@@ -39,8 +39,8 @@ class GridView: UIScrollView {
 		var current = subviews
 		for j in 0..<delegate.numberOfRows(gridView: self) {
 			for i in 0..<delegate.numberOfColumns(gridView: self) {
-				let cell: UIView = delegate.cell(gridView: self, column: i, row: j)
-				size = delegate.size(gridView: self, column: i, row: j)
+				let cell: UIView = delegate.cell(gridView: self, colNo: i, rowNo: j)
+				size = delegate.size(gridView: self, colNo: i, rowNo: j)
 				cell.frame = CGRect(x: x, y: y, width: size.width, height: size.height)
 				if let index: Int = current.firstIndex(of: cell) { current.remove(at: index) }
 				else { addSubview(cell) }
@@ -60,7 +60,7 @@ class GridView: UIScrollView {
 		var size: CGSize = .zero
 		var x: CGFloat = 0
 		for i in 0..<delegate.numberOfColumns(gridView: self) {
-			size = delegate.size(gridView: self, column: i, row: 0)
+			size = delegate.size(gridView: self, colNo: i, rowNo: 0)
 			x += size.width
 			if x > cx {return max(i,1)}
 		}
@@ -73,7 +73,7 @@ class GridView: UIScrollView {
 		var y: CGFloat = 0
 		var size: CGSize = .zero
 		let hiddenNo: Int = column.colNo + 1
-		let hiddenWidth: CGFloat = delegate.size(gridView: self, column: hiddenNo, row: 0).width
+		let hiddenWidth: CGFloat = delegate.size(gridView: self, colNo: hiddenNo, rowNo: 0).width
 		
 		let at: Int = colNo(cx: cx)
 
@@ -87,9 +87,9 @@ class GridView: UIScrollView {
 				if i == skipNo {
 					x += hiddenWidth
 				} else {
-					let cell: UIView = delegate.cell(gridView: self, column: colNo, row: j)
+					let cell: UIView = delegate.cell(gridView: self, colNo: colNo, rowNo: j)
 					if colNo != hiddenNo {
-						size = delegate.size(gridView: self, column: colNo, row: j)
+						size = delegate.size(gridView: self, colNo: colNo, rowNo: j)
 						cell.frame = CGRect(x: x, y: y, width: size.width, height: size.height)
 						x += size.width
 					}
@@ -105,7 +105,7 @@ class GridView: UIScrollView {
 		var size: CGSize = .zero
 		var y: CGFloat = 0
 		for i in 0..<delegate.numberOfRows(gridView: self) {
-			size = delegate.size(gridView: self, column: 0, row: i)
+			size = delegate.size(gridView: self, colNo: 0, rowNo: i)
 			y += size.height
 			if y > cy {return max(i,1)}
 		}
@@ -118,7 +118,7 @@ class GridView: UIScrollView {
 		var y: CGFloat = 0
 		var size: CGSize = .zero
 		let hiddenNo: Int = rowNo + 1
-		let hiddenHeight: CGFloat = delegate.size(gridView: self, column: 0, row: hiddenNo).height
+		let hiddenHeight: CGFloat = delegate.size(gridView: self, colNo: 0, rowNo: hiddenNo).height
 		
 		let at: Int = row(cy: cy)
 
@@ -133,8 +133,8 @@ class GridView: UIScrollView {
 			} else {
 				if jRow != hiddenNo {
 					for i in 0..<delegate.numberOfColumns(gridView: self) {
-						let cell: UIView = delegate.cell(gridView: self, column: i, row: jRow)
-						size = delegate.size(gridView: self, column: i, row: jRow)
+						let cell: UIView = delegate.cell(gridView: self, colNo: i, rowNo: jRow)
+						size = delegate.size(gridView: self, colNo: i, rowNo: jRow)
 						cell.frame = CGRect(x: x, y: y, width: size.width, height: size.height)
 						x += size.width
 					}

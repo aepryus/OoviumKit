@@ -213,7 +213,8 @@ class GridBub: Bubble, ChainLeafDelegate {
 	func onWillFocusTap() { suppressChainLeafRemoval = true }
 	func onEdit() { layoutLeavesIfNeeded() }
     func onOK(leaf: ChainLeaf) {
-        guard let editingColNo = editingColNo, let column: Column = grid.column(colNo: editingColNo) else { fatalError() }
+        guard let editingColNo = editingColNo else { fatalError() }
+        let column: Column = grid.column(colNo: editingColNo)
         column.disseminate()
 
         let aetherExe: AetherExe = aetherView.aetherExe

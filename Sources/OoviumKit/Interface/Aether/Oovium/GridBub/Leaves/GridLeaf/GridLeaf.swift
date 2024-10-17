@@ -91,7 +91,7 @@ class GridLeaf: Leaf, GridViewDelegate, UITextInput, UITextInputTraits {
 		addSubview(slider)
 	}
 	func move(rowNo: Int, to: Int) {
-		grid.move(rowNo: rowNo, to: to)
+		grid.move(rowNo: rowNo, toRowNo: to)
         columns.forEach {
             let gridCell: GridCell = $0.gridCells.remove(at: rowNo)
             $0.gridCells.insert(gridCell, at: to)
@@ -135,7 +135,7 @@ class GridLeaf: Leaf, GridViewDelegate, UITextInput, UITextInputTraits {
 	
     private func nextColumnWrapping(colNo: Int) -> Int {
         var nextNo = (colNo + 1) % grid.columns.count
-        while grid.column(colNo: nextNo)!.calculated {
+        while grid.column(colNo: nextNo).calculated {
             nextNo = (nextNo + 1) % grid.columns.count
         }
         return nextNo
@@ -144,7 +144,7 @@ class GridLeaf: Leaf, GridViewDelegate, UITextInput, UITextInputTraits {
         var testNo: Int = colNo+1
         var newNo: Int?
         while testNo < grid.columns.count && newNo == nil {
-            if !grid.column(colNo: testNo)!.calculated { newNo = testNo }
+            if !grid.column(colNo: testNo).calculated { newNo = testNo }
             testNo += 1
         }
         return newNo ?? colNo
@@ -154,7 +154,7 @@ class GridLeaf: Leaf, GridViewDelegate, UITextInput, UITextInputTraits {
         var newNo: Int?
         while testNo > 0 && newNo == nil {
             testNo -= 1
-            if !grid.column(colNo: testNo)!.calculated { newNo = testNo }
+            if !grid.column(colNo: testNo).calculated { newNo = testNo }
         }
         return newNo ?? colNo
     }
@@ -196,16 +196,16 @@ class GridLeaf: Leaf, GridViewDelegate, UITextInput, UITextInputTraits {
 // GridViewDelegate ================================================================================
 	func numberOfRows(gridView: GridView) -> Int { grid.rows + 1 + (grid.hasFooter ? 1 : 0) }
 	func numberOfColumns(gridView: GridView) -> Int { grid.columns.count + 1 }
-	func cell(gridView: GridView, column: Int, row: Int) -> UIView {
-		let rI: Int = row - 1
-		let cI: Int = column - 1
-		let leftMost: Bool = column == grid.columns.count
-		let bottomMost: Bool = !grid.hasFooter && row == grid.rows
-		if column == 0 && row == 0 {
+	func cell(gridView: GridView, colNo: Int, rowNo: Int) -> UIView {
+		let rI: Int = rowNo - 1
+		let cI: Int = colNo - 1
+		let leftMost: Bool = colNo == grid.columns.count
+		let bottomMost: Bool = !grid.hasFooter && rowNo == grid.rows
+		if colNo == 0 && rowNo == 0 {
 			return anchorCell
-		} else if grid.hasFooter && row == grid.rows+1 && column == 0 {
+		} else if grid.hasFooter && rowNo == grid.rows+1 && colNo == 0 {
 			return bottomLeftCell
-		} else if grid.hasFooter && row == grid.rows+1 {
+		} else if grid.hasFooter && rowNo == grid.rows+1 {
             let cell: FooterCell
             if let footerCell: FooterCell = columns[cI].footerCell {
                 cell = footerCell
@@ -216,36 +216,37 @@ class GridLeaf: Leaf, GridViewDelegate, UITextInput, UITextInputTraits {
             cell.leftMost = leftMost
 			cell.setNeedsDisplay()
 			return cell
-		} else if column == 0 {
+		} else if colNo == 0 {
 			let cell: LefterCell = lefterCells[rI]
-			if cell.rowNo != row {
-				cell.rowNo = row
+			if cell.rowNo != rowNo {
+				cell.rowNo = rowNo
 				cell.bottomMost = bottomMost
 				cell.setNeedsDisplay()
 			}
 			return cell
-		} else if row == 0 {
+		} else if rowNo == 0 {
             let cell: HeaderCell = columns[cI].headerCell
             cell.leftMost = leftMost
             cell.setNeedsDisplay()
 			return cell
 		} else {
             let gridCell: GridCell = columns[cI].gridCells[rI]
-            let cell: Cell = grid.cells[rI * grid.columns.count + cI]
+            let cell: Cell = grid.column(colNo: colNo).cell(rowNo: rowNo)
+//            let cell: Cell = grid.cells[rI * grid.columns.count + cI]
 			if gridCell.cell !== cell {
                 gridCell.load(cell: cell)
                 gridCell.leftMost = leftMost
                 gridCell.bottomMost = bottomMost
-                gridCell.bounds.size = size(gridView: gridView, column: column, row: row)
+                gridCell.bounds.size = size(gridView: gridView, colNo: colNo, rowNo: rowNo)
 			}
             gridCell.setNeedsLayout()
 			return gridCell
 		}
 	}
-    func size(gridView: GridView, column: Int, row: Int) -> CGSize {
+    func size(gridView: GridView, colNo: Int, rowNo: Int) -> CGSize {
         CGSize(
-            width: column == 0 ? 30 : columns[column-1].widthNeeded,
-            height: row == 0 ? 30 : 24
+            width: colNo == 0 ? 30 : columns[colNo-1].widthNeeded,
+            height: rowNo == 0 ? 30 : 24
         )
     }
 
