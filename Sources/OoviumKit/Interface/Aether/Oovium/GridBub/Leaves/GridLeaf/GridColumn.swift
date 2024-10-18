@@ -10,7 +10,7 @@ import UIKit
 import OoviumEngine
 
 class GridColumn {
-    let controller: GridController
+    unowned let controller: GridController
     let column: Column
     
     let headerCell: HeaderCell

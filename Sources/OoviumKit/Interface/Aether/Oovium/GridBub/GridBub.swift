@@ -13,7 +13,7 @@ import UIKit
 class GridBub: Bubble, ChainLeafDelegate {
 	let grid: Grid
     
-    lazy var controller: GridController = GridController(self)
+    var controller: GridController!
 	
 	var gridLeaf: GridLeaf!
     lazy var addRowLeaf: PlusLeaf = PlusLeaf(controller: controller)

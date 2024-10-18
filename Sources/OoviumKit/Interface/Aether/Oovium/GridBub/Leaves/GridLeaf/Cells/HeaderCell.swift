@@ -11,7 +11,7 @@ import OoviumEngine
 import UIKit
 
 class HeaderCell: UICollectionViewCell, Sizable, Editable, Citable, DoubleTappable, AnchorPannable, UITextFieldDelegate {
-    let controller: GridController
+    unowned let controller: GridController
 	let column: Column
     
 	var leftMost: Bool = false
@@ -166,8 +166,8 @@ class HeaderCell: UICollectionViewCell, Sizable, Editable, Citable, DoubleTappab
 		gridLeaf.slide(column: column, dx: offset.x)
 	}
 	func onReleased(offset: CGPoint) {
-		let to: Int = gridLeaf.gridView.colNo(cx: center.x+offset.x)-1
-		gridLeaf.move(column: column, to: to)
+		let toColNo: Int = gridLeaf.gridView.colNo(cx: center.x+offset.x)-1
+		gridLeaf.move(column: column, toColNo: toColNo)
 	}
 
 // UITextFieldDelegate =============================================================================

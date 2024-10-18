@@ -59,9 +59,8 @@ class GridLeaf: Leaf, GridViewDelegate, UITextInput, UITextInputTraits {
 	}
 	required init?(coder aDecoder: NSCoder) { fatalError() }
     
-    func setNeedsResize() {
-        controller.leafNeedsResizing = true
-    }
+    func gridColumn(colNo: Int) -> GridColumn { columns[colNo-1] }
+    func setNeedsResize() { controller.leafNeedsResizing = true }
     func resize() {
         gridView.reloadData()
         size = gridView.bounds.size
@@ -81,7 +80,7 @@ class GridLeaf: Leaf, GridViewDelegate, UITextInput, UITextInputTraits {
 	}
 	func slide(rowNo: Int, dy: CGFloat) {
 		let lefterCell: LefterCell = lefterCells[rowNo]
-        let footerHeight: CGFloat = columns[0].footerCell?.height ?? 0
+        let footerHeight: CGFloat = gridColumn(colNo: 1).footerCell?.height ?? 0
 		let dy: CGFloat = dy.clamped(to: (30-lefterCell.top)...(height-lefterCell.height-lefterCell.top-footerHeight))
 		let slider: UIView = UIView(frame: bounds.offsetBy(dx: 0, dy: dy))
 		slider.isUserInteractionEnabled = false
@@ -108,69 +107,69 @@ class GridLeaf: Leaf, GridViewDelegate, UITextInput, UITextInputTraits {
 	}
 	func delete(column: Column) {
         columns.remove(at: column.colNo)
-        gridBub.chainLeaf.chain = columns[0].column.chain
+        gridBub.chainLeaf.chain = gridColumn(colNo: 1).column.chain
 	}
 	func slide(column: Column, dx: CGFloat) {
 		let colNo: Int = column.colNo
-        let headerCell: HeaderCell = columns[colNo].headerCell
+        let headerCell: HeaderCell = gridColumn(colNo: colNo).headerCell
 		let dx: CGFloat = dx.clamped(to: (30-headerCell.left)...(width-headerCell.width-headerCell.left))
 		let slider: UIView = UIView(frame: bounds.offsetBy(dx: dx, dy: 0))
 		slider.isUserInteractionEnabled = false
 		slider.addSubview(headerCell)
-        if grid.hasFooter, let footerCell: FooterCell = columns[colNo].footerCell { slider.addSubview(footerCell) }
-        columns[colNo].gridCells.forEach { slider.addSubview($0) }
+        if grid.hasFooter, let footerCell: FooterCell = gridColumn(colNo: colNo).footerCell { slider.addSubview(footerCell) }
+        gridColumn(colNo: colNo).gridCells.forEach { slider.addSubview($0) }
 		gridView.hide(column: column, cx: headerCell.center.x+dx)
 		addSubview(slider)
 	}
-	func move(column: Column, to: Int) {
+	func move(column: Column, toColNo: Int) {
         
-        let gridColumn: GridColumn = columns[column.colNo]
-        columns.remove(at: column.colNo)
-        columns.insert(gridColumn, at: to)
+        let gridColumn: GridColumn = gridColumn(colNo: column.colNo)
+        columns.remove(at: column.colNo-1)
+        columns.insert(gridColumn, at: toColNo-1)
 
-        grid.move(column: column, to: to)
+        grid.move(column: column, to: toColNo-1)
 
         controller.resizeEverything()
 	}
 	
     private func nextColumnWrapping(colNo: Int) -> Int {
         var nextNo = (colNo + 1) % grid.columns.count
-        while grid.column(colNo: nextNo).calculated {
+        while grid.column(colNo: nextNo + 1).calculated {
             nextNo = (nextNo + 1) % grid.columns.count
         }
         return nextNo
     }
 	private func nextColumn(colNo: Int) -> Int {
-        var testNo: Int = colNo+1
+        var testNo: Int = colNo + 1
         var newNo: Int?
-        while testNo < grid.columns.count && newNo == nil {
+        while testNo <= grid.columns.count && newNo == nil {
             if !grid.column(colNo: testNo).calculated { newNo = testNo }
             testNo += 1
         }
         return newNo ?? colNo
 	}
     private func prevCol(colNo: Int) -> Int {
-        var testNo: Int = colNo
+        var testNo: Int = colNo - 1
         var newNo: Int?
-        while testNo > 0 && newNo == nil {
-            testNo -= 1
+        while testNo >= 1 && newNo == nil {
             if !grid.column(colNo: testNo).calculated { newNo = testNo }
+            testNo -= 1
         }
         return newNo ?? colNo
     }
     
     func equalRelease(gridCell: GridCell) -> Editable? {
-        let colNo: Int
-        let rowNo: Int
+        let iC: Int
+        let iR: Int
         if grid.equalMode == .down {
-            colNo = gridCell.cell.colNo
-            rowNo = gridCell.cell.rowNo + 1
+            iC = gridCell.cell.colNo - 1
+            iR = gridCell.cell.rowNo
         } else /*if grid.equalMode == .right*/ {
-            colNo = nextColumnWrapping(colNo: gridCell.cell.colNo)
-            rowNo = gridCell.cell.rowNo + (colNo == 0 ? 1 : 0)
+            iC = nextColumnWrapping(colNo: gridCell.cell.colNo - 1)
+            iR = gridCell.cell.rowNo - 1 + (iC == 0 ? 1 : 0)
         }
-        if rowNo == grid.rows { controller.addRow() }
-        return columns[colNo].gridCells[rowNo]
+        if iR == grid.rows { controller.addRow() }
+        return columns[iC].gridCells[iR]
     }
     func arrowRelease(gridCell: GridCell, arrow: Release.Arrow) -> Editable? {
         var colNo: Int = gridCell.cell.colNo
@@ -178,11 +177,10 @@ class GridLeaf: Leaf, GridViewDelegate, UITextInput, UITextInputTraits {
         switch arrow {
             case .left: colNo = prevCol(colNo: colNo)
             case .right: colNo = nextColumn(colNo: colNo)
-            case .up: rowNo -= 1
-            case .down: rowNo += 1
+            case .up: rowNo = max(rowNo-1, 1)
+            case .down: rowNo = min(rowNo+1, grid.rows)
         }
-        guard 0..<grid.columns.count ~= colNo && 0..<grid.rows ~= rowNo else { return gridCell }
-        return columns[colNo].gridCells[rowNo]
+        return gridColumn(colNo: colNo).gridCells[rowNo-1]
     }
     
 // UIView ==========================================================================================

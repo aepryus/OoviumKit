@@ -9,7 +9,7 @@
 import UIKit
 
 class PlusLeaf: Leaf, FocusTappable {
-    let controller: GridController
+    unowned let controller: GridController
 	
 	var onTapped: (AetherView)->() = { AetherView in }
 	

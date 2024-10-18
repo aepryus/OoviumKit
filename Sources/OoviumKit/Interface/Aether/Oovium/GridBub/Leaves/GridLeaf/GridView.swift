@@ -35,7 +35,7 @@ class GridView: UIScrollView {
 		var size: CGSize = .zero
 		var width: CGFloat = 0
 		var height: CGFloat = 0
-		
+        
 		var current = subviews
 		for j in 0..<delegate.numberOfRows(gridView: self) {
 			for i in 0..<delegate.numberOfColumns(gridView: self) {
@@ -72,7 +72,7 @@ class GridView: UIScrollView {
 		var x: CGFloat = 0
 		var y: CGFloat = 0
 		var size: CGSize = .zero
-		let hiddenNo: Int = column.colNo + 1
+		let hiddenNo: Int = column.colNo
 		let hiddenWidth: CGFloat = delegate.size(gridView: self, colNo: hiddenNo, rowNo: 0).width
 		
 		let at: Int = colNo(cx: cx)

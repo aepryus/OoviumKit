@@ -31,7 +31,7 @@ class GridCell: UICollectionViewCell, Sizable, Editable, Citable, ChainViewDeleg
 
         backgroundColor = UIColor.clear
                 
-        chainView = ChainView(editable: self, responder: nil)
+//        chainView = ChainView(editable: self, responder: nil)
         chainView.chain = cell.chain
 		chainView.delegate = self
         chainView.keyDelegate = controller

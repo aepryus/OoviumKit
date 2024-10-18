@@ -58,7 +58,7 @@ class ChainLeaf: Leaf, ChainViewDelegate, Editable {
 		
 		self.backgroundColor = UIColor.clear
         
-        chainView = ChainView(editable: self, responder: aetherView.responder)
+//        chainView = ChainView(editable: self, responder: aetherView.responder)
 		chainView.delegate = self
         chainView.alwaysShow = alwaysShow
 		addSubview(chainView)
