@@ -79,21 +79,21 @@ class GridLeaf: Leaf, GridViewDelegate, UITextInput, UITextInputTraits {
         controller.resizeEverything()
 	}
 	func slide(rowNo: Int, dy: CGFloat) {
-		let lefterCell: LefterCell = lefterCells[rowNo]
+		let lefterCell: LefterCell = lefterCells[rowNo-1]
         let footerHeight: CGFloat = gridColumn(colNo: 1).footerCell?.height ?? 0
 		let dy: CGFloat = dy.clamped(to: (30-lefterCell.top)...(height-lefterCell.height-lefterCell.top-footerHeight))
 		let slider: UIView = UIView(frame: bounds.offsetBy(dx: 0, dy: dy))
 		slider.isUserInteractionEnabled = false
 		slider.addSubview(lefterCell)
-        columns.forEach { slider.addSubview($0.gridCells[rowNo]) }
+        columns.forEach { slider.addSubview($0.gridCells[rowNo-1]) }
 		gridView.hide(rowNo: rowNo, cy: lefterCell.center.y+dy)
 		addSubview(slider)
 	}
 	func move(rowNo: Int, to: Int) {
 		grid.move(rowNo: rowNo, toRowNo: to)
         columns.forEach {
-            let gridCell: GridCell = $0.gridCells.remove(at: rowNo)
-            $0.gridCells.insert(gridCell, at: to)
+            let gridCell: GridCell = $0.gridCells.remove(at: rowNo-1)
+            $0.gridCells.insert(gridCell, at: to-1)
         }
         controller.resizeEverything()
 	}
@@ -106,7 +106,7 @@ class GridLeaf: Leaf, GridViewDelegate, UITextInput, UITextInputTraits {
         for i in 0..<grid.rows { gridColumn.gridCells.append(GridCell(controller: controller, column: gridColumn, cell: cells[i])) }
 	}
 	func delete(column: Column) {
-        columns.remove(at: column.colNo)
+        columns.remove(at: column.colNo-1)
         gridBub.chainLeaf.chain = gridColumn(colNo: 1).column.chain
 	}
 	func slide(column: Column, dx: CGFloat) {
@@ -195,8 +195,6 @@ class GridLeaf: Leaf, GridViewDelegate, UITextInput, UITextInputTraits {
 	func numberOfRows(gridView: GridView) -> Int { grid.rows + 1 + (grid.hasFooter ? 1 : 0) }
 	func numberOfColumns(gridView: GridView) -> Int { grid.columns.count + 1 }
 	func cell(gridView: GridView, colNo: Int, rowNo: Int) -> UIView {
-		let rI: Int = rowNo - 1
-		let cI: Int = colNo - 1
 		let leftMost: Bool = colNo == grid.columns.count
 		let bottomMost: Bool = !grid.hasFooter && rowNo == grid.rows
 		if colNo == 0 && rowNo == 0 {
@@ -205,17 +203,17 @@ class GridLeaf: Leaf, GridViewDelegate, UITextInput, UITextInputTraits {
 			return bottomLeftCell
 		} else if grid.hasFooter && rowNo == grid.rows+1 {
             let cell: FooterCell
-            if let footerCell: FooterCell = columns[cI].footerCell {
+            if let footerCell: FooterCell = columns[colNo-1].footerCell {
                 cell = footerCell
             } else {
-                cell = FooterCell(controller: controller, column: columns[cI].column)
-                columns[cI].footerCell = cell
+                cell = FooterCell(controller: controller, column: columns[colNo-1].column)
+                columns[colNo-1].footerCell = cell
             }
             cell.leftMost = leftMost
 			cell.setNeedsDisplay()
 			return cell
 		} else if colNo == 0 {
-			let cell: LefterCell = lefterCells[rI]
+			let cell: LefterCell = lefterCells[rowNo-1]
 			if cell.rowNo != rowNo {
 				cell.rowNo = rowNo
 				cell.bottomMost = bottomMost
@@ -223,12 +221,12 @@ class GridLeaf: Leaf, GridViewDelegate, UITextInput, UITextInputTraits {
 			}
 			return cell
 		} else if rowNo == 0 {
-            let cell: HeaderCell = columns[cI].headerCell
+            let cell: HeaderCell = columns[colNo-1].headerCell
             cell.leftMost = leftMost
             cell.setNeedsDisplay()
 			return cell
 		} else {
-            let gridCell: GridCell = columns[cI].gridCells[rI]
+            let gridCell: GridCell = columns[colNo-1].gridCells[rowNo-1]
             let cell: Cell = grid.column(colNo: colNo).cell(rowNo: rowNo)
 //            let cell: Cell = grid.cells[rI * grid.columns.count + cI]
 			if gridCell.cell !== cell {

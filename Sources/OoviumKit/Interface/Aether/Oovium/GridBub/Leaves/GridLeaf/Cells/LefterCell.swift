@@ -68,10 +68,10 @@ class LefterCell: UICollectionViewCell, Editable, AnchorPannable {
 	
 // AnchorPannable ==================================================================================
 	func onPan(offset: CGPoint) {
-		gridLeaf.slide(rowNo: rowNo-1, dy: offset.y)
+		gridLeaf.slide(rowNo: rowNo, dy: offset.y)
 	}
 	func onReleased(offset: CGPoint) {
-		let to: Int = (gridLeaf.gridView.row(cy: center.y+offset.y)-1).clamped(to: 0...(gridLeaf.grid.rows-1))
-		gridLeaf.move(rowNo: rowNo-1, to: to)
+		let to: Int = gridLeaf.gridView.row(cy: center.y+offset.y).clamped(to: 1...(gridLeaf.grid.rows))
+		gridLeaf.move(rowNo: rowNo, to: to)
 	}
 }

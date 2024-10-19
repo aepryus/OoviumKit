@@ -104,12 +104,12 @@ class GridView: UIScrollView {
 		guard let delegate = gridViewDelegate else { return 1 }
 		var size: CGSize = .zero
 		var y: CGFloat = 0
-		for i in 0..<delegate.numberOfRows(gridView: self) {
-			size = delegate.size(gridView: self, colNo: 0, rowNo: i)
+        for i in 0..<delegate.numberOfRows(gridView: self) {
+			size = delegate.size(gridView: self, colNo: 1, rowNo: i)
 			y += size.height
-			if y > cy {return max(i,1)}
+			if y > cy { return max(i,1) }
 		}
-		return delegate.numberOfRows(gridView: self)-1
+		return delegate.numberOfRows(gridView: self)
 	}
 	func hide(rowNo: Int, cy: CGFloat) {
 		guard let delegate = gridViewDelegate else { return }
@@ -117,22 +117,22 @@ class GridView: UIScrollView {
 		var x: CGFloat = 0
 		var y: CGFloat = 0
 		var size: CGSize = .zero
-		let hiddenNo: Int = rowNo + 1
-		let hiddenHeight: CGFloat = delegate.size(gridView: self, colNo: 0, rowNo: hiddenNo).height
+		let hiddenNo: Int = rowNo
+		let hiddenHeight: CGFloat = delegate.size(gridView: self, colNo: 1, rowNo: hiddenNo).height
 		
 		let at: Int = row(cy: cy)
 
 		let skipNo: Int = at > hiddenNo ? at+1 : at
 		var jRow: Int = 0
 		
-		for j in 0...delegate.numberOfRows(gridView: self) {
+		for j in 0..<delegate.numberOfRows(gridView: self) {
 			x = 0
 			
 			if j == skipNo {
 				y += hiddenHeight
 			} else {
 				if jRow != hiddenNo {
-					for i in 0..<delegate.numberOfColumns(gridView: self) {
+                    for i in 0..<delegate.numberOfColumns(gridView: self) {
 						let cell: UIView = delegate.cell(gridView: self, colNo: i, rowNo: jRow)
 						size = delegate.size(gridView: self, colNo: i, rowNo: jRow)
 						cell.frame = CGRect(x: x, y: y, width: size.width, height: size.height)

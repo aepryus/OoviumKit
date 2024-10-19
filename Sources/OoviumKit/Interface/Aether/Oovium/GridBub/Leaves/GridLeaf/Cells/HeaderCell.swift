@@ -72,7 +72,7 @@ class HeaderCell: UICollectionViewCell, Sizable, Editable, Citable, DoubleTappab
         var towers: [Tower] = column.cells.map({ aetherExe.tower(key: $0.chain.key!)! })
         if let footerTower: Tower = aetherExe.tower(key: column.footerTokenKey) { towers += [footerTower] }
         towers.forEach { $0.buildStream() }
-        Tower.evaluate(towers: Set(towers))
+        Tower.trigger(towers: Set(towers))
     }
     func triggerFooterCalculation() {
         guard let tower: Tower = aetherView.aetherExe.tower(key: column.footerTokenKey) else { return }
@@ -166,7 +166,7 @@ class HeaderCell: UICollectionViewCell, Sizable, Editable, Citable, DoubleTappab
 		gridLeaf.slide(column: column, dx: offset.x)
 	}
 	func onReleased(offset: CGPoint) {
-		let toColNo: Int = gridLeaf.gridView.colNo(cx: center.x+offset.x)-1
+		let toColNo: Int = gridLeaf.gridView.colNo(cx: center.x+offset.x)
 		gridLeaf.move(column: column, toColNo: toColNo)
 	}
 
