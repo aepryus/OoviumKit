@@ -49,7 +49,6 @@ class HeaderEditor: KeyOrbit {
 			self.headerCell.column.aggregate = .sum
             self.headerCell.column.disseminate()
             self.headerCell.triggerColumnCalculation()
-			self.headerCell.column.render()
 			self.headerCell.renderColumn()
 			self.schematic = self.topSchematic
 		}))
@@ -57,7 +56,6 @@ class HeaderEditor: KeyOrbit {
 			self.headerCell.column.aggregate = .match
             self.headerCell.column.disseminate()
             self.headerCell.triggerColumnCalculation()
-			self.headerCell.column.render()
 			self.headerCell.renderColumn()
 			self.schematic = self.topSchematic
 		}))
@@ -65,7 +63,6 @@ class HeaderEditor: KeyOrbit {
 			self.headerCell.column.aggregate = .average
             self.headerCell.column.disseminate()
             self.headerCell.triggerColumnCalculation()
-			self.headerCell.column.render()
 			self.headerCell.renderColumn()
 			self.schematic = self.topSchematic
 		}))
@@ -73,7 +70,6 @@ class HeaderEditor: KeyOrbit {
 			self.headerCell.column.aggregate = .running
             self.headerCell.column.disseminate()
             self.headerCell.triggerColumnCalculation()
-			self.headerCell.column.render()
 			self.headerCell.renderColumn()
 			self.schematic = self.topSchematic
 		}))
@@ -81,7 +77,6 @@ class HeaderEditor: KeyOrbit {
 			self.headerCell.column.aggregate = .none
             self.headerCell.column.disseminate()
             self.headerCell.triggerColumnCalculation()
-			self.headerCell.column.render()
 			self.headerCell.renderColumn()
 			self.schematic = self.topSchematic
 		}))
@@ -89,7 +84,6 @@ class HeaderEditor: KeyOrbit {
 			self.headerCell.column.aggregate = .count
             self.headerCell.column.disseminate()
             self.headerCell.triggerColumnCalculation()
-			self.headerCell.column.render()
 			self.headerCell.renderColumn()
 			self.schematic = self.topSchematic
 		}))

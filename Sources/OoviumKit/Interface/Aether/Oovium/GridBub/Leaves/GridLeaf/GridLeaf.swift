@@ -71,12 +71,13 @@ class GridLeaf: Leaf, GridViewDelegate, UITextInput, UITextInputTraits {
         columns.enumerated().forEach { $0.1.addGridCell(controller: controller, column: $0.1, cell: cells[$0.0]) }
         controller.resize()
 	}
-	func deleteRow(rowNo: Int) {
-		grid.deleteRow(rowNo: rowNo-1)
+	func delete(rowNo: Int) {
 		lefterCells[rowNo-1].removeFromSuperview()
 		lefterCells.remove(at: rowNo-1)
-        columns.forEach { $0.gridCells.remove(at: rowNo-1) }
-        controller.resizeEverything()
+        columns.forEach {
+            $0.gridCells[rowNo-1].removeFromSuperview()
+            $0.gridCells.remove(at: rowNo-1)
+        }
 	}
 	func slide(rowNo: Int, dy: CGFloat) {
 		let lefterCell: LefterCell = lefterCells[rowNo-1]

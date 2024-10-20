@@ -35,13 +35,15 @@ class GridController: ChainViewKeyDelegate {
         gridBub.addRow(with: cells)
         let aetherExe: AetherExe = gridBub.aetherView.aetherExe
 
+        cells.forEach({ aetherExe.plugIn(aexon: $0) })
+        
+        aetherExe.buildMemory()
+        
         grid.columns.filter({ $0.aggregate != .none }).forEach {
             let footerTower: Tower = aetherExe.tower(key: $0.footerTokenKey)!
             footerTower.buildStream()
             footerTower.buildTask()
         }
-        
-        cells.forEach({ aetherExe.plugIn(aexon: $0) })
         
         aetherExe.trigger(keys: cells.map({ $0.chain.key! }))
                 
@@ -50,7 +52,11 @@ class GridController: ChainViewKeyDelegate {
 
         resizeEverything()
     }
-    func delete(row: Int) {
+    func delete(rowNo: Int) {
+        gridBub.gridLeaf.delete(rowNo: rowNo)
+        let keys: [TokenKey] = grid.delete(rowNo: rowNo)
+        gridBub.aetherView.aetherExe.nuke(keys: keys)
+        resizeEverything()
     }
     func addColumn() {
         let aetherExe: AetherExe = gridBub.aetherView.aetherExe
