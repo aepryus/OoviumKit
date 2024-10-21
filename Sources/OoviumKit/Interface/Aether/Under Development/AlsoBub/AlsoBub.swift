@@ -83,7 +83,7 @@ class AlsoBub: Bubble {
 	}
 	
 // Bubble ==========================================================================================
-	override var uiColor: UIColor { !selected ? OOColor.lavender.uiColor : UIColor.yellow }
+	override var uiColor: UIColor { !selected ? Text.Color.lavender.uiColor : UIColor.yellow }
     override var hitch: Position { .top }
 	
 // UIView ==========================================================================================

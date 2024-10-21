@@ -18,6 +18,6 @@ class TextMaker: Maker {
         return TextBub(text, aetherView: aetherView)
     }
     func drawIcon() {
-        OOShape.ellipse.shape.drawIcon(color: UIColor.orange)
+        Text.Shape.ellipse.shape.drawIcon(color: UIColor.orange)
     }
 }

@@ -86,7 +86,7 @@ class CoordinateBub: Bubble, HeaderLeafDelegate, ChainLeafDelegate {
     }
 
 // Bubble ==========================================================================================
-    override var uiColor: UIColor { !selected ? OOColor.marine.uiColor : .yellow }
+    override var uiColor: UIColor { !selected ? Text.Color.marine.uiColor : .yellow }
 
 // SignatureLeafDelegate ===========================================================================
     func name(for headerLeaf: HeaderLeaf) -> String {

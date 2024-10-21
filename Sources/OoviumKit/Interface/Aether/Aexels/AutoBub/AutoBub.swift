@@ -249,7 +249,7 @@ class AutoBub: Bubble, ChainLeafDelegate {
     }
 	
 // Bubble ==========================================================================================
-	override var uiColor: UIColor { OOColor.cobolt.uiColor }
+	override var uiColor: UIColor { Text.Color.cobolt.uiColor }
     override var hitch: Position { .topLeft }
     override var selectable: Bool { false }
 

@@ -107,13 +107,13 @@ class SystemMaker: Maker {
         arrow.addQuadCurve(to: CGPoint(x: x3, y: y4), control: CGPoint(x: x11, y: y4))
         arrow.closeSubpath()
         
-        let color = RGB.tint(color: OOColor.lime.uiColor, percent: 0.5)
+        let color = RGB.tint(color: Text.Color.lime.uiColor, percent: 0.5)
         let c = UIGraphicsGetCurrentContext()!
         c.setFillColor(color.alpha(0.4).cgColor)
         c.setStrokeColor(color.alpha(0.9).cgColor)
         c.addPath(arrow)
         c.drawPath(using: .fillStroke)
         
-        Skin.bubble(path: path, uiColor: OOColor.lime.uiColor, width: 4.0/3.0*Oo.s)
+        Skin.bubble(path: path, uiColor: Text.Color.lime.uiColor, width: 4.0/3.0*Oo.s)
     }
 }

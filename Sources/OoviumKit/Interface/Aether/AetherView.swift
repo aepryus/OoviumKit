@@ -37,8 +37,8 @@ public class AetherView: UIView, UIScrollViewDelegate, UIGestureRecognizerDelega
 	public weak var aetherViewDelegate: AetherViewDelegate? = nil
 	
 	var maker: Maker = ObjectMaker()
-	var shape: OOShape = .ellipse
-	var color: OOColor = .lime
+	var shape: Text.Shape = .ellipse
+	var color: Text.Color = .lime
 	
 	var bubbles: [Bubble] = [Bubble]()
 	var doodles: [Doodle] = [Doodle]()

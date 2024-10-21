@@ -23,7 +23,7 @@ class FunctionsLeaf: Leaf, Citable {
 	}
 	
 	var color: UIColor {
-		return !bubble.selected ? OOColor.blue.uiColor : bubble.uiColor
+		return !bubble.selected ? Text.Color.blue.uiColor : bubble.uiColor
 	}
 	
 	func render() {

@@ -23,7 +23,7 @@ class ColorLeaf: Leaf {
     
     public func load(state: State) {
         no = state.no
-        uiColor = OOColor(rawValue: state.color)?.uiColor ?? .white
+        uiColor = Text.Color(rawValue: state.color)?.uiColor ?? .white
     }
 	
 // Events ==========================================================================================
@@ -36,7 +36,7 @@ class ColorLeaf: Leaf {
 	
 // UIView ==========================================================================================
 	override func draw(_ rect: CGRect) {
-//		guard let uiColor = OOColor(rawValue: state.color)?.uiColor else { return }
+//		guard let uiColor = Text.Color(rawValue: state.color)?.uiColor else { return }
 		let rgb = RGB(uiColor: uiColor)
 		let field = rgb.tint(0.5)
 		let c = UIGraphicsGetCurrentContext()!

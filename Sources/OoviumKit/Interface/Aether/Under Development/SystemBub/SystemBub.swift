@@ -140,7 +140,7 @@ class SystemBub: Bubble, Editable {
     func cite(_ citable: Citable, at: CGPoint) {}
             
 // Bubble ==========================================================================================
-    override var uiColor: UIColor { open ? .white : !selected ? OOColor.lime.uiColor : .yellow }
+    override var uiColor: UIColor { open ? .white : !selected ? Text.Color.lime.uiColor : .yellow }
 
 // UIView ==========================================================================================
     override func draw(_ rect: CGRect) {

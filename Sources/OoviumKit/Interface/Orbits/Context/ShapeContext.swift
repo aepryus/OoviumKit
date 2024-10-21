@@ -10,9 +10,9 @@ import OoviumEngine
 import UIKit
 
 private class ShapeKey: Key {
-	let shape: OOShape
+	let shape: Text.Shape
 	
-	init(shape: OOShape, _ closure: @escaping()->()) {
+	init(shape: Text.Shape, _ closure: @escaping()->()) {
 		self.shape = shape
 		super.init(text: "", uiColor: UIColor.white, font: UIFont(name: "Verdana", size: 14)!, closure)
 	}
@@ -58,7 +58,7 @@ class ShapeContext: Context {
 	}
 	required init?(coder aDecoder: NSCoder) { fatalError() }
 	
-	func execute(_ ooShape: OOShape) {
+	func execute(_ ooShape: Text.Shape) {
         dismiss()
         (aetherView.selected as! Set<TextBub>).forEach { $0.shape = ooShape }
 	}

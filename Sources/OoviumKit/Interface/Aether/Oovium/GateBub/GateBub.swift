@@ -95,7 +95,7 @@ class GateBub: Bubble, ChainLeafDelegate, Citable {
 	}
 	
 // Bubble ==========================================================================================
-    override var uiColor: UIColor { !selected ? OOColor.marine.uiColor : UIColor.yellow }
+    override var uiColor: UIColor { !selected ? Text.Color.marine.uiColor : UIColor.yellow }
 	override func positionMoorings() {
 		let w: CGFloat = ifLeaf.size.width
 		let p: CGFloat = 3

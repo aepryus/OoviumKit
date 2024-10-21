@@ -36,6 +36,6 @@ class CoordinateMaker: Maker {
         path.addArc(tangent1End: CGPoint(x: x1, y: y3), tangent2End: CGPoint(x: x1, y: y2), radius: r)
         path.closeSubpath()
         
-        Skin.bubble(path: path, uiColor: OOColor.marine.uiColor, width: 4.0/3.0*Oo.s)
+        Skin.bubble(path: path, uiColor: Text.Color.marine.uiColor, width: 4.0/3.0*Oo.s)
     }
 }

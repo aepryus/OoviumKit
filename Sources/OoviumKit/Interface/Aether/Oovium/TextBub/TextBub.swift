@@ -13,14 +13,14 @@ class TextBub: Bubble, NSCopying {
 	let text: Text
 	var textLeaf: TextLeaf!
 	
-	var color: OOColor {
+    var color: Text.Color {
 		get {return text.color}
 		set {
 			text.color = newValue
 			render()
 		}
 	}
-	var shape: OOShape {
+    var shape: Text.Shape {
 		get {return text.shape}
 		set {
 			text.shape = newValue
@@ -55,9 +55,7 @@ class TextBub: Bubble, NSCopying {
 // Events ==========================================================================================
 	override func onCreate() {
 		alpha = 0
-		UIView.animate(withDuration: 0.1) {
-			self.alpha = 1
-		}
+		UIView.animate(withDuration: 0.1) { self.alpha = 1 }
         textLeaf.mode = .edit
 	}
 	func onOK() {}

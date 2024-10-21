@@ -10,9 +10,9 @@ import OoviumEngine
 import UIKit
 
 class ShapeTool: Tool {
-	let shape: OOShape
+	let shape: Text.Shape
 	
-	init(shape: OOShape) {
+	init(shape: Text.Shape) {
 		self.shape = shape
 		super.init()
 	}

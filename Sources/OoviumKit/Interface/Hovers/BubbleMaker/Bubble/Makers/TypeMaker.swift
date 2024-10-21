@@ -55,6 +55,6 @@ class TypeMaker: Maker {
         path.addArc(tangent1End: CGPoint(x: x1, y: y1), tangent2End: CGPoint(x: x4, y: y1), radius: or)
         path.closeSubpath()
 
-        Skin.bubble(path: path, uiColor: OOColor.lavender.uiColor, width: 4.0/3.0*Oo.s)
+        Skin.bubble(path: path, uiColor: Text.Color.lavender.uiColor, width: 4.0/3.0*Oo.s)
     }
 }

@@ -192,7 +192,7 @@ class GraphBub: Bubble, ChainLeafDelegate {
 //    var paramTokens: [Token] { [graph.uTower.variableToken, graph.vTower.variableToken, graph.tTower.variableToken] }
 
 // Bubble ==========================================================================================
-    override var uiColor: UIColor { !selected ? OOColor.cobolt.uiColor : .yellow }
+    override var uiColor: UIColor { !selected ? Text.Color.cobolt.uiColor : .yellow }
     
 // UIView ==========================================================================================
     override func draw(_ rect: CGRect) {
