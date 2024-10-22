@@ -1,39 +1,53 @@
 //
-//  ConfirmModal.swift
-//  Oovium
+//  AlertModal.swift
+//  OoviumKit
 //
-//  Created by Joe Charlier on 9/21/17.
-//  Copyright © 2017 Aepryus Software. All rights reserved.
+//  Created by Joe Charlier on 10/22/24.
+//  Copyright © 2024 Aepryus Software. All rights reserved.
 //
 
 import Acheron
 import UIKit
 
-class ConfirmModal: Modal {
+class AlertModal: Modal {
+    var message: String = ""
+    var leftTitle: String?
+    var rightTitle: String = ""
+    
     let messageLabel: UILabel = UILabel()
-    let ok: Trapezoid = Trapezoid(title: "OK".localized, leftSlant: .up, rightSlant: .vertical)
-    let cancel: Trapezoid = Trapezoid(title: "Cancel".localized, leftSlant: .vertical, rightSlant: .down)
+    let rightButton: Trapezoid = Trapezoid(title: "OK".localized, leftSlant: .up, rightSlant: .vertical)
+    let leftButton: Trapezoid = Trapezoid(title: "Cancel".localized, leftSlant: .vertical, rightSlant: .down)
     
     var complete: (()->())?
     var input: String? = nil
+    
+    lazy var pen: Pen = Pen(font: .ooExplore(size: 15*gS), color: .green.tint(0.7), alignment: .center)
 
-    init(message: String, complete: (()->())?) {
+    init(message: String, left: String? = nil, right: String, complete: (()->())?) {
+        self.message = message
+        self.leftTitle = left
+        self.rightTitle = right
         self.complete = complete
         
-        super.init(anchor: .center, size: CGSize(width: 360, height: 165), offset: .zero)
+        super.init(anchor: .center, size: CGSize(width: 300, height: 165), offset: .zero)
 
         messageLabel.text = message
-        messageLabel.textAlignment = .center
-        messageLabel.font = UIFont.ooExplore(size: 15*gS)
-        messageLabel.numberOfLines = 2
-        messageLabel.textColor = .green.tint(0.7)
+        messageLabel.pen = pen
+        messageLabel.numberOfLines = 0
         addSubview(messageLabel)
         
-        addSubview(cancel)
-        addSubview(ok)
+        rightButton.title = rightTitle
+        addSubview(rightButton)
+        if let leftTitle {
+            leftButton.title = leftTitle
+            addSubview(leftButton)
+        }
 
-        cancel.addAction { [unowned self] in self.dismiss() }
-        ok.addAction { [unowned self] in self.onOK() }
+        leftButton.addAction { [unowned self] in self.dismiss() }
+        rightButton.addAction { [unowned self] in self.onOK() }
+        
+        let size: CGSize = pen.size(text: message, width: 300*gS-20*gS)
+        self.size = CGSize(width: size.width/gS + 40, height: size.height/gS + 80)
     }
     required init?(coder aDecoder: NSCoder) { fatalError() }
     
@@ -43,9 +57,6 @@ class ConfirmModal: Modal {
 //    }
     
 // Events ==========================================================================================
-    override func onDismiss() {
-        super.onDismiss()
-    }
     private func onOK() {
         dismiss()
         complete?()
@@ -77,6 +88,8 @@ class ConfirmModal: Modal {
         let p7 = CGPoint(x: x2, y: y2)
         let p8 = CGPoint(x: x1, y: y2)
         
+        let p9 = CGPoint(x: x1, y: y3)
+        
         let wr: CGFloat = 10*s
         let ar: CGFloat = 5*s
 
@@ -87,9 +100,14 @@ class ConfirmModal: Modal {
         path.addArc(tangent1End: p3, tangent2End: (p3+p4)/2, radius: ar)
         path.addArc(tangent1End: p4, tangent2End: (p4+p5)/2, radius: wr)
         path.addArc(tangent1End: p5, tangent2End: (p5+p6)/2, radius: wr)
-        path.addArc(tangent1End: p6, tangent2End: (p6+p7)/2, radius: wr)
-        path.addArc(tangent1End: p7, tangent2End: (p7+p8)/2, radius: wr)
-        path.addArc(tangent1End: p8, tangent2End: (p8+p1)/2, radius: ar)
+        
+        if leftTitle != nil {
+            path.addArc(tangent1End: p6, tangent2End: (p6+p7)/2, radius: wr)
+            path.addArc(tangent1End: p7, tangent2End: (p7+p8)/2, radius: wr)
+            path.addArc(tangent1End: p8, tangent2End: (p8+p1)/2, radius: ar)
+        } else {
+            path.addArc(tangent1End: p9, tangent2End: (p1+p9)/2, radius: wr)
+        }
         path.closeSubpath()
 
         let lw: CGFloat = 2*Screen.s
@@ -102,9 +120,10 @@ class ConfirmModal: Modal {
         c.drawPath(using: .fillStroke)
     }
     override func layoutSubviews() {
-        messageLabel.top(dy: 9*gS, width: width-20*gS, height: 48*gS)
-        cancel.bottomLeft(dx: 1*gS, dy: -1*gS, width: 128*gS, height: 32*gS)
-        ok.bottomRight(dx: -1*gS, dy: -1*gS, width: 128*gS, height: 32*gS)
+        let size: CGSize = pen.size(text: message, width: 300*gS-20*gS)
+        messageLabel.top(dy: 20*gS, size: size)
+        leftButton.bottomLeft(dx: 1*gS, dy: -1*gS, width: 128*gS, height: 32*gS)
+        rightButton.bottomRight(dx: -1*gS, dy: -1*gS, width: 128*gS, height: 32*gS)
     }
     
 // UITextFieldDelegate =============================================================================

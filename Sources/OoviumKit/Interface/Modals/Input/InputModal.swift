@@ -51,13 +51,10 @@ class InputModal: Modal, UITextFieldDelegate {
         super.onInvoke()
         textField.becomeFirstResponder()
     }
-    override func onDismiss() {
-        super.onDismiss()
-        complete(input)
-    }
     private func onOK() {
         input = textField.text
         dismiss()
+        complete(input)
     }
 
 // UIView ==========================================================================================

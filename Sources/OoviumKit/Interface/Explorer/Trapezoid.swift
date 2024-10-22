@@ -12,7 +12,9 @@ import UIKit
 public class Trapezoid: UIControl {
     public enum Slant { case up, down, vertical }
     
-	let title: String
+    var title: String {
+        didSet { setNeedsDisplay() }
+    }
     let leftSlant: Slant
     let rightSlant: Slant
 

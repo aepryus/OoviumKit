@@ -52,11 +52,12 @@ class GridController: ChainViewKeyDelegate {
 
         resizeEverything()
     }
-    func delete(rowNo: Int) {
+    func delete(rowNo: Int) -> Bool {
         gridBub.gridLeaf.delete(rowNo: rowNo)
         let keys: [TokenKey] = grid.delete(rowNo: rowNo)
-        gridBub.aetherView.aetherExe.nuke(keys: keys)
+        guard gridBub.aetherView.aetherExe.nuke(keys: keys) else { return false }
         resizeEverything()
+        return true
     }
     func addColumn() {
         let aetherExe: AetherExe = gridBub.aetherView.aetherExe
@@ -72,11 +73,12 @@ class GridController: ChainViewKeyDelegate {
         gridBub.addColumn(with: column)
         resizeEverything()
     }
-    func delete(column: Column) {
+    func delete(column: Column) -> Bool {
         gridBub.gridLeaf.delete(column: column)
         let keys: [TokenKey] = grid.deleteColumn(column)
-        gridBub.aetherView.aetherExe.nuke(keys: keys)
+        guard gridBub.aetherView.aetherExe.nuke(keys: keys) else { return false }
         resizeEverything()
+        return true
     }
     
 // Sizing ==========================================================================================

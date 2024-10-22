@@ -733,13 +733,15 @@ public class AetherView: UIView, UIScrollViewDelegate, UIGestureRecognizerDelega
 	func moveSelected(by: CGPoint) {
 		selected.forEach { $0.move(by: by) }
 	}
-	func deleteSelected() {
+    func selectedDeletable() -> Bool { aetherExe.nukable(keys: selected.flatMap({ $0.aexel.tokenKeys })) }
+	func deleteSelected() -> Bool {
+        guard aetherExe.nuke(keys: selected.flatMap({ $0.aexel.tokenKeys })) else { return false }
         remove(bubbles: selected)
         aether.remove(aexels: selected.map({ $0.aexel }))
-        aetherExe.nuke(keys: selected.flatMap({ $0.aexel.tokenKeys }))
         stretch()
 		orb.chainEditor.customSchematic?.render(aether: aether)
         unselectAll()
+        return true
 	}
 	func copyBubbles() {
 		copyBuffer = selected
@@ -911,12 +913,13 @@ public class AetherView: UIView, UIScrollViewDelegate, UIGestureRecognizerDelega
 		messageHover.message = message
 		messageHover.invoke()
 	}
-	public func invokeConfirmModal(_ message: String, _ closure: @escaping()->()) {
-		let confirmModal: ConfirmModal = ConfirmModal(aetherView: self)
-        confirmModal.message = message
-        confirmModal.closure = closure
-        confirmModal.invoke()
+	public func invokeConfirmModal(_ message: String, _ complete: @escaping()->()) {
+        ConfirmModal(message: message, complete: complete).invoke()
 	}
+    public func invokeInfoModal(_ message: String, _ complete: (()->())? = nil) {
+        AlertModal(message: message, right: "OK".localized, complete: complete).invoke()
+//        AlertModal(message: message, complete: complete).invoke()
+    }
 
 // UIView ==========================================================================================
     public override var frame: CGRect {
