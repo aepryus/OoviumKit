@@ -20,7 +20,7 @@ class MultiContext: Context {
                     }
                 }
             } else {
-                self.aetherView.invokeInfoModal("One or more of the selected bubbles is still depended upon.  These selected bubbles can not be deleted.", {})
+                self.aetherView.invokeInfoModal("These bubbles have downstream dependencies.  They can not be deleted.", {})
             }
         }))
         

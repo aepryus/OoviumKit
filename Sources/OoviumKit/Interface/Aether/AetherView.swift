@@ -914,11 +914,10 @@ public class AetherView: UIView, UIScrollViewDelegate, UIGestureRecognizerDelega
 		messageHover.invoke()
 	}
 	public func invokeConfirmModal(_ message: String, _ complete: @escaping()->()) {
-        ConfirmModal(message: message, complete: complete).invoke()
+        AlertModal(message: message, left: "No".localized, right: "Yes".localized, complete: complete).invoke()
 	}
     public func invokeInfoModal(_ message: String, _ complete: (()->())? = nil) {
         AlertModal(message: message, right: "OK".localized, complete: complete).invoke()
-//        AlertModal(message: message, complete: complete).invoke()
     }
 
 // UIView ==========================================================================================

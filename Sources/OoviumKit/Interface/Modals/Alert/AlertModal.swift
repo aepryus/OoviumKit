@@ -47,7 +47,7 @@ class AlertModal: Modal {
         rightButton.addAction { [unowned self] in self.onOK() }
         
         let size: CGSize = pen.size(text: message, width: 300*gS-20*gS)
-        self.size = CGSize(width: size.width/gS + 40, height: size.height/gS + 80)
+        self.size = CGSize(width: max(size.width/gS + 40, 320), height: max(size.height/gS + 80, 100))
     }
     required init?(coder aDecoder: NSCoder) { fatalError() }
     
