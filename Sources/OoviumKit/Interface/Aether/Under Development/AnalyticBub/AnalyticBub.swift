@@ -43,8 +43,8 @@ class AnalyticBub: Bubble, Citable {
 
 // Bubble ==========================================================================================
 //    override var context: Context { orb.analyticContext }
-    override var uiColor: UIColor { selected ? .yellow : (analyticLeaf.focused ? .black.tint(0.8) : (analytic.token.status == .ok ? analytic.anain.tower.obje.uiColor : .red)) }
+//    override var uiColor: UIColor { selected ? .yellow : (analyticLeaf.focused ? .black.tint(0.8) : (analytic.token.status == .ok ? analytic.anain.tower.obje.uiColor : .red)) }
 
 // Citable =========================================================================================
-    func tokenKey(at: CGPoint) -> TokenKey? { analytic.token.key }
+    func tokenKey(at: CGPoint) -> TokenKey? { analytic.tokenKey }
 }

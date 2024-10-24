@@ -10,15 +10,15 @@ import OoviumEngine
 import UIKit
 
 class SpaceLeaf: Leaf, Citable {
-	let token: Token
+	let tokenKey: TokenKey
 	var name: String
 
-	init(bubble: Bubble, name: String, token: Token) {
+	init(bubble: Bubble, name: String, tokenKey: TokenKey) {
 		self.name = name
-		self.token = token
+		self.tokenKey = tokenKey
 		super.init(bubble: bubble)
 		backgroundColor = UIColor.clear
-        mooring = bubble.createMooring(key: token.key)
+        mooring = bubble.createMooring(key: tokenKey)
 	}
 	required init?(coder aDecoder: NSCoder) { fatalError() }
 	
@@ -31,5 +31,5 @@ class SpaceLeaf: Leaf, Citable {
 	}
 	
 // Citable =========================================================================================
-    func tokenKey(at: CGPoint) -> TokenKey? { token.key }
+    func tokenKey(at: CGPoint) -> TokenKey? { tokenKey }
 }

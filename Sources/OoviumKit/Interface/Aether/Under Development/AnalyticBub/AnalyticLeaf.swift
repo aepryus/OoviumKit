@@ -21,7 +21,7 @@ class AnalyticLeaf: Leaf, Editable, AnainViewDelegate, DoubleTappable, UITextFie
         
         super.init(bubble: bubble)
         
-        mooring = bubble.createMooring(key: analytic.token.key)
+        mooring = bubble.createMooring(key: analytic.tokenKey)
 
         anainView.anain = analytic.anain
         anainView.delegate = self

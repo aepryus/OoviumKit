@@ -13,15 +13,15 @@ import UIKit
 class AutoBub: Bubble, ChainLeafDelegate {
 	let auto: Automata
     
-    lazy var aLeaf: SpaceLeaf = SpaceLeaf(bubble: self, name: "A", token: auto.spaceTowers[0].variableToken)
-	lazy var bLeaf: SpaceLeaf = SpaceLeaf(bubble: self, name: "B", token: auto.spaceTowers[1].variableToken)
-	lazy var cLeaf: SpaceLeaf = SpaceLeaf(bubble: self, name: "C", token: auto.spaceTowers[2].variableToken)
-	lazy var dLeaf: SpaceLeaf = SpaceLeaf(bubble: self, name: "D", token: auto.spaceTowers[3].variableToken)
-	lazy var eLeaf: SpaceLeaf = SpaceLeaf(bubble: self, name: "E", token: auto.spaceTowers[4].variableToken)
-	lazy var fLeaf: SpaceLeaf = SpaceLeaf(bubble: self, name: "F", token: auto.spaceTowers[5].variableToken)
-	lazy var gLeaf: SpaceLeaf = SpaceLeaf(bubble: self, name: "G", token: auto.spaceTowers[6].variableToken)
-	lazy var hLeaf: SpaceLeaf = SpaceLeaf(bubble: self, name: "H", token: auto.spaceTowers[7].variableToken)
-	lazy var selfLeaf: SpaceLeaf = SpaceLeaf(bubble: self, name: "Self", token: auto.spaceTowers[8].variableToken)
+    lazy var aLeaf: SpaceLeaf = SpaceLeaf(bubble: self, name: "A", tokenKey: auto.aTokenKey)
+	lazy var bLeaf: SpaceLeaf = SpaceLeaf(bubble: self, name: "B", tokenKey: auto.bTokenKey)
+	lazy var cLeaf: SpaceLeaf = SpaceLeaf(bubble: self, name: "C", tokenKey: auto.cTokenKey)
+	lazy var dLeaf: SpaceLeaf = SpaceLeaf(bubble: self, name: "D", tokenKey: auto.dTokenKey)
+	lazy var eLeaf: SpaceLeaf = SpaceLeaf(bubble: self, name: "E", tokenKey: auto.eTokenKey)
+	lazy var fLeaf: SpaceLeaf = SpaceLeaf(bubble: self, name: "F", tokenKey: auto.fTokenKey)
+	lazy var gLeaf: SpaceLeaf = SpaceLeaf(bubble: self, name: "G", tokenKey: auto.gTokenKey)
+	lazy var hLeaf: SpaceLeaf = SpaceLeaf(bubble: self, name: "H", tokenKey: auto.hTokenKey)
+	lazy var selfLeaf: SpaceLeaf = SpaceLeaf(bubble: self, name: "Self", tokenKey: auto.selfTokenKey)
 	
 	lazy var nextLeaf: ChainLeaf = ChainLeaf(bubble: self, delegate: self)
 	
