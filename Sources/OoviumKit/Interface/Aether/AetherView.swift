@@ -267,13 +267,15 @@ public class AetherView: UIView, UIScrollViewDelegate, UIGestureRecognizerDelega
             let aexels: [Aexel] = aetherExe.paste(array: json.toArray())
             let bubbles: [Bubble] = aexels.map { createBubble(aexel: $0)! }
             bubbles.forEach { add(bubble: $0) }
-
             bubbles.forEach { $0.wireMoorings() }
+            
             bubbles.forEach { $0.frame = CGRect(origin: CGPoint(x: $0.aexel.x, y: $0.aexel.y), size: $0.bounds.size) }
             stretch(animated:false)
 
             unselectAll()
             select(bubbles: bubbles)
+            
+            aetherExe.notifyListeners()
             
         } else {
             if let string: String = UIPasteboard.general.string {
@@ -579,13 +581,11 @@ public class AetherView: UIView, UIScrollViewDelegate, UIGestureRecognizerDelega
         }
     }
 	public func clearAether() {
-		self.aether.removeAllAexels()
 		UIView.animate(withDuration: 0.2, animations: {
 			self.bubbles.forEach { $0.alpha = 0 }
 			self.doodles.forEach { $0.opacity = 0 }
-		}) { (finsihed: Bool) in
-			self.removeAllBubbles()
-            self.removeAllDoodles()
+		}) { (finished: Bool) in
+            self.delete(bubbles: Set(self.bubbles))
 		}
 	}
 	
@@ -734,15 +734,15 @@ public class AetherView: UIView, UIScrollViewDelegate, UIGestureRecognizerDelega
 		selected.forEach { $0.move(by: by) }
 	}
     func selectedDeletable() -> Bool { aetherExe.nukable(keys: selected.flatMap({ $0.aexel.tokenKeys })) }
-	func deleteSelected() -> Bool {
-        guard aetherExe.nuke(keys: selected.flatMap({ $0.aexel.tokenKeys })) else { return false }
-        remove(bubbles: selected)
-        aether.remove(aexels: selected.map({ $0.aexel }))
+    private func delete(bubbles: Set<Bubble>) {
+        aetherExe.nuke(keys: bubbles.flatMap({ $0.aexel.tokenKeys }))
+        remove(bubbles: bubbles)
+        aether.remove(aexels: bubbles.map({ $0.aexel }))
         stretch()
-		orb.chainEditor.customSchematic?.render(aether: aether)
+        orb.chainEditor.customSchematic?.render(aether: aether)
         unselectAll()
-        return true
-	}
+    }
+    func deleteSelected() { delete(bubbles: selected) }
 	func copyBubbles() {
 		copyBuffer = selected
 		unselectAll()

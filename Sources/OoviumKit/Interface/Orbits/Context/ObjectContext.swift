@@ -20,9 +20,8 @@ class ObjectContext: Context {
 		self.schematic.add(row: 1, col: 0, key: Key(text: NSLocalizedString("delete", tableName: nil, bundle: Bundle(for: type(of: self)), value: "", comment: ""), uiColor: UIColor(red: 0.5, green: 0.6, blue: 0.7, alpha: 1), {
             if self.aetherView.selectedDeletable() {
                 self.aetherView.invokeConfirmModal("deleteOneConfirm".localized) {
-                    if self.aetherView.deleteSelected() {
-                        self.dismiss()
-                    }
+                    self.aetherView.deleteSelected()
+                    self.dismiss()
                 }
             } else {
                 self.aetherView.invokeInfoModal("This bubble has downstream dependencies.  It can not be deleted.", {})

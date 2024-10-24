@@ -15,9 +15,8 @@ class MultiContext: Context {
         schematic.add(row: 0, col: 0, key: Key(text: "delete".localized, uiColor: UIColor(red: 0.6, green: 0.7, blue: 0.8, alpha: 1), {
             if self.aetherView.selectedDeletable() {
                 self.aetherView.invokeConfirmModal("deleteManyConfirm".localized) {
-                    if self.aetherView.deleteSelected() {
-                        self.dismiss()
-                    }
+                    self.aetherView.deleteSelected()
+                    self.dismiss()
                 }
             } else {
                 self.aetherView.invokeInfoModal("These bubbles have downstream dependencies.  They can not be deleted.", {})
