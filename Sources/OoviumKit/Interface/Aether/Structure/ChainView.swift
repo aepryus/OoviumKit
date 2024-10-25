@@ -85,15 +85,15 @@ class ChainView: UIView, UITextInput, UITextInputTraits, AnchorTappable, TowerLi
     
 // Computed ========================================================================================
     var aetherView: AetherView { editable.aetherView }
-    var aetherExe: AetherExe { aetherView.aetherExe }
-    var chainCore: ChainCore { aetherExe.chainCore(key: chain.key!) }
+    var citadel: Citadel { aetherView.citadel }
+    var chainCore: ChainCore { citadel.chainCore(key: chain.key!) }
     
     var blank: Bool { chain.isEmpty && !editing }
     
     var chainDisplay: String {
-        alwaysShow || aetherExe.inAFog(key: chain.key!)
-        ? aetherExe.tokenDisplay(key: chain.key!)
-        : aetherExe.valueDisplay(key: chain.key!) }
+        alwaysShow || citadel.inAFog(key: chain.key!)
+        ? citadel.tokenDisplay(key: chain.key!)
+        : citadel.valueDisplay(key: chain.key!) }
 
     func resize() {
         var widthNeeded: CGFloat
@@ -110,7 +110,7 @@ class ChainView: UIView, UITextInput, UITextInputTraits, AnchorTappable, TowerLi
             while i < to {
                 repeat {
                     key = chain.tokenKeys[i]
-                    token = aetherExe.token(key: key)
+                    token = citadel.token(key: key)
                     if ChainView.usesWafer(token: token) { break }
                     sb.append(token.display)
                     i += 1
@@ -141,7 +141,7 @@ class ChainView: UIView, UITextInput, UITextInputTraits, AnchorTappable, TowerLi
         var pos: Int = 0
         
         chain.tokenKeys.forEach { (key: TokenKey) in
-            let token: Token = aetherExe.token(key: key)
+            let token: Token = citadel.token(key: key)
             x += token.display.size(pen: ChainView.pen).width
             if ChainView.usesWafer(token: token) {x += 9}
             if nx < lx+(x-lx)/2 { return }
@@ -169,11 +169,11 @@ class ChainView: UIView, UITextInput, UITextInputTraits, AnchorTappable, TowerLi
     var inString: Bool { chain.isInString(at: cursor) }
     var unmatchedQuote: Bool { chain.unmatchedQuote }
     func attemptToPost(key: TokenKey) -> Bool {
-        guard aetherExe.canBeAdded(thisKey: key, to: chain.key!) else { return false }
+        guard citadel.canBeAdded(thisKey: key, to: chain.key!) else { return false }
         
         chain.post(key: key, at: cursor)
         
-        if key.hasTower { aetherExe.increment(key: chain.key!, dependenceOn: key) }
+        if key.hasTower { citadel.increment(key: chain.key!, dependenceOn: key) }
         
         cursor += 1
         triggerKeyboardIfNeeded()
@@ -206,7 +206,7 @@ class ChainView: UIView, UITextInput, UITextInputTraits, AnchorTappable, TowerLi
     }
     func delete() {
         guard let key: TokenKey = chain.delete(at: cursor) else { return }
-        if key.hasTower { aetherExe.decrement(key: chain.key!, dependenceOn:  key)}
+        if key.hasTower { citadel.decrement(key: chain.key!, dependenceOn:  key)}
         handleKeyRemoved(key)
     }
        
@@ -223,7 +223,7 @@ class ChainView: UIView, UITextInput, UITextInputTraits, AnchorTappable, TowerLi
         resignFirstResponder()
         isUserInteractionEnabled = false
         editing = false
-        let tower: Tower = aetherView.aetherExe.tower(key: chain.key!)!
+        let tower: Tower = aetherView.citadel.tower(key: chain.key!)!
         tower.trigger()
 //        aetherView.compileAether()
         resize()
@@ -244,7 +244,7 @@ class ChainView: UIView, UITextInput, UITextInputTraits, AnchorTappable, TowerLi
         while (pos < to) {
             repeat {
                 key = chain.tokenKeys[pos]
-                token = aetherExe.token(key: key)
+                token = citadel.token(key: key)
                 if ChainView.usesWafer(token: token) { break }
                 sb.append(token.display)
                 pos += 1
@@ -368,7 +368,7 @@ class ChainView: UIView, UITextInput, UITextInputTraits, AnchorTappable, TowerLi
     }
     @objc func backspace() {            // delete left
         guard let key: TokenKey = chain.backspace(at: cursor) else { return }
-        if key.hasTower { aetherExe.decrement(key: chain.key!, dependenceOn:  key)}
+        if key.hasTower { citadel.decrement(key: chain.key!, dependenceOn:  key)}
         cursor -= 1
         handleKeyRemoved(key)
     }

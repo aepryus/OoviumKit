@@ -54,7 +54,7 @@ class CronBub: Bubble, ChainLeafDelegate {
             self.playLeaf.playButton.stop()
             self.cronCore.reset()
             
-            guard let tower: Tower = self.aetherView.aetherExe.tower(key: self.cron.tokenKey)
+            guard let tower: Tower = self.aetherView.citadel.tower(key: self.cron.tokenKey)
             else { fatalError() }
             tower.trigger()
 		}
@@ -105,7 +105,7 @@ class CronBub: Bubble, ChainLeafDelegate {
 	required init?(coder aDecoder: NSCoder) { fatalError() }
     
     var cronCore: CronCore {
-        guard let tower: Tower = aetherView.aetherExe.tower(key: cron.tokenKey),
+        guard let tower: Tower = aetherView.citadel.tower(key: cron.tokenKey),
               let cronCore: CronCore = tower.core as? CronCore
         else { fatalError() }
         return cronCore

@@ -26,7 +26,7 @@ public extension AetherViewDelegate {
 
 public class AetherView: UIView, UIScrollViewDelegate, UIGestureRecognizerDelegate, AnchorDoubleTappable, GadgetDelegate {
 	public var aether: Aether
-    var aetherExe: AetherExe
+    var citadel: Citadel
     public var facade: AetherFacade?
     
     lazy var responder: ChainResponder = { ChainResponder(aetherView: self) }()
@@ -106,7 +106,7 @@ public class AetherView: UIView, UIScrollViewDelegate, UIGestureRecognizerDelega
 	
 	public init(toolBox: ToolBox, toolsOn: Bool = true, burn: Bool = true, oldPicker: Bool = false) {
 		aether = Aether()
-        aetherExe = aether.compile()
+        citadel = aether.compile()
 
         self.burn = burn
 		self.oldPicker = oldPicker
@@ -206,17 +206,17 @@ public class AetherView: UIView, UIScrollViewDelegate, UIGestureRecognizerDelega
 	public required init?(coder aDecoder: NSCoder) { fatalError() }
     
     public func compileAether() {
-        aetherExe = aether.compile()
-        aetherExe.notifyListeners()
+        citadel = aether.compile()
+        citadel.notifyListeners()
     }
     
     public func create<T: Aexel>(at: V2) -> T {
         let aexel: T = aether.create(at: at)
-        aetherExe.plugIn(aexons: [aexel])
+        citadel.plugIn(aexons: [aexel])
         return aexel
     }
     
-    public func printTowers() { aetherExe.printTowers() }
+    public func printTowers() { citadel.printTowers() }
     
 // Events ==========================================================================================
     public func onCut() {
@@ -228,11 +228,11 @@ public class AetherView: UIView, UIScrollViewDelegate, UIGestureRecognizerDelega
         // General ======================
         if selected.count == 1, let bubble: Bubble = selected.first {
             if let objectBub: ObjectBub = bubble as? ObjectBub {
-                UIPasteboard.general.string = aetherExe.value(key: objectBub.object.tokenKey)
+                UIPasteboard.general.string = citadel.value(key: objectBub.object.tokenKey)
             } else if let gateBub: GateBub = bubble as? GateBub {
-                UIPasteboard.general.string = aetherExe.value(key: gateBub.gate.tokenKey)
+                UIPasteboard.general.string = citadel.value(key: gateBub.gate.tokenKey)
             } else if let cronBub: CronBub = bubble as? CronBub {
-                UIPasteboard.general.string = aetherExe.value(key: cronBub.cron.tokenKey)
+                UIPasteboard.general.string = citadel.value(key: cronBub.cron.tokenKey)
             } else if let textBub: TextBub = bubble as? TextBub {
                 UIPasteboard.general.string = textBub.text.name
             } else if let gridBub: GridBub = bubble as? GridBub {
@@ -244,7 +244,7 @@ public class AetherView: UIView, UIScrollViewDelegate, UIGestureRecognizerDelega
 
                 for i: Int in 1...gridBub.grid.rows {
                     for j: Int in 1...gridBub.grid.columns.count {
-                        string += "\(aetherExe.value(key: gridBub.grid.cell(colNo: j, rowNo: i).chain.key!) ?? "0"),"
+                        string += "\(citadel.value(key: gridBub.grid.cell(colNo: j, rowNo: i).chain.key!) ?? "0"),"
                     }
                     string.removeLast()
                     string += "\n"
@@ -263,7 +263,7 @@ public class AetherView: UIView, UIScrollViewDelegate, UIGestureRecognizerDelega
     public func onPaste() {
         if responder.chainView == nil {
             guard let json: String = UIPasteboard.oovium.string else { return }
-            let aexels: [Aexel] = aetherExe.paste(array: json.toArray())
+            let aexels: [Aexel] = citadel.paste(array: json.toArray())
             let bubbles: [Bubble] = aexels.map { createBubble(aexel: $0)! }
             bubbles.forEach { add(bubble: $0) }
             bubbles.forEach { $0.wireMoorings() }
@@ -274,7 +274,7 @@ public class AetherView: UIView, UIScrollViewDelegate, UIGestureRecognizerDelega
             unselectAll()
             select(bubbles: bubbles)
             
-            aetherExe.notifyListeners()
+            citadel.notifyListeners()
             
         } else {
             if let string: String = UIPasteboard.general.string {
@@ -525,7 +525,7 @@ public class AetherView: UIView, UIScrollViewDelegate, UIGestureRecognizerDelega
         
         aether.aexels.forEach { add(bubble: createBubble(aexel: $0)!) }
         
-        aetherExe.notifyListeners()
+        citadel.notifyListeners()
 
 		bubbles.forEach { $0.wireMoorings() }
 		bubbles.forEach { $0.frame = CGRect(origin: CGPoint(x: $0.aexel.x, y: $0.aexel.y), size: $0.bounds.size) }
@@ -732,9 +732,9 @@ public class AetherView: UIView, UIScrollViewDelegate, UIGestureRecognizerDelega
 	func moveSelected(by: CGPoint) {
 		selected.forEach { $0.move(by: by) }
 	}
-    func selectedDeletable() -> Bool { aetherExe.nukable(keys: selected.flatMap({ $0.aexel.tokenKeys })) }
+    func selectedDeletable() -> Bool { citadel.nukable(keys: selected.flatMap({ $0.aexel.tokenKeys })) }
     private func delete(bubbles: Set<Bubble>) {
-        aetherExe.nuke(keys: bubbles.flatMap({ $0.aexel.tokenKeys }))
+        citadel.nuke(keys: bubbles.flatMap({ $0.aexel.tokenKeys }))
         remove(bubbles: bubbles)
         aether.remove(aexels: bubbles.map({ $0.aexel }))
         stretch()

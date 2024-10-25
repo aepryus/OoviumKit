@@ -21,7 +21,7 @@ class FaceLeaf: Leaf, FocusTappable, TowerListener, Citable {
 	var cronBub: CronBub { bubble as! CronBub }
 	
 	func render() {
-        guard let tower: Tower = cronBub.aetherView.aetherExe.tower(key: cronBub.cron.tokenKey)
+        guard let tower: Tower = cronBub.aetherView.citadel.tower(key: cronBub.cron.tokenKey)
         else { fatalError() }
         let text = tower.obje.display
 		let pen = Pen(font: UIFont(name: "HelveticaNeue", size: 16)!)
@@ -40,7 +40,7 @@ class FaceLeaf: Leaf, FocusTappable, TowerListener, Citable {
 		let path = CGPath(roundedRect: rect.insetBy(dx: 3, dy: 3), cornerWidth: 15, cornerHeight: 15, transform: nil)
 		hitPath = path
 		Skin.bubble(path: path, uiColor: bubble.uiColor, width: Oo.s)
-        guard let tower: Tower = cronBub.aetherView.aetherExe.tower(key: cronBub.cron.tokenKey)
+        guard let tower: Tower = cronBub.aetherView.citadel.tower(key: cronBub.cron.tokenKey)
         else { fatalError() }
         let text = tower.obje.display
 		Skin.bubble(text: "\(text)", rect: CGRect(x: 0, y: 7.5, width: rect.width, height: 20), uiColor: bubble.uiColor)

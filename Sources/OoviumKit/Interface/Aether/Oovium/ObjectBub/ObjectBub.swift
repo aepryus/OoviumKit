@@ -48,9 +48,9 @@ class ObjectBub: Bubble, Citable {
         if selected { return .yellow }
         if objectLeaf.focused { return .black.tint(0.8) }
         
-        let token: VariableToken = aetherView.aetherExe.token(key: object.chain.key!) as! VariableToken
+        let token: VariableToken = aetherView.citadel.token(key: object.chain.key!) as! VariableToken
         if token.status == .ok {
-            let tower = aetherView.aetherExe.tower(key: object.chain.key!)
+            let tower = aetherView.citadel.tower(key: object.chain.key!)
             return tower!.obje.uiColor
         } else { return .red }
     }

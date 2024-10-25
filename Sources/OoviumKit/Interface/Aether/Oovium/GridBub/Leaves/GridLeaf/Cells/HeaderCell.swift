@@ -68,14 +68,14 @@ class HeaderCell: UICollectionViewCell, Sizable, Editable, Citable, DoubleTappab
 		gridBub.render()
 	}
     func triggerColumnCalculation() {
-        let aetherExe: AetherExe = aetherView.aetherExe
-        var towers: [Tower] = column.cells.map({ aetherExe.tower(key: $0.chain.key!)! })
-        if let footerTower: Tower = aetherExe.tower(key: column.footerTokenKey) { towers += [footerTower] }
+        let citadel: Citadel = aetherView.citadel
+        var towers: [Tower] = column.cells.map({ citadel.tower(key: $0.chain.key!)! })
+        if let footerTower: Tower = citadel.tower(key: column.footerTokenKey) { towers += [footerTower] }
         towers.forEach { $0.buildStream() }
         Tower.trigger(towers: Set(towers))
     }
     func triggerFooterCalculation() {
-        guard let tower: Tower = aetherView.aetherExe.tower(key: column.footerTokenKey) else { return }
+        guard let tower: Tower = aetherView.citadel.tower(key: column.footerTokenKey) else { return }
         tower.buildStream()
         tower.trigger()
     }

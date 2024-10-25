@@ -217,11 +217,11 @@ class GridBub: Bubble, ChainLeafDelegate {
         let column: Column = grid.column(colNo: editingColNo)
         column.disseminate()
 
-        let aetherExe: AetherExe = aetherView.aetherExe
+        let citadel: Citadel = aetherView.citadel
 
-        aetherExe.trigger(keys: column.cellKeys() + [column.headerTokenKey])
+        citadel.trigger(keys: column.cellKeys() + [column.headerTokenKey])
         
-        let cellTowers: [Tower] = column.cellKeys().map({ aetherExe.tower(key: $0)! })
+        let cellTowers: [Tower] = column.cellKeys().map({ citadel.tower(key: $0)! })
         cellTowers.forEach({ $0.buildStream() })
 
 		removeChainLeaf()

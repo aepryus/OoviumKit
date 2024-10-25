@@ -33,19 +33,19 @@ class GridController: ChainViewKeyDelegate {
     func addRow() {
         let cells: [Cell] = grid.addRow()
         gridBub.addRow(with: cells)
-        let aetherExe: AetherExe = gridBub.aetherView.aetherExe
+        let citadel: Citadel = gridBub.aetherView.citadel
 
-        aetherExe.plugIn(aexons: cells)
+        citadel.plugIn(aexons: cells)
         
         grid.columns.filter({ $0.aggregate != .none }).forEach {
-            let footerTower: Tower = aetherExe.tower(key: $0.footerTokenKey)!
+            let footerTower: Tower = citadel.tower(key: $0.footerTokenKey)!
             footerTower.buildStream()
             footerTower.buildTask()
         }
         
-        aetherExe.trigger(keys: cells.map({ $0.chain.key! }))
+        citadel.trigger(keys: cells.map({ $0.chain.key! }))
                 
-        let cellTowers: [Tower] = cells.map({ aetherExe.tower(key: $0.chain.key!)! })
+        let cellTowers: [Tower] = cells.map({ citadel.tower(key: $0.chain.key!)! })
         cellTowers.forEach({ $0.buildStream() })
 
         resizeEverything()
@@ -53,18 +53,18 @@ class GridController: ChainViewKeyDelegate {
     func delete(rowNo: Int) {
         gridBub.gridLeaf.delete(rowNo: rowNo)
         let keys: [TokenKey] = grid.delete(rowNo: rowNo)
-        gridBub.aetherView.aetherExe.nuke(keys: keys)
+        gridBub.aetherView.citadel.nuke(keys: keys)
         resizeEverything()
     }
     func addColumn() {
-        let aetherExe: AetherExe = gridBub.aetherView.aetherExe
+        let citadel: Citadel = gridBub.aetherView.citadel
         let column: Column = grid.addColumn()
 
-        aetherExe.plugIn(aexons: [column])
+        citadel.plugIn(aexons: [column])
 
-        aetherExe.trigger(keys: column.cellKeys())
+        citadel.trigger(keys: column.cellKeys())
 
-        let cellTowers: [Tower] = column.cellKeys().map({ aetherExe.tower(key: $0)! })
+        let cellTowers: [Tower] = column.cellKeys().map({ citadel.tower(key: $0)! })
         cellTowers.forEach({ $0.buildStream() })
 
         gridBub.addColumn(with: column)
@@ -73,7 +73,7 @@ class GridController: ChainViewKeyDelegate {
     func delete(column: Column) {
         gridBub.gridLeaf.delete(column: column)
         let keys: [TokenKey] = grid.deleteColumn(column)
-        gridBub.aetherView.aetherExe.nuke(keys: keys)
+        gridBub.aetherView.citadel.nuke(keys: keys)
         resizeEverything()
     }
     
