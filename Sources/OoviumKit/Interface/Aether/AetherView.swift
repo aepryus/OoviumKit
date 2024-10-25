@@ -212,8 +212,7 @@ public class AetherView: UIView, UIScrollViewDelegate, UIGestureRecognizerDelega
     
     public func create<T: Aexel>(at: V2) -> T {
         let aexel: T = aether.create(at: at)
-        aetherExe.plugIn(aexon: aexel)
-        aetherExe.buildMemory()
+        aetherExe.plugIn(aexons: [aexel])
         return aexel
     }
     

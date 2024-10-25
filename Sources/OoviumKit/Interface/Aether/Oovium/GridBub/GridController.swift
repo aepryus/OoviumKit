@@ -35,9 +35,7 @@ class GridController: ChainViewKeyDelegate {
         gridBub.addRow(with: cells)
         let aetherExe: AetherExe = gridBub.aetherView.aetherExe
 
-        cells.forEach({ aetherExe.plugIn(aexon: $0) })
-        
-        aetherExe.buildMemory()
+        aetherExe.plugIn(aexons: cells)
         
         grid.columns.filter({ $0.aggregate != .none }).forEach {
             let footerTower: Tower = aetherExe.tower(key: $0.footerTokenKey)!
@@ -62,7 +60,7 @@ class GridController: ChainViewKeyDelegate {
         let aetherExe: AetherExe = gridBub.aetherView.aetherExe
         let column: Column = grid.addColumn()
 
-        aetherExe.plugIn(aexon: column)
+        aetherExe.plugIn(aexons: [column])
 
         aetherExe.trigger(keys: column.cellKeys())
 
