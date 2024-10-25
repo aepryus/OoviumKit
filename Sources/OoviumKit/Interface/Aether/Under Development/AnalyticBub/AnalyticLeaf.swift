@@ -51,7 +51,7 @@ class AnalyticLeaf: Leaf, Editable, AnainViewDelegate, DoubleTappable, UITextFie
         textField = nil
         render()
         bubble.aetherView.locked = false
-        Tower.evaluate(towers: Tower.allDownstream(towers: analytic.towers))
+        Citadel.evaluate(towers: Citadel.allDownstream(towers: analytic.towers))
     }
     
     func render() {

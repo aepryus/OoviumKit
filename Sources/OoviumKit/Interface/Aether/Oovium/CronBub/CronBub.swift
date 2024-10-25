@@ -33,7 +33,7 @@ class CronBub: Bubble, ChainLeafDelegate {
 		self.cron = cron
         super.init(aetherView: aetherView, aexel: cron, origin: CGPoint(x: self.cron.x, y: self.cron.y), size: CGSize.zero)
 		
-        Tower.startListening(to: cron.tokenKey, listener: faceLeaf)
+        Citadel.startListening(to: cron.tokenKey, listener: faceLeaf)
 		add(leaf: faceLeaf)
 		
 		playLeaf.playButton.onPlay = { [weak self] in

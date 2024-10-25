@@ -58,7 +58,7 @@ class ChainView: UIView, UITextInput, UITextInputTraits, AnchorTappable, TowerLi
         didSet {
             guard let key: TokenKey = chain.key
             else { fatalError() }
-            Tower.startListening(to: key, listener: self)
+            Citadel.startListening(to: key, listener: self)
         }
     }
     public private(set) var editing: Bool = false

@@ -26,7 +26,7 @@ class FooterCell: UICollectionViewCell, Sizable, Citable, FocusTappable, TowerLi
         self.column = column
         super.init(frame: .zero)
 		backgroundColor = .clear
-        Tower.startListening(to: column.footerTokenKey, listener: self)
+        Citadel.startListening(to: column.footerTokenKey, listener: self)
 	}
 	required init?(coder: NSCoder) { fatalError() }
     

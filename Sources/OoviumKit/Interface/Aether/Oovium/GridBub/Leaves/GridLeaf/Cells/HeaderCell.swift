@@ -72,7 +72,7 @@ class HeaderCell: UICollectionViewCell, Sizable, Editable, Citable, DoubleTappab
         var towers: [Tower] = column.cells.map({ citadel.tower(key: $0.chain.key!)! })
         if let footerTower: Tower = citadel.tower(key: column.footerTokenKey) { towers += [footerTower] }
         towers.forEach { $0.buildStream() }
-        Tower.trigger(towers: Set(towers))
+        Citadel.trigger(towers: Set(towers))
     }
     func triggerFooterCalculation() {
         guard let tower: Tower = aetherView.citadel.tower(key: column.footerTokenKey) else { return }
