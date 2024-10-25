@@ -20,7 +20,7 @@ class EndLeaf: Leaf, FocusTappable {
 	
 // Events ==========================================================================================
 	func onFocusTap(aetherView: AetherView) {
-		cronBub.cron.endMode = OOEndMode(rawValue: (cronBub.cron.endMode.rawValue+1) % 5)!
+        cronBub.cron.endMode = Cron.EndMode(rawValue: (cronBub.cron.endMode.rawValue+1) % 5)!
 		setNeedsDisplay()
 		cronBub.selectLeaves()
 	}
