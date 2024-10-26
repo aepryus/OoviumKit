@@ -58,7 +58,6 @@ class ChainLeaf: Leaf, ChainViewDelegate, Editable {
 		
 		self.backgroundColor = UIColor.clear
         
-//        chainView = ChainView(editable: self, responder: aetherView.responder)
 		chainView.delegate = self
         chainView.alwaysShow = alwaysShow
 		addSubview(chainView)
@@ -96,7 +95,9 @@ class ChainLeaf: Leaf, ChainViewDelegate, Editable {
 	override func wireMoorings() {
         guard delegate?.usesMooring ?? true else { return }
         chain.tokenKeys.forEach {
-            guard let mooring = bubble.aetherView.moorings[$0] else { return }
+            guard
+                $0.code != .cl,
+                let mooring = bubble.aetherView.moorings[$0] else { return }
             mooring.attach(self.mooring, wake: false)
         }
 	}
