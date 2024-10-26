@@ -146,6 +146,7 @@ class HeaderCell: UICollectionViewCell, Sizable, Editable, Citable, DoubleTappab
 	func onMakeFocus() {
 		gridBub.suppressChainLeafRemoval = false
 		gridBub.attachChainLeaf(to: self)
+        gridBub.layoutLeavesIfNeeded()
 		setNeedsDisplay()
 	}
 	func onReleaseFocus() {

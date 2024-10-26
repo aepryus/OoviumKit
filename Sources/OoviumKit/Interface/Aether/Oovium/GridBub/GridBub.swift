@@ -110,6 +110,7 @@ class GridBub: Bubble, ChainLeafDelegate {
 		render()
         chainLeaf.chainView.resize()
         chainLeaf.wireMoorings()
+        aetherView.citadel.trigger(key: headerCell.column.chain.key!)
 	}
 	func removeChainLeaf() {
 		editingColNo = nil

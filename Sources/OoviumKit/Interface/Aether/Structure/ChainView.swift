@@ -223,9 +223,7 @@ class ChainView: UIView, UITextInput, UITextInputTraits, AnchorTappable, TowerLi
         resignFirstResponder()
         isUserInteractionEnabled = false
         editing = false
-        let tower: Tower = aetherView.citadel.tower(key: chain.key!)!
-        tower.trigger()
-//        aetherView.compileAether()
+        aetherView.citadel.trigger(key: chain.key!)
         resize()
         delegate?.onChanged()
     }

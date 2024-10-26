@@ -56,7 +56,8 @@ class FooterCell: UICollectionViewCell, Sizable, Citable, FocusTappable, TowerLi
     var widthNeeded: CGFloat = 0
     func setNeedsResize() { controller.needsResizing.append(self) }
     func resize() {
-//        if column.aggregate == .none || column.aggregate == .running { widthNeeded = 0 }
+        if column.aggregate == .none || column.aggregate == .running { widthNeeded = 0 }
+        else { widthNeeded = aetherView.citadel.valueDisplay(key: column.footerTokenKey).size(pen: pen).width + 12 }
 //        else { widthNeeded = column.footerChain.tower.obje.display.size(pen: pen).width + 12 }
     }
 
