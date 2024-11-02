@@ -147,7 +147,8 @@ class HeaderCell: UICollectionViewCell, Sizable, Editable, Citable, DoubleTappab
 		gridBub.suppressChainLeafRemoval = false
 		gridBub.attachChainLeaf(to: self)
         gridBub.layoutLeavesIfNeeded()
-		setNeedsDisplay()
+        gridBub.render()
+        gridBub.setNeedsDisplay()
 	}
 	func onReleaseFocus() {
 		if !gridBub.suppressChainLeafRemoval { gridBub.removeChainLeaf() }
