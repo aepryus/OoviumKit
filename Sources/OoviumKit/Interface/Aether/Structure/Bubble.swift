@@ -52,7 +52,8 @@ public class Bubble: UIView, AnchorTappable, Colorable, UIGestureRecognizerDeleg
 		
 		if Screen.mac { addInteraction(UIContextMenuInteraction(delegate: self)) }
 	}
-	public required init?(coder aDecoder: NSCoder) { fatalError() }
+    @available(*, unavailable)
+    public required init?(coder aDecoder: NSCoder) { fatalError() }
 
     var uiColor: UIColor { .white }
     var hitch: Position { .center }

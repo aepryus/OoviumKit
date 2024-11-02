@@ -22,7 +22,7 @@ class AnchorPan: UIPanGestureRecognizer {
 	weak var bubble: Bubble? = nil
 	var panStart: CGPoint? = nil
 	var bubbleStart: CGPoint? = nil
-	var lassoDoodle: LassoDoodle? = nil
+	var selectionDoodle: SelectionDoodle? = nil
 	var anchorPannable: AnchorPannable? = nil
 
 	init(aetherView: AetherView) {
@@ -78,8 +78,9 @@ class AnchorPan: UIPanGestureRecognizer {
 				}
 				panStart = panTouch?.location(in: aetherView.scrollView)
 			} else if view is AetherView {
-				lassoDoodle = LassoDoodle(aetherView: aetherView, touch: panTouch!)
-				aetherView.add(doodle: lassoDoodle!)
+                if !Screen.mac || OoviumQit.delegate?.selectionMode == .lasso { selectionDoodle = LassoDoodle(aetherView: aetherView, touch: panTouch!) }
+                else { selectionDoodle = RectangleDoodle(aetherView: aetherView, touch: panTouch!) }
+                aetherView.add(doodle: selectionDoodle!)
 			} else if let anchorPannable = view as? AnchorPannable {
 				self.anchorPannable = anchorPannable
 				panStart = panTouch?.location(in: aetherView.scrollView)
@@ -97,9 +98,8 @@ class AnchorPan: UIPanGestureRecognizer {
 	override func touchesMoved(_ touches: Set<UITouch>, with event: UIEvent) {
 		super.touchesMoved(touches, with: event)
 
-		if let lassoDoodle = lassoDoodle {
-			lassoDoodle.add(touch: panTouch!)
-		}
+		if let selectionDoodle { selectionDoodle.add(touch: panTouch!) }
+        
 		if let panLoc = panTouch?.location(in: aetherView.scrollView), let panStart = panStart {
 			if (panLoc - panStart).length() > 3 {
 				aetherView.focusTapGesture.state = .failed
@@ -120,11 +120,9 @@ class AnchorPan: UIPanGestureRecognizer {
 			panStart = nil
 			bubbleStart = nil
 			anchorPannable = nil
-			if let path = lassoDoodle?.path {
-				aetherView.select(path: path)
-			}
-			lassoDoodle?.fadeOut()
-			lassoDoodle = nil
+            if let selectionPath: CGPath = selectionDoodle?.selectionPath { aetherView.select(path: selectionPath) }
+            selectionDoodle?.fadeOut()
+            selectionDoodle = nil
 			aetherView.stretch()
 		}
 		if let at = anchorTouch, at.phase == .cancelled || at.phase == .ended {
@@ -158,8 +156,8 @@ class AnchorPan: UIPanGestureRecognizer {
 		bubble = nil
 		panStart = nil
 		bubbleStart = nil
-		lassoDoodle?.fadeOut()
-		lassoDoodle = nil
+        selectionDoodle?.fadeOut()
+        selectionDoodle = nil
 		anchorPannable = nil
 	}
 }
