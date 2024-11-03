@@ -40,6 +40,7 @@ class ObjectBub: Bubble, Citable {
             aetherView.remove(bubble: self)
         }
         aetherView.stretch()
+        aetherView.dodo()
     }
 
 // Bubble ==========================================================================================

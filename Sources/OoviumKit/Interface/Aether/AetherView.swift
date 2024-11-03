@@ -42,6 +42,8 @@ public class AetherView: UIView, UIScrollViewDelegate, UIGestureRecognizerDelega
 	
 	var bubbles: [Bubble] = [Bubble]()
 	var doodles: [Doodle] = [Doodle]()
+    
+    let raphus: Raphus = Raphus()
 	
 	var aetherScale: CGFloat { Oo.s }
 	var hoverScale: CGFloat { Oo.s }
@@ -535,6 +537,8 @@ public class AetherView: UIView, UIScrollViewDelegate, UIGestureRecognizerDelega
 		let a0: CGPoint = CGPoint(x: aether.width, y: aether.height)
         let a1: CGPoint = a0 == .zero ? .zero : CGPoint(x: width, y: height)
 		scrollView.setContentOffset(c0-a0+a1, animated: false)
+        
+        dodo()
 
 		aetherViewDelegate?.onOpen(aetherView: self, aether: aether)
 	}
@@ -585,6 +589,7 @@ public class AetherView: UIView, UIScrollViewDelegate, UIGestureRecognizerDelega
 			self.doodles.forEach { $0.opacity = 0 }
 		}) { (finished: Bool) in
             self.delete(bubbles: Set(self.bubbles))
+            self.dodo()
 		}
 	}
 	
@@ -611,6 +616,24 @@ public class AetherView: UIView, UIScrollViewDelegate, UIGestureRecognizerDelega
 			bubble.aexel.y = Double(bubble.top)
 		}
 	}
+    
+// Undo ============================================================================================
+    public func dodo() {
+        markPositions()
+        raphus.dodo(json: aether.toJSON())
+    }
+    public func undo() {
+        guard let json: String = raphus.undo() else { return }
+        removeAllBubbles()
+        removeAllDoodles()
+        openAether(Aether(json: json))
+    }
+    public func redo() {
+        guard let json: String = raphus.redo() else { return }
+        removeAllBubbles()
+        removeAllDoodles()
+        openAether(Aether(json: json))
+    }
 	
 // Links ===========================================================================================
 	var moorings: [TokenKey:Mooring] = [:]
