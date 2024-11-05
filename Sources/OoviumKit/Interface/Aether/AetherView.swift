@@ -229,6 +229,7 @@ public class AetherView: UIView, UIScrollViewDelegate, UIGestureRecognizerDelega
         else if let focus { focus.cancelFocus() }
         else { unselectAll() }
     }
+    public func onDelete() { deleteSelectedWithPrompt() }
     public func onCut() {
         onCopy()
         deleteSelected()
@@ -641,6 +642,7 @@ public class AetherView: UIView, UIScrollViewDelegate, UIGestureRecognizerDelega
         removeAllDoodles()
         openAether(Aether(json: json))
     }
+    public func selectAll() { select(bubbles: bubbles) }
 	
 // Links ===========================================================================================
 	var moorings: [TokenKey:Mooring] = [:]
@@ -788,6 +790,15 @@ public class AetherView: UIView, UIScrollViewDelegate, UIGestureRecognizerDelega
             aether.addAexel(copy.aexel)
 		}
 	}
+    func deleteSelectedWithPrompt(_ complete: @escaping ()->() = {}) {
+        guard selected.count > 0 else { return }
+        if selectedDeletable() {
+            invokeConfirmModal("deleteManyConfirm".localized) {
+                self.deleteSelected()
+                complete()
+            }
+        } else { invokeInfoModal("These bubbles have downstream dependencies.  They can not be deleted.", {}) }
+    }
 	
 // Events ==========================================================================================
 	@objc func onTap() {

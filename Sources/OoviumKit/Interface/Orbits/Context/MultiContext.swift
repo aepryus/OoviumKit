@@ -13,14 +13,7 @@ class MultiContext: Context {
         super.init(orb: orb, size: CGSize(width: 84, height: 154), uiColor: UIColor.yellow, schematic: Schematic(rows: 1, cols: 1))
         
         schematic.add(row: 0, col: 0, key: Key(text: "delete".localized, uiColor: UIColor(red: 0.6, green: 0.7, blue: 0.8, alpha: 1), {
-            if self.aetherView.selectedDeletable() {
-                self.aetherView.invokeConfirmModal("deleteManyConfirm".localized) {
-                    self.aetherView.deleteSelected()
-                    self.dismiss()
-                }
-            } else {
-                self.aetherView.invokeInfoModal("These bubbles have downstream dependencies.  They can not be deleted.", {})
-            }
+            self.aetherView.deleteSelectedWithPrompt { self.dismiss() }
         }))
         
         renderSchematic()
