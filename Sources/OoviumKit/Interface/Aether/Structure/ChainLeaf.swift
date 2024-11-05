@@ -145,6 +145,7 @@ class ChainLeaf: Leaf, ChainViewDelegate, Editable {
 		render()
 		mooring.sleepDoodles()
 		delegate?.onOK(leaf: self)
+        aetherView.dodo()
 	}
     func cite(_ citable: Citable, at: CGPoint) {
         guard let tokenKey = citable.tokenKey(at: at) else { return }

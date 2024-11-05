@@ -24,6 +24,7 @@ class AnchorPan: UIPanGestureRecognizer {
 	var bubbleStart: CGPoint? = nil
 	var selectionDoodle: SelectionDoodle? = nil
 	var anchorPannable: AnchorPannable? = nil
+    var movedLength: CGFloat = 0
 
 	init(aetherView: AetherView) {
 		self.aetherView = aetherView
@@ -42,10 +43,12 @@ class AnchorPan: UIPanGestureRecognizer {
 		let t = CGPoint(x: s.x-panStart.x, y: s.y-panStart.y)
 		if let bubble = bubble, let bubbleStart = bubbleStart, !bubble.selected {
 			bubble.center = CGPoint(x: bubbleStart.x+t.x, y: bubbleStart.y+t.y)
+            movedLength = t.length()
 		} else if let anchorPanable = anchorPannable {
 			anchorPanable.onPan(offset: t)
 		} else {
 			aetherView.moveSelected(by: t)
+            movedLength = t.length()
 		}
 	}
 	
@@ -137,10 +140,15 @@ class AnchorPan: UIPanGestureRecognizer {
 					}
 				}
 			}
+            aetherView.dodo()
 		}
 		if anchorTouch == nil && panTouch == nil {
 			state = .ended
 		}
+        if movedLength > 1 {
+            aetherView.dodo()
+            movedLength = 0
+        }
 	}
 	override func touchesEnded(_ touches: Set<UITouch>, with event: UIEvent) {
 		super.touchesEnded(touches, with: event)
@@ -159,5 +167,6 @@ class AnchorPan: UIPanGestureRecognizer {
         selectionDoodle?.fadeOut()
         selectionDoodle = nil
 		anchorPannable = nil
+        movedLength = 0
 	}
 }

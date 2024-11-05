@@ -64,6 +64,7 @@ class LefterCell: UICollectionViewCell, Editable, AnchorPannable {
 	}
 	func onMakeFocus() { setNeedsDisplay() }
 	func onReleaseFocus() { setNeedsDisplay() }
+    func onCancelFocus() { releaseFocus(.administrative) }
 	func cite(_ citable: Citable, at: CGPoint) {}
 	
 // AnchorPannable ==================================================================================

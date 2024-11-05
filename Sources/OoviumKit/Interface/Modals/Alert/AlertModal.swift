@@ -56,6 +56,8 @@ class AlertModal: Modal {
 //        self.complete = complete
 //    }
     
+    func ok() { onOK() }
+    
 // Events ==========================================================================================
     private func onOK() {
         dismiss()

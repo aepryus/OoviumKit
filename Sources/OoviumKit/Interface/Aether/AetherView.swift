@@ -221,6 +221,14 @@ public class AetherView: UIView, UIScrollViewDelegate, UIGestureRecognizerDelega
     public func printTowers() { citadel.printTowers() }
     
 // Events ==========================================================================================
+    public func onReturn() {
+        if let modal: AlertModal = Modal.current as? AlertModal { modal.ok() }
+    }
+    public func onEscape() {
+        if let modal: Modal = Modal.current { modal.dismiss() }
+        else if let focus { focus.cancelFocus() }
+        else { unselectAll() }
+    }
     public func onCut() {
         onCopy()
         deleteSelected()
@@ -537,10 +545,6 @@ public class AetherView: UIView, UIScrollViewDelegate, UIGestureRecognizerDelega
 		let a0: CGPoint = CGPoint(x: aether.width, y: aether.height)
         let a1: CGPoint = a0 == .zero ? .zero : CGPoint(x: width, y: height)
 		scrollView.setContentOffset(c0-a0+a1, animated: false)
-        
-        dodo()
-
-		aetherViewDelegate?.onOpen(aetherView: self, aether: aether)
 	}
 	public func saveAether(complete: @escaping (Bool)->() = {Bool in}) {
 		markPositions()
@@ -554,7 +558,10 @@ public class AetherView: UIView, UIScrollViewDelegate, UIGestureRecognizerDelega
 		closeCurrentAether()
 		self.facade = facade
 		openAether(aether)
+        raphus.wipe()
+        dodo()
 		if oldPicker { aetherPicker?.retract() }
+        aetherViewDelegate?.onOpen(aetherView: self, aether: aether)
 	}
 	public func swapToAether(_ facadeAether: (facade: AetherFacade, aether: Aether)) {
 		swapToAether(facade: facadeAether.0, aether: facadeAether.1)
@@ -589,7 +596,6 @@ public class AetherView: UIView, UIScrollViewDelegate, UIGestureRecognizerDelega
 			self.doodles.forEach { $0.opacity = 0 }
 		}) { (finished: Bool) in
             self.delete(bubbles: Set(self.bubbles))
-            self.dodo()
 		}
 	}
 	
@@ -599,6 +605,7 @@ public class AetherView: UIView, UIScrollViewDelegate, UIGestureRecognizerDelega
 		add(bubble: bubble)
 		bubble.create()
 		stretch()
+        dodo()
 		bubbleToolBar?.recoil()
 	}
 	
@@ -763,6 +770,7 @@ public class AetherView: UIView, UIScrollViewDelegate, UIGestureRecognizerDelega
         stretch()
         orb.chainEditor.customSchematic?.render(aether: aether)
         unselectAll()
+        dodo()
     }
     func deleteSelected() { delete(bubbles: selected) }
 	func copyBubbles() {

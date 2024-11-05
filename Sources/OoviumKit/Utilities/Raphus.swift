@@ -21,7 +21,7 @@ class Raphus {
         return undos.last
     }
     func redo() -> String? {
-        guard redos.count > 1 else { return nil }
+        guard redos.count > 0 else { return nil }
         let json: String = redos.removeLast()
         undos.append(json)
         return json

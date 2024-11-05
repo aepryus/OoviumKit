@@ -73,6 +73,7 @@ class AlsoLeaf: Leaf, Editable, DoubleTappable {
 		alsoBub.onOK()
 		setNeedsDisplay()
 	}
+    func onCancelFocus() {}
 	func cite(_ citable: Citable, at: CGPoint) {
 	}
 	

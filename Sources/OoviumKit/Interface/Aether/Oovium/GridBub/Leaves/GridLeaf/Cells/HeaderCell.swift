@@ -154,6 +154,7 @@ class HeaderCell: UICollectionViewCell, Sizable, Editable, Citable, DoubleTappab
 		if !gridBub.suppressChainLeafRemoval { gridBub.removeChainLeaf() }
 		setNeedsDisplay()
 	}
+    func onCancelFocus() { releaseFocus(.administrative) }
 	func cite(_ citable: Citable, at: CGPoint) {}
 
 // Citable =========================================================================================

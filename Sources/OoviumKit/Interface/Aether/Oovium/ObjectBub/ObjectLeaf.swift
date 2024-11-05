@@ -134,6 +134,14 @@ class ObjectLeaf: Leaf, Editable, ChainViewDelegate, DoubleTappable, UITextField
 		mooring.sleepDoodles()
         aetherView.responder.chainView = nil
 	}
+    func onCancelFocus() {
+        if ChainResponder.hasExternalKeyboard { chainView.resignFirstResponder() }
+        chainView.cancel()
+        render()
+        objectBub.onOK()
+        mooring.sleepDoodles()
+        aetherView.responder.chainView = nil
+    }
 	func cite(_ citable: Citable, at: CGPoint) {
 		guard let tokenKey = citable.tokenKey(at: at) else { return }
 		guard chainView.attemptToPost(key: tokenKey) else { return }

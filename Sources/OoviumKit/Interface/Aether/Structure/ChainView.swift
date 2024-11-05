@@ -68,6 +68,7 @@ class ChainView: UIView, UITextInput, UITextInputTraits, AnchorTappable, TowerLi
     weak var keyDelegate: ChainViewKeyDelegate?
     
     var oldWidth: CGFloat?
+    var oldTokenKeys: [TokenKey]?
     
     static let pen: Pen = Pen(font: .ooAether(size: 16))
     
@@ -212,6 +213,7 @@ class ChainView: UIView, UITextInput, UITextInputTraits, AnchorTappable, TowerLi
        
     @objc func rightDelete() { print("rightDelete") }
     func edit() {
+        oldTokenKeys = chain.tokenKeys
         editing = true
         cursor = chain.tokenKeys.count
         delegate?.onEditStart()
@@ -226,6 +228,11 @@ class ChainView: UIView, UITextInput, UITextInputTraits, AnchorTappable, TowerLi
         aetherView.citadel.trigger(key: chain.key!)
         resize()
         delegate?.onChanged()
+    }
+    func cancel() {
+        chain.clear()
+        oldTokenKeys?.forEach { chain.post(key: $0) }
+        ok()
     }
     
 // UIResponder =====================================================================================

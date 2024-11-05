@@ -19,6 +19,7 @@ protocol Editable: FocusTappable {
     var editor: Orbit { get }
     func onMakeFocus()
     func onReleaseFocus()
+    func onCancelFocus()
     func cite(_ citable: Citable, at: CGPoint)
     func nextFocus(release: Release) -> Editable?
 }
@@ -27,6 +28,12 @@ extension Editable {
     var focused: Bool { aetherView.focus === self }
     func makeFocus() { aetherView.makeFocus(editable: self) }
     func releaseFocus(_ release: Release) { aetherView.clearFocus(release: release) }
+    func cancelFocus() {
+        onCancelFocus()
+        aetherView.clearFocus(release: .administrative)
+    }
+    
+    func onCancelFocus() {}
     
 // Editable ========================================================================================
     var orb: Orb { aetherView.orb }
