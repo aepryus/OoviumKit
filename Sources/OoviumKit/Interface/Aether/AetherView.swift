@@ -293,6 +293,12 @@ public class AetherView: UIView, UIScrollViewDelegate, UIGestureRecognizerDelega
             }
         }
     }
+    public func onYes() {
+        if let modal: AlertModal = Modal.current as? AlertModal, modal.rightTitle == "Yes".localized { modal.ok() }
+    }
+    public func onNo() {
+        if let modal: AlertModal = Modal.current as? AlertModal, modal.leftTitle == "No".localized { modal.dismiss() }
+    }
 
 // GadgetDelegate ==================================================================================
     private var isFullScreen: Bool { max(Screen.width, Screen.height) == max(width, height) && min(Screen.width, Screen.height) == min(width, height) }
