@@ -39,21 +39,13 @@ public class LocalSpace: Space {
         } catch { print("\(error)") }
         complete(items)
     }
-    public override func loadAether(facade: AetherFacade, _ complete: @escaping (String?) -> ()) {
+    public override func loadAether(facade: AetherFacade, _ complete: @escaping (String?) -> ()) throws {
         let url: URL = facade.url
         if  let data = FileManager.default.contents(atPath: url.path),
             var json: String = String(data: data, encoding: .utf8) {
-            do {
-                json = try Migrate.migrateAether(json: json)
-                complete(json)
-            } catch {
-                print("ERROR: \(error)")
-                complete(nil)
-            }
-        } else {
-            print("no file at \(url.path)")
-            complete(nil)
-        }
+            json = try Migrate.migrateAether(json: json)
+            complete(json)
+        } else { throw AetherLoadingError.notFound }
     }
     public override func storeAether(facade: AetherFacade, aether: Aether, _ complete: @escaping (Bool) -> ()) {
         let url: URL = facade.url

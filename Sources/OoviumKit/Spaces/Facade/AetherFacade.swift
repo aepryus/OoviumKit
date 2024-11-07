@@ -32,7 +32,7 @@ public class AetherFacade: Facade {
     override var url: URL { parent.url.appendingPathComponent(name).appendingPathExtension("oo") }
     
 // Convenience =====================================================================================
-    public func load(_ complete: @escaping (String?)->()) { space.loadAether(facade: self, complete) }
+    public func load(_ complete: @escaping (String?)->()) throws { try space.loadAether(facade: self, complete) }
     public func store(aether: Aether, _ complete: @escaping (Bool)->()) { space.storeAether(facade: self, aether: aether, complete) }
     public func renameAether(name: String, _ complete: @escaping (Bool)->()) { space.renameAether(facade: self, name: name, complete) }
     

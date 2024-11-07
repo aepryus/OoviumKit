@@ -26,7 +26,7 @@ public class Space {
     var documentsRoot: String { "Documents" }
     
     public func loadFacades(facade: DirFacade, _ complete: @escaping ([Facade])->()) { complete([]) }
-    public func loadAether(facade: AetherFacade, _ complete: @escaping (String?)->()) { complete(nil) }
+    public func loadAether(facade: AetherFacade, _ complete: @escaping (String?)->()) throws { complete(nil) }
     public func storeAether(facade: AetherFacade, aether: Aether, _ complete: @escaping (Bool)->()) { complete(true) }
     public func renameAether(facade: AetherFacade, name: String, _ complete: @escaping (Bool)->()) { complete(true) }
     public func renameFolder(facade: FolderFacade, name: String, _ complete: @escaping (Bool)->()) { complete(true) }

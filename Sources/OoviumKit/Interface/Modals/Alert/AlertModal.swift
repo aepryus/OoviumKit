@@ -23,7 +23,7 @@ class AlertModal: Modal {
     
     lazy var pen: Pen = Pen(font: .ooExplore(size: 15*gS), color: .green.tint(0.7), alignment: .center)
 
-    init(message: String, left: String? = nil, right: String, complete: (()->())?) {
+    init(message: String, left: String? = nil, right: String, complete: (()->())? = nil) {
         self.message = message
         self.leftTitle = left
         self.rightTitle = right

@@ -56,13 +56,19 @@ class AetherExplorerCell: UITableViewCell {
     
     private func digest(facade: AetherFacade) {
         guard facade !== explorer.aetherView.facade else { return }
-        facade.load { (json: String?) in
-            guard let json else { return }
-            let aether: Aether = Aether(json: json)
-            DispatchQueue.main.async {
-                self.explorer.aetherView.swapToAether(facade: facade, aether: aether)
-                if Screen.iPhone { self.explorer.aetherView.slideBack() }
+        do {
+            try facade.load { (json: String?) in
+                guard let json else { return }
+                let aether: Aether = Aether(json: json)
+                DispatchQueue.main.async {
+                    self.explorer.aetherView.swapToAether(facade: facade, aether: aether)
+                    if Screen.iPhone { self.explorer.aetherView.slideBack() }
+                }
             }
+        } catch AetherLoadingError.fromNewerVersion(currentVersion: let currentVersion, fileVersion: let fileVersion) {
+            AlertModal(message: "Aether [\(facade.name)] was saved using the newer v\(fileVersion) version of the Oovium engine.  Please upgrade the current v\(currentVersion) version of Oovium to open it.", right: "OK".localized).invoke()
+        } catch {
+            AlertModal(message: "Aether [\(facade.name)] not found.", right: "OK".localized).invoke()
         }
     }
 
