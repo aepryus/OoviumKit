@@ -167,8 +167,7 @@ public class ChainResponder {
         } else if ChainResponder.isNumeric(c: text[0]) {                // External Keyboard
             token = Token.digitToken(tag: text)
         } else if text == "-" {
-            chainView.minusSign()
-            return
+            token = Token.subtract
         } else if ChainResponder.isOperator(c: text[0]) {               // External Keyboard
             token = Token.operatorToken(tag: ChainResponder.convert(s: text))
         } else if text == "|" {

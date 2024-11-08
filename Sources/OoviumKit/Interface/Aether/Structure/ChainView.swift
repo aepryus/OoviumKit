@@ -187,12 +187,6 @@ class ChainView: UIView, UITextInput, UITextInputTraits, AnchorTappable, TowerLi
     func attemptToPost(token: Token) -> Bool { attemptToPost(key: token.key) }
     func post(key: TokenKey) { _ = attemptToPost(key: key) }
     func post(token: Token) { post(key: token.key) }
-    func minusSign() {
-        chain.minusSign(at: cursor)
-        cursor += 1
-        resize()
-        delegate?.onChanged()
-    }
     func parenthesis() {
         chain.parenthesis(at: cursor)
         cursor += 1
