@@ -144,4 +144,5 @@ class GridCell: UICollectionViewCell, Sizable, Editable, Citable, ChainViewDeleg
         setNeedsResize()
     }
     func onChanged() { controller.resize() }
+    func onCalculated() { controller.resize() }
 }

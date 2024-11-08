@@ -327,7 +327,6 @@ public class AetherView: UIView, UIScrollViewDelegate, UIGestureRecognizerDelega
     }
     
 // =================================================================================================
-	
 	public func reload() {
 		closeCurrentAether()
 		openAether(aether)
@@ -531,7 +530,7 @@ public class AetherView: UIView, UIScrollViewDelegate, UIGestureRecognizerDelega
     }
 	public func openAether(_ aether: Aether) {
 		self.aether = aether
-        compileAether()
+        citadel = self.aether.compile()
 		
 		aetherPicker?.aetherButton.setNeedsDisplay()
         aetherHover.aetherNameView.setNeedsDisplay()
@@ -542,11 +541,11 @@ public class AetherView: UIView, UIScrollViewDelegate, UIGestureRecognizerDelega
         
         aether.aexels.forEach { add(bubble: createBubble(aexel: $0)!) }
         
-        citadel.notifyListeners()
-
 		bubbles.forEach { $0.wireMoorings() }
 		bubbles.forEach { $0.frame = CGRect(origin: CGPoint(x: $0.aexel.x, y: $0.aexel.y), size: $0.bounds.size) }
-		stretch(animated:false)
+        
+        citadel.notifyListeners()
+        stretch(animated:false)
 
 		let c0: CGPoint = CGPoint(x: aether.xOffset, y: aether.yOffset)
 		let a0: CGPoint = CGPoint(x: aether.width, y: aether.height)
