@@ -221,7 +221,8 @@ public class AetherView: UIView, UIScrollViewDelegate, UIGestureRecognizerDelega
     public func printTowers() { citadel.printTowers() }
     
 // Events ==========================================================================================
-    public func onReturn() {
+    // onReturn causes Xcode 16.1 to crash on compile. :-/ - jjc 11/9/24
+    public func onReturnQ() {
         if let modal: AlertModal = Modal.current as? AlertModal { modal.ok() }
     }
     public func onEscape() {
@@ -541,11 +542,11 @@ public class AetherView: UIView, UIScrollViewDelegate, UIGestureRecognizerDelega
         
         aether.aexels.forEach { add(bubble: createBubble(aexel: $0)!) }
         
+        citadel.notifyListeners()
+
 		bubbles.forEach { $0.wireMoorings() }
 		bubbles.forEach { $0.frame = CGRect(origin: CGPoint(x: $0.aexel.x, y: $0.aexel.y), size: $0.bounds.size) }
-        
-        citadel.notifyListeners()
-        stretch(animated:false)
+		stretch(animated:false)
 
 		let c0: CGPoint = CGPoint(x: aether.xOffset, y: aether.yOffset)
 		let a0: CGPoint = CGPoint(x: aether.width, y: aether.height)
