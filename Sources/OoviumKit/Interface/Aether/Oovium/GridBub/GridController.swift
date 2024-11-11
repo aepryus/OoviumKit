@@ -52,8 +52,9 @@ class GridController: ChainViewKeyDelegate {
     }
     func delete(rowNo: Int) {
         gridBub.gridLeaf.delete(rowNo: rowNo)
-        let keys: [TokenKey] = grid.delete(rowNo: rowNo)
-        gridBub.aetherView.citadel.nuke(keys: keys)
+        let subs: [TokenKey:TokenKey?] = grid.delete(rowNo: rowNo)
+        gridBub.aetherView.citadel.rekey(subs: subs)
+        gridBub.aetherView.citadel.reevaluate()
         resizeEverything()
     }
     func addColumn() {

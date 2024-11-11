@@ -229,7 +229,7 @@ class GridLeaf: Leaf, GridViewDelegate, UITextInput, UITextInputTraits {
 		} else {
             let gridCell: GridCell = columns[colNo-1].gridCells[rowNo-1]
             let cell: Cell = grid.column(colNo: colNo).cell(rowNo: rowNo)
-//            let cell: Cell = grid.cells[rI * grid.columns.count + cI]
+            
 			if gridCell.cell !== cell {
                 gridCell.load(cell: cell)
                 gridCell.leftMost = leftMost

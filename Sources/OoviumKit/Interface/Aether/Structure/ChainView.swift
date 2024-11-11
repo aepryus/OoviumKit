@@ -111,7 +111,7 @@ class ChainView: UIView, UITextInput, UITextInputTraits, AnchorTappable, TowerLi
             while i < to {
                 repeat {
                     key = chain.tokenKeys[i]
-                    token = citadel.token(key: key)
+                    token = citadel.anyToken(key: key)
                     if ChainView.usesWafer(token: token) { break }
                     sb.append(token.display)
                     i += 1
@@ -142,7 +142,7 @@ class ChainView: UIView, UITextInput, UITextInputTraits, AnchorTappable, TowerLi
         var pos: Int = 0
         
         chain.tokenKeys.forEach { (key: TokenKey) in
-            let token: Token = citadel.token(key: key)
+            let token: Token = citadel.anyToken(key: key)
             x += token.display.size(pen: ChainView.pen).width
             if ChainView.usesWafer(token: token) {x += 9}
             if nx < lx+(x-lx)/2 { return }
@@ -243,7 +243,7 @@ class ChainView: UIView, UITextInput, UITextInputTraits, AnchorTappable, TowerLi
         while (pos < to) {
             repeat {
                 key = chain.tokenKeys[pos]
-                token = citadel.token(key: key)
+                token = citadel.anyToken(key: key)
                 if ChainView.usesWafer(token: token) { break }
                 sb.append(token.display)
                 pos += 1
