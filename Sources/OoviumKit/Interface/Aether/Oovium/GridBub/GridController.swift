@@ -57,6 +57,13 @@ class GridController: ChainViewKeyDelegate {
         gridBub.aetherView.citadel.reevaluate()
         resizeEverything()
     }
+    func move(rowNo: Int, toRowNo: Int) {
+        gridBub.gridLeaf.move(rowNo: rowNo, to: toRowNo)
+        let subs: [TokenKey:TokenKey?] = grid.move(rowNo: rowNo, toRowNo: toRowNo)
+        gridBub.aetherView.citadel.rekey(subs: subs)
+        gridBub.aetherView.citadel.reevaluate()
+        resizeEverything()
+    }
     func addColumn() {
         let citadel: Citadel = gridBub.aetherView.citadel
         let column: Column = grid.addColumn()
@@ -73,8 +80,16 @@ class GridController: ChainViewKeyDelegate {
     }
     func delete(column: Column) {
         gridBub.gridLeaf.delete(column: column)
-        let keys: [TokenKey] = grid.deleteColumn(column)
-        gridBub.aetherView.citadel.nuke(keys: keys)
+        let subs: [TokenKey:TokenKey?] = grid.deleteColumn(column)
+        gridBub.aetherView.citadel.rekey(subs: subs)
+        gridBub.aetherView.citadel.reevaluate()
+        resizeEverything()
+    }
+    func move(column: Column, toColNo: Int) {
+        gridBub.gridLeaf.move(column: column, toColNo: toColNo)
+        let subs: [TokenKey:TokenKey?] = grid.move(column: column, to: toColNo-1)
+        gridBub.aetherView.citadel.rekey(subs: subs)
+        gridBub.aetherView.citadel.reevaluate()
         resizeEverything()
     }
     

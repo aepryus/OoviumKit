@@ -170,7 +170,7 @@ class HeaderCell: UICollectionViewCell, Sizable, Editable, Citable, DoubleTappab
 	}
 	func onReleased(offset: CGPoint) {
 		let toColNo: Int = gridLeaf.gridView.colNo(cx: center.x+offset.x)
-		gridLeaf.move(column: column, toColNo: toColNo)
+        controller.move(column: column, toColNo: toColNo)
 	}
 
 // UITextFieldDelegate =============================================================================

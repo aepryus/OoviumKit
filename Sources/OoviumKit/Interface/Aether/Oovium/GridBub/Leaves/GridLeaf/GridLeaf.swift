@@ -91,12 +91,10 @@ class GridLeaf: Leaf, GridViewDelegate, UITextInput, UITextInputTraits {
 		addSubview(slider)
 	}
 	func move(rowNo: Int, to: Int) {
-		grid.move(rowNo: rowNo, toRowNo: to)
         columns.forEach {
             let gridCell: GridCell = $0.gridCells.remove(at: rowNo-1)
             $0.gridCells.insert(gridCell, at: to-1)
         }
-        controller.resizeEverything()
 	}
     
     func addColumn(with column: Column) {
@@ -123,14 +121,9 @@ class GridLeaf: Leaf, GridViewDelegate, UITextInput, UITextInputTraits {
 		addSubview(slider)
 	}
 	func move(column: Column, toColNo: Int) {
-        
         let gridColumn: GridColumn = gridColumn(colNo: column.colNo)
         columns.remove(at: column.colNo-1)
         columns.insert(gridColumn, at: toColNo-1)
-
-        grid.move(column: column, to: toColNo-1)
-
-        controller.resizeEverything()
 	}
 	
     private func nextColumnWrapping(colNo: Int) -> Int {

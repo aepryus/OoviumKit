@@ -73,6 +73,6 @@ class LefterCell: UICollectionViewCell, Editable, AnchorPannable {
 	}
 	func onReleased(offset: CGPoint) {
 		let to: Int = gridLeaf.gridView.row(cy: center.y+offset.y).clamped(to: 1...(gridLeaf.grid.rows))
-		gridLeaf.move(rowNo: rowNo, to: to)
+        controller.move(rowNo: rowNo, toRowNo: to)
 	}
 }
