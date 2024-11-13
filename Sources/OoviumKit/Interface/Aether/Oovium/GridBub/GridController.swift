@@ -87,7 +87,7 @@ class GridController: ChainViewKeyDelegate {
     }
     func move(column: Column, toColNo: Int) {
         gridBub.gridLeaf.move(column: column, toColNo: toColNo)
-        let subs: [TokenKey:TokenKey?] = grid.move(column: column, to: toColNo-1)
+        let subs: [TokenKey:TokenKey?] = grid.move(column: column, to: toColNo)
         gridBub.aetherView.citadel.rekey(subs: subs)
         gridBub.aetherView.citadel.reevaluate()
         resizeEverything()
