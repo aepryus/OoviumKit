@@ -29,6 +29,7 @@ public class AetherView: UIView, UIScrollViewDelegate, UIGestureRecognizerDelega
     var citadel: Citadel
     public var facade: AetherFacade?
     
+    public lazy var controller: AetherController = AetherController(aetherView: self)
     lazy var responder: ChainResponder = { ChainResponder(aetherView: self) }()
     lazy var anResponder: AnainResponder = { AnainResponder(aetherView: self) }()
 
@@ -123,10 +124,7 @@ public class AetherView: UIView, UIScrollViewDelegate, UIGestureRecognizerDelega
 		if !oldPicker {
 			addSubview(aetherHover)
             aetherHover.frame = CGRect(x: 4*gS, y: Screen.mac ? 3*gS : Screen.safeTop, width: Screen.mac ? 300*gS : 240*gS, height: Screen.mac ? 40*gS : 32*gS)
-            aetherHover.hookView.addAction { [unowned self] in
-                if aetherHover.aetherNameView.editing { aetherHover.controller.onAetherViewReturn() }
-				self.slideToggle()
-			}
+            aetherHover.hookView.addAction { [unowned self] in self.controller.toggleExplorer() }
 		} else {
 			aetherPicker = AetherPicker(aetherView: self)
 			aetherPicker?.invoke()

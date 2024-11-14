@@ -38,7 +38,7 @@ public class ExplorerController: NSObject, UIDocumentPickerDelegate {
             }
         }
     }
-    func onNewAether() {
+    public func onNewAether() {
         let facade: DirFacade = explorer.facade
         facade.loadFacades { (facades: [Facade]) in
             let aether: Aether = Aether()

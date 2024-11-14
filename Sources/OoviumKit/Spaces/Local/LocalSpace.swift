@@ -64,6 +64,23 @@ public class LocalSpace: Space {
             complete(false)
         }
     }
+    public override func duplicateAether(facade: AetherFacade, aether: Aether, _ complete: @escaping (AetherFacade?, Aether?) -> ()) {
+        let newAether: Aether = Aether(json: aether.unload().toJSON())
+        let newName: String = "\(aether.name) copy"
+        newAether.name = newName
+        let newFacade: AetherFacade = AetherFacade(name: newName, parent: facade.parent)
+        
+        let fURL: URL = facade.url
+        let tURL: URL = fURL.deletingLastPathComponent().appendingPathComponent(newName).appendingPathExtension("oo")
+
+        if !FileManager.default.fileExists(atPath: tURL.path) {
+            FileManager.default.createFile(atPath: tURL.path, contents: newAether.toJSON().data(using: .utf8), attributes: nil)
+            delegate?.onChanged(space: self)
+            complete(newFacade, newAether)
+        } else {
+            complete(nil, nil)
+        }
+    }
     public override func renameFolder(facade: FolderFacade, name: String, _ complete: @escaping (Bool) -> ()) {
         let fURL: URL = facade.url
         let tURL: URL = fURL.deletingLastPathComponent().appendingPathComponent(name)

@@ -175,6 +175,25 @@ public class CloudSpace: Space {
             complete(false)
         }
     }
+    public override func duplicateAether(facade: AetherFacade, aether: Aether, _ complete: @escaping (AetherFacade?, Aether?) -> ()) {
+        let newAether: Aether = Aether(json: aether.unload().toJSON())
+        let newName: String = "\(aether.name) copy"
+        newAether.name = newName
+        let newFacade: AetherFacade = AetherFacade(name: newName, parent: facade.parent)
+        
+        let fURL: URL = facade.url
+        let tURL: URL = fURL.deletingLastPathComponent().appendingPathComponent(newName).appendingPathExtension("oo")
+        
+        let document: AetherDocument = AetherDocument(fileURL: tURL)
+        document.aether = aether
+        opQueue.addOperation {
+            document.save(to: tURL, for: .forCreating) { (success: Bool) in
+                document.close { (success: Bool) in
+                    DispatchQueue.main.async { complete(newFacade, newAether) }
+                }
+            }
+        }
+    }
     public override func renameFolder(facade: FolderFacade, name: String, _ complete: @escaping (Bool) -> ()) {
         print("renameFolder [\(facade.name)] to [\(name)]")
         var url: URL = facade.url

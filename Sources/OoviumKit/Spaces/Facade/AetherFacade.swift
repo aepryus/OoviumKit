@@ -15,7 +15,7 @@ public class AetherFacade: Facade {
     
 //    var document: AnyObject?
     
-    init(name: String, parent: DirFacade) {
+    public init(name: String, parent: DirFacade) {
         _name = name
         _parent = parent
     }
@@ -35,7 +35,8 @@ public class AetherFacade: Facade {
     public func load(_ complete: @escaping (String?)->()) throws { try space.loadAether(facade: self, complete) }
     public func store(aether: Aether, _ complete: @escaping (Bool)->()) { space.storeAether(facade: self, aether: aether, complete) }
     public func renameAether(name: String, _ complete: @escaping (Bool)->()) { space.renameAether(facade: self, name: name, complete) }
-    
+    public func duplicateAether(facade: AetherFacade, aether: Aether, _ complete: @escaping (AetherFacade?, Aether?) -> ()) { space.duplicateAether(facade: facade, aether: aether, complete) }
+
 // Utility =========================================================================================
     private func isChild(of facade: Facade) -> Bool {
         var parent: Facade? = self

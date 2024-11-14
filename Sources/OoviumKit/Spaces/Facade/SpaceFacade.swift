@@ -12,7 +12,7 @@ public class SpaceFacade: DirFacade {
     var _space: Space
     var _parent: SpaceFacade?
     
-    init(space: Space) {
+    public init(space: Space) {
         _space = space
         _parent = space !== Space.anchor ? Facade.create(space: Space.anchor) as? SpaceFacade : nil
     }
