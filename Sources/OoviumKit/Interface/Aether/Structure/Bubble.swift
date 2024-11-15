@@ -30,7 +30,7 @@ public class Bubble: UIView, AnchorTappable, Colorable, UIGestureRecognizerDeleg
 
     private var leaves: [Leaf] = []
     var plasma: CGMutablePath? = nil
-    var moorings: [Mooring] = []
+//    var moorings: [Mooring] = []
 
     var selected: Bool = false
     
@@ -123,14 +123,7 @@ public class Bubble: UIView, AnchorTappable, Colorable, UIGestureRecognizerDeleg
 	}
     
 // Moorings ========================================================================================
-    func createMooring(key: TokenKey? = nil) -> Mooring {
-        let mooring: Mooring = Mooring(bubble: self, key: key)
-        moorings.append(mooring)
-        if let key { aetherView.moorings[key] = mooring }
-        return mooring
-    }
-    func destroy(key: TokenKey) { aetherView.moorings[key] = nil }
-
+    func createMooring(key: TokenKey) -> Mooring { aetherView.createMooring(key: key, colorable: self) }
     func wireMoorings() { leaves.forEach { $0.wireMoorings() } }
     func positionMoorings() { leaves.forEach { $0.positionMoorings() } }
 

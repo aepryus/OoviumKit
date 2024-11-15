@@ -437,7 +437,7 @@ public class AetherView: UIView, UIScrollViewDelegate, UIGestureRecognizerDelega
 	}
 	private func remove(bubbles: Set<Bubble>) {
         // Remove Doodles
-        let moorings: [Mooring] = bubbles.flatMap { $0.moorings }
+        let moorings: [Mooring] = bubbles.flatMap({ $0.aexel.tokenKeys }).compactMap({ self.moorings[$0] })
         var doodles: Set<LinkDoodle> = Set()
         moorings.forEach { doodles.formUnion($0.doodles) }
         doodles.forEach {
@@ -650,7 +650,14 @@ public class AetherView: UIView, UIScrollViewDelegate, UIGestureRecognizerDelega
 	
 // Links ===========================================================================================
 	var moorings: [TokenKey:Mooring] = [:]
-	
+    func createMooring(key: TokenKey, colorable: Colorable) -> Mooring {
+        let mooring: Mooring = Mooring(aetherView: self, key: key, colorable: colorable)
+//        moorings.append(mooring)
+        moorings[key] = mooring
+        return mooring
+    }
+    func destroy(key: TokenKey) { moorings[key] = nil }
+
 // Stretch =========================================================================================
 	func snapBack() { scrollView.setContentOffset(CGPoint(x: aether.xOffset, y: aether.yOffset), animated: false) }
 	func homing(current: CGFloat, extent: CGFloat) -> CGFloat { min(max(current, 0), extent) }

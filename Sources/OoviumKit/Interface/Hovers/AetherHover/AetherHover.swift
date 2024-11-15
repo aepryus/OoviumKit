@@ -141,6 +141,7 @@ class AetherHover: UIView {
         required init?(coder: NSCoder) { fatalError() }
         
         func takeEditForm() {
+            guard !controller.aetherHover.aetherView.aether.readOnly else { return }
             textField.text = controller.aetherHover.aetherView.aether.name
             editing = true
             addSubview(textField)
@@ -199,58 +200,12 @@ class AetherHover: UIView {
             return true
         }
     }
-//    class ScrewView: UIControl {
-//        private var path: CGMutablePath = CGMutablePath()
-//
-//        init() {
-//            super.init(frame: .zero)
-//            backgroundColor = .clear
-//        }
-//        required init?(coder: NSCoder) { fatalError() }
-//        
-//        // UIView ==================================================================================
-//        override func hitTest(_ point: CGPoint, with event: UIEvent?) -> UIView? {
-//            let view: UIView? = super.hitTest(point, with: event)
-//            if view !== self { return view }
-//            if path.contains(point) { return self }
-//            return nil
-//        }
-//        override func draw(_ rect: CGRect) {
-//            let sw: CGFloat = h-lw
-//
-//            let x1: CGFloat = lw
-//            let x2: CGFloat = x1 + sw
-//            let x4: CGFloat = width - lw
-////            let x3: CGFloat = x4 - sw
-//
-//            let y1: CGFloat = lw
-//            let y2: CGFloat = h - lw
-//            
-//            let p1: CGPoint = CGPoint(x: x2, y: y1)
-//            let p2: CGPoint = CGPoint(x: x4, y: y1)
-//            let p3: CGPoint = CGPoint(x: x4, y: y2)
-//            let p4: CGPoint = CGPoint(x: x1, y: y2)
-//
-//            path = CGMutablePath()
-//            path.move(to: (p1+p4)/2)
-//            path.addArc(tangent1End: p1, tangent2End: (p1+p2)/2, radius: wr)
-//            path.addArc(tangent1End: p2, tangent2End: (p2+p3)/2, radius: nr)
-//            path.addArc(tangent1End: p3, tangent2End: (p3+p4)/2, radius: ar)
-//            path.addArc(tangent1End: p4, tangent2End: (p4+p1)/2, radius: nr)
-//            path.closeSubpath()
-//
-//            Skin.skin.explorer(path: path)
-//        }
-//    }
-//    class PublicView: UIView {}
     
     lazy var controller: AetherHoverController = { AetherHoverController(aetherHover: self) }()
     
     let aetherView: AetherView
     let hookView: HookView = HookView()
     lazy var aetherNameView: AetherNameView = { AetherNameView(controller: controller) }()
-//    let screwView: ScrewView = ScrewView()
-//    let publicView: PublicView = PublicView()
     
     init(aetherView: AetherView) {
         self.aetherView = aetherView
@@ -259,7 +214,6 @@ class AetherHover: UIView {
         
         addSubview(hookView)
         addSubview(aetherNameView)
-//        addSubview(screwView)
     }
     required init?(coder: NSCoder) { fatalError() }
     
@@ -269,6 +223,5 @@ class AetherHover: UIView {
         let sw: CGFloat = hw
         hookView.left(width: hw, height: AetherHover.h)
         aetherNameView.left(dx: hookView.right - AetherHover.h + AetherHover.p, width: width - hw - sw - 2*AetherHover.p + 2*AetherHover.h, height: AetherHover.h)
-//        screwView.left(dx: aetherNameView.right - AetherHover.h + AetherHover.p, width: sw, height: AetherHover.h)
     }
 }

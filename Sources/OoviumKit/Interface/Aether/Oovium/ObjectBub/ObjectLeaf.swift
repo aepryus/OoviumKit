@@ -21,7 +21,7 @@ class ObjectLeaf: Leaf, Editable, ChainViewDelegate, DoubleTappable, UITextField
 		
 		super.init(bubble: bubble)
         
-        mooring = bubble.createMooring(key: object.chain.key)
+        mooring = bubble.createMooring(key: object.chain.key!)
 
 		chainView.chain = object.chain
 		chainView.delegate = self

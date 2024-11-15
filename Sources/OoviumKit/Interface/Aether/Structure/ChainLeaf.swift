@@ -41,7 +41,7 @@ class ChainLeaf: Leaf, ChainViewDelegate, Editable {
 	var chain: Chain {
 		set {
 			chainView.chain = newValue
-            mooring = bubble.createMooring(key: chain.key)
+            mooring = bubble.createMooring(key: chain.key!)
 		}
 		get { chainView.chain }
 	}

@@ -10,7 +10,7 @@ import Acheron
 import OoviumEngine
 import UIKit
 
-class FaceLeaf: Leaf, FocusTappable, TowerListener, Citable {
+class FaceLeaf: Leaf, FocusTappable, TowerListener {
 	
 	init(bubble: Bubble) {
 		super.init(bubble: bubble, hitch: .top, anchor: CGPoint.zero, size: CGSize(width: 80, height: 36))

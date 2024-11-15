@@ -62,6 +62,7 @@ class FooterCell: UICollectionViewCell, Sizable, Citable, FocusTappable, TowerLi
     }
 
 // Citable =========================================================================================
+//    var mooring: Mooring = Mooring(bubble: <#T##Bubble#>)
     func tokenKey(at: CGPoint) -> TokenKey? { column.footerTokenKey }
 	
 // TowerListener ===================================================================================

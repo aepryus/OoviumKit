@@ -31,7 +31,7 @@ class TextLeaf: Leaf, Editable, DoubleTappable, Citable, UITextFieldDelegate {
 		self.text = (bubble as! TextBub).text
 		super.init(bubble: bubble, hitch: .center, anchor: CGPoint.zero, size: CGSize.zero)
 		self.backgroundColor = UIColor.clear
-        mooring = bubble.createMooring()
+        mooring = bubble.createMooring(key: text.tokenKey)
 	}
 	required init?(coder aDecoder: NSCoder) { fatalError() }
 	

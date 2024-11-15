@@ -21,6 +21,7 @@ class GridCell: UICollectionViewCell, Sizable, Editable, Citable, ChainViewDeleg
     lazy var chainView: ChainView = ChainView(editable: self, responder: nil)
     
     var gridLeaf: GridLeaf { controller.gridBub.gridLeaf }
+    var mooring: Mooring!
 	
     init(controller: GridController, column: GridColumn, cell: Cell) {
         self.controller = controller
@@ -37,6 +38,8 @@ class GridCell: UICollectionViewCell, Sizable, Editable, Citable, ChainViewDeleg
         chainView.keyDelegate = controller
 		addSubview(chainView)
         
+//        mooring = gridLeaf.gridBub.createMooring(key: chainView.chain.key!)
+        
 //        self.cell.tower.listener = chainView
 	}
 	required init?(coder: NSCoder) { fatalError() }
@@ -47,6 +50,9 @@ class GridCell: UICollectionViewCell, Sizable, Editable, Citable, ChainViewDeleg
         self.cell = cell
         chainView.chain = cell.chain
     }
+    
+    func wireMoorings() {}
+    func positionMoorings() { mooring.point = gridLeaf.gridBub.aetherView.scrollView.convert(self.center, from: self.superview) }
     
 // UIView ==========================================================================================
 	override func setNeedsDisplay() {

@@ -11,7 +11,7 @@ import UIKit
 
 class VarView: UIView, Citable {
 	let token: Token
-    lazy var mooring: Mooring = Mooring(bubble: bubble, key: token.key)
+    lazy var mooring: Mooring = bubble.createMooring(key: token.key)
 	
 	unowned let bubble: Bubble
 	

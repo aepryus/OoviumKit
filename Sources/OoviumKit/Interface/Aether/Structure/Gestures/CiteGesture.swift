@@ -9,12 +9,15 @@
 import OoviumEngine
 import UIKit
 
-protocol Citable: AnyObject {
+protocol Citable: UIView {
+//    var mooring: Mooring { get }
 	func relevant(editable: Editable) -> Bool
 	func tokenKey(at: CGPoint) -> TokenKey?
+//    func positionMooring()
 }
 extension Citable {
 	func relevant(editable: Editable) -> Bool { true }
+//    func positionMooring() { mooring.point = center }
 }
 
 class CiteGesture: UITapGestureRecognizer {

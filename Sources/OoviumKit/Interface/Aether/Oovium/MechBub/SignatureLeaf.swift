@@ -35,7 +35,7 @@ class SignatureLeaf: Leaf, Editable, Citable, UITextFieldDelegate {
 	var nameEdit: SignatureField? = nil
 	var paramEdits: [SignatureField] = []
 	
-    lazy var recipeMooring: Mooring = Mooring(bubble: bubble, key: delegate!.recipeToken)
+    lazy var recipeMooring: Mooring = bubble.createMooring(key: delegate!.recipeToken)
 	var paramMoorings: [Mooring] = []
 	
 	init(bubble: Bubble & SignatureLeafDelegate, anchor: CGPoint, hitch: Position, size: CGSize) {
@@ -44,7 +44,7 @@ class SignatureLeaf: Leaf, Editable, Citable, UITextFieldDelegate {
 		noOfParams = delegate!.params.count
 		
 		for i in 0..<noOfParams {
-            let mooring = bubble.createMooring(key: delegate?.paramTokens[i])
+            let mooring = bubble.createMooring(key: delegate!.paramTokens[i])
 			paramMoorings.append(mooring)
 		}
 

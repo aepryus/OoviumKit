@@ -25,9 +25,9 @@ class TypeLeaf: Leaf, Colorable {
 		super.init(bubble: bubble, hitch: hitch, anchor: anchor, size: size)
 		
 		backgroundColor = UIColor.clear
-        mooring = bubble.createMooring()
+//        mooring = bubble.createMooring()
 		
-        type.fields.forEach { _ in fieldMoorings.append(bubble.createMooring()) }
+//        type.fields.forEach { _ in fieldMoorings.append(bubble.createMooring()) }
 		
 		render()
 	}
