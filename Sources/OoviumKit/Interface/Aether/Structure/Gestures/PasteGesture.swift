@@ -19,9 +19,9 @@ class PasteGesture: UITapGestureRecognizer {
 	}
 	
 // Events ==========================================================================================
-	@objc func onDoubleTap() {
-		let origin = location(in: aetherView)
-		aetherView.pasteBubbles(at: origin)
+	@objc func onDoubleTap() { // Positional Paste via iOS
+//        let origin = location(in: aetherView)
+        aetherView.onPaste()
 	}
 	
 // UIGestureRecognizer =============================================================================

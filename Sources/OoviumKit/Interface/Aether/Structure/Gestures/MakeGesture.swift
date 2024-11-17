@@ -28,8 +28,8 @@ class MakeGesture: UITapGestureRecognizer {
         let commandKeyPressed: Bool = CGEventSource.keyState(.combinedSessionState, key: 0x37)
         if !commandKeyPressed {
             aetherView.triggerMaker(at: at)
-        } else {
-            aetherView.pasteBubbles(at: CGPoint(x: at.x, y: at.y))
+        } else { // Positional Paste via macOS
+            aetherView.onPaste()
         }
 #else
         aetherView.triggerMaker(at: at)

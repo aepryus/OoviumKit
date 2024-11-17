@@ -32,15 +32,13 @@ class GridCell: UICollectionViewCell, Sizable, Editable, Citable, ChainViewDeleg
 
         backgroundColor = UIColor.clear
                 
-//        chainView = ChainView(editable: self, responder: nil)
         chainView.chain = cell.chain
 		chainView.delegate = self
         chainView.keyDelegate = controller
 		addSubview(chainView)
         
-//        mooring = gridLeaf.gridBub.createMooring(key: chainView.chain.key!)
-        
-//        self.cell.tower.listener = chainView
+        mooring = controller.gridBub.createMooring(key: cell.tokenKey)
+        mooring.fog = controller.gridBub
 	}
 	required init?(coder: NSCoder) { fatalError() }
     
@@ -51,8 +49,13 @@ class GridCell: UICollectionViewCell, Sizable, Editable, Citable, ChainViewDeleg
         chainView.chain = cell.chain
     }
     
-    func wireMoorings() {}
-    func positionMoorings() { mooring.point = gridLeaf.gridBub.aetherView.scrollView.convert(self.center, from: self.superview) }
+    func wireMoorings() {
+        cell.chain.tokenKeys.forEach { (key: TokenKey) in
+            guard let mooring = gridLeaf.aetherView.moorings[key] else { return }
+            mooring.attach(self.mooring, wake: false)
+        }
+    }
+    func positionMoorings() { mooring.point = gridLeaf.aetherView.scrollView.convert(self.center, from: self.superview) }
     
 // UIView ==========================================================================================
 	override func setNeedsDisplay() {
@@ -118,6 +121,7 @@ class GridCell: UICollectionViewCell, Sizable, Editable, Citable, ChainViewDeleg
 		gridLeaf.gridBub.cellGainedFocus()
         setNeedsDisplay()
         controller.gridBub.determineLeaves()
+        mooring.wakeDoodles()
 	}
 	func onReleaseFocus() {
         gridLeaf.focusCell = nil
@@ -125,6 +129,7 @@ class GridCell: UICollectionViewCell, Sizable, Editable, Citable, ChainViewDeleg
         gridLeaf.beingEdited = false
         controller.gridBub.determineLeaves()
         setNeedsDisplay()
+        mooring.sleepDoodles()
 	}
 	func cite(_ citable: Citable, at: CGPoint) {
 		guard let key = citable.tokenKey(at: at) else { return }
@@ -142,8 +147,14 @@ class GridCell: UICollectionViewCell, Sizable, Editable, Citable, ChainViewDeleg
     func becomeFirstResponder() { gridLeaf.becomeFirstResponder() }
     func resignFirstResponder() { gridLeaf.resignFirstResponder() }
 
-    func onTokenKeyAdded(_ key: TokenKey) {}
-    func onTokenKeyRemoved(_ key: TokenKey) {}
+    func onTokenKeyAdded(_ key: TokenKey) {
+        guard let upstream: Mooring = gridLeaf.gridBub.aetherView.moorings[key] else { return }
+        upstream.attach(mooring)
+    }
+    func onTokenKeyRemoved(_ key: TokenKey) {
+        guard let upstream: Mooring = gridLeaf.gridBub.aetherView.moorings[key] else { return }
+        upstream.detach(mooring)
+    }
 
     func onWidthChanged(oldWidth: CGFloat?, newWidth: CGFloat) {
         guard oldWidth != newWidth else { return }

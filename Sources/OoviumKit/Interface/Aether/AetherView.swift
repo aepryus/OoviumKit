@@ -24,7 +24,7 @@ public extension AetherViewDelegate {
 	func onSave(aetherView: AetherView, aether: Aether) {}
 }
 
-public class AetherView: UIView, UIScrollViewDelegate, UIGestureRecognizerDelegate, AnchorDoubleTappable, GadgetDelegate {
+public class AetherView: UIView, UIScrollViewDelegate, UIGestureRecognizerDelegate, GadgetDelegate {
 	public var aether: Aether
     var citadel: Citadel
     public var facade: AetherFacade?
@@ -52,7 +52,6 @@ public class AetherView: UIView, UIScrollViewDelegate, UIGestureRecognizerDelega
 	var readOnly: Bool = false
 	private(set) var focus: Editable? = nil
 	public var selected: Set<Bubble> = Set<Bubble>()
-	var copyBuffer: Set<Bubble> = Set<Bubble>()
 	var locked: Bool = false
 	var currentTextLeaf: TextLeaf? = nil
 	let oldPicker: Bool
@@ -222,6 +221,7 @@ public class AetherView: UIView, UIScrollViewDelegate, UIGestureRecognizerDelega
     // onReturn causes Xcode 16.1 to crash on compile. :-/ - jjc 11/9/24
     public func onReturnQ() {
         if let modal: AlertModal = Modal.current as? AlertModal { modal.ok() }
+        else if let focus { focus.releaseFocus(.okEqualReturn) }
     }
     public func onEscape() {
         if let modal: Modal = Modal.current { modal.dismiss() }
@@ -786,21 +786,6 @@ public class AetherView: UIView, UIScrollViewDelegate, UIGestureRecognizerDelega
         dodo()
     }
     func deleteSelected() { delete(bubbles: selected) }
-	func copyBubbles() {
-		copyBuffer = selected
-		unselectAll()
-	}
-	func pasteBubbles(at: CGPoint) {
-		guard let first = copyBuffer.first else { return }
-		let anchor = first.frame.origin
-		for bubble in copyBuffer {
-			let copy: Bubble = bubble.copy() as! Bubble
-			let pos = bubble.frame.origin
-			copy.frame = CGRect(origin: at+pos-anchor, size: copy.frame.size)
-			add(bubble: copy)
-            aether.addAexel(copy.aexel)
-		}
-	}
     func deleteSelectedWithPrompt(_ complete: @escaping ()->() = {}) {
         guard selected.count > 0 else { return }
         if selectedDeletable() {
@@ -846,12 +831,6 @@ public class AetherView: UIView, UIScrollViewDelegate, UIGestureRecognizerDelega
 			scrollView.setContentOffset(CGPoint(x: point.x, y: point.y+y+32), animated: true)
 		}
 	}
-
-// AnchorDoubleTappable ============================================================================
-    @objc func onAnchorDoubleTap(point: CGPoint) {
-        pasteBubbles(at: point)
-        stretch()
-    }
 
 // UIScrollViewDelegate ============================================================================
 	public func scrollViewDidScroll(_ scrollView: UIScrollView) {

@@ -23,6 +23,8 @@ class Mooring {
 	}
     var doodles: [LinkDoodle] = []
     
+    var fog: AnyObject? = nil
+    
     init(aetherView: AetherView, key: TokenKey, colorable: Colorable) {
         self.aetherView = aetherView
         self.tokenKey = key
@@ -35,6 +37,7 @@ class Mooring {
 	func sleepDoodles() { doodles.forEach{ $0.sleep() } }
     
     func attach(_ mooring: Mooring, wake: Bool = true) {
+        guard fog == nil || mooring.fog == nil || fog !== mooring.fog else { return }
         let doodle: LinkDoodle = LinkDoodle(from: mooring, to: self)
         doodles.append(doodle)
         mooring.doodles.append(doodle)

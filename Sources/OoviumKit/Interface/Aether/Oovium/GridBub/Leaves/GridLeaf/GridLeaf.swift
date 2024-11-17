@@ -40,9 +40,7 @@ class GridLeaf: Leaf, GridViewDelegate, UITextInput, UITextInputTraits {
         
         grid.columns.forEach { (column: Column) in
             let gridColumn: GridColumn = GridColumn(controller: controller, column: column, headerCell: HeaderCell(controller: controller, column: column))
-            let n: Int = column.colNo
-            let cells: [Cell] = grid.cellsForColumn(colNo: n)
-//            let cells: [Cell] = grid.cellsForColumn(i: column.colNo)
+            let cells: [Cell] = grid.cellsForColumn(colNo: column.colNo)
             cells.forEach { gridColumn.addGridCell(controller: controller, column: gridColumn, cell: $0) }
             columns.append(gridColumn)
         }
@@ -177,8 +175,19 @@ class GridLeaf: Leaf, GridViewDelegate, UITextInput, UITextInputTraits {
         return gridColumn(colNo: colNo).gridCells[rowNo-1]
     }
     
+// Leaf ============================================================================================
+    override func positionMoorings() {
+        let gridCells: [GridCell] = columns.flatMap({ $0.gridCells })
+        gridCells.forEach({ $0.positionMoorings() })
+        let footerCells: [FooterCell] = columns.compactMap({ $0.footerCell })
+        footerCells.forEach({ $0.positionMoorings() })
+    }
+    
 // UIView ==========================================================================================
-	override func layoutSubviews() { gridView.frame = self.bounds }
+    override func layoutSubviews() {
+        gridView.frame = self.bounds
+        positionMoorings()
+    }
     override func draw(_ rect: CGRect) {}
 	
 // UIResponder =====================================================================================

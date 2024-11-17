@@ -58,6 +58,24 @@ class TextBub: Bubble, NSCopying {
 		UIView.animate(withDuration: 0.1) { self.alpha = 1 }
         textLeaf.mode = .edit
 	}
+    override func onRemove() {
+        var edges: Set<Edge> = Set<Edge>()
+        
+        for bubble in aetherView.selected {
+            guard let textBub = bubble as? TextBub else { fatalError() }
+            edges.formUnion(textBub.text.edges)
+            edges.formUnion(textBub.text.outputEdges)
+        }
+        
+        for edge in edges {
+            guard let parentText: Text = edge.text,
+                  let childText: Text = edge.other
+                else { continue }
+            let parentLeaf: TextLeaf = (aetherView.bubble(aexel: parentText) as! TextBub).textLeaf
+            let childLeaf: TextLeaf = (aetherView.bubble(aexel: childText) as! TextBub).textLeaf
+            parentLeaf.unlinkTo(other: childLeaf)
+        }
+    }
 	func onOK() {}
 
 // Bubble ==========================================================================================

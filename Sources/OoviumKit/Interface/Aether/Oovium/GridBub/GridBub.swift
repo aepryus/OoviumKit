@@ -117,7 +117,6 @@ class GridBub: Bubble, ChainLeafDelegate {
 		remove(leaf: chainLeaf)
 		render()
         chainLeaf.unwireMoorings()
-//        aetherView.moorings[chainLeaf.chain.tower.variableToken] = nil
 	}
     func addColumn(with column: Column) { gridLeaf.addColumn(with: column) }
     func addRow(with cells: [Cell]) { gridLeaf.addRow(with: cells) }
@@ -197,7 +196,10 @@ class GridBub: Bubble, ChainLeafDelegate {
     override var uiColor: UIColor { !selected ? UIColor.purple : UIColor.yellow }
     override var hitch: Position { .topLeft }
 	override var hitchPoint: CGPoint { CGPoint(x: grid.exposed ? 4.5 : 0, y: editingColNo != nil ? 57 : (grid.exposed ? 4.5 : 0)) }
-	override func wireMoorings() {}
+	override func wireMoorings() {
+        let gridCells: [GridCell] = gridLeaf.columns.flatMap({ $0.gridCells })
+        gridCells.forEach({ $0.wireMoorings() })
+    }
 	
 // UIView ==========================================================================================
 	override func setNeedsDisplay() {

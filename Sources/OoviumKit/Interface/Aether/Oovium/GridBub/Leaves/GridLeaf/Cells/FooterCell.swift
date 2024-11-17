@@ -19,6 +19,8 @@ class FooterCell: UICollectionViewCell, Sizable, Citable, FocusTappable, TowerLi
     var gridBub: GridBub { controller.gridBub }
     var gridLeaf: GridLeaf { gridBub.gridLeaf }
 
+    var mooring: Mooring!
+
     lazy var pen: Pen = Pen(color: controller.gridBub.gridLeaf.uiColor, alignment: column.alignment)
 	
     init(controller: GridController, column: Column) {
@@ -26,9 +28,15 @@ class FooterCell: UICollectionViewCell, Sizable, Citable, FocusTappable, TowerLi
         self.column = column
         super.init(frame: .zero)
 		backgroundColor = .clear
+        
+        mooring = controller.gridBub.createMooring(key: column.footerTokenKey)
+        mooring.fog = controller.gridBub
+
         Citadel.startListening(to: column.footerTokenKey, listener: self)
 	}
 	required init?(coder: NSCoder) { fatalError() }
+    
+    func positionMoorings() { mooring.point = gridLeaf.gridBub.aetherView.scrollView.convert(self.center, from: self.superview) }
     
 // Tappable ========================================================================================
 	func onFocusTap(aetherView: AetherView) {}
@@ -58,11 +66,9 @@ class FooterCell: UICollectionViewCell, Sizable, Citable, FocusTappable, TowerLi
     func resize() {
         if column.aggregate == .none || column.aggregate == .running { widthNeeded = 0 }
         else { widthNeeded = aetherView.citadel.valueDisplay(key: column.footerTokenKey).size(pen: pen).width + 12 }
-//        else { widthNeeded = column.footerChain.tower.obje.display.size(pen: pen).width + 12 }
     }
 
 // Citable =========================================================================================
-//    var mooring: Mooring = Mooring(bubble: <#T##Bubble#>)
     func tokenKey(at: CGPoint) -> TokenKey? { column.footerTokenKey }
 	
 // TowerListener ===================================================================================

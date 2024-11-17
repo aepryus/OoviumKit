@@ -116,12 +116,8 @@ class TextLeaf: Leaf, Editable, DoubleTappable, Citable, UITextFieldDelegate {
 	
 // Leaf ============================================================================================
 	override func wireMoorings() {
-		for edge in text.edges {
-            guard let text: Text = edge.other
-                else { continue }
-			let textBub: TextBub = bubble.aetherView.bubble(aexel: text) as! TextBub
-            mooring.attach(textBub.textLeaf.mooring, wake: false)
-		}
+        let moorings: [Mooring] = text.edges.compactMap({ $0.other?.tokenKey }).compactMap({ aetherView.moorings[$0] })
+        moorings.forEach { mooring.attach($0, wake: false) }
 	}
 	
 // Editable ========================================================================================
