@@ -270,10 +270,11 @@ public class AetherView: UIView, UIScrollViewDelegate, UIGestureRecognizerDelega
         let array: [[String:Any]] = selected.compactMap({ $0.aexel }).map({ $0.unload() })
         UIPasteboard.oovium.string = array.toJSON()
     }
-    public func onPaste() {
+    public func onPaste(at v2: V2? = nil) {
+        let v2: V2 = v2 ?? (scrollView.contentOffset + scrollView.bounds.size / 2).v2
         if responder.chainView == nil {
             guard let json: String = UIPasteboard.oovium.string else { return }
-            let aexels: [Aexel] = citadel.paste(array: json.toArray())
+            let aexels: [Aexel] = citadel.paste(array: json.toArray(), at: v2)
             let bubbles: [Bubble] = aexels.map { createBubble(aexel: $0)! }
             bubbles.forEach { add(bubble: $0) }
             bubbles.forEach { $0.wireMoorings() }
@@ -529,6 +530,7 @@ public class AetherView: UIView, UIScrollViewDelegate, UIGestureRecognizerDelega
     }
 	public func openAether(_ aether: Aether) {
 		self.aether = aether
+        Citadel.nukeListeners()
         citadel = self.aether.compile()
 		
 		aetherPicker?.aetherButton.setNeedsDisplay()

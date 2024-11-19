@@ -29,7 +29,7 @@ class MakeGesture: UITapGestureRecognizer {
         if !commandKeyPressed {
             aetherView.triggerMaker(at: at)
         } else { // Positional Paste via macOS
-            aetherView.onPaste()
+            aetherView.onPaste(at: at)
         }
 #else
         aetherView.triggerMaker(at: at)
