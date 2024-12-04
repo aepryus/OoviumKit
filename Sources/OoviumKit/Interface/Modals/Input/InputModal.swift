@@ -51,20 +51,17 @@ class InputModal: Modal, UITextFieldDelegate {
         super.onInvoke()
         textField.becomeFirstResponder()
     }
-    override func onDismiss() {
-        super.onDismiss()
-        complete(input)
-    }
     private func onOK() {
         input = textField.text
         dismiss()
+        complete(input)
     }
 
 // UIView ==========================================================================================
     override func draw(_ rect: CGRect) {
         let p: CGFloat = 1*gS
         let bh: CGFloat = (32+6)*gS
-        let bw: CGFloat = (128+7)*gS
+        let bw: CGFloat = (128+8)*gS
         
         let x1: CGFloat = p
         let x3: CGFloat = x1 + bw

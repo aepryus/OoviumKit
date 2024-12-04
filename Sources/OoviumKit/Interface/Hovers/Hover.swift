@@ -26,7 +26,7 @@ open class Hover: Gadget {
 	open func retract() {}
 	
 // Gadget ==========================================================================================
-	override public var size: CGSize {
+	public override var size: CGSize {
 		didSet { render() }
 	}
 	public override func invoke(animated: Bool = true) {

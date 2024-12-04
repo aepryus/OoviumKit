@@ -18,7 +18,7 @@ class LefterEditor: KeyOrbit {
 			self.lefterCell.gridLeaf.aetherView.invokeConfirmModal("delete selected row?".localized) { [unowned self] in
                 self.lefterCell.releaseFocus(.administrative)
 				if self.lefterCell.gridLeaf.grid.rows > 1 {
-					self.lefterCell.gridLeaf.deleteRow(rowNo: self.lefterCell.rowNo)
+                    self.lefterCell.controller.delete(rowNo: self.lefterCell.rowNo)
 				} else {
                     self.lefterCell.gridLeaf.gridBub.aetherView.aether.remove(aexel: self.lefterCell.gridLeaf.gridBub.grid)
                     self.lefterCell.gridLeaf.gridBub.aetherView.remove(bubble: self.lefterCell.gridLeaf.gridBub)

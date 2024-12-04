@@ -12,7 +12,7 @@ import UIKit
 class TypeMaker: Maker {
 // Maker ===========================================================================================
     func make(aetherView: AetherView, at: V2) -> Bubble {
-        let type: Type = aetherView.aether.create(at: at)
+        let type: Type = aetherView.create(at: at)
         return TypeBub(type, aetherView: aetherView)
     }
     func drawIcon() {
@@ -55,6 +55,6 @@ class TypeMaker: Maker {
         path.addArc(tangent1End: CGPoint(x: x1, y: y1), tangent2End: CGPoint(x: x4, y: y1), radius: or)
         path.closeSubpath()
 
-        Skin.bubble(path: path, uiColor: OOColor.lavender.uiColor, width: 4.0/3.0*Oo.s)
+        Skin.bubble(path: path, uiColor: Text.Color.lavender.uiColor, width: 4.0/3.0*Oo.s)
     }
 }

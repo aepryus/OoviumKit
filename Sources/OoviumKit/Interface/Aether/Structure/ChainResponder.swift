@@ -57,6 +57,8 @@ public class ChainResponder {
     func tab() { chainView?.keyDelegate?.onTab() }
     func backspace() { chainView?.backspace() }
     
+    func paste(text: String) { text.forEach { insertText("\($0)") } }
+    
 // UITextInput =====================================================================================
     var autocapitalizationType: UITextAutocapitalizationType {
         get { .none }
@@ -69,7 +71,7 @@ public class ChainResponder {
     var beginningOfDocument: UITextPosition { ChainPosition.zero }
     var endOfDocument: UITextPosition {
         guard let chainView else { return ChainPosition.zero }
-        return ChainPosition(chainView.chain.tokens.count)
+        return ChainPosition(chainView.chain.tokenKeys.count)
     }
     
     private var markedText: String? = nil
@@ -78,21 +80,21 @@ public class ChainResponder {
         defer {
             self.markedText = markedText
             let markedCount: Int = markedText?.count ?? 0
-            markedTextRange = ChainRange(NSRange(location: chainView.chain.cursor - markedCount, length: markedCount))
+            markedTextRange = ChainRange(NSRange(location: chainView.cursor - markedCount, length: markedCount))
         }
         guard markedText?.count != 0 || self.markedText?.count != 1 else {
             chainView.backspace()
             return
         }
         for _ in 0..<(self.markedText?.count ?? 0) {
-            _ = chainView.chain.backspace()
+            chainView.backspace()
         }
         guard let markedText = markedText else { return }
         for c in markedText {
             var token: Token? = nil
-            if c == "\n" && chainView.chain.inString && chainView.chain.unmatchedQuote {
+            if c == "\n" && chainView.inString && chainView.chain.unmatchedQuote {
                 token = Token.quote
-            } else if chainView.chain.inString {
+            } else if chainView.inString {
                 token = Token.characterToken(tag: "\(c)")
             }
             if let token { _ = chainView.attemptToPost(token: token) }
@@ -131,7 +133,7 @@ public class ChainResponder {
     func characterRange(at point: CGPoint) -> UITextRange? { nil }
 
 // UIKeyInput ======================================================================================
-    public static var hasExternalKeyboard: Bool { GCKeyboard.coalesced != nil }
+    public static var hasExternalKeyboard: Bool { GCKeyboard.coalesced != nil && (UIDevice.current.orientation == .landscapeLeft || Screen.mac) }
     private static func isNumeric(c: Character) -> Bool {
         c >= "0" && c <= "9" || c == "."
     }
@@ -153,21 +155,20 @@ public class ChainResponder {
         guard let chainView else { return }
         var token: Token? = nil
         
-        if text == "\n" && chainView.chain.inString && chainView.chain.unmatchedQuote {
+        if text == "\n" && chainView.inString && chainView.unmatchedQuote {
             token = Token.quote
-        } else if ChainResponder.isSeparator(c: text[0]) {                    // External Keyboard
+        } else if ChainResponder.isSeparator(c: text[0]) {              // External Keyboard
             token = Token.separatorToken(tag: text)
         } else if text == "\n" || text == "\t" {                        // External Keyboard
             chainView.editable.releaseFocus(.okEqualReturn)
             return
-        } else if chainView.chain.inString {
+        } else if chainView.inString {
             token = Token.characterToken(tag: text)
-        } else if ChainResponder.isNumeric(c: text[0]) {                        // External Keyboard
+        } else if ChainResponder.isNumeric(c: text[0]) {                // External Keyboard
             token = Token.digitToken(tag: text)
         } else if text == "-" {
-            chainView.minusSign()
-            return
-        } else if ChainResponder.isOperator(c: text[0]) {                    // External Keyboard
+            token = Token.subtract
+        } else if ChainResponder.isOperator(c: text[0]) {               // External Keyboard
             token = Token.operatorToken(tag: ChainResponder.convert(s: text))
         } else if text == "|" {
             token = Token.or

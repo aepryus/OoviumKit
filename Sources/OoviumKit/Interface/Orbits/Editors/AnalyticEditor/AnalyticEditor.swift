@@ -13,9 +13,9 @@ class AnalyticEditor: KeyOrbit {
     var systemBub: SystemBub { editable as! SystemBub }
     
     init(orb: Orb) {
-        super.init(orb: orb, size: CGSize(width: 134, height: 174), uiColor: OOColor.olive.uiColor, schematic: Schematic(rows: 1, cols: 1))
+        super.init(orb: orb, size: CGSize(width: 134, height: 174), uiColor: Text.Color.olive.uiColor, schematic: Schematic(rows: 1, cols: 1))
 
-        schematic.add(row: 0, col: 0, w: 1, h: 1, key: Key(text: NSLocalizedString("OK", tableName: nil, bundle: Bundle(for: type(of: self)), value: "", comment: ""), uiColor: OOColor.olive.uiColor, {
+        schematic.add(row: 0, col: 0, w: 1, h: 1, key: Key(text: NSLocalizedString("OK", tableName: nil, bundle: Bundle(for: type(of: self)), value: "", comment: ""), uiColor: Text.Color.olive.uiColor, {
             self.systemBub.releaseFocus(.okEqualReturn)
         }))
         

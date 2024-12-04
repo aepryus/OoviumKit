@@ -34,7 +34,7 @@ public class Orbit: Gadget {
 //	func retract() {}
 	
 // Gadget ==========================================================================================
-	override public var size: CGSize {
+	public override var size: CGSize {
 		didSet {}
 	}
 }

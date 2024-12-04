@@ -97,6 +97,16 @@ public class TronSkin: Skin {
 	override func lasso(path: CGPath) {
 		bubble(path: path, uiColor: UIColor.yellow, width: 2)
 	}
+    override func doodle(c: CGContext, path: CGPath, color: UIColor, asleep: Bool) {
+        c.addPath(path)
+        c.setLineWidth(5)
+        c.setStrokeColor(color.alpha(asleep ? 0.25 : 0.5).cgColor)
+        c.drawPath(using: .stroke)
+        c.addPath(path)
+        c.setLineWidth(1.5)
+        c.setStrokeColor(color.tint(0.8).alpha(asleep ? 0.3 : 0.6).cgColor)
+        c.drawPath(using: .stroke)
+    }
 	
 	// Panel
 	override func panel (path: CGPath, uiColor: UIColor) {

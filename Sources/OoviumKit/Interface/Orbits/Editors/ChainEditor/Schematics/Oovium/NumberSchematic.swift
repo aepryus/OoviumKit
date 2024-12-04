@@ -27,7 +27,7 @@ class NumberSchematic: ChainSchematic {
             self.chainEditor.chainView.backspace()
 		})
 		
-		add(row: 1, col: 0, key: Key(text: "\"", uiColor: OOColor.peach.uiColor) { [unowned self] in
+		add(row: 1, col: 0, key: Key(text: "\"", uiColor: Text.Color.peach.uiColor) { [unowned self] in
             self.chainEditor.chainView.post(token: Token.quote)
 		})
 		add(row: 1, col: 1, key: Key(text: "^", uiColor: banana) { [unowned self] in

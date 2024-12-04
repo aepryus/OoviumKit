@@ -23,7 +23,7 @@ open class Modal: Gadget {
         }
         
         // UIView ==================================================================================
-        override public var frame: CGRect {
+        public override var frame: CGRect {
             didSet { Modal.current?.render() }
         }
         

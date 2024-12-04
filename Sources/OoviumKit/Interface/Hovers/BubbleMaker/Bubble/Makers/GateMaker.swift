@@ -12,7 +12,7 @@ import UIKit
 class GateMaker: Maker {
 // Maker ===========================================================================================
     func make(aetherView: AetherView, at: V2) -> Bubble {
-        let gate: Gate = aetherView.aether.create(at: at)
+        let gate: Gate = aetherView.create(at: at)
         return GateBub(gate, aetherView: aetherView)
     }
     func drawIcon() {
@@ -76,11 +76,11 @@ class GateMaker: Maker {
         arrow.closeSubpath()
 
         let c = UIGraphicsGetCurrentContext()!
-        c.setFillColor(OOColor.marine.uiColor.alpha(0.4).cgColor)
-        c.setStrokeColor(OOColor.marine.uiColor.alpha(0.7).cgColor)
+        c.setFillColor(Text.Color.marine.uiColor.alpha(0.4).cgColor)
+        c.setStrokeColor(Text.Color.marine.uiColor.alpha(0.7).cgColor)
         c.addPath(arrow)
         c.drawPath(using: .fillStroke)
         
-        Skin.bubble(path: path, uiColor: OOColor.marine.uiColor, width: 4.0/3.0*Oo.s)
+        Skin.bubble(path: path, uiColor: Text.Color.marine.uiColor, width: 4.0/3.0*Oo.s)
     }
 }

@@ -12,7 +12,7 @@ import OoviumEngine
 class GraphMaker: Maker {
 // Maker ===========================================================================================
     func make(aetherView: AetherView, at: V2) -> Bubble {
-        let graph: Graph = aetherView.aether.create(at: at)
+        let graph: Graph = aetherView.create(at: at)
         return GraphBub(graph, aetherView: aetherView)
     }
     func drawIcon() {
@@ -36,6 +36,6 @@ class GraphMaker: Maker {
         path.addArc(tangent1End: CGPoint(x: x1, y: y3), tangent2End: CGPoint(x: x1, y: y2), radius: r)
         path.closeSubpath()
         
-        Skin.bubble(path: path, uiColor: OOColor.cobolt.uiColor, width: 4.0/3.0*Oo.s)
+        Skin.bubble(path: path, uiColor: Text.Color.cobolt.uiColor, width: 4.0/3.0*Oo.s)
     }
 }

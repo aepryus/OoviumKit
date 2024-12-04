@@ -76,7 +76,7 @@ public class AetherExplorer: UIView, UITableViewDataSource, SpaceDelegate {
 	}
 
 // UIView ==========================================================================================
-	override public func layoutSubviews() {
+	public override func layoutSubviews() {
 		tableView.topLeft(dx: 35*s, size: CGSize(width: 295*s, height: height))
 	}
 

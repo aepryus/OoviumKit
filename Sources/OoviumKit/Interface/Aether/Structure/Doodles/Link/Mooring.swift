@@ -14,35 +14,43 @@ protocol Colorable: AnyObject {
 }
 
 class Mooring {
-    private unowned var bubble: Bubble
-    weak var token: Token?
+    private unowned let aetherView: AetherView
+    private unowned let colorable: Colorable
+    var tokenKey: TokenKey
     
 	var point: CGPoint = CGPoint.zero {
         didSet { doodles.forEach { $0.render() } }
 	}
     var doodles: [LinkDoodle] = []
     
-    init(bubble: Bubble, token: Token? = nil) {
-        self.bubble = bubble
-        self.token = token
+    var fog: AnyObject? = nil
+    
+    init(aetherView: AetherView, key: TokenKey, colorable: Colorable) {
+        self.aetherView = aetherView
+        self.tokenKey = key
+        self.colorable = colorable
     }
 	
-	var color: UIColor { bubble.uiColor }
+	var color: UIColor { colorable.uiColor }
 	
 	func wakeDoodles() { doodles.forEach{ $0.wake() } }
 	func sleepDoodles() { doodles.forEach{ $0.sleep() } }
     
     func attach(_ mooring: Mooring, wake: Bool = true) {
+        guard fog == nil || mooring.fog == nil || fog !== mooring.fog else { return }
         let doodle: LinkDoodle = LinkDoodle(from: mooring, to: self)
         doodles.append(doodle)
         mooring.doodles.append(doodle)
         if wake { doodle.wake() }
-        bubble.aetherView.add(doodle: doodle)
+        aetherView.add(doodle: doodle)
     }
     func detach(_ mooring: Mooring) {
-        let doodle: LinkDoodle = doodles.first(where: { $0.from === mooring && $0.to === self })!
+        // TODO: This allows for nils, but ideally this shouldn't be called if there is no doodle.  The usesMooring mechanism doesn't seem to be used
+        // any more.  I think I decided to allow GridBub header ChainLeafs to link to other non GridBib moorings.  Perhaps the whole thing needs to be
+        // revamped.  -- jjc 10/20/24
+        guard let doodle: LinkDoodle = doodles.first(where: { $0.from === mooring && $0.to === self }) else { return }
         doodles.remove(object: doodle)
         mooring.doodles.remove(object: doodle)
-        bubble.aetherView.remove(doodle: doodle)
+        aetherView.remove(doodle: doodle)
     }
 }

@@ -13,7 +13,7 @@ public class AnchorSpace: Space {
     init() { super.init(name: "◎", url: URL(string: "oovium.com")!) }
 
 // Space ===========================================================================================
-    override public func loadFacades(facade: Facade, _ complete: @escaping ([Facade]) -> ()) {
+    public override func loadFacades(facade: Facade, _ complete: @escaping ([Facade]) -> ()) {
         var items: [Facade] = []
         items += [Facade.create(space: Space.local)]
         if let cloud = Space.cloud { items += [Facade.create(space: cloud)] }

@@ -9,7 +9,11 @@
 import UIKit
 
 class Doodle: CALayer {
-	
+
+    override init() { super.init() }
+    @available(*, unavailable)
+    public required init?(coder aDecoder: NSCoder) { fatalError() }
+
 	func render() {}
 	
 // CALayer =========================================================================================

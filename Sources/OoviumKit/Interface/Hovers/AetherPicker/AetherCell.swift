@@ -38,11 +38,13 @@ class AetherCell: UITableViewCell, UIContextMenuInteractionDelegate {
 			switch self.state {
 				case .normal:
                     let facade: AetherFacade = Facade.create(ooviumKey: "Local::\(self.aetherName)") as! AetherFacade
-                    Space.local.loadAether(facade: facade) { (json: String?) in
-                        guard let json else { return }
-                        let aether: Aether = Aether(json: json)
-                        self.aetherPicker.aetherView.swapToAether(facade: facade, aether: aether)
-                    }
+                    do {
+                        try Space.local.loadAether(facade: facade) { (json: String?) in
+                            guard let json else { return }
+                            let aether: Aether = Aether(json: json)
+                            self.aetherPicker.aetherView.swapToAether(facade: facade, aether: aether)
+                        }
+                    } catch {}
 				case .deletable:
 					self.state = .normal
 					self.animateTransitionIfNeeded(state: self.state, duration: 0.3)
@@ -69,11 +71,13 @@ class AetherCell: UITableViewCell, UIContextMenuInteractionDelegate {
                     if facades.count == 0 { self.aetherPicker.aetherView.swapToNewAether() }
                     else {
                         guard let aetherFacade: AetherFacade = facades.first(where: { $0 is AetherFacade && $0 !== removeFacade }) as? AetherFacade else { return }
-                        aetherFacade.load { (json: String?) in
-                            guard let json else { return }
-                            let aether: Aether = Aether(json: json)
-                            self.aetherPicker.aetherView.swapToAether(facade: aetherFacade, aether: aether)
-                        }
+                        do {
+                            try aetherFacade.load { (json: String?) in
+                                guard let json else { return }
+                                let aether: Aether = Aether(json: json)
+                                self.aetherPicker.aetherView.swapToAether(facade: aetherFacade, aether: aether)
+                            }
+                        } catch {}
                     }
                 }
 			}
