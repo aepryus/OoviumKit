@@ -9,8 +9,8 @@
 import OoviumEngine
 import UIKit
 
-extension OOColor {
-	public var uiColor: UIColor {
+public extension OOColor {
+	var uiColor: UIColor {
 		switch self {
 			case .red:				return UIColor(red: 255.0/255, green:  53.0/255, blue:  62.0/255, alpha: 1)
 			case .orange:			return UIColor(red: 255.0/255, green: 165.0/255, blue:  62.0/255, alpha: 1)
