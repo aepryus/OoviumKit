@@ -16,13 +16,12 @@ public class MaskView: UIView {
 			addSubview(content)
 		}
 	}
-	public var path: CGPath {
-		set {
-			(layer.mask! as! CAShapeLayer).path = newValue
-		}
-		get {
-			return (layer.mask! as! CAShapeLayer).path!
-		}
+	public var path: CGPath? {
+        didSet {
+            guard let shapeLayer: CAShapeLayer = layer.mask as? CAShapeLayer else { return }
+            shapeLayer.path = path
+            shapeLayer.fillColor = UIColor.black.cgColor
+        }
 	}
 	
 	public init(content: UIView) {
@@ -52,12 +51,17 @@ public class MaskView: UIView {
 	public required init?(coder aDecoder: NSCoder) { fatalError() }
 		
 // UIView ==========================================================================================
+    override public func layoutSubviews() {
+        if let mask { mask.frame = bounds }
+    }
 	public override var frame: CGRect {
 		didSet {
 			content.frame = bounds
+            if let mask { mask.frame = bounds }
 		}
 	}
 	public override func point(inside point: CGPoint, with event: UIEvent?) -> Bool {
+        guard let path else { return super.point(inside: point, with: event) }
 		return path.contains(point)
 	}
 }
