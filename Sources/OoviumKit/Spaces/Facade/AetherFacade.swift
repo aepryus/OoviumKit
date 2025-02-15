@@ -21,7 +21,7 @@ public class AetherFacade: Facade {
     }
     
 // Facade ==========================================================================================
-    override var name: String { _name }
+    override public var name: String { _name }
     override public var parent: DirFacade { _parent }
     override var space: Space { parent.space }
     override public var ooviumKey: String {
