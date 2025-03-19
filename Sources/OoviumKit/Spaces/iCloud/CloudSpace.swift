@@ -138,28 +138,48 @@ public class CloudSpace: Space {
     public override func loadFacades(facade: DirFacade, _ complete: @escaping ([Facade]) -> ()) {
         queue.sync { complete(facades[facade.ooviumKey] ?? []) }
     }
-    public override func loadAether(facade: AetherFacade, _ complete: @escaping (String?) -> ()) {
+    override public func loadAether(facade: AetherFacade, _ complete: @escaping (String?) -> ()) {
         let url: URL = facade.url
         let document: AetherDocument = AetherDocument(fileURL: url)
         opQueue.addOperation {
-            document.open { (success: Bool) in
-                guard success else { complete(nil); return }
-                let json: String = document.json
-                document.close { (success: Bool) in
-                    DispatchQueue.main.async { complete(json) }
+            var error: NSError?
+            let coordinator: NSFileCoordinator = NSFileCoordinator()
+            
+            coordinator.coordinate(readingItemAt: url, options: .withoutChanges, error: &error) { (url: URL) in
+                document.open { (success: Bool) in
+                    guard success else { DispatchQueue.main.async { complete(nil) }; return }
+                    let json: String = document.json
+                    document.close { (success: Bool) in
+                        DispatchQueue.main.async { complete(json) }
+                    }
                 }
+            }
+
+            if let error {
+                print("loadAether [\(facade.name)] error [\(error)]")
+                DispatchQueue.main.async { complete(nil) }
             }
         }
     }
-    public override func storeAether(facade: AetherFacade, aether: Aether, _ complete: @escaping (Bool) -> ()) {
+    override public func storeAether(facade: AetherFacade, aether: Aether, _ complete: @escaping (Bool) -> ()) {
         let url: URL = facade.url
         let document: AetherDocument = AetherDocument(fileURL: url)
         document.aether = aether
         opQueue.addOperation {
-            document.save(to: url, for: .forOverwriting) { (success: Bool) in
-                document.close { (success: Bool) in
-                    DispatchQueue.main.async { complete(success) }
+            var error: NSError?
+            let coordinator: NSFileCoordinator = NSFileCoordinator()
+
+            coordinator.coordinate(writingItemAt: url, options: .forReplacing, error: &error) { (url: URL) in
+                document.save(to: url, for: .forOverwriting) { (success: Bool) in
+                    document.close { (success: Bool) in
+                        DispatchQueue.main.async { complete(success) }
+                    }
                 }
+            }
+            
+            if let error {
+                print("storeAether [\(facade.name)] error [\(error)]")
+                DispatchQueue.main.async { complete(false) }
             }
         }
     }
