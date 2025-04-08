@@ -194,7 +194,7 @@ public class AetherView: UIView, UIScrollViewDelegate, UIGestureRecognizerDelega
         tools[0][5] = AetherView.analyticTool
         tools[0][6] = AetherView.systemTool
         tools[0][7] = AetherView.coordinateTool
-        tools[0][8] = AetherView.tensorTool
+//        tools[0][8] = AetherView.tensorTool
         tools[0][9] = AetherView.graphTool
 //		tools[0][5] = AetherView.alsoTool
 		
@@ -435,7 +435,7 @@ public class AetherView: UIView, UIScrollViewDelegate, UIGestureRecognizerDelega
                 case "oovi":        add(bubble: OoviBub(aexel as! Oovi, aetherView: self))
                 case "system":      add(bubble: SystemBub(aexel as! System, aetherView: self))
                 case "tail":        add(bubble: TailBub(aexel as! Tail, aetherView: self))
-                case "tensor":      add(bubble: TensorBub(aexel as! Tensor, aetherView: self))
+//                case "tensor":      add(bubble: TensorBub(aexel as! Tensor, aetherView: self))
                 case "text":        add(bubble: TextBub(aexel as! Text, aetherView: self))
                 case "type":        add(bubble: TypeBub(aexel as! Type, aetherView: self))
 				default:		    print("invalid type [\(aexel.type ?? "nil")]")
@@ -855,7 +855,7 @@ public class AetherView: UIView, UIScrollViewDelegate, UIGestureRecognizerDelega
 	public static let objectTool = BubbleTool(maker: ObjectMaker())
     public static let systemTool = BubbleTool(maker: SystemMaker(), recoil: objectTool)
     public static let tailTool = BubbleTool(maker: TailMaker(), recoil: objectTool)
-    public static let tensorTool = BubbleTool(maker: TensorMaker())
+//    public static let tensorTool = BubbleTool(maker: TensorMaker())
     public static let textTool = BubbleTool(maker: TextMaker())
     public static let typeTool = BubbleTool(maker: TypeMaker())
 
