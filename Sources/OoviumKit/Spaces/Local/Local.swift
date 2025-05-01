@@ -12,7 +12,8 @@ import UIKit
 
 public class Local {
 	public static func installAetherFromBundle(name: String) {
-		let atPath: String = Bundle.main.path(forResource: (Oo.iPhone ? "\(name) iP" : name), ofType: "oo")!
+		let atPath: String = Bundle.main.path(forResource: "\(name) iP", ofType: "oo")!
+//        let atPath: String = Bundle.main.path(forResource: (Oo.iPhone ? "\(name) iP" : name), ofType: "oo")!
         let path = NSSearchPathForDirectoriesInDomains(.documentDirectory, .userDomainMask, true)[0]
         
         let toURL: URL = FileManager.default.urls(for: .documentDirectory, in: .userDomainMask).first!.appendingPathComponent("aethers")

@@ -10,7 +10,7 @@ import Foundation
 import OoviumEngine
 
 public class Facade {
-    var name: String { "" }
+    public var name: String { "" }
     public var parent: DirFacade? { nil }
     var space: Space { .local }
     public var ooviumKey: String { "" }

@@ -18,7 +18,7 @@ public class SpaceFacade: DirFacade {
     }
     
 // Facade ==========================================================================================
-    override var name: String { space.name }
+    public override var name: String { space.name }
     public override var parent: DirFacade? { _parent }
     override var space: Space { _space }
     public override var ooviumKey: String { name }
