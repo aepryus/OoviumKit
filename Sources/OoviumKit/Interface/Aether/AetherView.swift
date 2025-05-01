@@ -520,7 +520,7 @@ public class AetherView: UIView, UIScrollViewDelegate, UIGestureRecognizerDelega
             case "oovi":        return OoviBub(aexel as! Oovi, aetherView: self)
             case "system":      return SystemBub(aexel as! System, aetherView: self)
             case "tail":        return TailBub(aexel as! Tail, aetherView: self)
-            case "tensor":      return TensorBub(aexel as! Tensor, aetherView: self)
+//            case "tensor":      return TensorBub(aexel as! Tensor, aetherView: self)
             case "text":        return TextBub(aexel as! Text, aetherView: self)
             case "type":        return TypeBub(aexel as! Type, aetherView: self)
             default:
@@ -977,7 +977,7 @@ public class AetherView: UIView, UIScrollViewDelegate, UIGestureRecognizerDelega
 	public static let objectTool = BubbleTool(maker: ObjectMaker())
     public static let systemTool = BubbleTool(maker: SystemMaker(), recoil: objectTool)
     public static let tailTool = BubbleTool(maker: TailMaker(), recoil: objectTool)
-    public static let tensorTool = BubbleTool(maker: TensorMaker())
+//    public static let tensorTool = BubbleTool(maker: TensorMaker())
     public static let textTool = BubbleTool(maker: TextMaker())
     public static let typeTool = BubbleTool(maker: TypeMaker())
 
