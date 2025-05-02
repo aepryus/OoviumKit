@@ -62,7 +62,7 @@ class TextBub: Bubble, NSCopying {
         var edges: Set<Edge> = Set<Edge>()
         
         for bubble in aetherView.selected {
-            guard let textBub = bubble as? TextBub else { fatalError() }
+            guard let textBub = bubble as? TextBub else { continue }
             edges.formUnion(textBub.text.edges)
             edges.formUnion(textBub.text.outputEdges)
         }

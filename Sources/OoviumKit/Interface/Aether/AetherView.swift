@@ -530,6 +530,15 @@ public class AetherView: UIView, UIScrollViewDelegate, UIGestureRecognizerDelega
     }
 	public func openAether(_ aether: Aether) {
 		self.aether = aether
+        
+        // This code will rekey Grids.  I *think* it is only needed for my own aethers which got corrupted
+        // during the development process.  In theory the migration should take care of the rekeying, but
+        // I'll leave it in here just in case.  (But, should be able to remove eventually) - 5/2/25
+        for aexels in self.aether.aexels {
+            guard let grid: Grid = aexels as? Grid else { continue }
+            grid.rekey(aether: aether)
+        }
+        
         Citadel.nukeListeners()
         citadel = self.aether.compile()
 		
@@ -633,20 +642,20 @@ public class AetherView: UIView, UIScrollViewDelegate, UIGestureRecognizerDelega
     
 // Undo ============================================================================================
     public func dodo() {
-        markPositions()
-        raphus.dodo(json: aether.toJSON())
+//        markPositions()
+//        raphus.dodo(json: aether.toJSON())
     }
     public func undo() {
-        guard let json: String = raphus.undo() else { return }
-        removeAllBubbles()
-        removeAllDoodles()
-        openAether(Aether(json: json))
+//        guard let json: String = raphus.undo() else { return }
+//        removeAllBubbles()
+//        removeAllDoodles()
+//        openAether(Aether(json: json))
     }
     public func redo() {
-        guard let json: String = raphus.redo() else { return }
-        removeAllBubbles()
-        removeAllDoodles()
-        openAether(Aether(json: json))
+//        guard let json: String = raphus.redo() else { return }
+//        removeAllBubbles()
+//        removeAllDoodles()
+//        openAether(Aether(json: json))
     }
     public func selectAll() { select(bubbles: bubbles) }
 	
