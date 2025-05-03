@@ -40,6 +40,7 @@ class AetherDocument: UIDocument {
 		guard let json: String = String(data: data, encoding: .utf8) else { return }
 		self.json = try Migrate.migrateAether(json: json)
 		aether = Aether()
+        print("AetherDocument.load(fromContents")
 		aether.load(attributes: self.json.toAttributes())
 	}
 	override func handleError(_ error: Error, userInteractionPermitted: Bool) {
