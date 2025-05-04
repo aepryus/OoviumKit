@@ -164,7 +164,7 @@ public class CloudSpace: Space {
     override public func storeAether(facade: AetherFacade, aether: Aether, _ complete: @escaping (Bool) -> ()) {
         let url: URL = facade.url
         let document: AetherDocument = AetherDocument(fileURL: url)
-        document.aether = aether
+        document.json = aether.toJSON()
         opQueue.addOperation {
             var error: NSError?
             let coordinator: NSFileCoordinator = NSFileCoordinator()
@@ -205,7 +205,7 @@ public class CloudSpace: Space {
         let tURL: URL = fURL.deletingLastPathComponent().appendingPathComponent(newName).appendingPathExtension("oo")
         
         let document: AetherDocument = AetherDocument(fileURL: tURL)
-        document.aether = aether
+        document.json = aether.toJSON()
         opQueue.addOperation {
             document.save(to: tURL, for: .forCreating) { (success: Bool) in
                 document.close { (success: Bool) in
@@ -262,7 +262,6 @@ public class CloudSpace: Space {
     }
     @objc func queryDidStartGathering(_ notification: Notification) {
 //        print("== [ queryDidStartGathering ]")
-
     }
     @objc func queryDidFinishGathering(_ notification: Notification) {
 //        print("== [ queryDidFinishGathering ]")
