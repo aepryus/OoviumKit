@@ -12,15 +12,15 @@ public class SpaceFacade: DirFacade {
     var _space: Space
     var _parent: SpaceFacade?
     
-    init(space: Space) {
+    public init(space: Space) {
         _space = space
         _parent = space !== Space.anchor ? Facade.create(space: Space.anchor) as? SpaceFacade : nil
     }
     
 // Facade ==========================================================================================
-    override public var name: String { space.name }
-    override public var parent: DirFacade? { _parent }
+    public override var name: String { space.name }
+    public override var parent: DirFacade? { _parent }
     override var space: Space { _space }
-    override public var ooviumKey: String { name }
+    public override var ooviumKey: String { name }
     override var url: URL { space.url }
 }

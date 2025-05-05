@@ -28,9 +28,9 @@ public class FolderFacade: DirFacade {
         }
         get { _name }
     }
-    override public var parent: DirFacade { _parent }
+    public override var parent: DirFacade { _parent }
     override var space: Space { parent.space }
-    override public var ooviumKey: String {
+    public override var ooviumKey: String {
         let prefix: String = (parent is SpaceFacade) ? "::" : "/"
         return parent.ooviumKey + prefix + name
     }

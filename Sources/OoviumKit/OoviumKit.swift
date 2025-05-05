@@ -9,3 +9,15 @@
 import Foundation
 
 public let fontBundle = Bundle.module
+
+public enum SelectionMode: CaseIterable {
+    case lasso, rectangle
+}
+
+public protocol OoviumKitDelegate: AnyObject {
+    var selectionMode: SelectionMode { get }
+}
+
+public class OoviumQit {
+    public static weak var delegate: OoviumKitDelegate? = nil
+}

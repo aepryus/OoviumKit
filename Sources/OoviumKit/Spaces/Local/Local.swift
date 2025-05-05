@@ -33,10 +33,10 @@ public class Local {
 			print("\(error)")
 		}
 	}
-	public static func aetherJSONFromBundle(name: String) -> String {
+	public static func aetherJSONFromBundle(name: String) throws -> String {
 		let atPath: String = Bundle.main.path(forResource: name + (Oo.iPhone ? "S" : "L"), ofType: "oo") ??  Bundle.main.path(forResource: name, ofType: "oo")!
-		guard let data = FileManager.default.contents(atPath: atPath) else {return ""}
-		return String(data: data, encoding: .utf8) ?? ""
+		guard let data = FileManager.default.contents(atPath: atPath) else { return "" }
+        return try Migrate.migrateAether(json: String(data: data, encoding: .utf8) ?? "")
 	}
 	
 	public static func wipeSplashBoard() {

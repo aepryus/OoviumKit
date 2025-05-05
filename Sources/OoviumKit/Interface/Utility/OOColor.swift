@@ -1,5 +1,5 @@
 //
-//  OOColor.swift
+//  Text.Color.swift
 //  Oovium
 //
 //  Created by Joe Charlier on 2/23/21.
@@ -9,8 +9,8 @@
 import OoviumEngine
 import UIKit
 
-public extension OOColor {
-	var uiColor: UIColor {
+extension Text.Color {
+	public var uiColor: UIColor {
 		switch self {
 			case .red:				return UIColor(red: 255.0/255, green:  53.0/255, blue:  62.0/255, alpha: 1)
 			case .orange:			return UIColor(red: 255.0/255, green: 165.0/255, blue:  62.0/255, alpha: 1)

@@ -6,6 +6,7 @@
 //  Copyright © 2019 Aepryus Software. All rights reserved.
 //
 
+import OoviumEngine
 import UIKit
 
 class PasteGesture: UITapGestureRecognizer {
@@ -19,9 +20,9 @@ class PasteGesture: UITapGestureRecognizer {
 	}
 	
 // Events ==========================================================================================
-	@objc func onDoubleTap() {
-		let origin = location(in: aetherView)
-		aetherView.pasteBubbles(at: origin)
+	@objc func onDoubleTap() { // Positional Paste via iOS
+        let origin: CGPoint = location(in: aetherView)
+        aetherView.onPaste(at: V2(origin.x, origin.y))
 	}
 	
 // UIGestureRecognizer =============================================================================

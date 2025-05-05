@@ -10,9 +10,9 @@ import OoviumEngine
 import UIKit
 
 class ColorTool: Tool {
-	let color: OOColor
+	let color: Text.Color
 	
-	init(color: OOColor) {
+	init(color: Text.Color) {
 		self.color = color
 		super.init()
 	}

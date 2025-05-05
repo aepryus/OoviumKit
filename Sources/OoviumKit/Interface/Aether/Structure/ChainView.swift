@@ -17,8 +17,8 @@ protocol ChainViewDelegate: AnyObject {
     func becomeFirstResponder()
     func resignFirstResponder()
     
-    func onTokenAdded(_ token: Token)
-    func onTokenRemoved(_ token: Token)
+    func onTokenKeyAdded(_ key: TokenKey)
+    func onTokenKeyRemoved(_ key: TokenKey)
 
     func onChanged()
     func onWidthChanged(oldWidth: CGFloat?, newWidth: CGFloat)
@@ -27,8 +27,6 @@ protocol ChainViewDelegate: AnyObject {
 }
 extension ChainViewDelegate {
     func onEditStart() {}
-    func onTokenAdded(_ token: Token) {}
-    func onTokenRemoved(_ token: Token) {}
     func onEditStop() {}
     
     func onChanged(oldWidth: CGFloat?, newWidth: CGFloat) {}
@@ -54,21 +52,23 @@ extension ChainViewKeyDelegate {
 class ChainView: UIView, UITextInput, UITextInputTraits, AnchorTappable, TowerListener {
     unowned let editable: Editable
     unowned let responder: ChainResponder?
+    var alwaysShow: Bool = false
 
-    var chain: Chain = Chain() {
+    var chain: Chain! {
         didSet {
-            if chain.tower == nil {
-                print("yo")
-                return
-            }
-            chain.tower.listener = self
-            resize()
+            guard let key: TokenKey = chain.key
+            else { fatalError() }
+            Citadel.startListening(to: key, listener: self)
         }
     }
+    public private(set) var editing: Bool = false
+    public var cursor: Int = 0
+
     weak var delegate: ChainViewDelegate?
     weak var keyDelegate: ChainViewKeyDelegate?
     
     var oldWidth: CGFloat?
+    var oldTokenKeys: [TokenKey]?
     
     static let pen: Pen = Pen(font: .ooAether(size: 16))
     
@@ -84,22 +84,34 @@ class ChainView: UIView, UITextInput, UITextInputTraits, AnchorTappable, TowerLi
     }
     public required init?(coder aDecoder: NSCoder) { fatalError() }
     
-    var blank: Bool { chain.tokens.count == 0 && !chain.editing }
+// Computed ========================================================================================
+    var aetherView: AetherView { editable.aetherView }
+    var citadel: Citadel { aetherView.citadel }
+    var chainCore: ChainCore { citadel.chainCore(key: chain.key!) }
+    
+    var blank: Bool { chain.isEmpty && !editing }
+    
+    var chainDisplay: String {
+        alwaysShow || citadel.inAFog(key: chain.key!)
+        ? citadel.tokenDisplay(key: chain.key!)
+        : citadel.valueDisplay(key: chain.key!) }
 
-    private func resize() {
+    func resize() {
         var widthNeeded: CGFloat
-        if !chain.editing {
-            widthNeeded = "\(chain)".size(pen: ChainView.pen).width + 3
+        if !editing {
+            widthNeeded = chainDisplay.size(pen: ChainView.pen).width + 3
         } else {
             widthNeeded = 3
             var sb: String = ""
             var token: Token
-            let to = chain.tokens.count
+            var key: TokenKey
+            let to = chain.tokenKeys.count
             
             var i: Int = 0
             while i < to {
                 repeat {
-                    token = chain.tokens[i]
+                    key = chain.tokenKeys[i]
+                    token = citadel.anyToken(key: key)
                     if ChainView.usesWafer(token: token) { break }
                     sb.append(token.display)
                     i += 1
@@ -129,69 +141,92 @@ class ChainView: UIView, UITextInput, UITextInputTraits, AnchorTappable, TowerLi
         var lx: CGFloat = 0
         var pos: Int = 0
         
-        for token in chain.tokens {
+        chain.tokenKeys.forEach { (key: TokenKey) in
+            let token: Token = citadel.anyToken(key: key)
             x += token.display.size(pen: ChainView.pen).width
             if ChainView.usesWafer(token: token) {x += 9}
-            if nx < lx+(x-lx)/2 {break}
+            if nx < lx+(x-lx)/2 { return }
             lx = x
             pos += 1
         }
-        chain.cursor = pos
+        cursor = pos
+        triggerKeyboardIfNeeded()
         resize()
     }
     
-// Chain ===========================================================================================
-    func attemptToPost(token: Token) -> Bool {
-        guard chain.attemptToPost(token: token) else { return false }
-        if !ChainResponder.hasExternalKeyboard && chain.editing {
-            if chain.inString { delegate?.becomeFirstResponder() }
-            else { delegate?.resignFirstResponder() }
-        }
+    private func triggerKeyboardIfNeeded() {
+        guard !ChainResponder.hasExternalKeyboard && editing else { return }
+        if chain.isInString(at: cursor) { delegate?.becomeFirstResponder() }
+        else { delegate?.resignFirstResponder() }
+    }
+    private func handleKeyRemoved(_ key: TokenKey) {
+        triggerKeyboardIfNeeded()
         resize()
         delegate?.onChanged()
-        delegate?.onTokenAdded(token)
+        delegate?.onTokenKeyRemoved(key)
+    }
+    
+// Chain ===========================================================================================
+    var inString: Bool { chain.isInString(at: cursor) }
+    var unmatchedQuote: Bool { chain.unmatchedQuote }
+    func attemptToPost(key: TokenKey) -> Bool {
+        guard citadel.canBeAdded(thisKey: key, to: chain.key!) else { return false }
+        
+        chain.post(key: key, at: cursor)
+        
+        if key.hasTower { citadel.increment(key: chain.key!, dependenceOn: key) }
+        
+        cursor += 1
+        triggerKeyboardIfNeeded()
+        resize()
+        delegate?.onChanged()
+        delegate?.onTokenKeyAdded(key)
+        
         return true
     }
-    func post(token: Token) {
-        _ = attemptToPost(token: token)
-    }
-    func minusSign() {
-        chain.minusSign()
-        resize()
-        delegate?.onChanged()
-    }
+    func attemptToPost(token: Token) -> Bool { attemptToPost(key: token.key) }
+    func post(key: TokenKey) { _ = attemptToPost(key: key) }
+    func post(token: Token) { post(key: token.key) }
     func parenthesis() {
-        chain.parenthesis()
+        chain.parenthesis(at: cursor)
+        cursor += 1
         resize()
         delegate?.onChanged()
     }
     func braket() {
-        chain.braket()
+        chain.braket(at: cursor)
+        cursor += 1
         resize()
         delegate?.onChanged()
     }
     func delete() {
-        guard let token = chain.delete() else { return }
-        resize()
-        delegate?.onChanged()
-        delegate?.onTokenRemoved(token)
+        guard let key: TokenKey = chain.delete(at: cursor) else { return }
+        if key.hasTower { citadel.decrement(key: chain.key!, dependenceOn:  key)}
+        handleKeyRemoved(key)
     }
        
-    @objc func rightDelete() {
-        print("rightDelete")
-    }
+    @objc func rightDelete() { print("rightDelete") }
     func edit() {
-        chain.edit()
+        oldTokenKeys = chain.tokenKeys
+        editing = true
+        cursor = chain.tokenKeys.count
         delegate?.onEditStart()
         isUserInteractionEnabled = true
         resize()
         delegate?.onChanged()
     }
     func ok() {
+        resignFirstResponder()
         isUserInteractionEnabled = false
-        chain.ok()
+        editing = false
+        aetherView.citadel.trigger(key: chain.key!)
         resize()
         delegate?.onChanged()
+    }
+    func cancel() {
+        chain.clear()
+        oldTokenKeys?.forEach { chain.post(key: $0) }
+        ok()
     }
     
 // UIResponder =====================================================================================
@@ -203,11 +238,13 @@ class ChainView: UIView, UITextInput, UITextInputTraits, AnchorTappable, TowerLi
         var x: CGFloat = x
         var sb: String = ""
         var pos: Int = from
+        var key: TokenKey
         var token: Token
         while (pos < to) {
             repeat {
-                token = chain.tokens[pos]
-                if ChainView.usesWafer(token: token) {break}
+                key = chain.tokenKeys[pos]
+                token = citadel.anyToken(key: key)
+                if ChainView.usesWafer(token: token) { break }
                 sb.append(token.display)
                 pos += 1
             } while (pos < to)
@@ -229,12 +266,12 @@ class ChainView: UIView, UITextInput, UITextInputTraits, AnchorTappable, TowerLi
         return x
     }
     override func draw(_ rect: CGRect) {
-        if !chain.editing {
-            Skin.bubble(text: "\(chain)", x: 1, y: Screen.mac ? 1 : 0, uiColor: delegate?.color ?? UIColor.green)
+        if !editing {
+            Skin.bubble(text: chainDisplay, x: 1, y: Screen.mac ? 1 : 0, uiColor: delegate?.color ?? UIColor.green)
         } else {
-            let x: CGFloat = drawTokens(at: 1, from: 0, to: chain.cursor)
+            let x: CGFloat = drawTokens(at: 1, from: 0, to: cursor)
             // Cursor
-            if chain.tokens.count > 0 {
+            if chain.tokenKeys.count > 0 {
                 let path = CGMutablePath()
                 path.move(to: CGPoint(x: x+1, y: 1))
                 path.addLine(to: CGPoint(x: x+1, y: 20))
@@ -245,13 +282,13 @@ class ChainView: UIView, UITextInput, UITextInputTraits, AnchorTappable, TowerLi
                 c.drawPath(using: .stroke)
             }
             
-            _ = drawTokens(at: x, from: chain.cursor, to: chain.tokens.count)
+            _ = drawTokens(at: x, from: cursor, to: chain.tokenKeys.count)
         }
     }
     
 // AnchorTappable ==================================================================================
     func onAnchorTap(point: CGPoint) {
-        guard chain.editing else { return }
+        guard editing else { return }
         moveCursor(to: point.x)
     }
     
@@ -317,24 +354,23 @@ class ChainView: UIView, UITextInput, UITextInputTraits, AnchorTappable, TowerLi
     func deleteBackward() { responder!.deleteBackward() }
     
     @objc func leftArrow() {
-        if chain.leftArrow() { setNeedsDisplay() }
-        else { keyDelegate?.onArrowLeft() }
+        if cursor > 0 {
+            cursor -= 1
+            setNeedsDisplay()
+        } else { keyDelegate?.onArrowLeft() }
     }
     @objc func rightArrow() {
-        if chain.rightArrow() { setNeedsDisplay() }
-        else { keyDelegate?.onArrowRight() }
+        if cursor < chain.tokenKeys.count {
+            cursor += 1
+            setNeedsDisplay()
+        } else { keyDelegate?.onArrowRight() }
     }
-    @objc func backspace() {
-        guard let token = chain.backspace() else { return }
-        resize()
-        delegate?.onChanged()
-        delegate?.onTokenRemoved(token)
+    @objc func backspace() {            // delete left
+        guard let key: TokenKey = chain.backspace(at: cursor) else { return }
+        if key.hasTower { citadel.decrement(key: chain.key!, dependenceOn:  key)}
+        cursor -= 1
+        handleKeyRemoved(key)
     }
-//    func delete() {
-//        guard let token = chain.delete() else { return }
-//        render()
-//        delegate?.onTokenRemoved(token)
-//    }
 
     @objc func upArrow() { responder!.upArrow() }
     @objc func downArrow() { responder!.downArrow() }

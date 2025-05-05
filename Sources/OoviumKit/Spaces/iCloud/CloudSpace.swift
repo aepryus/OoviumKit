@@ -135,35 +135,55 @@ public class CloudSpace: Space {
     }
     
 // Space ===========================================================================================
-    override public func loadFacades(facade: DirFacade, _ complete: @escaping ([Facade]) -> ()) {
+    public override func loadFacades(facade: DirFacade, _ complete: @escaping ([Facade]) -> ()) {
         queue.sync { complete(facades[facade.ooviumKey] ?? []) }
     }
     override public func loadAether(facade: AetherFacade, _ complete: @escaping (String?) -> ()) {
         let url: URL = facade.url
         let document: AetherDocument = AetherDocument(fileURL: url)
         opQueue.addOperation {
-            document.open { (success: Bool) in
-                guard success else { complete(nil); return }
-                let json: String = document.json
-                document.close { (success: Bool) in
-                    DispatchQueue.main.async { complete(json) }
+            var error: NSError?
+            let coordinator: NSFileCoordinator = NSFileCoordinator()
+            
+            coordinator.coordinate(readingItemAt: url, options: .withoutChanges, error: &error) { (url: URL) in
+                document.open { (success: Bool) in
+                    guard success else { DispatchQueue.main.async { complete(nil) }; return }
+                    let json: String = document.json
+                    document.close { (success: Bool) in
+                        DispatchQueue.main.async { complete(json) }
+                    }
                 }
+            }
+
+            if let error {
+                print("loadAether [\(facade.name)] error [\(error)]")
+                DispatchQueue.main.async { complete(nil) }
             }
         }
     }
     override public func storeAether(facade: AetherFacade, aether: Aether, _ complete: @escaping (Bool) -> ()) {
         let url: URL = facade.url
         let document: AetherDocument = AetherDocument(fileURL: url)
-        document.aether = aether
+        document.json = aether.toJSON()
         opQueue.addOperation {
-            document.save(to: url, for: .forOverwriting) { (success: Bool) in
-                document.close { (success: Bool) in
-                    DispatchQueue.main.async { complete(success) }
+            var error: NSError?
+            let coordinator: NSFileCoordinator = NSFileCoordinator()
+
+            coordinator.coordinate(writingItemAt: url, options: .forReplacing, error: &error) { (url: URL) in
+                document.save(to: url, for: .forOverwriting) { (success: Bool) in
+                    document.close { (success: Bool) in
+                        DispatchQueue.main.async { complete(success) }
+                    }
                 }
+            }
+            
+            if let error {
+                print("storeAether [\(facade.name)] error [\(error)]")
+                DispatchQueue.main.async { complete(false) }
             }
         }
     }
-    override public func renameAether(facade: AetherFacade, name: String, _ complete: @escaping (Bool) -> ()) {
+    public override func renameAether(facade: AetherFacade, name: String, _ complete: @escaping (Bool) -> ()) {
         var url: URL = facade.url
         var rv = URLResourceValues()
         rv.name = "\(name).oo"
@@ -175,7 +195,26 @@ public class CloudSpace: Space {
             complete(false)
         }
     }
-    override public func renameFolder(facade: FolderFacade, name: String, _ complete: @escaping (Bool) -> ()) {
+    public override func duplicateAether(facade: AetherFacade, aether: Aether, _ complete: @escaping (AetherFacade?, Aether?) -> ()) {
+        let newAether: Aether = Aether(json: aether.unload().toJSON())
+        let newName: String = "\(aether.name) copy"
+        newAether.name = newName
+        let newFacade: AetherFacade = AetherFacade(name: newName, parent: facade.parent)
+        
+        let fURL: URL = facade.url
+        let tURL: URL = fURL.deletingLastPathComponent().appendingPathComponent(newName).appendingPathExtension("oo")
+        
+        let document: AetherDocument = AetherDocument(fileURL: tURL)
+        document.json = aether.toJSON()
+        opQueue.addOperation {
+            document.save(to: tURL, for: .forCreating) { (success: Bool) in
+                document.close { (success: Bool) in
+                    DispatchQueue.main.async { complete(newFacade, newAether) }
+                }
+            }
+        }
+    }
+    public override func renameFolder(facade: FolderFacade, name: String, _ complete: @escaping (Bool) -> ()) {
         print("renameFolder [\(facade.name)] to [\(name)]")
         var url: URL = facade.url
         var rv = URLResourceValues()
@@ -189,7 +228,7 @@ public class CloudSpace: Space {
             complete(false)
         }
     }
-    override public func removeAether(facade: AetherFacade, _ complete: @escaping (Bool) -> ()) {
+    public override func removeAether(facade: AetherFacade, _ complete: @escaping (Bool) -> ()) {
         let url: URL = facade.url
         do {
             try FileManager.default.removeItem(atPath: url.path)
@@ -199,7 +238,7 @@ public class CloudSpace: Space {
             complete(false)
         }
     }
-    override public func createFolder(facade: DirFacade, name: String, _ complete: @escaping (Bool) -> ()) {
+    public override func createFolder(facade: DirFacade, name: String, _ complete: @escaping (Bool) -> ()) {
         let url: URL = facade.url
         do {
             try FileManager.default.createDirectory(at: url.appendingPathComponent(name, isDirectory: true), withIntermediateDirectories: true)
@@ -223,7 +262,6 @@ public class CloudSpace: Space {
     }
     @objc func queryDidStartGathering(_ notification: Notification) {
 //        print("== [ queryDidStartGathering ]")
-
     }
     @objc func queryDidFinishGathering(_ notification: Notification) {
 //        print("== [ queryDidFinishGathering ]")

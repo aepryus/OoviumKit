@@ -30,7 +30,7 @@ public class Bubble: UIView, AnchorTappable, Colorable, UIGestureRecognizerDeleg
 
     private var leaves: [Leaf] = []
     var plasma: CGMutablePath? = nil
-    var moorings: [Mooring] = []
+//    var moorings: [Mooring] = []
 
     var selected: Bool = false
     
@@ -52,7 +52,8 @@ public class Bubble: UIView, AnchorTappable, Colorable, UIGestureRecognizerDeleg
 		
 		if Screen.mac { addInteraction(UIContextMenuInteraction(delegate: self)) }
 	}
-	public required init?(coder aDecoder: NSCoder) { fatalError() }
+    @available(*, unavailable)
+    public required init?(coder aDecoder: NSCoder) { fatalError() }
 
     var uiColor: UIColor { .white }
     var hitch: Position { .center }
@@ -122,14 +123,7 @@ public class Bubble: UIView, AnchorTappable, Colorable, UIGestureRecognizerDeleg
 	}
     
 // Moorings ========================================================================================
-    func createMooring(token: Token? = nil) -> Mooring {
-        let mooring: Mooring = Mooring(bubble: self, token: token)
-        moorings.append(mooring)
-        if let token { aetherView.moorings[token] = mooring }
-        return mooring
-    }
-    func destroy(token: Token) { aetherView.moorings[token] = nil }
-
+    func createMooring(key: TokenKey) -> Mooring { aetherView.createMooring(key: key, colorable: self) }
     func wireMoorings() { leaves.forEach { $0.wireMoorings() } }
     func positionMoorings() { leaves.forEach { $0.positionMoorings() } }
 

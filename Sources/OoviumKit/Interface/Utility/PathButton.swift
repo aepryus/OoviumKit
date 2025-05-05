@@ -43,10 +43,10 @@ public class PathButton: UIButton {
 	}
 	
 // UIView ==========================================================================================
-	override public func hitTest(_ point: CGPoint, with event: UIEvent?) -> UIView? {
+	public override func hitTest(_ point: CGPoint, with event: UIEvent?) -> UIView? {
 		return path.contains(point) ? super.hitTest(point, with: event) : nil
 	}
-	override public func draw(_ rect: CGRect) {
+	public override func draw(_ rect: CGRect) {
 		draw(path: path)
 	}
 }

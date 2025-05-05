@@ -12,7 +12,6 @@ import UIKit
 public class AetherExplorer: UIView, UITableViewDataSource, SpaceDelegate {
     public var facade: DirFacade = Facade.create(space: Space.local) as! SpaceFacade {
 		didSet {
-			tableView.setContentOffset(.zero, animated: false)
 			navigator.transform = .identity
 			navigator.facade = facade
 			navigator.transform = CGAffineTransform(rotationAngle: -.pi/2)
@@ -76,7 +75,7 @@ public class AetherExplorer: UIView, UITableViewDataSource, SpaceDelegate {
 	}
 
 // UIView ==========================================================================================
-	override public func layoutSubviews() {
+	public override func layoutSubviews() {
 		tableView.topLeft(dx: 35*s, size: CGSize(width: 295*s, height: height))
 	}
 

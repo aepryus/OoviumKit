@@ -30,7 +30,7 @@ public class IvorySkin: Skin {
 			case .labelFore:		return UIColor(red: 0.3, green: 0.3, blue: 0.3, alpha: 0.9)
 			case .cursor:			return UIColor.gray
 			case .ovalBack:			return UIColor.lightGray
-			case .currentCell:		return OOColor.yellow.uiColor
+			case .currentCell:		return Text.Color.yellow.uiColor
 			case .headerText:		return RGB(uiColor: UIColor.purple).shade(0.5).uiColor
 			case .tailText:			return RGB(uiColor: UIColor.white).shade(0.5).uiColor
 			case .signatureText:	return UIColor.darkGray
@@ -42,7 +42,7 @@ public class IvorySkin: Skin {
 	//	case OOSkinColorLabelFore:	return [UIColor colorWithRed:.3 green:.3 blue:.3 alpha:.9];
 	//	case OOSkinColorCursor:		return [UIColor grayColor];
 	//	case OOSkinColorOvalBack:	return [UIColor lightGrayColor];
-	//	case OOSkinColorCurrentCell:return [Oovium color:OOColorYellow];
+	//	case OOSkinColorCurrentCell:return [Oovium color:Text.ColorYellow];
 	//	case OOSkinColorHeaderText:	return [RGB shade:[UIColor purpleColor] percent:.5];
 	//	case OOSkinColorTailText:	return [RGB shade:[UIColor whiteColor] percent:.5];
 	//	return [UIColor whiteColor];

@@ -1,5 +1,5 @@
 //
-//  OOShape+OoviumKit.swift
+//  Text.Shape+OoviumKit.swift
 // 	OoviumKit
 //
 //  Created by Joe Charlier on 3/7/22.
@@ -9,7 +9,7 @@
 import Foundation
 import OoviumEngine
 
-extension OOShape {
+extension Text.Shape {
 	static let ellipseShape = EllipseShape()
 	static let roundedShape = RoundedShape()
 	static let rectangleShape = RectangleShape()
@@ -17,10 +17,10 @@ extension OOShape {
 
 	var shape: Shape {
 		switch self {
-			case .ellipse:      return OOShape.ellipseShape
-			case .rounded:      return OOShape.roundedShape
-			case .rectangle:    return OOShape.rectangleShape
-			case .diamond:      return OOShape.diamondShape
+            case .ellipse:      return Text.Shape.ellipseShape
+            case .rounded:      return Text.Shape.roundedShape
+            case .rectangle:    return Text.Shape.rectangleShape
+            case .diamond:      return Text.Shape.diamondShape
 		}
 	}
 }

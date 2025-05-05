@@ -15,16 +15,16 @@ public class AetherFacade: Facade {
     
 //    var document: AnyObject?
     
-    init(name: String, parent: DirFacade) {
+    public init(name: String, parent: DirFacade) {
         _name = name
         _parent = parent
     }
     
 // Facade ==========================================================================================
-    override public var name: String { _name }
-    override public var parent: DirFacade { _parent }
+    public override var name: String { _name }
+    public override var parent: DirFacade { _parent }
     override var space: Space { parent.space }
-    override public var ooviumKey: String {
+    public override var ooviumKey: String {
         let prefix: String = (parent is SpaceFacade) ? "::" : "/"
         return parent.ooviumKey + prefix + name
     }
@@ -32,10 +32,11 @@ public class AetherFacade: Facade {
     override var url: URL { parent.url.appendingPathComponent(name).appendingPathExtension("oo") }
     
 // Convenience =====================================================================================
-    public func load(_ complete: @escaping (String?)->()) { space.loadAether(facade: self, complete) }
+    public func load(_ complete: @escaping (String?)->()) throws { try space.loadAether(facade: self, complete) }
     public func store(aether: Aether, _ complete: @escaping (Bool)->()) { space.storeAether(facade: self, aether: aether, complete) }
     public func renameAether(name: String, _ complete: @escaping (Bool)->()) { space.renameAether(facade: self, name: name, complete) }
-    
+    public func duplicateAether(facade: AetherFacade, aether: Aether, _ complete: @escaping (AetherFacade?, Aether?) -> ()) { space.duplicateAether(facade: facade, aether: aether, complete) }
+
 // Utility =========================================================================================
     private func isChild(of facade: Facade) -> Bool {
         var parent: Facade? = self
