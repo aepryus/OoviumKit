@@ -74,7 +74,7 @@ class TypeLeaf: Leaf, Colorable {
 		
 		size = CGSize(width: x7+p, height: y4+p)
 		
-		reMoor()
+//		reMoor()
 	}
 	
 	func reMoor() {
