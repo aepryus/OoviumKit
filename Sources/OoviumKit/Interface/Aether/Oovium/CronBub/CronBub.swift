@@ -10,7 +10,7 @@ import Acheron
 import OoviumEngine
 import UIKit
 
-class CronBub: Bubble, ChainLeafDelegate {
+class CronBub: Bubble, ChainLeafDelegate, Citable {
 	let cron: Cron
 //    var cronCore: CronCore?
 	
@@ -278,4 +278,7 @@ class CronBub: Bubble, ChainLeafDelegate {
 		}
 	}
 	func onCalculate() {}
+    
+// Citable =========================================================================================
+    func tokenKey(at: CGPoint) -> TokenKey? { cron.tokenKey }
 }
