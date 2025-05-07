@@ -508,7 +508,7 @@ public class AetherView: UIView, UIScrollViewDelegate, UIGestureRecognizerDelega
         switch aexel.type {
             case "also":        return AlsoBub(aexel as! Also, aetherView: self)
             case "analytic":    return AnalyticBub(aexel as! Analytic, aetherView: self)
-            case "auto":        return AutoBub(aexel as! Automata, aetherView: self)
+            case "automata":    return AutoBub(aexel as! Automata, aetherView: self)
             case "coordinate":  return CoordinateBub(aexel as! Coordinate, aetherView: self)
             case "cron":        return CronBub(aexel as! Cron, aetherView: self)
             case "gate":        return GateBub(aexel as! Gate, aetherView: self)
