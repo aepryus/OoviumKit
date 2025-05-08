@@ -193,6 +193,14 @@ public class GraphView: UIView {
         graph.eVChain = Chain("va:Gp1.eV::dg:4")
         graph.dVChain = Chain("va:Gp1.dV::dg:4;dg:0")
         graph.tChain = Chain("va:Gp1.t::dg:1")
+        
+        graph.view = V3(8.91167255619427, 8.2567481154179, 9.63093990157929)
+        graph.look = V3(-0.597824245607881, -0.542194458806552, -0.704535868587812)
+        graph.orient = V3(-0.821996365745422, 0.445722968116547, 0.35447568378478912120)
+        graph.light = V3(1, 21, 20)
+//        graph.surfaceColor = RGB(r: 49, g: 49, b: 100)
+//        graph.lightColor = RGB(r: 172, g: 172, b: 215)
+//        graph.netColor = RGB(r: 255, g: 255, b: 255)
 
         let net: CGFloat = 0.0
         let light: CGFloat = 0.8
@@ -211,7 +219,7 @@ public class GraphView: UIView {
         graph.dV = (graph.eV-graph.sV)/stepsV
         graph.t = 0
         graph.surfaceOn = true
-        
+                
         return graph
     }
 }
