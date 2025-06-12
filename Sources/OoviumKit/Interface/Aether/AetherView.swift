@@ -54,10 +54,8 @@ public class AetherView: UIView, UIScrollViewDelegate, UIGestureRecognizerDelega
 	public var selected: Set<Bubble> = Set<Bubble>()
 	var locked: Bool = false
 	var currentTextLeaf: TextLeaf? = nil
-	let oldPicker: Bool
 	
 	public var hovers: [Hover] = []
-	public var aetherPicker: AetherPicker? = nil
 	var bubbleToolBar: BubbleToolBar? = nil
 	var shapeToolBar: ShapeToolBar? = nil
 	var colorToolBar: ColorToolBar? = nil
@@ -106,12 +104,11 @@ public class AetherView: UIView, UIScrollViewDelegate, UIGestureRecognizerDelega
 
 	var slid: Bool = false
 	
-	public init(toolBox: ToolBox, toolsOn: Bool = true, burn: Bool = true, oldPicker: Bool = false) {
+	public init(toolBox: ToolBox, toolsOn: Bool = true, burn: Bool = true) {
 		aether = Aether()
         citadel = aether.compile()
 
         self.burn = burn
-		self.oldPicker = oldPicker
 
 		super.init(frame: CGRect(x: 0, y: 0, width: self.aether.width, height: self.aether.height))
 		
@@ -120,15 +117,10 @@ public class AetherView: UIView, UIScrollViewDelegate, UIGestureRecognizerDelega
 
 		addSubview(scrollView)
 
-		if !oldPicker {
-			addSubview(aetherHover)
-            aetherHover.frame = CGRect(x: 4*gS, y: Screen.mac ? 3*gS : Screen.safeTop, width: Screen.mac ? 300*gS : 240*gS, height: Screen.mac ? 40*gS : 32*gS)
-            aetherHover.hookView.addAction { [unowned self] in self.controller.toggleExplorer() }
-		} else {
-			aetherPicker = AetherPicker(aetherView: self)
-			aetherPicker?.invoke()
-		}
-		
+        addSubview(aetherHover)
+        aetherHover.frame = CGRect(x: 4*gS, y: Screen.mac ? 3*gS : Screen.safeTop, width: Screen.mac ? 300*gS : 240*gS, height: Screen.mac ? 40*gS : 32*gS)
+        aetherHover.hookView.addAction { [unowned self] in self.controller.toggleExplorer() }
+
 		if #available(iOS 11.0, *) {
 			scrollView.contentInsetAdjustmentBehavior = .never
 		}
@@ -182,7 +174,7 @@ public class AetherView: UIView, UIScrollViewDelegate, UIGestureRecognizerDelega
 		NotificationCenter.default.addObserver(self, selector: #selector(onKeyboardWillHide(_:)), name: UIResponder.keyboardWillHideNotification, object: nil)
 	}
 	
-    public convenience init(toolsOn: Bool = true, burn: Bool = true, oldPicker: Bool = false) {
+    public convenience init(toolsOn: Bool = true, burn: Bool = true) {
 		var tools: [[Tool?]] = Array(repeating: Array(repeating: nil, count: 10), count: 2)
 		
 		tools[0][0] = AetherView.objectTool
@@ -200,7 +192,7 @@ public class AetherView: UIView, UIScrollViewDelegate, UIGestureRecognizerDelega
 //        tools[0][9] = AetherView.graphTool
 //		tools[0][5] = AetherView.alsoTool
 		
-        self.init(toolBox: ToolBox(tools), toolsOn: toolsOn, burn: burn, oldPicker: oldPicker)
+        self.init(toolBox: ToolBox(tools), toolsOn: toolsOn, burn: burn)
 	}
 	public required init?(coder aDecoder: NSCoder) { fatalError() }
     
@@ -542,7 +534,6 @@ public class AetherView: UIView, UIScrollViewDelegate, UIGestureRecognizerDelega
         Citadel.nukeListeners()
         citadel = self.aether.compile()
 		
-		aetherPicker?.aetherButton.setNeedsDisplay()
         aetherHover.aetherNameView.setNeedsDisplay()
 		
 		readOnly = aether.readOnly
@@ -576,7 +567,6 @@ public class AetherView: UIView, UIScrollViewDelegate, UIGestureRecognizerDelega
 		openAether(aether)
         raphus.wipe()
         dodo()
-		if oldPicker { aetherPicker?.retract() }
         aetherViewDelegate?.onOpen(aetherView: self, aether: aether)
 	}
 	public func swapToAether(_ facadeAether: (facade: AetherFacade, aether: Aether)) {
@@ -867,7 +857,7 @@ public class AetherView: UIView, UIScrollViewDelegate, UIGestureRecognizerDelega
 		bubbleToolBar?.dismiss(animated: false)
 		shapeToolBar?.dismiss(animated: false)
 		colorToolBar?.dismiss(animated: false)
-		aetherPicker?.dismiss(animated: false)
+//		aetherPicker?.dismiss(animated: false)
 	}
 	public func dismissToolBars() {
 		bubbleToolBar?.dismiss()
@@ -922,26 +912,6 @@ public class AetherView: UIView, UIScrollViewDelegate, UIGestureRecognizerDelega
 	public func invokeBubbleToolBar() { bubbleToolBar?.invoke() }
 	public func dismissBubbleToolBar() { bubbleToolBar?.dismiss() }
 	
-	public func layoutAetherPicker() {
-		let fullScreen: Bool = (width == Screen.width && height == Screen.height) || (width == Screen.height && height == Screen.width)
-		let origin: CGPoint = findOrigin()
-		
-		let fixedOffset: UIOffset
-		if fullScreen {
-			fixedOffset = UIOffset(horizontal: origin.x+aetherPickerOffset.horizontal, vertical: origin.y+aetherPickerOffset.vertical)
-		} else {
-			fixedOffset = UIOffset(horizontal: origin.x+9+aetherPickerOffset.horizontal, vertical: origin.y+9-Screen.safeTop+aetherPickerOffset.vertical)
-		}
-		
-		aetherPicker?.fixed = fixedOffset
-	}
-	public func invokeAetherPicker() {
-		layoutAetherPicker()
-		aetherPicker?.invoke()
-	}
-	public func snapAetherPicker() { aetherPicker?.invoke(animated: false) }
-	public func dismissAetherPicker() { aetherPicker?.dismiss() }
-
 	func invokeShapeToolBar() { shapeToolBar?.invoke() }
     func dismissShapeToolBar() { shapeToolBar?.dismiss() }
 	func contractShapeToolBar() { shapeToolBar?.contract() }
@@ -950,11 +920,6 @@ public class AetherView: UIView, UIScrollViewDelegate, UIGestureRecognizerDelega
 	func dismissColorToolBar() { colorToolBar?.dismiss() }
 	func contractColorToolBar() { colorToolBar?.contract() }
     
-	public func invokeMessageHover(_ message: String) {
-		let messageHover: MessageHover = MessageHover(aetherView: self)
-		messageHover.message = message
-		messageHover.invoke()
-	}
 	public func invokeConfirmModal(_ message: String, _ complete: @escaping()->()) {
         AlertModal(message: message, left: "No".localized, right: "Yes".localized, complete: complete).invoke()
 	}

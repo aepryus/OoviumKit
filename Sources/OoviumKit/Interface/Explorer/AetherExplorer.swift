@@ -6,6 +6,22 @@
 //  Copyright © 2021 Aepryus Software. All rights reserved.
 //
 
+
+/*
+    Explorer =======================================================================================
+ 
+            AetherExplorer: This is the MAIN view.  It contains the AetherNavigator and a table displaying the AetherExplorerCells.
+        AetherExplorerCell: This is the CELL for the Aether Explorer.  It represents each of the Facades in the current Space.
+           AetherNavigator: This is the rotated directory structure shown on the left of the AetherExplorer including the + button used for adding new directories.
+                BehindView: This is the TOP level view; it is everything behind the AetherView.  It contains the left and right AetherExplorers and the new and import Trapezoids.
+        ExplorerController: This is the CONTROLLER.  All the buttons and other user actions map to this controller which is then responsible for actually executing the users request.
+                FacadeSnap: Inherits from Snap.  This is each of the Spaces listed in the AetherNavigator.
+                   NewSnap: Inherits from Snap.  This is the + Snap that creates a new directory.
+                      Snap: This is the base button class used in the AetherNavigator.
+                 Trapezoid: This is the button used for the new and import buttons referenced from the BehindView.
+ 
+ */
+
 import Acheron
 import UIKit
 
