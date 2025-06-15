@@ -796,6 +796,56 @@ public class AetherView: UIView, UIScrollViewDelegate, UIGestureRecognizerDelega
             }
         } else { invokeInfoModal("These bubbles have downstream dependencies.  They can not be deleted.", {}) }
     }
+    
+// Utilities =======================================================================================
+    public func importCSV(tokens: [[String]]) {
+        func toNatural(_ token: String) -> String {
+            let trimmed = token.trimmingCharacters(in: .whitespacesAndNewlines)
+            
+            guard !trimmed.isEmpty else { return "" }
+            
+            let needsWrapping = trimmed.rangeOfCharacter(from: .letters) != nil ||
+                               trimmed.contains(" ") ||
+                               trimmed.contains(",") ||
+                               trimmed.rangeOfCharacter(from: CharacterSet(charactersIn: "+-*/^()!")) != nil
+            
+            if needsWrapping {
+                let escaped = trimmed.replacingOccurrences(of: "\"", with: "")
+                return "\"\(escaped)\""
+            }
+            
+            return trimmed
+        }
+        
+        guard !tokens.isEmpty else { return }
+        let grid: Grid = create(at: (scrollView.contentOffset + scrollView.bounds.size / 2).v2)
+        // Columns
+        for i in 0..<tokens[0].count {
+            let column: Column
+            if i == 0 { column = grid.column(colNo: 1) }
+            else { column = grid.addColumn() }
+            column.name = tokens[0][i]
+        }
+        // Rows
+        for j in 1..<tokens.count {
+            let cells: [Cell]
+            if j == 1 { cells = grid.columns.map({ $0.cell(rowNo: 1) }) }
+            else { cells = grid.addRow() }
+            for i in 0..<tokens[0].count {
+                let chain: Chain = Chain(natural: toNatural(tokens[j][i]))
+                chain.key = cells[i].tokenKey
+                cells[i].chain = chain
+            }
+        }
+        let gridBub: GridBub = GridBub(grid, aetherView: self)
+        add(bubble: gridBub)
+        
+        gridBub.wireMoorings()
+
+        compileAether()
+
+        stretch(animated:false)
+    }
 	
 // Events ==========================================================================================
 	@objc func onTap() {
