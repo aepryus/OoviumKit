@@ -170,6 +170,8 @@ class TailBub: Bubble, SignatureLeafDelegate, ChainLeafDelegate {
 			vertebra.name = signatureLeaf.paramEdits[i].text ?? ""
 			vertebraLeaves[i].placeholder = "next \(vertebra.name)"
 		}
+        aetherView.citadel.setParams(for: tail.mechlikeTokenKey, to: tail.vertebras.count)
+
 //        tail.aether.state.buildMemory()
 	}
 	var token: TokenKey { tail.mechlikeTokenKey }
