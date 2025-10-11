@@ -81,7 +81,7 @@ public class CloudSpace: Space {
         self.complete = complete
         super.init(
             name: "iCloud".localized,
-            url: FileManager.default.url(forUbiquityContainerIdentifier: nil)!.appendingPathComponent("Documents")
+            url: FileManager.default.url(forUbiquityContainerIdentifier: "iCloud.com.aepryus.oovium")!.appendingPathComponent("Documents")
         )
         
         opQueue.maxConcurrentOperationCount = 1
