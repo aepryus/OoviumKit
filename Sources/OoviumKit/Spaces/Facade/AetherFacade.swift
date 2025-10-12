@@ -29,7 +29,7 @@ public class AetherFacade: Facade {
         return parent.ooviumKey + prefix + name
     }
     override var description: String { name }
-    override var url: URL { parent.url.appendingPathComponent(name).appendingPathExtension("oo") }
+    public override var url: URL { parent.url.appendingPathComponent(name).appendingPathExtension("oo") }
     
 // Convenience =====================================================================================
     public func load(_ complete: @escaping (String?)->()) throws { try space.loadAether(facade: self, complete) }

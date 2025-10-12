@@ -15,7 +15,7 @@ public class Facade {
     var space: Space { .local }
     public var ooviumKey: String { "" }
     var description: String { "" }
-    var url: URL { URL(string: "")! }
+    public var url: URL { URL(string: "")! }
     
 // Static ==========================================================================================
     private static var facades: [String:Facade] = [:]

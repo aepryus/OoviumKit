@@ -22,5 +22,5 @@ public class SpaceFacade: DirFacade {
     public override var parent: DirFacade? { _parent }
     override var space: Space { _space }
     public override var ooviumKey: String { name }
-    override var url: URL { space.url }
+    public override var url: URL { space.url }
 }

@@ -10,7 +10,7 @@ import Acheron
 import Foundation
 import OoviumEngine
 
-extension URL {
+public extension URL {
     var pathStripingPrivate: String { path.replacingOccurrences(of: "/private/var/", with: "/var/") }
     var itemName: String {
         let url: URL = deletingPathExtension()

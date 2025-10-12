@@ -34,7 +34,7 @@ public class FolderFacade: DirFacade {
         let prefix: String = (parent is SpaceFacade) ? "::" : "/"
         return parent.ooviumKey + prefix + name
     }
-    override var url: URL { parent.url.appendingPathComponent(name) }
+    public override var url: URL { parent.url.appendingPathComponent(name) }
     
 // Convenience =====================================================================================
     public func renameFolder(name: String, _ complete: @escaping (Bool)->()) { space.renameFolder(facade: self, name: name, complete) }

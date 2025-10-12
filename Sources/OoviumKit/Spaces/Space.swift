@@ -14,7 +14,7 @@ protocol SpaceDelegate: AnyObject {
 }
 
 public class Space {
-    let url: URL
+    public let url: URL
     let name: String
     weak var delegate: SpaceDelegate? = nil
 
