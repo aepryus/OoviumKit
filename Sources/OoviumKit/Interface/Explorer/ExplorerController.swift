@@ -69,21 +69,23 @@ public class ExplorerController: NSObject, UIDocumentPickerDelegate {
     }
     
 // UIDocumentPickerDelegate ========================================================================
-    private func importAethers(urls: [URL]) throws {
-        try urls.forEach {
-            guard let data: Data = FileManager.default.contents(atPath: $0.path),
-                  let dataString = String(data: data, encoding: .utf8)
-                else { return }
-            
-            let name: String = $0.itemName
-            let xmlAtts: [String:Any] = dataString.xmlToAttributes()
-            let jsonAtts: [String:Any] = xmlAtts.count == 0 ? dataString.toAttributes() : Migrate.migrateXMLtoJSON(xmlAtts)
-            let aether: Aether = Aether(json: try Migrate.migrateAether(json: jsonAtts.toJSON()))
-            let facade: AetherFacade = Facade.create(url: explorer.facade.url.appendingPathComponent(name).appendingPathExtension("oo")) as! AetherFacade
-            facade.store(aether: aether) { (success: Bool) in
-                print("[\(name)] imported successfully")
-            }
+    public func importAether(url: URL, completed: ((AetherFacade?)->())? = nil) throws {
+        guard let data: Data = FileManager.default.contents(atPath: url.path),
+              let dataString = String(data: data, encoding: .utf8)
+            else { return }
+        
+        let name: String = url.itemName
+        let xmlAtts: [String:Any] = dataString.xmlToAttributes()
+        let jsonAtts: [String:Any] = xmlAtts.count == 0 ? dataString.toAttributes() : Migrate.migrateXMLtoJSON(xmlAtts)
+        let aether: Aether = Aether(json: try Migrate.migrateAether(json: jsonAtts.toJSON()))
+        let facade: AetherFacade = Facade.create(url: explorer.facade.url.appendingPathComponent(name).appendingPathExtension("oo")) as! AetherFacade
+        facade.store(aether: aether) { (success: Bool) in
+            completed?(facade)
+            print("[\(name)] imported successfully")
         }
+    }
+    private func importAethers(urls: [URL], completed: ((Facade?)->())? = nil) throws {
+        try urls.forEach { try importAether(url: $0) }
     }
     public func documentPicker(_ controller: UIDocumentPickerViewController, didPickDocumentAt url: URL) {
         do {

@@ -34,10 +34,17 @@ public class Space {
     public func removeAether(facade: AetherFacade, _ complete: @escaping (Bool)->()) { complete(true) }
     public func createFolder(facade: DirFacade, name: String, _ complete: @escaping (Bool)->()) { complete(true) }
     
+    public func contains(url: URL) -> Bool {
+        let ancestor = self.url.standardizedFileURL.resolvingSymlinksInPath().pathComponents
+        let descendent = url.standardizedFileURL.resolvingSymlinksInPath().pathComponents
+        return ancestor.count < descendent.count && !zip(ancestor, descendent).contains(where: !=)
+    }
+    
 // Static ==========================================================================================
     public static let anchor: AnchorSpace = AnchorSpace()
     public static let local: LocalSpace = LocalSpace()
     public static var cloud: CloudSpace?
     public static let pequod: PequodSpace = PequodSpace()
     public static let statics: StaticsSpace = StaticsSpace()
+    
 }
