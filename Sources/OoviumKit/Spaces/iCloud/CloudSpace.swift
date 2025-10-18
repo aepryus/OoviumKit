@@ -51,8 +51,9 @@ extension NSMetadataItem {
     var url: URL { value(forAttribute: NSMetadataItemURLKey) as! URL }
     var name: String { url.deletingPathExtension().lastPathComponent }
     var path: String {
-        var path: String = url.deletingLastPathComponent().absoluteString
-        path.removeFirst(Space.cloud!.url.absoluteString.lengthOfBytes(using: .utf8))
+        var path: String = url.deletingLastPathComponent().path
+        path.removeFirst(Space.cloud!.url.path.count)
+        if path.first == "/" { path.removeFirst() }
         if path.last == "/" { path.removeLast() }
         return path
     }
@@ -205,7 +206,7 @@ public class CloudSpace: Space {
         let tURL: URL = fURL.deletingLastPathComponent().appendingPathComponent(newName).appendingPathExtension("oo")
         
         let document: AetherDocument = AetherDocument(fileURL: tURL)
-        document.json = aether.toJSON()
+        document.json = newAether.toJSON()
         opQueue.addOperation {
             document.save(to: tURL, for: .forCreating) { (success: Bool) in
                 document.close { (success: Bool) in
