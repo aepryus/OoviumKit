@@ -45,6 +45,6 @@ class AetherDocument: UIDocument {
 		self.json = try Migrate.migrateAether(json: json)
 	}
 	override func handleError(_ error: Error, userInteractionPermitted: Bool) {
-		print("ERROR: \(error)")
+		print("AetherDocument ERROR: \(error)")
 	}
 }
