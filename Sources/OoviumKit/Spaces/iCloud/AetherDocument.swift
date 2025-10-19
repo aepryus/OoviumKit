@@ -10,6 +10,10 @@ import Acheron
 import OoviumEngine
 import UIKit
 
+private extension String {
+    var isXML: Bool { hasPrefix("<aether ") }
+}
+
 class AetherDocument: UIDocument {
 	var json: String = ""
     
@@ -41,8 +45,9 @@ class AetherDocument: UIDocument {
             catch { print("[CONFLICT] resolution failed [\(error)]") }
         }
                 
-		guard let json: String = String(data: data, encoding: .utf8) else { return }
-		self.json = try Migrate.migrateAether(json: json)
+		guard let fileString: String = String(data: data, encoding: .utf8) else { return }
+        let json: String = !fileString.isXML ? fileString : Migrate.migrateXMLtoJSON(fileString.xmlToAttributes()).toJSON()
+        self.json = try Migrate.migrateAether(json: json)
 	}
 	override func handleError(_ error: Error, userInteractionPermitted: Bool) {
 		print("AetherDocument ERROR: \(error)")
