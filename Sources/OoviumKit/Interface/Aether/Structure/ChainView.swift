@@ -401,7 +401,7 @@ class ChainView: UIView, UITextInput, UITextInputTraits, AnchorTappable, TowerLi
 
 // Static ==========================================================================================
 	private static func usesWafer(token: Token) -> Bool {
-        if token.code == .cn && ![Token.pi, Token.e, Token.i].contains(token) { return true }
+        if token.code == .cn && ![Token.pi, Token.e, Token.i, Token.k].contains(token) { return true }
         guard let token: TowerToken = token as? TowerToken else { return false }
         return token.code == .va || token.code == .cl || token.status == .deleted
 	}
