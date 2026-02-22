@@ -21,7 +21,7 @@ class FooterCell: UICollectionViewCell, Sizable, Citable, FocusTappable, TowerLi
 
     var mooring: Mooring!
 
-    lazy var pen: Pen = Pen(color: controller.gridBub.gridLeaf.uiColor, alignment: column.alignment)
+    lazy var pen: Pen = Pen(font: .ooAether(size: 16), color: controller.gridBub.gridLeaf.uiColor, alignment: column.alignment)
 	
     init(controller: GridController, column: Column) {
         self.controller = controller
